@@ -109,10 +109,9 @@
 <script lang="ts" setup>
 import { enumKeys, translateItems } from '~/lib/utils';
 import { EvmChainMainnet } from '~/lib/types/nft';
-import { ServiceTypeName } from '~/lib/types/service';
-import type { VideoChapter } from '../Modal/YT.vue';
+import type { ServiceTypeName } from '~/lib/types/service';
 
-const props = defineProps({
+defineProps({
   name: { type: String, required: true },
   service: { type: String as PropType<ServiceTypeName>, required: true },
   docs: { type: String, default: null },
@@ -120,7 +119,6 @@ const props = defineProps({
   videoChapters: { type: Array<VideoChapter>, default: null },
 });
 
-const { t } = useI18n();
 const showVideo = ref<boolean>(false);
 
 const guides = [

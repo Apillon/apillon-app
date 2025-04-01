@@ -77,7 +77,7 @@
       </W3Warn>
     </slot>
 
-    <template #learn v-if="!basicDesign">
+    <template v-if="!basicDesign" #learn>
       <n-card class="card !border-bg-lighter mobile:mt-8" :title="$t('storage.ipfs.hotToGenerateLink')">
         <template #header-extra>
           <Btn
@@ -97,7 +97,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { CSSProperties } from 'nuxt/dist/app/compat/capi';
+import type { CSSProperties } from 'vue';
 
 const { t } = useI18n();
 const dataStore = useDataStore();

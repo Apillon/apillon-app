@@ -47,7 +47,7 @@ export type RpcSubscriptionPackage = {
 defineProps({
   package: { type: Object as PropType<RpcSubscriptionPackage>, required: true },
   isSelected: { type: Boolean, required: true },
-  onPress: { type: Function as PropType<() => void>, required: true },
+  onPress: { type: Function as PropType<Func>, required: true },
   loading: { type: Boolean, required: true },
   isOwner: { type: Boolean, default: false },
 });

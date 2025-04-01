@@ -28,7 +28,6 @@
 import { AuthLoginGoogle } from '#components';
 
 const { t } = useI18n();
-const { isLg } = useScreen();
 const authStore = useAuthStore();
 const oauthToken = ref<string | undefined>('');
 

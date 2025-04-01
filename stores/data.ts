@@ -16,7 +16,7 @@ export const useDataStore = defineStore('data', {
       items: [] as Array<ProjectInterface>,
       selected: localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID) || null,
       showOnboarding: false,
-      quotaReached: undefined as Boolean | undefined,
+      quotaReached: undefined as boolean | undefined,
       overview: {} as ProjectOverviewInterface,
     },
     promises: {
@@ -87,7 +87,7 @@ export const useDataStore = defineStore('data', {
       this.project.active = {} as ProjectInterface;
       this.project.items = [] as Array<ProjectInterface>;
       this.project.overview = {} as ProjectOverviewInterface;
-      this.project.quotaReached = undefined as Boolean | undefined;
+      this.project.quotaReached = undefined as boolean | undefined;
       /** Services */
       this.services = [] as Array<ServiceInterface>;
     },
@@ -150,6 +150,7 @@ export const useDataStore = defineStore('data', {
      * Fetch wrappers
      */
     async getProjectUuid(): Promise<string> {
+      await this.waitOnPromises(false);
       if (!this.hasProjects) {
         await this.fetchProjects();
       }
@@ -289,7 +290,7 @@ export const useDataStore = defineStore('data', {
         sessionStorage.setItem(LsCacheKeys.PROJECT, Date.now().toString());
 
         return res.data;
-      } catch (error) {
+      } catch (error: ApiError | any) {
         this.project.active = {} as ProjectInterface;
 
         /** Show error message */
@@ -325,7 +326,7 @@ export const useDataStore = defineStore('data', {
         sessionStorage.setItem(LsCacheKeys.PROJECT_OVERVIEW, Date.now().toString());
 
         return res.data;
-      } catch (error) {
+      } catch (error: ApiError | any) {
         this.project.overview = {} as ProjectOverviewInterface;
 
         /** Show error message */

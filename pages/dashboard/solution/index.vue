@@ -27,8 +27,8 @@
               <div>
                 <div class="mb-8 flex flex-wrap gap-2">
                   <Pill
-                    v-for="(item, key) in service.usage"
-                    :key="key"
+                    v-for="(item, key2) in service.usage"
+                    :key="key2"
                     :color="{ borderColor: colors.violet, textColor: colors.violet }"
                     round
                   >
@@ -72,7 +72,7 @@ type SolutionTypeItem = {
   icon: string;
   link?: string;
   github?: string;
-  usage: String[];
+  usage: string[];
 };
 const { t } = useI18n();
 useHead({

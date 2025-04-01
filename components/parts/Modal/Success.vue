@@ -22,9 +22,9 @@ defineProps({
   title: { type: String, default: '' },
   content: { type: String, default: '' },
   btn1: { type: String, default: '' },
-  btn1Action: { type: Function as PropType<() => void>, default: () => {} },
+  btn1Action: { type: Function as PropType<Func>, default: () => {} },
   btn2: { type: String, default: '' },
-  btn2Action: { type: Function as PropType<() => void>, default: () => {} },
+  btn2Action: { type: Function as PropType<Func>, default: () => {} },
 });
 
 const modalVisible = ref<boolean>(true);

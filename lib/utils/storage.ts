@@ -56,7 +56,7 @@ export function stripFolderName(value: string | [string, string]) {
   return textMarshal({
     input: value,
     template: 'x',
-    disallowCharacters: [/@/, /\\/, /\//, /\|/, /\!/, /\#/, /\$/, /\%/, /\^/, /\&/, /\*/],
+    disallowCharacters: [/@/, /\\/, /\//, /\|/, /!/, /#/, /$/, /%/, /^/, /&/, /\*/],
     isRepeat: {
       value: true,
       removeStart: true,

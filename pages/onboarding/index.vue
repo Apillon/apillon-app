@@ -1,9 +1,9 @@
 <template>
-  <div class="flex flex-wrap xl:pt-8 md:pt-6 pt-4">
+  <div class="flex flex-wrap pt-4 md:pt-6 xl:pt-8">
     <div class="w-full md:w-1/2">
       <h1 class="mb-10 text-center md:text-left">{{ $t('auth.onboarding.web3Gateway') }}</h1>
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 lg:mb-16 md:mb-10">
-        <div class="p-6 flex flex-col justify-between bg-bg-light shadow-black">
+      <div class="mb-8 grid grid-cols-1 gap-8 md:mb-10 lg:mb-16 lg:grid-cols-2">
+        <div class="flex flex-col justify-between bg-bg-light p-6 shadow-black">
           <div>
             <h4 class="mb-1">{{ $t('auth.onboarding.createWeb3Project') }}</h4>
             <p class="mb-4">{{ $t('auth.onboarding.buildCustomApp') }}</p>
@@ -14,7 +14,7 @@
             </Btn>
           </div>
         </div>
-        <div class="p-6 flex flex-col justify-between bg-bg-light shadow-black">
+        <div class="flex flex-col justify-between bg-bg-light p-6 shadow-black">
           <div>
             <h4 class="mb-1">{{ $t('auth.onboarding.demoProject') }}</h4>
             <p class="mb-4">{{ $t('auth.onboarding.walkThroughWeb3') }}</p>
@@ -24,7 +24,7 @@
           </div>
         </div>
       </div>
-      <NuxtLink :to="{ name: 'dashboard' }" class="text-body text-bold">
+      <NuxtLink :to="{ name: 'dashboard' }" class="text-bold text-body">
         {{ $t('auth.onboarding.skip') }}
       </NuxtLink>
     </div>

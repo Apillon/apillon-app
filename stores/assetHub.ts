@@ -1,5 +1,6 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { defineStore } from 'pinia';
+import { AssetHubClient } from '~/lib/asset-hub/client';
 
 export type AssetInterface = {
   id: number;
@@ -169,6 +170,6 @@ export const useAssetHubStore = defineStore('assetHub', {
   persist: {
     key: SessionKeys.ASSET_HUB,
     storage: piniaPluginPersistedstate.sessionStorage(),
-    paths: ['account', 'itemsMainnet', 'itemsTestnet'],
-  } as any,
+    pick: ['account', 'itemsMainnet', 'itemsTestnet'],
+  },
 });

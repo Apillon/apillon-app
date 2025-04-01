@@ -179,7 +179,8 @@ export const usePostStore = defineStore('post', {
         sessionStorage.setItem(LsCacheKeys.POST, Date.now().toString());
 
         return res.data;
-      } catch (error: any) {
+      } catch (e: ApiError | any) {
+        console.log(e);
         this.active = {} as PostInterface;
       }
       return {} as PostInterface;

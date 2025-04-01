@@ -2,7 +2,7 @@ export function sleep(timeMs = 1000) {
   return new Promise(resolve => setTimeout(resolve, timeMs));
 }
 
-export function delay(fn: Function, delay = 500) {
+export function delay(fn: Func, delay = 500) {
   setTimeout(fn, delay);
 }
 

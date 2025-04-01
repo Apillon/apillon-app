@@ -9,10 +9,10 @@
     </template>
     <slot>
       <div class="pb-8">
-        <p class="my-6 text-bold">
+        <p class="text-bold my-6">
           <strong>{{ $t('dashboard.solution.nftAirdrop.description') }}</strong>
         </p>
-        <div class="grid md:grid-cols-2 gap-8 border-b border-bg-lighter pb-8 mb-8">
+        <div class="mb-8 grid gap-8 border-b border-bg-lighter pb-8 md:grid-cols-2">
           <SolutionContent :content="content">
             <Btn type="primary" href="https://github.com/Apillon/ps-email-airdrop/fork">
               {{ $t('dashboard.solution.deploy') }}
@@ -20,10 +20,10 @@
           </SolutionContent>
 
           <!-- DEMO -->
-          <div class="flex justify-center h-fit">
-            <div class="relative rounded-lg overflow-hidden">
+          <div class="flex h-fit justify-center">
+            <div class="relative overflow-hidden rounded-lg">
               <Image :src="NftTemplateJPG" width="514" height="320" alt="nft template" />
-              <div class="absolute left-0 right-0 top-0 bottom-0 flex-cc bg-bg-dark/75">
+              <div class="flex-cc absolute bottom-0 left-0 right-0 top-0 bg-bg-dark/75">
                 <Btn type="info" size="small" href="https://github.com/Apillon/ps-email-airdrop">
                   <span class="icon-github mr-2"></span>
                   <strong class="body-sm"> {{ $t('dashboard.solution.viewCode') }}</strong>
@@ -33,7 +33,7 @@
           </div>
         </div>
 
-        <div class="max-w-lg mb-8">
+        <div class="mb-8 max-w-lg">
           <h4>{{ $t('dashboard.solution.includedWeb3Services') }}</h4>
         </div>
         <div class="grid gap-4 md:grid-cols-3">
@@ -57,9 +57,6 @@ useHead({
 
 const content = generateContent(SolutionKey.NFT_AIRDROP);
 const nftServices = web3Services.filter(
-  item =>
-    item.id === ServiceType.STORAGE ||
-    item.id === ServiceType.HOSTING ||
-    item.id === ServiceType.NFT
+  item => item.id === ServiceType.STORAGE || item.id === ServiceType.HOSTING || item.id === ServiceType.NFT
 );
 </script>

@@ -1,4 +1,3 @@
-import path from 'path';
 import { defineStore } from 'pinia';
 import { NftMetadataStep, type FormSingleNft } from '~/lib/types/nft';
 
@@ -142,7 +141,7 @@ export const useMetadataStore = defineStore('metadata', {
   persist: {
     key: SessionKeys.METADATA_STORE,
     storage: piniaPluginPersistedstate.sessionStorage(),
-    paths: [
+    pick: [
       'csvAttributes',
       'columns',
       'csvData',

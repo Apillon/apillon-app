@@ -8,7 +8,7 @@ export const useCollectionStore = defineStore('collection', {
     metadataDeploys: [] as MetadataDeployInterface[],
     pagination: createPagination(false),
     search: '',
-    quotaReached: undefined as Boolean | undefined,
+    quotaReached: undefined as boolean | undefined,
     transaction: [] as TransactionInterface[],
     archive: {
       items: [] as CollectionInterface[],
@@ -116,7 +116,7 @@ export const useCollectionStore = defineStore('collection', {
       const dataStore = useDataStore();
       if (!dataStore.projectUuid) return [];
 
-      (archive ? this.archive : this).loading = false;
+      (archive ? this.archive : this).loading = showLoader;
       try {
         const params = parseArguments({ ...PARAMS_ALL_ITEMS, project_uuid: dataStore.projectUuid });
         if (archive) params.status = SqlModelStatus.ARCHIVED;
@@ -160,6 +160,7 @@ export const useCollectionStore = defineStore('collection', {
 
         return res.data;
       } catch (error: any) {
+        console.error(error);
         this.active = {} as CollectionInterface;
       }
       return null;

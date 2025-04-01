@@ -8,7 +8,6 @@ import type {
   SelectOption,
   TagProps,
   UploadFileInfo,
-  UploadSettledFileInfo,
 } from 'naive-ui';
 import type {
   InternalRowData,
@@ -113,4 +112,11 @@ declare global {
   };
 
   type TagType = TagProps['type'];
+
+  type Func = () => void;
+
+  type VideoChapter = {
+    title: string;
+    time: number | string;
+  };
 }

@@ -1,4 +1,4 @@
-import { useChainId, useChains, useClient, useConnectorClient, useSwitchChain } from '@wagmi/vue';
+import { useChainId, useChains, useClient, useConnectorClient } from '@wagmi/vue';
 import type { Address, Client, Transport, Chain, Account } from 'viem';
 import { createPublicClient, getContract, http } from 'viem';
 import { nftAbi, nftAbiNestable } from '~/lib/config/abi';
@@ -66,7 +66,7 @@ export default function useNftContract() {
   }
 
   /** Actions */
-  async function getAllTokens(address: Address, chainId: number): Promise<Number[]> {
+  async function getAllTokens(address: Address, chainId: number): Promise<number[]> {
     try {
       const contract = await initReadContract(address, chainId);
       return (await contract.read.allTokens()).map(i => Number(i));

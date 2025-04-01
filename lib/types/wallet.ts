@@ -58,7 +58,7 @@ declare global {
 
   interface OpenSelectWalletInterface {
     isOpen: boolean;
-    open: () => void;
-    close: () => void;
+    open: Func;
+    close: Func;
   }
 }

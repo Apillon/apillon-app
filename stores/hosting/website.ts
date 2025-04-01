@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
-import { WebsiteCreateStep, WebsiteSource, WebsiteType } from '~/lib/types/hosting';
+import type { WebsiteType } from '~/lib/types/hosting';
+import { WebsiteCreateStep, WebsiteSource } from '~/lib/types/hosting';
 
 export const useWebsiteStore = defineStore('website', {
   state: () => ({

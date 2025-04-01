@@ -44,13 +44,6 @@ const messageOverrides: MessageThemeOverrides = {
   textColorWarning: colors.bg.DEFAULT,
 };
 
-/** Theme override */
-type TableThemeOverrides = NonNullable<FormProps['themeOverrides']>;
-const labelOverride: TableThemeOverrides = {
-  labelFontSizeLeftMedium: '14px',
-  labelFontWeight: 'semibold',
-};
-
 /**
  * Theme configs
  */

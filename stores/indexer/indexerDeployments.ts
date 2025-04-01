@@ -31,9 +31,7 @@ export const useIndexerDeploymentsStore = defineStore('indexerDeployments', {
       this.loading = showLoader;
       this.indexerUuid = indexerUuid;
       try {
-        const res = await $api.get<IndexerDeploymentsResponse>(
-          endpoints.indexerDeployments(this.indexerUuid)
-        );
+        const res = await $api.get<IndexerDeploymentsResponse>(endpoints.indexerDeployments(this.indexerUuid));
         this.items = res.data;
 
         /** Save timestamp to SS */

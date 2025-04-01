@@ -13,7 +13,7 @@ export const useRpcApiKeyStore = defineStore('rpc-api-key', {
       project_uuid: undefined as string | undefined,
     },
     dwellirId: null as string | null,
-    quotaReached: undefined as Boolean | undefined,
+    quotaReached: undefined as boolean | undefined,
   }),
   getters: {
     hasRpcApiKeys(state): boolean {
@@ -86,7 +86,9 @@ export const useRpcApiKeyStore = defineStore('rpc-api-key', {
           this.usage = res.data;
 
           sessionStorage.setItem(LsCacheKeys.RPC_API_KEY_USAGE, Date.now().toString());
-        } catch (error) {}
+        } catch (e: ApiError | any) {
+          console.error(e);
+        }
       }
       this.loading = false;
     },
@@ -105,7 +107,9 @@ export const useRpcApiKeyStore = defineStore('rpc-api-key', {
           this.usagePerChain = res.data;
 
           sessionStorage.setItem(LsCacheKeys.RPC_API_KEY_USAGE_PER_CHAIN, Date.now().toString());
-        } catch (error) {}
+        } catch (e: ApiError | any) {
+          console.error(e);
+        }
       }
       this.loading = false;
     },
@@ -114,7 +118,7 @@ export const useRpcApiKeyStore = defineStore('rpc-api-key', {
       try {
         const res = await $api.get<RpcApiKeysQuotaResponse>(endpoints.rpcApiKeysQuotaReached());
         this.quotaReached = res.data;
-      } catch (error) {
+      } catch (error: ApiError | any) {
         this.quotaReached = undefined;
         window.$message.error(userFriendlyMsg(error));
       }
@@ -143,7 +147,8 @@ export const useRpcApiKeyStore = defineStore('rpc-api-key', {
         sessionStorage.setItem(LsCacheKeys.RPC_API_KEYS, Date.now().toString());
 
         return res.data.items;
-      } catch (error) {
+      } catch (e: ApiError | any) {
+        console.error(e);
         dataStore.promises.rpcApiKeys = null;
 
         this.items = [] as Array<RpcApiKeyInterface>;

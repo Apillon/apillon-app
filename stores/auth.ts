@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { getWalletBySource } from '~/lib/wallet/wallets';
 
 export const AuthLsKeys = {
   AUTH: 'al_auth',
@@ -110,7 +111,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         const data = JSON.parse(localStorage.getItem(AuthLsKeys.PROSOPO) || '{}');
         return typeof data === 'object' ? data : {};
-      } catch (error) {
+      } catch (error: ApiError | any) {
         console.warn(error);
       }
       return {};
@@ -140,8 +141,8 @@ export const useAuthStore = defineStore('auth', {
         const data = this.getCaptchaLS();
         const emails = Object.keys(data);
         if (emails.includes(email)) {
-          delete data[email];
-          localStorage.setItem(AuthLsKeys.PROSOPO, JSON.stringify(data));
+          const { [email]: _, ...newData } = data;
+          localStorage.setItem(AuthLsKeys.PROSOPO, JSON.stringify(newData));
         }
       } else {
         localStorage.removeItem(AuthLsKeys.PROSOPO);
@@ -178,10 +179,11 @@ export const useAuthStore = defineStore('auth', {
         }, 10);
 
         return res;
-      } catch (error) {
+      } catch (e) {
+        console.error(e);
+
         /** On error - logout */
         this.logout();
-
         const router = useRouter();
         router.push('/login');
 
@@ -198,7 +200,7 @@ export const useAuthStore = defineStore('auth', {
         const res = await $api.get<WalletMsgResponse>(endpoints.walletMsg);
 
         return res.data;
-      } catch (error) {
+      } catch (error: ApiError | any) {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }

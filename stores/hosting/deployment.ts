@@ -185,7 +185,7 @@ export const useDeploymentStore = defineStore('deployment', {
         this.buildWebsiteUuid = websiteUuid;
 
         sessionStorage.setItem(LsCacheKeys.DEPLOYMENT_BUILD, Date.now().toString());
-      } catch (error) {
+      } catch (error: ApiError | any) {
         this.builds = [] as DeploymentBuildInterface[];
         window.$message.error(userFriendlyMsg(error));
       }

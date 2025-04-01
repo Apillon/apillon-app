@@ -86,7 +86,7 @@
         <h4 class="mb-8">{{ $t('dashboard.onboarding.servicesTitle') }}</h4>
 
         <div class="mb-8 grid grid-cols-billing gap-4">
-          <CardService v-for="service in onboardingServices" v-bind="service" />
+          <CardService v-for="(service, key) in onboardingServices" v-bind="service" :key="key" />
         </div>
 
         <!-- Resources-->

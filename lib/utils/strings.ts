@@ -54,11 +54,7 @@ export function getOneOrRange(val1: number | string, val2: number | string) {
   return val1 + '-' + val2;
 }
 
-export function getFormattedPrice(
-  val = 0,
-  moreOptions?: Intl.NumberFormatOptions,
-  locale = 'en-US'
-) {
+export function getFormattedPrice(val = 0, moreOptions?: Intl.NumberFormatOptions, locale = 'en-US') {
   const formatter = new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: 'USD',
@@ -124,8 +120,7 @@ export function truncateCid(source: string, partLength: number = 4): string {
 
 export function hideSecret(source: string, partLength: number = 4): string {
   return source && source.length > partLength
-    ? '•'.repeat(source.length - partLength) +
-        source.slice(source.length - partLength, source.length)
+    ? '•'.repeat(source.length - partLength) + source.slice(source.length - partLength, source.length)
     : source;
 }
 

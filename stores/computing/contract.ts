@@ -133,7 +133,8 @@ export const useContractStore = defineStore('contract', {
         sessionStorage.setItem(LsCacheKeys.CONTRACT, Date.now().toString());
 
         return res.data;
-      } catch (error: any) {
+      } catch (e: ApiError | any) {
+        console.error(e);
         this.active = {} as ContractInterface;
       }
       return {} as ContractInterface;

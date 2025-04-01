@@ -1,4 +1,3 @@
-import { load } from '@fingerprintjs/fingerprintjs';
 import { defineStore } from 'pinia';
 
 export const useCloudFunctionStore = defineStore('cloudFunction', {

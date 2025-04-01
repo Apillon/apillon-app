@@ -6,7 +6,7 @@
 
     <n-space v-if="rpcApiKeyStore.hasRpcApiKeys" class="pb-8" :size="32" vertical>
       <ActionsRpc :show-usage-refresh="true" />
-      <n-tag closable size="small" v-if="network" @close="handleRemoveNetwork">{{ network }}</n-tag>
+      <n-tag v-if="network" closable size="small" @close="handleRemoveNetwork">{{ network }}</n-tag>
       <ChartLine v-if="chartData?.labels.length" :data="chartData" />
       <div v-else class="flex-cc min-h-40">
         <h2>No RPC usage has been detected yet.</h2>
