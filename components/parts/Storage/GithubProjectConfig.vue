@@ -60,7 +60,8 @@ async function connectToGithub() {
       'https://github.com/login/oauth/authorize?client_id=' +
         config.public.deploymentGithubId +
         '&redirect_uri=' +
-        window.location.href,
+        window.location.href +
+        '&scope=repo,admin:repo_hook,user:email',
       '_self'
     );
   } catch (e) {
