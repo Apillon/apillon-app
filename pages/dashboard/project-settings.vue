@@ -43,11 +43,11 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t } = useI18n();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 
 useHead({
-  title: $i18n.t('dashboard.nav.projectSettings'),
+  title: t('dashboard.nav.projectSettings'),
 });
 </script>

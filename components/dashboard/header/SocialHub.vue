@@ -35,6 +35,5 @@
 </template>
 
 <script lang="ts" setup>
-const postStore = usePostStore();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.SOCIAL_NEW);
 </script>

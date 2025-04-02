@@ -22,7 +22,7 @@
 <script lang="ts" setup>
 import { useMessage, type UploadCustomRequestOptions } from 'naive-ui';
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
 const bucketStore = useBucketStore();
@@ -53,12 +53,12 @@ function uploadFilesRequest({ file, onError, onFinish }: UploadCustomRequestOpti
   };
 
   if (!isEnoughSpaceInStorage(bucketStore.uploadFileList, fileListItem)) {
-    message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
+    message.warning(t('validation.notEnoughSpaceInStorage', { name: file.name }));
     onError();
   } else if (fileAlreadyOnFileList(bucketStore.uploadFileList, fileListItem)) {
     onError();
   } else if (!paymentStore.hasActiveSubscription && !fileTypeValid(fileListItem)) {
-    message.warning($i18n.t('validation.fileTypeNotAllow', { name: file.name }));
+    message.warning(t('validation.fileTypeNotAllow', { name: file.name }));
     onError();
   } else {
     bucketStore.uploadFileList.push(fileListItem);

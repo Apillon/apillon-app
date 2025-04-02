@@ -21,19 +21,11 @@
         </Btn>
       </n-space>
     </div>
-    <!-- <div class="lg:w-1/2">
-      <h3 class="mb-2">{{ $t('computing.cloudFunctions.checkVideo') }}</h3>
-      <LearnVideo
-        :title="$t('computing.cloudFunctions.checkVideo')"
-        html-content="https://www.youtube.com/embed/AslkbJH4OAM?si=IVlEtikZsgI85iWl"
-        class="w-full"
-      />
-    </div> -->
   </div>
 
   <!-- Modal - Create Cloud Functions -->
   <modal v-model:show="modalCreateCloudFunctionsVisible" :title="$t('computing.cloudFunctions.new')">
-    <FormComputingCloudFunctions @submit-success="modalCreateCloudFunctionsVisible = false" @create-success="" />
+    <FormComputingCloudFunctions @submit-success="modalCreateCloudFunctionsVisible = false" />
   </modal>
 </template>
 

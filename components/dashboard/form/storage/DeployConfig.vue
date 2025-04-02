@@ -81,7 +81,7 @@
         </n-form-item>
 
         <n-form-item path="apiSecret" :label="$t('hosting.deploy.form.api-secret')" :label-props="{ for: 'apiSecret' }">
-          <div v-if="props.config_id && !showApiSecretInput" class="flex flex-row gap-4">
+          <div v-if="props.configId && !showApiSecretInput" class="flex flex-row gap-4">
             <n-input :disabled="true" :placeholder="$t('hosting.deploy.form.api-secret-set')"> </n-input>
             <Btn type="primary" class="mt-2" @click="onChangeSecretPress">
               {{ $t('hosting.deploy.form.api-secret-change') }}
@@ -100,7 +100,7 @@
         </n-form-item>
       </n-collapse-item>
     </n-collapse>
-    <n-form-item v-if="!$props.on_create_website" :show-feedback="false" :show-label="false">
+    <n-form-item v-if="!$props.onCreateWebsite" :show-feedback="false" :show-label="false">
       <input type="submit" class="hidden" :value="'Save'" />
 
       <Btn type="primary" class="mt-2 w-full" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
@@ -115,11 +115,11 @@ import type { SelectOption } from 'naive-ui';
 import { WebsiteSource } from '~/lib/types/hosting';
 
 const props = defineProps({
-  config_id: { type: Number, default: 0 },
-  on_create_website: { type: Boolean, default: false },
+  configId: { type: Number, default: 0 },
+  onCreateWebsite: { type: Boolean, default: false },
 });
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const storageStore = useStorageStore();
 const websiteStore = useWebsiteStore();
@@ -145,15 +145,15 @@ const onChangeSecretPress = () => {
 };
 
 const rules: NFormRules = {
-  repoId: [ruleRequired($i18n.t('hosting.deploy.form.validation.repo-required'))],
-  branchName: [ruleRequired($i18n.t('hosting.deploy.form.validation.branch-name-required'))],
-  buildDirectory: [ruleRequired($i18n.t('hosting.deploy.form.validation.build-directory-required'))],
+  repoId: [ruleRequired(t('hosting.deploy.form.validation.repo-required'))],
+  branchName: [ruleRequired(t('hosting.deploy.form.validation.branch-name-required'))],
+  buildDirectory: [ruleRequired(t('hosting.deploy.form.validation.build-directory-required'))],
   apiKey: [
     {
       validator(_, value) {
         const apiSecret = storageStore.deployConfigForm.apiSecret;
         if (!value && apiSecret) {
-          return new Error($i18n.t('nft.collection.website-deploy.form.api-key-equired'));
+          return new Error(t('nft.collection.website-deploy.form.api-key-equired'));
         }
         return true;
       },
@@ -168,7 +168,7 @@ const rules: NFormRules = {
         }
         const apiKey = storageStore.deployConfigForm.apiKey;
         if (!value && apiKey) {
-          return new Error($i18n.t('nft.collection.website-deploy.form.api-secret-required'));
+          return new Error(t('nft.collection.website-deploy.form.api-secret-required'));
         }
         return true;
       },
@@ -198,8 +198,8 @@ async function createDeployConfig() {
       projectUuid: dataStore.projectUuid,
       ...storageStore.deployConfigForm,
     };
-    const res = await $api.post<DeploymentConfigResponse>(endpoints.deployConfig, bodyData);
-    message.success($i18n.t('hosting.deploy.form.success'));
+    await $api.post<DeploymentConfigResponse>(endpoints.deployConfig, bodyData);
+    message.success(t('hosting.deploy.form.success'));
     websiteStore.active.source = WebsiteSource.GITHUB;
     emit('submitSuccess');
   } catch (error) {

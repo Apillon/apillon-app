@@ -27,16 +27,14 @@
           MAINNET
         </Tag>
       </div>
-      <n-layout class="has-scrollbar" sider-placement="right" :has-sider="instructionsAvailable && isMd">
+      <n-layout class="has-scrollbar" sider-placement="right" :has-sider="sidebarVisible && isMd">
         <n-layout-content>
-          <n-scrollbar y-scrollable :style="instructionsAvailable || fullHeight ? {} : scrollStyle">
+          <n-scrollbar y-scrollable :style="sidebarVisible || fullHeight ? {} : scrollStyle">
             <div class="pt-8" :style="fullHeight ? heightScreen : {}">
               <slot />
             </div>
 
-            <slot v-if="instructionsAvailable && !isMd" name="learn" class="mt-8">
-              <learn-section />
-            </slot>
+            <slot v-if="sidebarVisible && !isMd" name="learn" class="mt-8"> </slot>
 
             <!-- Global component: File upload list -->
             <FormStorageUploadFiles
@@ -51,48 +49,9 @@
             <StatusCard v-if="activeDeployments.length > 0" />
           </n-scrollbar>
         </n-layout-content>
-        <n-layout-sider
-          v-if="instructionsAvailable && isMd"
-          :collapsed="learnCollapsed"
-          collapse-mode="width"
-          :collapsed-width="48"
-          :width="isXl ? 455 : 356"
-          :content-style="isMd ? 'padding-left: 20px;' : ''"
-          @after-enter="handleOnUpdateCollapse(false)"
-          @after-leave="handleOnUpdateCollapse(true)"
-        >
-          <div v-if="learnCollapsible" class="my-8">
-            <div class="mb-2">
-              <h6 v-if="!learnCollapsed" class="inline-block">
-                {{ $t('general.learn') }}
-              </h6>
-              <button
-                class="btn-collapse float-right flex h-7 w-8 items-center justify-center border-[1px] text-[10px]"
-                @click="learnCollapsed = !learnCollapsed"
-              >
-                <svg viewBox="0 0 24 24" width="24" height="24">
-                  <path
-                    d="M3.27273 5.45453V18.5454L12 12L3.27273 5.45453Z"
-                    fill="#F0F2DA"
-                    :class="learnCollapsed ? 'translate-x-[9px]' : 'translate-x-0'"
-                  />
-                  <path
-                    d="M20.7271 18.5454V5.45453L11.9998 12L20.7271 18.5454Z"
-                    fill="#F0F2DA"
-                    :class="learnCollapsed ? '-translate-x-[9px]' : 'translate-x-0'"
-                  />
-                </svg>
-              </button>
-            </div>
-
-            <slot v-if="!learnCollapsed" name="learn">
-              <learn-section />
-            </slot>
-          </div>
-          <div v-else class="h-full py-8">
-            <slot v-if="!learnCollapsed" name="learn">
-              <learn-section />
-            </slot>
+        <n-layout-sider v-if="sidebarVisible && isMd" :width="isXl ? 455 : 356" content-style="padding-left: 20px;">
+          <div class="h-full py-8">
+            <slot name="learn" />
           </div>
         </n-layout-sider>
       </n-layout>
@@ -101,7 +60,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useGtm } from '@gtm-support/vue-gtm';
 const props = defineProps({
   fullHeight: { type: Boolean, default: false },
   loading: { type: Boolean, default: false },
@@ -112,14 +70,11 @@ const props = defineProps({
 /** Check if instructions are available (page has content and feature is enabled) */
 const $slots = useSlots();
 const authStore = useAuthStore();
-const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const warningStore = useWarningStore();
 const { activeDeployments } = useRefreshStatus();
 
-const gtm = useGtm();
 const { isMd, isLg, isXl } = useScreen();
-const { name } = useRoute();
 
 /** Heading height */
 const headingRef = ref<HTMLElement>();
@@ -130,8 +85,8 @@ const headingHeight = ref<number>(calcHeaderHeight());
 const scrollStyle = computed(() => ({
   maxHeight: `calc(100dvh - ${headingHeight.value}px)`,
 }));
-const minHeight = computed(() => ({
-  minHeight: `calc(100dvh - ${headingHeight.value}px)`,
+const heightScreen = computed(() => ({
+  height: `calc(100dvh - ${headingHeight.value}px)`,
 }));
 
 /** Delay animation */
@@ -160,26 +115,9 @@ function setLoadingAnimation(isLoading: boolean) {
   }, delay);
 }
 
-/** Instructions load */
-const key = computed(() => {
-  return name?.toString() || '';
+const sidebarVisible = computed<boolean>(() => {
+  return !!$slots.learn;
 });
-
-const instructionsAvailable = computed<boolean>(() => {
-  return (
-    (dataStore.hasInstructions(key.value) &&
-      isFeatureEnabled(Feature.INSTRUCTIONS, authStore.getUserRoles()) &&
-      isLg.value) ||
-    !!$slots.learn
-  );
-});
-
-// Keep info about collapsible section learn in local storage
-const learnCollapsed = ref<boolean>(props.learnCollapsible && localStorage.getItem('learnCollapsed') === '1');
-
-function handleOnUpdateCollapse(value: boolean) {
-  localStorage.setItem('learnCollapsed', value ? '1' : '0');
-}
 
 /** Warnings */
 function onSpendingWaningClose() {

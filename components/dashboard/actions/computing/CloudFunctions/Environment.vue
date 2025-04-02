@@ -35,7 +35,7 @@
 
   <!-- Modal - Create Cloud Function variables -->
   <modal v-model:show="modalCreateVariableVisible" :title="$t('computing.cloudFunctions.variable.new')">
-    <FormComputingCloudFunctionsVariable @submit-success="modalCreateVariableVisible = false" @create-success="" />
+    <FormComputingCloudFunctionsVariable @submit-success="modalCreateVariableVisible = false" />
   </modal>
 </template>
 

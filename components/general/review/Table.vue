@@ -13,7 +13,7 @@
     <div class="relative mb-4"></div>
     <n-table class="plain mb-6 table-fixed" :bordered="false" :single-line="true">
       <tbody>
-        <tr v-for="item in data" :class="{ hidden: item.show === false }">
+        <tr v-for="item in data" :key="item.key" :class="{ hidden: item.show === false }">
           <td class="!text-white">{{ item.label }}</td>
           <td class="relative">
             <span v-if="item?.key === 'chain'" class="flex items-center gap-2">

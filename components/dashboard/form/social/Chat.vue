@@ -51,7 +51,7 @@ type FormSpace = {
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const message = useMessage();
-const $i18n = useI18n();
+const { t } = useI18n();
 const dataStore = useDataStore();
 const chatStore = useChatStore();
 const warningStore = useWarningStore();
@@ -67,8 +67,8 @@ const formData = ref<FormSpace>({
 });
 
 const rules: NFormRules = {
-  name: [ruleRequired($i18n.t('validation.chatNameRequired'))],
-  about: [ruleDescription($i18n.t('validation.descriptionTooLong'))],
+  name: [ruleRequired(t('validation.chatNameRequired'))],
+  about: [ruleDescription(t('validation.descriptionTooLong'))],
 };
 
 const isFormDisabled = computed<boolean>(() => {
@@ -99,7 +99,7 @@ async function createSpace() {
     };
     const res = await $api.post<ChatResponse>(endpoints.spaces(), params);
 
-    message.success($i18n.t('form.success.created.chatSpace'));
+    message.success(t('form.success.created.chatSpace'));
 
     /** On new space created add new item to list */
     chatStore.items.unshift(res.data);

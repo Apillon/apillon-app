@@ -140,7 +140,7 @@ const props = defineProps({
   bucketUuid: { type: String, required: true },
 });
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const bucketStore = useBucketStore();
 const { uploadFiles, fileAlreadyOnFileList, isEnoughSpaceInStorage, folderName } = useUpload();
@@ -183,7 +183,7 @@ function uploadFilesRequest({ file, onError, onFinish }: UploadCustomRequestOpti
     onError,
   };
   if (!isEnoughSpaceInStorage(bucketStore.uploadFileList, fileListItem)) {
-    message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
+    message.warning(t('validation.notEnoughSpaceInStorage', { name: file.name }));
     onError();
   } else if (fileAlreadyOnFileList(bucketStore.uploadFileList, fileListItem)) {
     onError();

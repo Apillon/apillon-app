@@ -54,7 +54,7 @@ const props = defineProps({
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const message = useMessage();
-const $i18n = useI18n();
+const { t } = useI18n();
 const bucketStore = useBucketStore();
 const ipnsStore = useIpnsStore();
 
@@ -70,7 +70,7 @@ const rules: NFormRules = {
   ipns: [
     {
       required: true,
-      message: $i18n.t('validation.ipnsRequired'),
+      message: t('validation.ipnsRequired'),
     },
   ],
 };
@@ -99,7 +99,7 @@ function handleSubmit(e: Event | MouseEvent) {
     } else if (formData.value.ipns) {
       publishToIpns(formData.value.ipns);
     } else {
-      message.warning($i18n.t('validation.ipnsRequired'));
+      message.warning(t('validation.ipnsRequired'));
     }
   });
 }
@@ -115,7 +115,7 @@ async function publishToIpns(ipnsUuid: string) {
     /** On  ipns publish, update data */
     updateIpnsInList(res.data);
 
-    message.success($i18n.t('form.success.ipnsPublished'));
+    message.success(t('form.success.ipnsPublished'));
 
     /** Emit events */
     emit('submitSuccess');
@@ -140,6 +140,6 @@ function onIpnsCreated() {
   modalCreateIpnsVisible.value = false;
   /** Emit events */
   emit('submitSuccess');
-  message.success($i18n.t('form.success.ipnsPublished'));
+  message.success(t('form.success.ipnsPublished'));
 }
 </script>

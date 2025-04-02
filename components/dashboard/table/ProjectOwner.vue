@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t } = useI18n();
 const settingsStore = useSettingsStore();
 const loading = ref<boolean>(false);
 const SelectRole = resolveComponent('SelectRole');
@@ -19,15 +19,15 @@ onMounted(async () => {
 const createColumns = (): NDataTableColumns<ProjectUserInterface> => {
   return [
     {
-      title: $i18n.t('dashboard.user'),
+      title: t('dashboard.user'),
       key: 'name',
     },
     {
-      title: $i18n.t('dashboard.email'),
+      title: t('dashboard.email'),
       key: 'email',
     },
     {
-      title: $i18n.t('dashboard.role'),
+      title: t('dashboard.role'),
       key: 'role_id',
       className: '!py-0',
       render(row) {

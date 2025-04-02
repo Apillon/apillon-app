@@ -40,44 +40,6 @@
       <h3 class="mb-2">{{ selectedFunction }}</h3>
 
       <n-data-table :bordered="false" :columns="columns" :data="tableData" />
-
-      <!-- <div class="mt-6">
-        <h3>Use this function in your app</h3>
-
-        <div class="bg-bg-lighter rounded-full p-0.4 inline-block mt-6 mb-6">
-          <n-button
-            size="small"
-            round
-            :class="selectedLang === 'react' ? '!bg-bg-dark' : ''"
-            @click="selectLang('react')"
-          >
-            <span class="px-2">React</span>
-          </n-button>
-          <n-button
-            size="small"
-            round
-            :class="selectedLang === 'vue' ? '!bg-bg-dark' : ''"
-            @click="selectLang('vue')"
-          >
-            <span class="px-2">Vue</span>
-          </n-button>
-          <n-button
-            size="small"
-            round
-            :class="selectedLang === 'react-native' ? '!bg-bg-dark' : ''"
-            @click="selectLang('react-native')"
-          >
-            <span class="px-2">React Native</span>
-          </n-button>
-        </div>
-        <VCodeBlock
-          :code="currentCode"
-          :style="codeSize"
-          lang="js"
-          theme="github-dark"
-          highlightjs
-        />
-      </div> -->
     </div>
   </div>
 </template>
@@ -134,10 +96,6 @@ const selectType = (type: string) => {
   selectedFunction.value = displayedFunctions.value.length ? displayedFunctions.value[0].name : ''; // Reset the selected function when type changes
 };
 
-const selectLang = (type: string) => {
-  selectedLang.value = type;
-};
-
 const selectFunction = (name: string) => {
   selectedFunction.value = name;
   updateTableData();
@@ -159,58 +117,5 @@ onMounted(() => {
     selectedLang.value = 'react';
   }
   updateTableData();
-});
-
-// codde stuff
-// VueJS code block
-const codeVue = computed(() => {
-  return `// 1. Installation
-  yarn add @subsocial/grill-widget
-  
-  // 2. Add the div HTML tag with an id of grill to your app.
-  <div id="grill"></div>
-  
-`;
-});
-
-// React code block
-const codeReact = computed(() => {
-  return `// 1. Installation react
-  yarn add @subsocial/grill-widget react
-  
-  // 2. Add the div HTML tag with an id of grill to your app.
-  <div id="grill"></div>
-
-`;
-});
-
-// React native code block
-const codeReactNative = computed(() => {
-  return `// 1. Installation react
-  yarn add @subsocial/grill-widget react
-  
-  // 2. Add the div HTML tag with an id of grill to your app.
-  <div id="grill"></div>
-
-`;
-});
-
-// Computed property to return the current code based on selected language
-const currentCode = computed(() => {
-  switch (selectedLang.value) {
-    case 'react':
-      return codeReact.value;
-    case 'vue':
-      return codeVue.value;
-    case 'react-native':
-      return codeReactNative.value;
-    default:
-      return codeReact.value;
-  }
-});
-
-// Update code size when language changes
-const codeSize = computed(() => {
-  return { 'min-height': `${22 * currentCode.value.split('\n').length}px` };
 });
 </script>

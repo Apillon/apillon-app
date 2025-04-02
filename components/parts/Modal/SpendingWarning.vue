@@ -10,7 +10,7 @@
     >
       <div v-if="servicePrices">
         <div v-if="isEnoughCredits" class="mb-4 flex flex-col gap-1 text-body">
-          <span v-for="servicePrice in servicePrices">
+          <span v-for="(servicePrice, key) in servicePrices" :key="key">
             {{ servicePrice.description || servicePrice.name }}
           </span>
         </div>

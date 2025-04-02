@@ -28,6 +28,4 @@
 
 <script setup lang="ts">
 defineProps({ showFooter: { type: Boolean, default: false } });
-
-const collectionStore = useCollectionStore();
 </script>

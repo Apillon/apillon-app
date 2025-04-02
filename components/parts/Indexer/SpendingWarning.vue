@@ -39,6 +39,7 @@
 </template>
 
 <script lang="ts" setup>
+defineEmits(['close']);
 const paymentStore = usePaymentStore();
 const proceed = ref<boolean>(false);
 

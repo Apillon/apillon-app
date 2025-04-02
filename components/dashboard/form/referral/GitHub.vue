@@ -38,7 +38,7 @@ const message = useMessage();
 const $route = useRoute();
 const $router = useRouter();
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
@@ -69,11 +69,11 @@ const rules: NFormRules = {
   email: [
     {
       type: 'email',
-      message: $i18n.t('validation.email'),
+      message: t('validation.email'),
     },
     {
       required: true,
-      message: $i18n.t('validation.emailRequired'),
+      message: t('validation.emailRequired'),
     },
   ],
 };

@@ -82,7 +82,7 @@ import type { SelectOption } from 'naive-ui';
 
 const emit = defineEmits(['submitSuccess']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const bucketStore = useBucketStore();
 const contractStore = useContractStore();
@@ -116,7 +116,7 @@ const rules: NFormRules = {
   bucket: [
     {
       required: true,
-      message: $i18n.t('validation.nft.bucketRequired'),
+      message: t('validation.nft.bucketRequired'),
     },
   ],
 };

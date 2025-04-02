@@ -40,7 +40,7 @@ const { connectAndSign } = useWallet();
 
 const { connect, connectors } = useConnect();
 const { refetch: refetchWalletClient } = useConnectorClient();
-const { address, isConnected, isConnecting } = useAccount();
+const { address, isConnected } = useAccount();
 const { disconnect } = useDisconnect();
 useAccountEffect({ onConnect: onWalletConnected });
 

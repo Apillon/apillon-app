@@ -48,7 +48,8 @@ const transformLinks = (str: string) => {
     try {
       const [_, link] = expr.substring(1, expr.length - 1).split('](');
       return text && link ? `<a href="${link}" class="link">${text}</a>` : expr;
-    } catch (error) {
+    } catch (e: any) {
+      console.error(e);
       return expr;
     }
   });

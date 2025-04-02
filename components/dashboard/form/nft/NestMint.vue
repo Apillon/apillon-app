@@ -80,7 +80,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['submitSuccess']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
@@ -100,23 +100,23 @@ const rules: NFormRules = {
   parentCollectionUuid: [
     {
       required: true,
-      message: $i18n.t('validation.nft.mintCollectionUuidRequired'),
+      message: t('validation.nft.mintCollectionUuidRequired'),
     },
   ],
   parentNftId: [
     {
       required: true,
-      message: $i18n.t('validation.nft.mintParentNftIdRequired'),
+      message: t('validation.nft.mintParentNftIdRequired'),
     },
   ],
   quantity: [
     {
       required: true,
-      message: $i18n.t('validation.nft.mintQuantityRequired'),
+      message: t('validation.nft.mintQuantityRequired'),
     },
     {
       validator: validateQuantity,
-      message: $i18n.t('validation.nft.mintQuantity'),
+      message: t('validation.nft.mintQuantity'),
     },
   ],
 };
@@ -176,7 +176,7 @@ async function mint() {
     const { data } = await $api.post<MintResponse>(endpoints.collectionNestMint(props.collectionUuid), bodyData);
 
     if (data.success) {
-      message.success($i18n.t('form.success.nftMint'));
+      message.success(t('form.success.nftMint'));
 
       /** Invalidate local cache */
       sessionStorage.removeItem(LsCacheKeys.COLLECTIONS);

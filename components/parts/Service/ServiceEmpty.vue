@@ -88,7 +88,7 @@
           <span class="icon-wide-right text-xl"></span>
         </NuxtLink>
         <div class="flex gap-2">
-          <Tag v-for="(item, key) in guide.tags" :key="key" size="small" type="info">
+          <Tag v-for="(item, key2) in guide.tags" :key="key2" size="small" type="info">
             {{ item }}
           </Tag>
         </div>

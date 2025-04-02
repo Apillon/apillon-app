@@ -4,22 +4,17 @@
       <strong>{{ $t('hosting.domain.preview') }}</strong>
     </div>
 
-    <div v-if="domain" class="flex flex-wrap mb-4 gap-4 gap-y-6 items-center">
+    <div v-if="domain" class="mb-4 flex flex-wrap items-center gap-4 gap-y-6">
       <HostingPreviewLink :link="`https://${domain}`" />
-      <div class="flex gap-3 items-center flex-wrap sm:flex-nowrap mb-2">
+      <div class="mb-2 flex flex-wrap items-center gap-3 sm:flex-nowrap">
         <div class="body-sm">
           <strong class="whitespace-nowrap">{{ $t('hosting.domain.domainStatus') }}:</strong>
         </div>
         <Pill :type="domainStatusType">
           {{ $t(`hosting.domain.status.${domainStatus || 0}`) }}
         </Pill>
-        <n-button
-          size="small"
-          :disabled="btnDomainDisabled"
-          :loading="loadingDomain"
-          @click="refreshDomainStatus"
-        >
-          <span class="icon-refresh text-xl mr-2"></span>
+        <n-button size="small" :disabled="btnDomainDisabled" :loading="loadingDomain" @click="refreshDomainStatus">
+          <span class="icon-refresh mr-2 text-xl"></span>
           {{ $t('hosting.domain.refreshStatus') }}
         </n-button>
       </div>
@@ -37,9 +32,9 @@
     <Btn v-else-if="editEnabled" type="primary" size="small" @click="showModalDomain = true">
       {{ $t('hosting.domain.add') }}
     </Btn>
-    <n-tooltip v-else placement="top" :trigger="isMd ? 'hover' : 'click'"">
+    <n-tooltip v-else placement="top" :trigger="isMd ? 'hover' : 'click'">
       <template #trigger>
-        <Btn type="primary" size="small" class="cursor-default !bg-primary/50 locked">
+        <Btn type="primary" size="small" class="locked cursor-default !bg-primary/50">
           {{ $t('hosting.domain.add') }}
         </Btn>
       </template>
@@ -49,7 +44,7 @@
   <!-- Modal - Website domain -->
   <modal
     v-model:show="showModalDomain"
-    class="!w-auto md:min-w-[38rem] max-w-[100vw]"
+    class="!w-auto max-w-[100vw] md:min-w-[38rem]"
     :title="domain ? $t('hosting.domain.update') : $t('hosting.domain.add')"
   >
     <FormHostingDomain :website-uuid="websiteUuid" :domain="domain" />

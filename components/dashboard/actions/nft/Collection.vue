@@ -106,8 +106,6 @@
 </template>
 
 <script lang="ts" setup>
-import { CollectionStatus, NFTCollectionType, SubstrateChain } from '~/lib/types/nft';
-
 defineProps({
   env: { type: Number, default: 0 },
 });

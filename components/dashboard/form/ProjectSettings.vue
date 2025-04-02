@@ -46,7 +46,7 @@ type FormProjectSettings = {
   name?: string | null;
   description?: string | null;
 };
-const $i18n = useI18n();
+const { t } = useI18n();
 const dataStore = useDataStore();
 
 const loading = ref(false);
@@ -93,7 +93,7 @@ async function updateProjectData() {
 
     if (res.data) {
       dataStore.updateCurrentProject(res.data);
-      window.$message.success($i18n.t('form.success.updated.project'));
+      window.$message.success(t('form.success.updated.project'));
     }
   } catch (error) {
     window.$message.error(userFriendlyMsg(error));

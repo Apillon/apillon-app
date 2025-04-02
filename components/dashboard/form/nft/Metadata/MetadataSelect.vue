@@ -16,6 +16,7 @@
     <div class="mx-auto my-6 flex flex-col gap-4 whitespace-pre-line">
       <CardSelect
         v-for="metadata in []"
+        :key="metadata.name"
         icon="nft/metadata"
         :title="metadata.name"
         :content="metadata.length"
@@ -31,8 +32,6 @@
 import { NftMetadataStep } from '~/lib/types/nft';
 
 const emits = defineEmits(['nextStep', 'select']);
-const { t } = useI18n();
-const message = useMessage();
 const collectionStore = useCollectionStore();
 
 const selectedMetadata = ref();

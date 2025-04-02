@@ -193,7 +193,7 @@ const dropdownOptions = computed(() => {
 /** On row click */
 const rowProps = (row: JobInterface) => {
   return {
-    onClick: (e: Event) => {
+    onClick: (_: Event) => {
       currentRow.value = row;
     },
   };

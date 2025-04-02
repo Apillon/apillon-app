@@ -133,14 +133,13 @@
 import type { SelectOption } from 'naive-ui';
 
 defineExpose({ handleSubmit });
-const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
+defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 const props = defineProps({
   title: { type: String, default: null },
   hideSubmit: { type: Boolean, default: false },
 });
 
 const { t } = useI18n();
-const router = useRouter();
 const message = useMessage();
 const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();

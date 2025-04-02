@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t } = useI18n();
 const dataStore = useDataStore();
 const storageStore = useStorageStore();
 const websiteStore = useWebsiteStore();
@@ -42,7 +42,7 @@ const pageLoading = ref<boolean>(true);
 const showModalNewWebsite = ref<boolean | null>(false);
 
 useHead({
-  title: $i18n.t('dashboard.nav.hosting'),
+  title: t('dashboard.nav.hosting'),
 });
 
 onMounted(async () => {
@@ -52,19 +52,6 @@ onMounted(async () => {
 
   pageLoading.value = false;
 });
-
-/**
- * On createNewWebsite click
- * If W3Warn has already been shown, show modal create new website, otherwise show warn first
- * */
-function createNewWebsite() {
-  if (localStorage.getItem(LsW3WarnKeys.HOSTING_NEW) || !$i18n.te('w3Warn.hosting.upload')) {
-    showModalNewWebsite.value = true;
-  } else {
-    modalW3WarnVisible.value = true;
-    showModalNewWebsite.value = null;
-  }
-}
 
 /** When user close W3Warn, allow him to create new website */
 function onModalW3WarnHide() {

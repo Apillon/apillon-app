@@ -48,7 +48,7 @@
 <script lang="ts" setup>
 import { ServiceTypeName } from '~/lib/types/service';
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const ipnsStore = useIpnsStore();
 const { pageLoading, initBucket } = useStorage();
 
@@ -57,7 +57,7 @@ const bucketUuid = ref<string>(`${params?.slug}`);
 const modalCreateIpnsVisible = ref<boolean>(false);
 
 useHead({
-  title: $i18n.t('dashboard.nav.storage'),
+  title: t('dashboard.nav.storage'),
 });
 
 onMounted(() => {

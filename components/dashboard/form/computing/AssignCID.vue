@@ -44,7 +44,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['submitSuccess']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const contractStore = useContractStore();
 const warningStore = useWarningStore();
@@ -67,8 +67,8 @@ const contract = computed<ContractInterface | undefined>(() => {
 const uploadDisabled = computed<boolean>(() => contract.value?.contractStatus !== ContractStatus.DEPLOYED);
 
 const rules: NFormRules = {
-  file: [ruleRequired($i18n.t('validation.contract.fileRequired'))],
-  nftId: [ruleRequired($i18n.t('validation.contract.nftIdRequired'))],
+  file: [ruleRequired(t('validation.contract.fileRequired'))],
+  nftId: [ruleRequired(t('validation.contract.nftIdRequired'))],
 };
 
 // Submit
@@ -89,11 +89,11 @@ async function onFileChange({ file, onError, onFinish }: UploadCustomRequestOpti
   const size = file.file?.size || 0;
 
   if (file.type?.startsWith('application/octet-stream') || file.type?.startsWith('application/x-msdownload')) {
-    message.warning($i18n.t('validation.contract.fileIsApp', { name: file.name }));
+    message.warning(t('validation.contract.fileIsApp', { name: file.name }));
     onError();
     return;
   } else if (size > 65536) {
-    message.warning($i18n.t('validation.contract.fileTooBig', { name: file.name }));
+    message.warning(t('validation.contract.fileTooBig', { name: file.name }));
     onError();
     return;
   }
@@ -120,7 +120,7 @@ async function encryptFile(file?: FileListItemType) {
       contract_uuid: props.contractUuid,
       content: fileContent,
     });
-    message.success($i18n.t('form.success.contract.encrypted'));
+    message.success(t('form.success.contract.encrypted'));
     file.onFinish();
 
     await onFileEncrypted(file, res.data.encryptedContent);
@@ -155,7 +155,7 @@ async function assignCid() {
     });
 
     if (res.data.success) {
-      message.success($i18n.t('form.success.contract.cidAssign'));
+      message.success(t('form.success.contract.cidAssign'));
 
       /** Emit events */
       emit('submitSuccess');

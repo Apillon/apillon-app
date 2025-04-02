@@ -33,7 +33,7 @@ import { useDebounceFn } from '@vueuse/core';
 import type { DataTableSortState, DataTableInst } from 'naive-ui';
 import { NButton, NDropdown, NEllipsis, useMessage } from 'naive-ui';
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
 const bucketStore = useBucketStore();
@@ -50,7 +50,7 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
       key: 'name',
       minWidth: 200,
       sorter: 'default',
-      title: $i18n.t('storage.fileName'),
+      title: t('storage.fileName'),
       render(row) {
         return [h(resolveComponent('IconFolderFile'), { isFile: true }, ''), h('span', { class: 'ml-2 ' }, row.name)];
       },
@@ -58,14 +58,14 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
     {
       key: 'CID',
       sorter: 'default',
-      title: $i18n.t('storage.fileCid'),
+      title: t('storage.fileCid'),
       render(row) {
         return h(resolveComponent('TableEllipsis'), { text: row.CID }, '');
       },
     },
     {
       key: 'link',
-      title: $i18n.t('storage.downloadLink'),
+      title: t('storage.downloadLink'),
       render(row: BucketItemInterface) {
         if (row.CID) {
           return [
@@ -91,7 +91,7 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
     {
       key: 'size',
       sorter: 'default',
-      title: $i18n.t('storage.fileSize'),
+      title: t('storage.fileSize'),
       render(row: BucketItemInterface) {
         if (row.size) {
           return h('span', {}, { default: () => formatBytes(row.size || 0) });
@@ -102,14 +102,14 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
     {
       key: 'createTime',
       sorter: 'default',
-      title: $i18n.t('dashboard.created'),
+      title: t('dashboard.created'),
       render(row: BucketItemInterface) {
         return h('span', {}, { default: () => dateTimeToDate(row.createTime || '') });
       },
     },
     {
       key: 'createTime',
-      title: $i18n.t('dashboard.deletedAt'),
+      title: t('dashboard.deletedAt'),
       render(row: BucketItemInterface) {
         return h('span', {}, { default: () => dateTimeToDateForDeletedFiles(row.updateTime || '') });
       },
@@ -117,7 +117,7 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
     {
       key: 'contentType',
       sorter: 'default',
-      title: $i18n.t('storage.contentType'),
+      title: t('storage.contentType'),
       render(row: BucketItemInterface) {
         if (row.contentType) {
           return h('span', {}, row.contentType);
@@ -156,7 +156,7 @@ const columns = createColumns();
 const dropdownOptions = [
   {
     key: 'restore',
-    label: $i18n.t('general.restore'),
+    label: t('general.restore'),
     disabled: authStore.isAdmin(),
     props: {
       onClick: () => {
@@ -172,14 +172,6 @@ function rowProps(row: BucketItemInterface) {
       currentRow.value = row;
     },
   };
-}
-
-/** Sort column - fetch directory content with order params  */
-async function handleSorterChange(sorter?: DataTableSortState) {
-  sort.value = sorter && sorter.order !== false ? sorter : null;
-  if (sorter) {
-    await getDeletedFiles();
-  }
 }
 
 /** Reset sort if user search change directory or search directory content */
@@ -202,7 +194,7 @@ const debouncedSearchFilter = useDebounceFn(getDeletedFiles, 500);
 /** On page change, load data */
 async function handlePageChange(currentPage: number, pageSize?: number) {
   if (!fileStore.trash.loading) {
-    await getDeletedFiles(currentPage);
+    await getDeletedFiles(currentPage, pageSize);
   }
 }
 
@@ -232,7 +224,7 @@ async function restore() {
     );
 
     removeTrashedFileFromList(restoredFile.data.file_uuid || restoredFile.data.uuid);
-    message.success($i18n.t('form.success.restored.file'));
+    message.success(t('form.success.restored.file'));
 
     /** Remove timestamp for items */
     sessionStorage.removeItem(LsCacheKeys.BUCKET_ITEMS);

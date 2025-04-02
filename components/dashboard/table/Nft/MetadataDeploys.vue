@@ -15,7 +15,7 @@ const props = defineProps({
   deploys: { type: Array<MetadataDeployInterface>, default: [] },
 });
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const collectionStore = useCollectionStore();
 
 /** Data: filtered deploys */
@@ -30,7 +30,7 @@ const createColumns = (): NDataTableColumns<MetadataDeployInterface> => {
   return [
     {
       key: 'createTime',
-      title: $i18n.t('dashboard.created'),
+      title: t('dashboard.created'),
       minWidth: 120,
       render(row: MetadataDeployInterface) {
         return h(
@@ -42,7 +42,7 @@ const createColumns = (): NDataTableColumns<MetadataDeployInterface> => {
     },
     {
       key: 'updateTime',
-      title: $i18n.t('general.updateTime'),
+      title: t('general.updateTime'),
       render(row: MetadataDeployInterface) {
         return h(
           'span',
@@ -53,14 +53,14 @@ const createColumns = (): NDataTableColumns<MetadataDeployInterface> => {
     },
     {
       key: 'currentStep',
-      title: $i18n.t('nft.metadata.currentStep'),
+      title: t('nft.metadata.currentStep'),
       render(row: MetadataDeployInterface) {
         return h(resolveComponent('NftMetadataDeployStatus'), { status: row.currentStep }, '');
       },
     },
     {
       key: 'lastError',
-      title: $i18n.t('nft.metadata.lastError'),
+      title: t('nft.metadata.lastError'),
     },
   ];
 };

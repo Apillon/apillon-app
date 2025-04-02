@@ -11,7 +11,7 @@
 <script lang="ts" setup>
 import { NButton, NDropdown, NTag, useMessage } from 'naive-ui';
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const settingsStore = useSettingsStore();
@@ -32,15 +32,15 @@ const createColumns = ({
 }): NDataTableColumns<ProjectUserInterface> => {
   return [
     {
-      title: $i18n.t('dashboard.user'),
+      title: t('dashboard.user'),
       key: 'name',
     },
     {
-      title: $i18n.t('dashboard.email'),
+      title: t('dashboard.email'),
       key: 'email',
     },
     {
-      title: $i18n.t('dashboard.role'),
+      title: t('dashboard.role'),
       key: 'role_id',
       className: '!py-0',
       render(row) {
@@ -58,7 +58,7 @@ const createColumns = ({
       },
     },
     {
-      title: $i18n.t('general.status'),
+      title: t('general.status'),
       key: 'active',
       render(row) {
         return h(
@@ -70,7 +70,7 @@ const createColumns = ({
             bordered: row.pendingInvitation,
           },
           {
-            default: () => (row.pendingInvitation ? $i18n.t('general.pending') : $i18n.t('general.active')),
+            default: () => (row.pendingInvitation ? t('general.pending') : t('general.active')),
           }
         );
       },
@@ -121,7 +121,7 @@ function rowProps(row: ProjectUserInterface) {
 const dropdownOptions = (user: ProjectUserInterface) => {
   return [
     {
-      label: $i18n.t('general.delete'),
+      label: t('general.delete'),
       key: 'delete',
       disabled: !isRoleDeletionAllowed(user),
       props: {
@@ -164,7 +164,7 @@ async function updateRole(id: number, roleId: number) {
     });
 
     /** Show success msg and refresh users */
-    message.success($i18n.t('form.success.updated.userRole'));
+    message.success(t('form.success.updated.userRole'));
     await getUsers();
   } catch (error) {
     message.error(userFriendlyMsg(error));
@@ -182,7 +182,7 @@ async function uninviteUser(user: ProjectUserInterface) {
     });
 
     /** Show success msg and refresh users */
-    message.success($i18n.t('form.success.deleted.userUninvited'));
+    message.success(t('form.success.deleted.userUninvited'));
     await getUsers();
   } catch (error) {
     message.error(userFriendlyMsg(error));
@@ -198,7 +198,7 @@ async function deleteUser(id: number) {
     await $api.delete<DeleteResponse>(endpoints.projectUser(id));
 
     /** Show success msg and refresh users */
-    message.success($i18n.t('form.success.deleted.user'));
+    message.success(t('form.success.deleted.user'));
     await getUsers();
   } catch (error) {
     message.error(userFriendlyMsg(error));

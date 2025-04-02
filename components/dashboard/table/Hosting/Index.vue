@@ -26,7 +26,7 @@ const props = defineProps({
   archive: { type: Boolean, default: false },
 });
 
-const { t, te } = useI18n();
+const { t } = useI18n();
 const router = useRouter();
 const message = useMessage();
 const authStore = useAuthStore();

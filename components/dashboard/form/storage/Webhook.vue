@@ -117,7 +117,7 @@ const props = defineProps({
   bucketUuid: { type: String, required: true },
 });
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
 
@@ -140,14 +140,14 @@ const rules = computed<NFormRules>(() => {
     url: [
       {
         required: true,
-        message: $i18n.t('validation.webhookRequired'),
+        message: t('validation.webhookRequired'),
         trigger: 'input',
       },
     ],
     authType: [
       {
         required: true,
-        message: $i18n.t('validation.webhookAuthTypeRequired'),
+        message: t('validation.webhookAuthTypeRequired'),
         trigger: 'input',
       },
     ],
@@ -158,15 +158,15 @@ const rules = computed<NFormRules>(() => {
           formData.value.authType === BucketWebhookAuthMethod.TOKEN,
         message:
           formData.value.authType === BucketWebhookAuthMethod.BASIC
-            ? $i18n.t('validation.webhookUsernameRequired')
-            : $i18n.t('validation.webhookTokenRequired'),
+            ? t('validation.webhookUsernameRequired')
+            : t('validation.webhookTokenRequired'),
         trigger: 'input',
       },
     ],
     param2: [
       {
         required: formData.value.authType === BucketWebhookAuthMethod.BASIC,
-        message: $i18n.t('validation.webhookPasswordRequired'),
+        message: t('validation.webhookPasswordRequired'),
         trigger: 'input',
       },
     ],
@@ -176,15 +176,15 @@ const rules = computed<NFormRules>(() => {
 const authTypes = ref<Array<SelectOption>>([
   {
     value: BucketWebhookAuthMethod.NONE,
-    label: $i18n.t(`form.authTypes.${BucketWebhookAuthMethod.NONE}`),
+    label: t(`form.authTypes.${BucketWebhookAuthMethod.NONE}`),
   },
   {
     value: BucketWebhookAuthMethod.BASIC,
-    label: $i18n.t(`form.authTypes.${BucketWebhookAuthMethod.BASIC}`),
+    label: t(`form.authTypes.${BucketWebhookAuthMethod.BASIC}`),
   },
   {
     value: BucketWebhookAuthMethod.TOKEN,
-    label: $i18n.t(`form.authTypes.${BucketWebhookAuthMethod.TOKEN}`),
+    label: t(`form.authTypes.${BucketWebhookAuthMethod.TOKEN}`),
   },
 ]);
 
@@ -225,7 +225,8 @@ async function getWebhook() {
 
     webhook.value = res.data;
     updateFormData(res.data);
-  } catch (error) {
+  } catch (e: ApiError | unknown) {
+    console.error(e);
     webhook.value = null;
   }
   loadingPage.value = false;
@@ -239,7 +240,7 @@ async function createWebhook() {
     webhook.value = res.data;
     updateFormData(res.data);
 
-    message.success($i18n.t('form.success.created.webhook'));
+    message.success(t('form.success.created.webhook'));
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
@@ -256,7 +257,7 @@ async function updateWebhook() {
     webhook.value = res.data;
     updateFormData(res.data);
 
-    message.success($i18n.t('form.success.updated.webhook'));
+    message.success(t('form.success.updated.webhook'));
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
@@ -271,7 +272,7 @@ async function resetWebhook() {
     webhook.value = null;
     updateFormData({} as WebhookInterface);
 
-    message.success($i18n.t('form.success.deleted.webhook'));
+    message.success(t('form.success.deleted.webhook'));
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

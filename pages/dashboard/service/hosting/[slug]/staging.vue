@@ -39,14 +39,14 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t } = useI18n();
 const bucketStore = useBucketStore();
 const websiteStore = useWebsiteStore();
 const deploymentStore = useDeploymentStore();
 const { pageLoading, initWebsite } = useHosting();
 
 useHead({
-  title: $i18n.t('dashboard.nav.hosting'),
+  title: t('dashboard.nav.hosting'),
 });
 
 onMounted(() => {

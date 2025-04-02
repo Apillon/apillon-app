@@ -46,7 +46,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['submitSuccess']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const bucketStore = useBucketStore();
 
@@ -63,7 +63,7 @@ const rules: NFormRules = {
   name: [
     {
       required: true,
-      message: $i18n.t('validation.folderNameRequired'),
+      message: t('validation.folderNameRequired'),
       trigger: 'input',
     },
   ],
@@ -105,7 +105,7 @@ async function createFolder() {
     });
 
     if (res.data) {
-      message.success($i18n.t('form.success.created.directory'));
+      message.success(t('form.success.created.directory'));
       emit('submitSuccess');
     }
   } catch (error) {

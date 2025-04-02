@@ -6,10 +6,7 @@
     :columns="columns"
     :data="tableData"
     :loading="rpcApiKeyStore.loading"
-    :pagination="{
-      pageSize: PAGINATION_LIMIT,
-      prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
-    }"
+    :pagination="pagination"
     :row-key="rowKey"
     :row-props="rowProps"
   />
@@ -33,6 +30,8 @@ const props = defineProps({
 
 const { t } = useI18n();
 const rpcApiKeyStore = useRpcApiKeyStore();
+
+const pagination = reactive(createPagination(false));
 
 const tableData = computed(() => {
   return rpcApiKeyStore.items.filter(item => item.name.toLowerCase().includes(rpcApiKeyStore.search.toLowerCase()));
@@ -146,7 +145,9 @@ const dropdownOptions = computed(() => {
 
 function onRpcApiKeyDeleted() {
   modalDeleteRpcKey.value = false;
-  currentRow.value && rpcApiKeyStore.deleteItem(currentRow.value.id);
+  if (currentRow.value) {
+    rpcApiKeyStore.deleteItem(currentRow.value.id);
+  }
 }
 
 watch(modalEditRpcKeyVisible, newValue => {

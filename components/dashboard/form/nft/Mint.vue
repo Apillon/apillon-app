@@ -110,10 +110,6 @@ const rules: NFormRules = {
   ],
 };
 
-const isSubstrate = computed(
-  () => props.collection.chainType === ChainType.SUBSTRATE || props.collection.chain === SubstrateChain.UNIQUE
-);
-
 function validateQuantity(_: FormItemRule, value: number): boolean {
   return (
     props.collection.isAutoIncrement ||

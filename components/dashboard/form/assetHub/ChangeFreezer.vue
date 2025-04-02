@@ -37,7 +37,7 @@ const props = defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const assetHubStore = useAssetHubStore();
-const { assetHubClient, initClient } = useAssetHub();
+const { assetHubClient } = useAssetHub();
 
 const loading = ref(false);
 const txHash = ref<string | undefined>();

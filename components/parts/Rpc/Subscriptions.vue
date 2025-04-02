@@ -36,7 +36,7 @@
 import { RpcPlanType } from '~/lib/types/rpc';
 
 const emit = defineEmits(['close']);
-const { t, tm, rt } = useI18n();
+const { tm, rt } = useI18n();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const { loading, getSubscriptionSessionUrl, goToCustomerPortal } = usePayment();

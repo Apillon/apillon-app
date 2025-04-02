@@ -8,9 +8,6 @@
 
 <script lang="ts" setup>
 defineProps({
-  status: {
-    type: String,
-    default: 0,
-  },
+  status: { type: String as PropType<TagType>, default: undefined },
 });
 </script>

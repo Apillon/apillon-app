@@ -62,7 +62,7 @@ type FormProject = {
   description: string | null;
 };
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const { clearAll } = useStore();
@@ -87,7 +87,7 @@ const rules: NFormRules = {
   name: [
     {
       required: true,
-      message: $i18n.t('validation.projectNameRequired'),
+      message: t('validation.projectNameRequired'),
       trigger: 'input',
     },
   ],

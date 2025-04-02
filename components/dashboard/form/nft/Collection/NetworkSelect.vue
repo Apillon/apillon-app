@@ -48,7 +48,7 @@
     >
       <h4 class="relative top-2">{{ $t('nft.collection.chainType') }}</h4>
       <div class="my-8 flex justify-center gap-4 whitespace-pre-line">
-        <div v-for="chainType in chainTypes">
+        <div v-for="chainType in chainTypes" :key="chainType.value">
           <div
             v-if="chainType.label === 'SUBSTRATE'"
             :key="chainType.label"
@@ -84,15 +84,14 @@
 import { EvmChainMainnet } from '~/lib/types/nft';
 import { PLAN_NAMES } from '~/lib/types/payment';
 
-const emit = defineEmits(['submit']);
+defineEmits(['submit']);
 const paymentStore = usePaymentStore();
 const metadataStore = useMetadataStore();
 const collectionStore = useCollectionStore();
 
 const { isMd } = useScreen();
 const { getPriceServiceName } = useMetadata();
-const { availableNftChains, availableNftTestChains, enterpriseChainIDs, chainTypes, isChainAvailable } =
-  useCollection();
+const { availableNftChains, availableNftTestChains, enterpriseChainIDs, chainTypes } = useCollection();
 
 const isMainnet = ref<boolean>(false);
 const isSubstrateEnabled = ref<boolean>(false);

@@ -36,7 +36,7 @@
 import { chainIdToName } from '~/lib/utils/chain';
 import { ServiceTypeName } from '~/lib/types/service';
 
-const { t, te } = useI18n();
+const { te } = useI18n();
 const paymentStore = usePaymentStore();
 const metadataStore = useMetadataStore();
 const collectionStore = useCollectionStore();

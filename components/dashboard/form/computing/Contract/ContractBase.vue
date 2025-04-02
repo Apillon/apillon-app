@@ -78,7 +78,7 @@
 <script lang="ts" setup>
 const emit = defineEmits(['submitSuccess']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
@@ -96,8 +96,8 @@ const buckets = computed<Array<NSelectOption>>(() => {
 });
 
 const rules: NFormRules = {
-  name: [ruleRequired($i18n.t('validation.contract.nameRequired'))],
-  description: [ruleDescription($i18n.t('validation.descriptionTooLong'))],
+  name: [ruleRequired(t('validation.contract.nameRequired'))],
+  description: [ruleDescription(t('validation.descriptionTooLong'))],
 };
 
 onMounted(() => {

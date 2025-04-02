@@ -34,7 +34,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['submitSuccess']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const warningStore = useWarningStore();
 
@@ -45,7 +45,7 @@ const formData = ref<FormContractTransfer>({
 });
 
 const rules: NFormRules = {
-  accountAddress: [ruleRequired($i18n.t('validation.contract.addressRequired'))],
+  accountAddress: [ruleRequired(t('validation.contract.addressRequired'))],
 };
 
 // Submit
@@ -66,7 +66,7 @@ async function transfer() {
   try {
     await $api.post<any>(endpoints.contractTransferOwnership(props.contractUuid), formData.value);
 
-    message.success($i18n.t('form.success.contract.transferred'));
+    message.success(t('form.success.contract.transferred'));
 
     /** Emit events */
     emit('submitSuccess');

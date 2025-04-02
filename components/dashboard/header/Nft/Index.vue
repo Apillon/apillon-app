@@ -16,8 +16,4 @@
   </Heading>
 </template>
 
-<script lang="ts" setup>
-import { ServiceTypeName } from '~/lib/types/service';
-
-const { t } = useI18n();
-</script>
+<script lang="ts" setup></script>

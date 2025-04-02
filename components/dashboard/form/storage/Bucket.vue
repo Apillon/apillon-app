@@ -6,10 +6,10 @@
     </Notification>
     <template v-else>
       <!-- Info text -->
-      <p v-if="!bucketUuid && $i18n.te('storage.bucket.infoNew')" class="mb-8 text-body">
+      <p v-if="!bucketUuid && $te('storage.bucket.infoNew')" class="mb-8 text-body">
         {{ $t('storage.bucket.infoNew') }}
       </p>
-      <p v-else-if="!!bucketUuid && $i18n.te('storage.bucket.infoEdit')" class="mb-8 text-body">
+      <p v-else-if="!!bucketUuid && $te('storage.bucket.infoEdit')" class="mb-8 text-body">
         {{ $t('storage.bucket.infoEdit') }}
       </p>
     </template>
@@ -76,7 +76,7 @@ const props = defineProps({
 const emit = defineEmits(['submit', 'submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const message = useMessage();
-const $i18n = useI18n();
+const { t } = useI18n();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 
@@ -90,8 +90,8 @@ const formData = ref<FormNewBucket>({
 });
 
 const rules: NFormRules = {
-  bucketName: [ruleRequired($i18n.t('validation.bucketNameRequired'))],
-  bucketDescription: [ruleDescription($i18n.t('validation.descriptionTooLong'))],
+  bucketName: [ruleRequired(t('validation.bucketNameRequired'))],
+  bucketDescription: [ruleDescription(t('validation.descriptionTooLong'))],
 };
 
 onMounted(async () => {
@@ -138,7 +138,7 @@ async function createBucket() {
   try {
     const res = await $api.post<BucketResponse>(endpoints.buckets, bodyData);
 
-    message.success($i18n.t('form.success.created.bucket'));
+    message.success(t('form.success.created.bucket'));
 
     /** On new bucket created push data to list */
     bucketStore.items.push(res.data);
@@ -164,7 +164,7 @@ async function updateBucket() {
   try {
     const res = await $api.patch<BucketResponse>(endpoints.bucket(props.bucketUuid), bodyData);
 
-    message.success($i18n.t('form.success.updated.bucket'));
+    message.success(t('form.success.updated.bucket'));
 
     /** On bucket updated refresh bucket data */
     bucketStore.items.forEach((item: BucketInterface) => {

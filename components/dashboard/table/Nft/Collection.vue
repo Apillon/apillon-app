@@ -9,7 +9,9 @@
     :pagination="archive ? collectionStore.archive.pagination : collectionStore.pagination"
     :row-key="rowKey"
     :row-props="rowProps"
-    @update:page-size="(pz: number) => (pagination.pageSize = pz)"
+    @update:page-size="
+      (pz: number) => ((archive ? collectionStore.archive.pagination : collectionStore.pagination).pageSize = pz)
+    "
   />
 </template>
 
@@ -19,7 +21,6 @@ import { NButton, NDropdown } from 'naive-ui';
 const props = defineProps({
   archive: { type: Boolean, default: false },
   collections: { type: Array<CollectionInterface>, default: [] },
-  pagination: { type: Object, default: {} },
   search: { type: String, default: '' },
 });
 

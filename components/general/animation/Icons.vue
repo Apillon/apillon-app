@@ -40,11 +40,6 @@ const btnClass = computed(() => {
 /** Index of currently visibile icon */
 const iconIndex = ref<number>(1);
 
-/** Name of currently visibile icon */
-const iconName = computed(() => {
-  return `animation/${props.animationName}/${iconIndex.value}`;
-});
-
 setInterval(() => {
   iconIndex.value = iconIndex.value === props.numOfIcons ? 1 : iconIndex.value + 1;
 }, 300);

@@ -11,7 +11,7 @@ export default function useStorage() {
   async function initBucket(isBucketUpload: boolean = false) {
     /** Website ID from route, then load buckets */
     const routeName = name?.toString() || '';
-    const bucketUuid = (params?.id || params?.slug).toString();
+    const bucketUuid = (params?.id || params?.slug || '').toString();
     if (bucketStore.selected !== bucketUuid) {
       fileStore.resetData();
       ipnsStore.resetData();

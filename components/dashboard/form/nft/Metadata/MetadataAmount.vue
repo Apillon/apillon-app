@@ -29,10 +29,7 @@
 import { NftMetadataStep } from '~/lib/types/nft';
 
 const emits = defineEmits(['nextStep']);
-const { t } = useI18n();
-const message = useMessage();
 const collectionStore = useCollectionStore();
-
 const nextStep = ref<number>();
 
 onMounted(() => {

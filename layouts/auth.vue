@@ -11,7 +11,7 @@
           <div v-if="!isRegister" class="bg-ellipse absoluteCenter"></div>
           <router-view v-slot="{ Component, route }">
             <transition :name="(route.meta?.transition as string) || 'fadeBlur'" :duration="500">
-              <div class="relative z-1 w-full" :class="{ 'card-auth': !isRegister }">
+              <div v-if="Component" class="relative z-1 w-full" :class="{ 'card-auth': !isRegister }">
                 <component :is="Component" />
               </div>
             </transition>

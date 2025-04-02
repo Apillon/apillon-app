@@ -23,7 +23,7 @@
 
       <!--  IPNS -->
       <n-form-item v-if="!website?.ipnsProduction" path="ipns" :show-label="false">
-        <n-checkbox v-model:checked="formData.ipns" :label="labelInfo('useIpns', 'hosting.domain') as string" />
+        <n-checkbox v-model:checked="formData.ipns" :label="labelInfo('useIpns', 'hosting.domain')" />
       </n-form-item>
 
       <!--  Form submit -->
@@ -62,7 +62,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
 const websiteStore = useWebsiteStore();
@@ -86,7 +86,7 @@ const rules: NFormRules = {
     {
       type: 'url',
       validator: validateDomain,
-      message: $i18n.t('validation.websiteDomainUrl'),
+      message: t('validation.websiteDomainUrl'),
     },
   ],
 };
@@ -148,7 +148,7 @@ async function createWebsiteDomain() {
     updateWebsiteDomainValue(res.data.domain);
 
     domainCreated.value = true;
-    message.success($i18n.t('form.success.created.domain'));
+    message.success(t('form.success.created.domain'));
 
     /** Emit events */
     emit('submitSuccess');
@@ -172,7 +172,7 @@ async function createIpns(): Promise<boolean> {
     });
     websiteStore.active.ipnsProduction = res.data.ipnsName;
 
-    message.success($i18n.t('form.success.created.ipns'));
+    message.success(t('form.success.created.ipns'));
     return true;
   } catch (error) {
     message.error(userFriendlyMsg(error));
@@ -189,7 +189,7 @@ async function updateWebsiteDomain() {
 
     updateWebsiteDomainValue(res.data.domain);
 
-    message.success($i18n.t('form.success.updated.domain'));
+    message.success(t('form.success.updated.domain'));
 
     /** Emit events */
     emit('submitSuccess');

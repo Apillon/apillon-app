@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useAccount, useAccountEffect, useConnect, useConnectorClient, useChainId, useSwitchChain } from '@wagmi/vue';
+import { useAccount, useAccountEffect, useConnect, useChainId, useSwitchChain } from '@wagmi/vue';
 
 defineEmits(['submit']);
 defineProps({
@@ -29,7 +29,6 @@ const chainId = useChainId();
 const { switchChain } = useSwitchChain();
 
 const { connect, connectors } = useConnect();
-const { refetch: refetchWalletClient } = useConnectorClient();
 const { isConnected } = useAccount();
 useAccountEffect({ onConnect: onWalletConnected });
 
@@ -45,11 +44,11 @@ async function onWalletConnected() {
 }
 
 const wrongNetwork = computed(() => {
-  return chainId.value?.id !== deployedContractStore.active.chain;
+  return chainId.value !== deployedContractStore.active.chain;
 });
 
 async function ensureCorrectNetwork() {
-  await switchNetwork(deployedContractStore.active.chain);
+  await switchChain({ chainId: deployedContractStore.active.chain });
   loading.value = false;
   return true;
 }

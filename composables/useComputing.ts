@@ -147,9 +147,9 @@ export default function useComputing() {
     return response.data;
   }
 
-  function labelInfo(field: string, base = 'form.label.contract') {
+  function labelInfo(field: string, base = 'form.label.contract'): string {
     if (te(`${base}.${field}`) && te(`${base}.labelInfo.${field}`) && t(`${base}.labelInfo.${field}`)) {
-      return labelInfoText(t(`${base}.${field}`), decodeHTMLEntities(t(`${base}.labelInfo.${field}`)));
+      return labelInfoText(t(`${base}.${field}`), decodeHTMLEntities(t(`${base}.labelInfo.${field}`))) as string;
     }
     return te(`${base}.${field}`) ? t(`${base}.${field}`) : field;
   }

@@ -6,10 +6,10 @@
     </Notification>
     <template v-else>
       <!-- Info text -->
-      <p v-if="ipnsUuid && $i18n.te('storage.ipns.infoNew')" class="mb-8 text-body">
+      <p v-if="ipnsUuid && $te('storage.ipns.infoNew')" class="mb-8 text-body">
         {{ $t('storage.ipns.infoNew') }}
       </p>
-      <p v-else-if="ipnsUuid && $i18n.te('storage.ipns.infoEdit')" class="mb-8 text-body">
+      <p v-else-if="ipnsUuid && $te('storage.ipns.infoEdit')" class="mb-8 text-body">
         {{ $t('storage.ipns.infoEdit') }}
       </p>
     </template>
@@ -71,7 +71,7 @@ const props = defineProps({
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const message = useMessage();
-const $i18n = useI18n();
+const { t } = useI18n();
 const dataStore = useDataStore();
 const ipnsStore = useIpnsStore();
 const bucketStore = useBucketStore();
@@ -88,8 +88,8 @@ const formData = ref<FormIpns>({
 });
 
 const rules: NFormRules = {
-  name: [ruleRequired($i18n.t('validation.ipnsNameRequired'))],
-  description: [ruleDescription($i18n.t('validation.descriptionTooLong'))],
+  name: [ruleRequired(t('validation.ipnsNameRequired'))],
+  description: [ruleDescription(t('validation.descriptionTooLong'))],
 };
 
 onMounted(async () => {
@@ -130,7 +130,7 @@ async function createIpns() {
   try {
     const res = await $api.post<IpnsCreateResponse>(endpoints.ipns(bucketStore.selected), formData.value);
 
-    message.success($i18n.t('form.success.created.ipns'));
+    message.success(t('form.success.created.ipns'));
 
     /** On new ipns created add new item to list */
     ipnsStore.items.unshift(res.data);
@@ -153,7 +153,7 @@ async function updateIpns() {
       formData.value
     );
 
-    message.success($i18n.t('form.success.updated.ipns'));
+    message.success(t('form.success.updated.ipns'));
 
     /** On ipns updated refresh ipns data */
     ipnsStore.items.forEach((item: IpnsInterface) => {

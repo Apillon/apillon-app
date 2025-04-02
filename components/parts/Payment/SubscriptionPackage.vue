@@ -32,7 +32,7 @@
     >
       {{ $t('dashboard.payment.currentPlan') }}
     </Btn>
-    <n-tooltip v-else-if="!dataStore.isUserOwner" :trigger="isMd ? 'hover' : 'click'"">
+    <n-tooltip v-else-if="!dataStore.isUserOwner" :trigger="isMd ? 'hover' : 'click'">
       <template #trigger>
         <Btn class="cursor-default opacity-60" type="primary" size="large" :color="colors.blue" round>
           {{ $t('dashboard.payment.selectPlan') }}

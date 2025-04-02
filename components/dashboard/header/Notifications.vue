@@ -51,7 +51,7 @@ const options = computed(() => {
   ];
 });
 
-function renderOption({ node, option }) {
+function renderOption({ option }) {
   if (option?.key === 'empty') {
     return h(resolveComponent('HeaderNotificationEmpty'));
   }

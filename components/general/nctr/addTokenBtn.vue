@@ -34,7 +34,8 @@ async function addToken() {
     setTimeout(() => {
       wasAdded.value = false;
     }, 7000);
-  } catch (error) {
+  } catch (e: ApiError | any) {
+    console.error(e);
     wasAdded.value = false;
   }
 }

@@ -8,7 +8,6 @@
         <ActionsNft archive />
         <TableNftCollection
           :collections="collectionStore.archive.items"
-          :pagination="collectionStore.archive.pagination"
           :search="collectionStore.archive.search"
           archive
         />

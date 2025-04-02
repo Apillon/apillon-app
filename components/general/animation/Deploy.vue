@@ -17,6 +17,4 @@ defineProps({
   title: { type: String, default: '' },
   content: { type: String, default: '' },
 });
-
-const { t } = useI18n();
 </script>

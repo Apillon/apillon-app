@@ -72,9 +72,9 @@ function nextStep() {
       break;
     case NftMetadataStep.CSV:
       createNftDataAsync();
+      step.value += 1;
+      break;
     case NftMetadataStep.CHAIN:
-    case NftMetadataStep.SINGLE:
-    case NftMetadataStep.CSV:
     case NftMetadataStep.ENDPOINT:
     case NftMetadataStep.JSON:
       step.value += 1;

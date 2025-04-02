@@ -52,6 +52,7 @@ export function substrateAddressValidate(
 
     return isValid;
   } catch (e: any) {
+    console.error(e);
     return false;
   }
 }

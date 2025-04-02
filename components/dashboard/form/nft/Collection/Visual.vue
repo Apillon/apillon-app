@@ -15,7 +15,7 @@
       <n-form-item-gi
         :span="6"
         path="logo"
-        :label="infoLabel('logo') as string"
+        :label="infoLabel('logo')"
         :label-props="{ for: 'collectionLogo' }"
         :show-feedback="false"
       >
@@ -26,7 +26,7 @@
       <n-form-item-gi
         :span="6"
         path="coverImage"
-        :label="infoLabel('coverImage') as string"
+        :label="infoLabel('coverImage')"
         :label-props="{ for: 'coverImage' }"
         :show-feedback="false"
       >

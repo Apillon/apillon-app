@@ -231,7 +231,7 @@ onMounted(async () => {
 
 watch(
   () => formData.value.network,
-  async rpc => {
+  async _ => {
     if (assetHubClient.value) {
       await assetHubClient.value.destroyInstance();
       await sleep(200);
@@ -240,9 +240,6 @@ watch(
 );
 
 // Custom validations
-function validateAssetId(_: FormItemRule, value: string): boolean {
-  return !!props.assetId || !assets.value.some(i => i.id === Number(value));
-}
 function validateName(_: FormItemRule, value: string): boolean {
   return !!props.assetId || !assets.value.some(i => equalsIgnoreCase(i.name, value));
 }

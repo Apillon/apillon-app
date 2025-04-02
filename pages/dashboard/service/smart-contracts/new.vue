@@ -38,10 +38,10 @@
 <script lang="ts" setup>
 const dataStore = useDataStore();
 const smartContractStore = useSmartContractStore();
-const $i18n = useI18n();
+const { t } = useI18n();
 
 useHead({
-  title: $i18n.t('dashboard.nav.smartContracts'),
+  title: t('dashboard.nav.smartContracts'),
 });
 const pageLoading = ref<boolean>(true);
 

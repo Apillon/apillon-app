@@ -12,7 +12,7 @@
 
     <n-table class="plain my-6 table-fixed" :bordered="false" :single-line="true">
       <tbody>
-        <tr v-for="price in pricing">
+        <tr v-for="(price, key) in pricing" :key="key">
           <td>{{ price.description }}</td>
           <td class="!text-white">{{ price.currentPrice }} {{ $t('dashboard.credits.credits') }}</td>
         </tr>

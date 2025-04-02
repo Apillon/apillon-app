@@ -1,7 +1,7 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules" autocomplete="off" @submit.prevent="handleSubmit">
     <n-grid class="items-end" :span="24" :x-gap="24" :y-gap="16">
-      <template v-for="(item, key) in formData">
+      <template v-for="(item, key) in formData" :key="key">
         <!--  Variable key -->
         <n-form-item-gi
           :class="{ 'hide-feedback': item.key || !formErrors }"

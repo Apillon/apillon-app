@@ -82,7 +82,7 @@ onMounted(() => {
 });
 
 const parseIpfsFromLink = (link: string) => {
-  const match = link.match(/\/ipfs\/[^\/?]+/);
+  const match = link.match(/\/ipfs\/[^/?]+/);
   return match && match.length ? match[0] : '';
 };
 </script>

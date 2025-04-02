@@ -9,7 +9,7 @@
         filled
         :title="chain"
       />
-      <n-tooltip placement="bottom" :trigger="isMd ? 'hover' : 'click'"">
+      <n-tooltip placement="bottom" :trigger="isMd ? 'hover' : 'click'">
         <template #trigger>
           <strong class="cursor-pointer text-xs underline"> + {{ chains.length - 4 }} {{ $t('general.more') }} </strong>
         </template>

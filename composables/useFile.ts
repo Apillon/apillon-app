@@ -13,7 +13,8 @@ export default function useFile() {
     }
     try {
       return download(file.link, file.name);
-    } catch (error: any) {
+    } catch (e: any) {
+      console.error(e);
       /** Show error message */
       window?.$message?.error(window?.$i18n?.t('error.fileDownload'));
     }

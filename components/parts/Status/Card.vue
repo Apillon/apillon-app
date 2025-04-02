@@ -61,7 +61,7 @@ import { colors } from '~/tailwind.config';
 
 const expanded = ref(true);
 
-const { activeDeployments, refreshInterval, refreshStatusOptions, updateRefreshInterval, refresh } = useRefreshStatus();
+const { activeDeployments } = useRefreshStatus();
 </script>
 
 <style lang="postcss">

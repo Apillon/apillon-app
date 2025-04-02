@@ -51,7 +51,6 @@
 </template>
 <script lang="ts" setup>
 defineEmits(['serviceCreated']);
-const { t } = useI18n();
 const dataStore = useDataStore();
 const rpcEndpointStore = useRpcEndpointStore();
 

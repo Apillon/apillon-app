@@ -27,7 +27,6 @@ export default function useService() {
   const { t, rt, tm } = useI18n();
   const authStore = useAuthStore();
   const config = useRuntimeConfig();
-  const { translate } = useSolution();
 
   const services = {
     storage: ServiceType.STORAGE,

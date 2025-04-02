@@ -16,7 +16,7 @@
     </div>
 
     <div class="flex w-1/2 max-w-xl flex-auto flex-col gap-3 lg:flex-1 xl:max-w-2xl">
-      <InfoBox v-for="info in instructions" :content="info" />
+      <InfoBox v-for="(info, key) in instructions" :key="key" :content="info" />
     </div>
   </div>
 </template>

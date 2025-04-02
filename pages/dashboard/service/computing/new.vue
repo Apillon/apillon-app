@@ -28,11 +28,11 @@
 <script lang="ts" setup>
 import { ServiceTypeName } from '~/lib/types/service';
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const paymentStore = usePaymentStore();
 
 useHead({
-  title: $i18n.t('dashboard.nav.computing'),
+  title: t('dashboard.nav.computing'),
 });
 
 const tab = ref<string>('choose');

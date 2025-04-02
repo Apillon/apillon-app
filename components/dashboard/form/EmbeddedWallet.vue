@@ -50,7 +50,7 @@
       <n-form-item
         path="whitelistedDomains"
         :label-props="{ for: 'whitelistedDomains' }"
-        :label="labelInfo('whitelistedDomains', 'form.label.embeddedWallet') as string"
+        :label="labelInfo('whitelistedDomains', 'form.label.embeddedWallet')"
       >
         <n-input
           v-model:value="formData.whitelistedDomains"
@@ -89,7 +89,6 @@ const props = defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
-const warningStore = useWarningStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
 const { labelInfo } = useComputing();
 

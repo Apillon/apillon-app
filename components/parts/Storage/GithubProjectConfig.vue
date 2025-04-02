@@ -33,7 +33,7 @@ onMounted(async () => {
   if (oauthToken.value) {
     const projectUuid = dataStore.projectUuid;
     try {
-      const res = await $api.post<any>(endpoints.linkGithub, {
+      await $api.post<any>(endpoints.linkGithub, {
         code: oauthToken.value,
         project_uuid: projectUuid,
       });

@@ -54,7 +54,7 @@ const props = defineProps({
   deleted: { type: Boolean, default: false },
 });
 
-const $i18n = useI18n();
+const { t, te } = useI18n();
 const router = useRouter();
 const message = useMessage();
 const authStore = useAuthStore();
@@ -88,7 +88,7 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
     },
     {
       key: 'name',
-      title: $i18n.t('storage.bucket.name'),
+      title: t('storage.bucket.name'),
       className: props.deleted ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h('strong', {}, { default: () => row.name });
@@ -96,25 +96,25 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
     },
     {
       key: 'type',
-      title: $i18n.t('storage.bucket.type'),
+      title: t('storage.bucket.type'),
       className: props.deleted ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
-        if (row.bucketType > 0 && $i18n.te(`storage.type.${row.bucketType}`)) {
-          return h('span', {}, { default: () => $i18n.t(`storage.type.${row.bucketType}`) });
+        if (row.bucketType > 0 && te(`storage.type.${row.bucketType}`)) {
+          return h('span', {}, { default: () => t(`storage.type.${row.bucketType}`) });
         }
         return '';
       },
     },
     {
       key: 'bucket_uuid',
-      title: $i18n.t('storage.bucket.uuid'),
+      title: t('storage.bucket.uuid'),
       render(row: BucketInterface) {
         return h(TableEllipsis, { text: row.bucket_uuid }, '');
       },
     },
     {
       key: 'used',
-      title: $i18n.t('storage.used'),
+      title: t('storage.used'),
       className: props.deleted ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return (
@@ -127,7 +127,7 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
     },
     {
       key: 'description',
-      title: $i18n.t('storage.bucket.description'),
+      title: t('storage.bucket.description'),
       className: props.deleted ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.description });
@@ -183,7 +183,7 @@ const rowProps = (row: BucketInterface) => {
 const dropdownOptions = [
   {
     key: 'storageEdit',
-    label: $i18n.t('storage.edit'),
+    label: t('storage.edit'),
     disabled: dataStore.isProjectUser,
     props: {
       onClick: () => {
@@ -193,7 +193,7 @@ const dropdownOptions = [
   },
   {
     key: 'storageDelete',
-    label: $i18n.t('general.delete'),
+    label: t('general.delete'),
     disabled: authStore.isAdmin(),
     props: {
       onClick: () => {
@@ -206,7 +206,7 @@ const dropdownOptions = [
 const dropdownDeletedOptions = [
   {
     key: 'storageRestore',
-    label: $i18n.t('general.restore'),
+    label: t('general.restore'),
     disabled: authStore.isAdmin(),
     props: {
       onClick: () => {
@@ -264,7 +264,7 @@ async function restoreBucket() {
     const response = await $api.patch<BucketResponse>(endpoints.bucketRestore(currentRow.value.bucket_uuid));
     removeDeletedBucketFromList(response.data.bucket_uuid);
 
-    message.success($i18n.t('form.success.restored.bucket'));
+    message.success(t('form.success.restored.bucket'));
   } catch (error) {
     window.$message.error(userFriendlyMsg(error));
   }

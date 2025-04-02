@@ -17,7 +17,7 @@ defineProps({
   deployments: { type: Array<DeploymentInterface>, default: [] },
 });
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const deploymentStore = useDeploymentStore();
 const DeploymentStatus = resolveComponent('HostingDeploymentStatus');
 
@@ -27,20 +27,20 @@ const createColumns = (): NDataTableColumns<DeploymentInterface> => {
   return [
     {
       key: 'environment',
-      title: $i18n.t('general.environment'),
+      title: t('general.environment'),
       minWidth: 150,
       render(row) {
         return h(
           'span',
           {},
           {
-            default: () => $i18n.t(`hosting.deployment.env.${row.environment}`),
+            default: () => t(`hosting.deployment.env.${row.environment}`),
           }
         );
       },
     },
     {
-      title: $i18n.t('hosting.deploymentStatus'),
+      title: t('hosting.deploymentStatus'),
       key: 'deploymentStatus',
       render(row) {
         return h(DeploymentStatus, { deploymentStatus: row.deploymentStatus }, '');
@@ -48,7 +48,7 @@ const createColumns = (): NDataTableColumns<DeploymentInterface> => {
     },
     {
       key: 'size',
-      title: $i18n.t('hosting.size'),
+      title: t('hosting.size'),
       render(row: DeploymentInterface) {
         if (row.size) {
           return h('span', {}, { default: () => formatBytes(row.size || 0) });
@@ -58,7 +58,7 @@ const createColumns = (): NDataTableColumns<DeploymentInterface> => {
     },
     {
       key: 'createTime',
-      title: $i18n.t('dashboard.createTime'),
+      title: t('dashboard.createTime'),
       render(row: DeploymentInterface) {
         return h('span', {}, { default: () => dateTimeToDateAndTime(row.createTime || '') });
       },

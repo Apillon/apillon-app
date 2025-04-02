@@ -45,7 +45,7 @@ type FormUserInvite = {
   role_id: number | null;
 };
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const settingsStore = useSettingsStore();
@@ -75,23 +75,23 @@ const rules: NFormRules = {
   email: [
     {
       type: 'email',
-      message: $i18n.t('validation.email'),
+      message: t('validation.email'),
     },
     {
       required: true,
-      message: $i18n.t('validation.emailRequired'),
+      message: t('validation.emailRequired'),
     },
   ],
   role_id: [
     {
       required: true,
-      message: $i18n.t('validation.roleRequired'),
+      message: t('validation.roleRequired'),
     },
     {
       validator(_: FormItemRule, value: string) {
         return UserRoleIds.includes(parseInt(value));
       },
-      message: $i18n.t('validation.role'),
+      message: t('validation.role'),
     },
   ],
 };
@@ -114,7 +114,7 @@ async function inviteUser() {
     await $api.post<InviteUserResponse>(endpoints.projectInviteUser(dataStore.project.selected), formData.value);
 
     /** Show success msg and refresh users */
-    message.success($i18n.t('form.success.created.userInvite'));
+    message.success(t('form.success.created.userInvite'));
     await settingsStore.fetchProjectUsers();
   } catch (error) {
     message.error(userFriendlyMsg(error));

@@ -59,7 +59,7 @@ const props = defineProps({
 });
 
 const message = useMessage();
-const $i18n = useI18n();
+const { t } = useI18n();
 
 const loading = ref<boolean>(false);
 const showModal = ref<boolean>(false);
@@ -71,7 +71,7 @@ const formData = ref<FormIpfs>({
 });
 
 const rules: NFormRules = {
-  targetUrl: ruleRequired($i18n.t('validation.ipfsCidRequired')),
+  targetUrl: ruleRequired(t('validation.ipfsCidRequired')),
 };
 
 onMounted(() => {

@@ -64,12 +64,12 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t } = useI18n();
 const authStore = useAuthStore();
 const settingsStore = useSettingsStore();
 
 useHead({
-  title: $i18n.t('profile.mySettings'),
+  title: t('profile.mySettings'),
 });
 
 onMounted(async () => {

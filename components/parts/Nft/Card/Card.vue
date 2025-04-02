@@ -33,6 +33,7 @@
 </template>
 
 <script lang="ts" setup>
+defineEmits(['remove']);
 defineProps({
   name: { type: String, default: null },
   description: { type: String, default: null },

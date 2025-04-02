@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t } = useI18n();
 const dataStore = useDataStore();
 const postStore = usePostStore();
 
@@ -39,7 +39,7 @@ const headingRef = ref<HTMLElement>();
 const modalCreatePostVisible = ref<boolean | null>(false);
 
 useHead({
-  title: $i18n.t('dashboard.nav.social'),
+  title: t('dashboard.nav.social'),
 });
 
 const scrollStyle = computed(() => {

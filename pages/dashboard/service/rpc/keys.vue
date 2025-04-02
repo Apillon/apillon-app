@@ -16,14 +16,14 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t } = useI18n();
 const dataStore = useDataStore();
 const rpcApiKeyStore = useRpcApiKeyStore();
 
 const pageLoading = ref<boolean>(true);
 
 useHead({
-  title: $i18n.t('dashboard.nav.rpc'),
+  title: t('dashboard.nav.rpc'),
 });
 
 onMounted(async () => {

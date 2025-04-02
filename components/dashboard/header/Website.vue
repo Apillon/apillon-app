@@ -31,9 +31,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ServiceTypeName } from '~/lib/types/service';
-
-const $i18n = useI18n();
+const { te } = useI18n();
 const { params } = useRoute();
 
 const bucketStore = useBucketStore();
@@ -54,7 +52,7 @@ onMounted(() => {
   if (
     websiteUuid.value &&
     !localStorage.getItem(LsW3WarnKeys.HOSTING_NEW) &&
-    $i18n.te('w3Warn.hosting.upload') &&
+    te('w3Warn.hosting.upload') &&
     bucketStore.folder.items.length === 0
   ) {
     showModalW3Warn.value = true;

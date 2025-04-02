@@ -30,7 +30,7 @@ import { useDebounceFn } from '@vueuse/core';
 import type { DataTableInst, DataTableSortState } from 'naive-ui';
 import { NButton, NDropdown } from 'naive-ui';
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const ipnsStore = useIpnsStore();
 const bucketStore = useBucketStore();
 
@@ -47,13 +47,13 @@ const TableLink = resolveComponent('TableLink');
 /** Available columns - show/hide column */
 const selectedColumns = ref(['name', 'ipns_uuid', 'description', 'ipnsName', 'ipnsValue', 'createTime']);
 const availableColumns = ref([
-  { value: 'name', label: $i18n.t('general.name') },
-  { value: 'ipns_uuid', label: $i18n.t('storage.ipns.uuid') },
-  { value: 'description', label: $i18n.t('storage.ipns.description') },
-  { value: 'ipnsName', label: $i18n.t('storage.ipns.ipnsName') },
-  { value: 'ipnsValue', label: $i18n.t('storage.ipns.link') },
-  { value: 'createTime', label: $i18n.t('dashboard.createTime') },
-  { value: 'updateTime', label: $i18n.t('general.updateTime') },
+  { value: 'name', label: t('general.name') },
+  { value: 'ipns_uuid', label: t('storage.ipns.uuid') },
+  { value: 'description', label: t('storage.ipns.description') },
+  { value: 'ipnsName', label: t('storage.ipns.ipnsName') },
+  { value: 'ipnsValue', label: t('storage.ipns.link') },
+  { value: 'createTime', label: t('dashboard.createTime') },
+  { value: 'updateTime', label: t('general.updateTime') },
 ]);
 
 /** Columns */
@@ -61,25 +61,25 @@ const columns = computed<NDataTableColumns<IpnsInterface>>(() => {
   return [
     {
       key: 'name',
-      title: $i18n.t('storage.ipns.name'),
+      title: t('storage.ipns.name'),
       minWidth: 100,
       className: { hidden: !selectedColumns.value.includes('name') },
     },
     {
       key: 'ipns_uuid',
-      title: $i18n.t('storage.ipns.uuid'),
+      title: t('storage.ipns.uuid'),
       render(row: IpnsInterface) {
         return h(TableEllipsis, { text: row.ipns_uuid }, '');
       },
     },
     {
       key: 'description',
-      title: $i18n.t('storage.ipns.description'),
+      title: t('storage.ipns.description'),
       className: { hidden: !selectedColumns.value.includes('description') },
     },
     {
       key: 'ipnsName',
-      title: $i18n.t('storage.ipns.ipnsName'),
+      title: t('storage.ipns.ipnsName'),
       className: { hidden: !selectedColumns.value.includes('ipnsName') },
       render(row: IpnsInterface) {
         return h(TableEllipsis, { text: row.ipnsName }, '');
@@ -87,7 +87,7 @@ const columns = computed<NDataTableColumns<IpnsInterface>>(() => {
     },
     {
       key: 'ipnsValue',
-      title: $i18n.t('storage.ipns.link'),
+      title: t('storage.ipns.link'),
       className: { hidden: !selectedColumns.value.includes('ipnsValue') },
       render(row: IpnsInterface) {
         return h(TableLink, { link: row.link }, '');
@@ -95,7 +95,7 @@ const columns = computed<NDataTableColumns<IpnsInterface>>(() => {
     },
     {
       key: 'createTime',
-      title: $i18n.t('dashboard.createTime'),
+      title: t('dashboard.createTime'),
       className: { hidden: !selectedColumns.value.includes('createTime') },
       render(row: IpnsInterface) {
         return h('span', {}, { default: () => dateTimeToDateAndTime(row.createTime || '') });
@@ -103,7 +103,7 @@ const columns = computed<NDataTableColumns<IpnsInterface>>(() => {
     },
     {
       key: 'updateTime',
-      title: $i18n.t('general.updateTime'),
+      title: t('general.updateTime'),
       className: { hidden: !selectedColumns.value.includes('updateTime') },
       render(row: IpnsInterface) {
         return h('span', {}, { default: () => dateTimeToDateAndTime(row.updateTime || '') });
@@ -161,7 +161,7 @@ function handleColumnChange(selectedValues: Array<string>) {
 const dropdownOptions = [
   {
     key: 'edit',
-    label: $i18n.t('general.edit'),
+    label: t('general.edit'),
     props: {
       onClick: () => {
         modalEditIpnsVisible.value = true;
@@ -170,7 +170,7 @@ const dropdownOptions = [
   },
   {
     key: 'delete',
-    label: $i18n.t('general.delete'),
+    label: t('general.delete'),
     props: {
       class: '!text-pink',
       onClick: () => {

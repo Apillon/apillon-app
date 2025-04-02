@@ -32,8 +32,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ServiceTypeName, PriceServiceName } from '~/lib/types/service';
-
 defineProps({
   archive: { type: Boolean, default: false },
 });

@@ -27,7 +27,6 @@
 <script lang="ts" setup>
 import { ServiceTypeName } from '~/lib/types/service';
 
-const { t } = useI18n();
 const { isLg } = useScreen();
 const paymentStore = usePaymentStore();
 const metadataStore = useMetadataStore();

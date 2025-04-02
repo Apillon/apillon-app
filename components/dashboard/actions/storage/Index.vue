@@ -73,7 +73,7 @@ import { ServiceTypeName } from '~/lib/types/service';
 
 const emit = defineEmits(['onBucketDelete']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const router = useRouter();
 const authStore = useAuthStore();
 const bucketStore = useBucketStore();
@@ -83,11 +83,11 @@ const showModalNewBucket = ref<boolean | null>(false);
 const bucketTypes = ref<SelectOption[]>([
   {
     value: BucketType.STORAGE,
-    label: $i18n.t(`storage.type.${BucketType.STORAGE}`),
+    label: t(`storage.type.${BucketType.STORAGE}`),
   },
   {
     value: BucketType.NFT_METADATA,
-    label: $i18n.t(`storage.type.${BucketType.NFT_METADATA}`),
+    label: t(`storage.type.${BucketType.NFT_METADATA}`),
   },
 ]);
 

@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t } = useI18n();
 const router = useRouter();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
@@ -58,7 +58,7 @@ const showModalW3Warn = ref<boolean>(false);
 const showModalNewBucket = ref<boolean | null>(false);
 
 useHead({
-  title: $i18n.t('dashboard.nav.storage'),
+  title: t('dashboard.nav.storage'),
 });
 
 onMounted(async () => {

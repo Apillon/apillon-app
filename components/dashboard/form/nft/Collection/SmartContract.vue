@@ -11,7 +11,7 @@
 
     <n-grid :cols="12" :x-gap="32">
       <!--  Collection name -->
-      <n-form-item-gi :span="8" path="name" :label="infoLabel('name') as string" :label-props="{ for: 'name' }">
+      <n-form-item-gi :span="8" path="name" :label="infoLabel('name')" :label-props="{ for: 'name' }">
         <n-input
           v-model:value="metadataStore.form.smartContract.name"
           :input-props="{ id: 'name' }"
@@ -21,7 +21,7 @@
       </n-form-item-gi>
 
       <!--  Collection Symbol -->
-      <n-form-item-gi :span="4" path="symbol" :label="infoLabel('symbol') as string" :label-props="{ for: 'symbol' }">
+      <n-form-item-gi :span="4" path="symbol" :label="infoLabel('symbol')" :label-props="{ for: 'symbol' }">
         <n-input
           v-model:value="metadataStore.form.smartContract.symbol"
           :minlength="1"
@@ -40,7 +40,7 @@
         metadataStore.form.smartContract.chainType === ChainType.EVM
       "
       path="collectionType"
-      :label="infoLabel('type') as string"
+      :label="infoLabel('type')"
       :label-props="{ for: 'collectionType' }"
     >
       <select-options
@@ -54,7 +54,7 @@
     </n-form-item>
 
     <!--  Chain -->
-    <n-form-item v-if="showNetwork" path="chain" :label="infoLabel('chain') as string" :label-props="{ for: 'chain' }">
+    <n-form-item v-if="showNetwork" path="chain" :label="infoLabel('chain')" :label-props="{ for: 'chain' }">
       <select-options
         v-model:value="metadataStore.form.smartContract.chain"
         :options="chains"
@@ -69,7 +69,7 @@
     <n-form-item
       v-if="metadataStore.form.smartContract.chainType !== ChainType.SUBSTRATE"
       path="adminAddress"
-      :label="infoLabel('adminAddress') as string"
+      :label="infoLabel('adminAddress')"
       :label-props="{ for: 'adminAddress' }"
     >
       <FormFieldWalletAddress
@@ -85,7 +85,7 @@
         id="useApillonIpfsGateway"
         v-model:checked="metadataStore.form.smartContract.useApillonIpfsGateway"
         size="medium"
-        :label="infoLabel('useGateway') as string"
+        :label="infoLabel('useGateway')"
       />
     </n-form-item>
 
@@ -94,7 +94,7 @@
       <n-checkbox
         v-model:checked="metadataStore.form.smartContract.useIpns"
         size="medium"
-        :label="infoLabel('useIpns') as string"
+        :label="infoLabel('useIpns')"
       />
     </n-form-item>
 
@@ -108,7 +108,7 @@
       <n-form-item-gi
         path="supplyLimited"
         :span="6"
-        :label="infoLabel('supplyLimited') as string"
+        :label="infoLabel('supplyLimited')"
         :label-props="{ for: 'supplyLimited' }"
       >
         <select-options
@@ -122,12 +122,7 @@
       </n-form-item-gi>
 
       <!--  Collection Max supply -->
-      <n-form-item-gi
-        path="maxSupply"
-        :span="6"
-        :label="infoLabel('maxSupply') as string"
-        :label-props="{ for: 'maxSupply' }"
-      >
+      <n-form-item-gi path="maxSupply" :span="6" :label="infoLabel('maxSupply')" :label-props="{ for: 'maxSupply' }">
         <n-input-number
           v-model:value="metadataStore.form.smartContract.maxSupply"
           :min="0"
@@ -151,12 +146,7 @@
       :x-gap="32"
     >
       <!-- Collection Revocable -->
-      <n-form-item-gi
-        path="revocable"
-        :span="4"
-        :label="infoLabel('revocable') as string"
-        :label-props="{ for: 'revocable' }"
-      >
+      <n-form-item-gi path="revocable" :span="4" :label="infoLabel('revocable')" :label-props="{ for: 'revocable' }">
         <select-options
           v-model:value="metadataStore.form.smartContract.revocable"
           :options="booleanSelect"
@@ -167,12 +157,7 @@
       </n-form-item-gi>
 
       <!-- Collection Soulbound -->
-      <n-form-item-gi
-        path="soulbound"
-        :span="4"
-        :label="infoLabel('soulbound') as string"
-        :label-props="{ for: 'soulbound' }"
-      >
+      <n-form-item-gi path="soulbound" :span="4" :label="infoLabel('soulbound')" :label-props="{ for: 'soulbound' }">
         <select-options
           v-model:value="metadataStore.form.smartContract.soulbound"
           :options="booleanSelect"
@@ -187,7 +172,7 @@
         v-show="metadataStore.form.smartContract.collectionType === NFTCollectionType.GENERIC"
         path="isAutoIncrement"
         :span="4"
-        :label="infoLabel('autoIncrement') as string"
+        :label="infoLabel('autoIncrement')"
         :label-props="{ for: 'autoIncrement' }"
       >
         <select-options
@@ -218,7 +203,7 @@
         <n-form-item-gi
           path="royaltiesFees"
           :span="4"
-          :label="infoLabel('royaltiesFees') as string"
+          :label="infoLabel('royaltiesFees')"
           :label-props="{ for: 'royaltiesFees' }"
         >
           <n-input-number
@@ -237,7 +222,7 @@
         <n-form-item-gi
           path="royaltiesAddress"
           :span="8"
-          :label="infoLabel('royaltiesAddress') as string"
+          :label="infoLabel('royaltiesAddress')"
           :label-props="{ for: 'royaltiesAddress' }"
         >
           <FormFieldWalletAddress
@@ -257,7 +242,7 @@
         </div>
       </n-form-item-gi>
       <!--  Collection Is Drop -->
-      <n-form-item-gi path="drop" :span="6" :label="infoLabel('drop') as string">
+      <n-form-item-gi path="drop" :span="6" :label="infoLabel('drop')">
         <n-switch id="drop" v-model:value="metadataStore.form.smartContract.drop" size="medium" class="!ml-0" />
         <strong v-if="metadataStore.form.smartContract.drop" class="text-xs text-green">
           {{ $t('form.switch.on') }}
@@ -287,12 +272,7 @@
       </n-form-item-gi>
 
       <!--  Collection Drop start -->
-      <n-form-item-gi
-        path="dropStart"
-        :span="6"
-        :label="infoLabel('dropStart') as string"
-        :label-props="{ for: 'dropStart' }"
-      >
+      <n-form-item-gi path="dropStart" :span="6" :label="infoLabel('dropStart')" :label-props="{ for: 'dropStart' }">
         <n-date-picker
           v-model:value="metadataStore.form.smartContract.dropStart"
           class="w-full"
@@ -309,7 +289,7 @@
         v-if="metadataStore.form.smartContract.chainType === ChainType.EVM"
         path="dropReserve"
         :span="6"
-        :label="infoLabel('dropReserve') as string"
+        :label="infoLabel('dropReserve')"
         :label-props="{ for: 'dropReserve' }"
       >
         <n-input-number
@@ -326,7 +306,7 @@
         v-if="metadataStore.form.smartContract.chainType === ChainType.SUBSTRATE"
         path="royaltiesAddress"
         :span="6"
-        :label="infoLabel('dropAddress') as string"
+        :label="infoLabel('dropAddress')"
         :label-props="{ for: 'royaltiesAddress' }"
       >
         <n-input
@@ -396,11 +376,7 @@ async function handleSubmitForm(e?: Event | MouseEvent): Promise<boolean> {
   e?.preventDefault();
   return !(
     await formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
-      console.warn(errors);
-      if (errors) {
-        errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
-      } else {
-      }
+      errors?.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     })
   )?.warnings;
 }

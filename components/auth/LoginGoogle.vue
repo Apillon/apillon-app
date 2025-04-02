@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { OauthActionTypes, OauthTypes } from '~/lib/values/general.values';
 
-const emit = defineEmits(['loading']);
+defineEmits(['loading']);
 defineProps({
   register: { type: Boolean, default: false },
 });

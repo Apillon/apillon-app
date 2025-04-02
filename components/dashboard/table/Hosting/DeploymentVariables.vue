@@ -39,7 +39,7 @@ defineProps({
   variables: { type: Array<DeploymentConfigVariable>, default: [] },
 });
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const deploymentStore = useDeploymentStore();
 
 const rowInEdit = ref('');
@@ -49,7 +49,7 @@ const pagination = reactive(createPagination(false));
 const createColumns = (): NDataTableColumns<DeploymentConfigVariable> => {
   return [
     {
-      title: $i18n.t('hosting.deploy.env-vars.key'),
+      title: t('hosting.deploy.env-vars.key'),
       key: 'key',
       render(row: DeploymentConfigVariable) {
         return rowInEdit.value === row.key
@@ -61,7 +61,7 @@ const createColumns = (): NDataTableColumns<DeploymentConfigVariable> => {
       },
     },
     {
-      title: $i18n.t('hosting.deploy.env-vars.value'),
+      title: t('hosting.deploy.env-vars.value'),
       key: 'value',
       render(row: DeploymentConfigVariable) {
         return rowInEdit.value === row.key
@@ -104,7 +104,7 @@ const editRow = (row: DeploymentConfigVariable) => {
 const saveRow = async (row: DeploymentConfigVariable) => {
   rowInEdit.value = '';
   if (row.key === '' || row.value === '') {
-    window.$message.error($i18n.t('hosting.deploy.env-vars.error-empty'));
+    window.$message.error(t('hosting.deploy.env-vars.error-empty'));
     deploymentStore.revertVariableChanges();
   } else {
     saveVariables();
@@ -129,6 +129,8 @@ const refreshVariables = async () => {
 };
 
 const saveVariables = () => {
-  deploymentStore.deploymentConfig && deploymentStore.saveVariables(deploymentStore.deploymentConfig.id);
+  if (deploymentStore.deploymentConfig) {
+    deploymentStore.saveVariables(deploymentStore.deploymentConfig.id);
+  }
 };
 </script>

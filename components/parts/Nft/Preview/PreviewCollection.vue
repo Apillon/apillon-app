@@ -31,7 +31,6 @@
 
 <script setup lang="ts">
 import { chainCurrency } from '~/lib/utils/chain';
-import { formatNumber } from '~/lib/utils/helpers';
 import { timestampToDateAndTime } from '~/lib/utils/dates';
 
 defineEmits(['back', 'deploy']);
@@ -41,7 +40,6 @@ const metadataStore = useMetadataStore();
 
 const { pricing, createThumbnailUrl } = useMetadata();
 
-const nonRefundable = ref<boolean>(false);
 const data = ref<Record<string, string | number | boolean | null>[]>([
   {
     label: t('form.label.collection.chain'),
@@ -100,8 +98,6 @@ const data = ref<Record<string, string | number | boolean | null>[]>([
     value: `${metadataStore.metadata.length} ${t('storage.files')}`,
   },
 ]);
-
-const totalCredits = computed(() => sumCredits(pricing.value));
 
 onMounted(() => {
   paymentStore.getPriceList();

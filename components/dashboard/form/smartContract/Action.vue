@@ -6,7 +6,7 @@
         v-for="(input, key) in fn.inputs"
         :key="key"
         :path="input.name"
-        :label="labelInfoText(input.name, input?.description)"
+        :label="labelInfoText(input.name, input?.description) as string"
       >
         <n-input v-if="input.name === 'data'" v-model:value="formData[input.name]" :maxlength="256" required>
           <template v-if="!formData[input.name]?.startsWith('0x')" #prefix>
@@ -46,7 +46,6 @@ import { useAccount } from '@wagmi/vue';
 import { createPublicClient, createWalletClient, custom, http } from 'viem';
 import { SmartContractStatus } from '~/lib/types/smartContracts';
 
-const emit = defineEmits(['submitSuccess', 'transferred']);
 const props = defineProps({
   args: { type: Array<string | null>, default: null },
   btnText: { type: String, default: null },

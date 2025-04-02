@@ -263,9 +263,9 @@ export default function useCollection() {
 
   function disablePastTime(ts: number): TimeValidator {
     return {
-      isHourDisabled: (hour: number) => ts < Date.now(),
-      isMinuteDisabled: (minute: number, hour: number | null) => ts < Date.now(),
-      isSecondDisabled: (second: number, minute: number | null, hour: number | null) => ts < Date.now(),
+      isHourDisabled: () => ts < Date.now(),
+      isMinuteDisabled: () => ts < Date.now(),
+      isSecondDisabled: () => ts < Date.now(),
     };
   }
 

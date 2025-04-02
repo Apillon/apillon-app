@@ -32,7 +32,7 @@
         :title="$t(websiteStore.isActiveWebsiteGithubSource ? 'hosting.deploy.update' : 'hosting.deploy.new')"
       >
         <FormStorageDeployConfig
-          :config_id="deploymentStore.deploymentConfig?.id"
+          :config-id="deploymentStore.deploymentConfig?.id"
           @submit-success="modalCreateKeyVisible = false"
         />
       </modal>
@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t } = useI18n();
 const websiteStore = useWebsiteStore();
 const deploymentStore = useDeploymentStore();
 const storageStore = useStorageStore();
@@ -49,7 +49,7 @@ const { pageLoading, initWebsite } = useHosting();
 const modalCreateKeyVisible = ref<boolean>(false);
 
 useHead({
-  title: $i18n.t('dashboard.nav.hosting'),
+  title: t('dashboard.nav.hosting'),
 });
 
 onMounted(async () => {
