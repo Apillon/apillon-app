@@ -1,5 +1,5 @@
 <template>
-  <Btn :type="storageStore.projectConfig ? 'secondary' : 'primary'" @click="handleGithubPress" :loading="loading">
+  <Btn :type="storageStore.projectConfig ? 'secondary' : 'primary'" :loading="loading" @click="handleGithubPress">
     <span>{{ $t(storageStore.projectConfig ? 'hosting.github-connected' : 'hosting.connect-github') }}</span>
   </Btn>
 
@@ -10,7 +10,7 @@
         {{ $t(`hosting.disconnect-confirmation-body`) }}
       </p>
     </template>
-    <Btn type="primary" @click="disconnectGithub" :loading="loading">
+    <Btn type="primary" :loading="loading" @click="disconnectGithub">
       {{ $t('hosting.disconnect-confirmation-button') }}
     </Btn>
   </ModalDelete>
@@ -33,7 +33,7 @@ onMounted(async () => {
   if (oauthToken.value) {
     const projectUuid = dataStore.projectUuid;
     try {
-      const res = await $api.post<any>(endpoints.linkGithub, {
+      await $api.post<any>(endpoints.linkGithub, {
         code: oauthToken.value,
         project_uuid: projectUuid,
       });
@@ -46,7 +46,7 @@ onMounted(async () => {
   storageStore.getGithubProjectConfig();
 });
 
-async function handleGithubPress() {
+function handleGithubPress() {
   if (storageStore.projectConfig) {
     isConfirmationModalVisible.value = true;
   } else {
@@ -54,7 +54,7 @@ async function handleGithubPress() {
   }
 }
 
-async function connectToGithub() {
+function connectToGithub() {
   try {
     window.open(
       'https://github.com/login/oauth/authorize?client_id=' +
@@ -67,7 +67,6 @@ async function connectToGithub() {
     console.log('Error connecting to Github');
     console.log(e);
   }
-  return;
 }
 
 async function disconnectGithub() {
