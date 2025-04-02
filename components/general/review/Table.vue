@@ -43,8 +43,6 @@
 </template>
 
 <script setup lang="ts">
-import { truncateWallet } from '~/lib/utils/strings';
-
 type RecordData = Record<string, any>;
 
 defineEmits(['back']);

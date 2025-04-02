@@ -6,7 +6,7 @@
       {{ $t('assetHub.assetCreating') }}
     </h2>
     <p>{{ $t('assetHub.assetCreatingWait') }}</p>
-    <i18n-t keypath="dashboard.service.assetHub.assetCreatingInfo" tag="p">
+    <i18n-t keypath="assetHub.assetCreatingInfo" tag="p">
       <a :href="link" class="link" target="_blank">{{ $t('general.here') }}</a>
     </i18n-t>
   </Modal>

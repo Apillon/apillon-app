@@ -26,25 +26,25 @@
         @submit.prevent="handleSubmit"
       >
         <!-- Existing form items for basic website -->
-        <n-form-item path="name" :label="$t('form.label.websiteName')" :label-props="{ for: 'name' }">
+        <n-form-item path="name" :label="$t('form.label.website.name')" :label-props="{ for: 'name' }">
           <n-input
             v-model:value="websiteStore.form.name"
             :input-props="{ id: 'name' }"
-            :placeholder="$t('form.placeholder.websiteName')"
+            :placeholder="$t('form.placeholder.website.name')"
             clearable
           />
         </n-form-item>
 
         <n-form-item
           path="description"
-          :label="$t('form.label.websiteDescription')"
+          :label="$t('form.label.website.description')"
           :label-props="{ for: 'description' }"
         >
           <n-input
             v-model:value="websiteStore.form.description"
             type="textarea"
             :input-props="{ id: 'description' }"
-            :placeholder="$t('form.placeholder.websiteDescription')"
+            :placeholder="$t('form.placeholder.website.description')"
             clearable
           />
         </n-form-item>
@@ -81,7 +81,7 @@ const formRef = ref<NFormInst | null>(null);
 const website = ref<WebsiteInterface | null>(null);
 
 const rules: NFormRules = {
-  name: [ruleRequired(t('validation.websiteNameRequired'))],
+  name: [ruleRequired(t('validation.website.nameRequired'))],
   description: [ruleDescription(t('validation.descriptionTooLong'))],
 };
 

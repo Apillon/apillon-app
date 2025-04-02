@@ -94,10 +94,12 @@
       }
     },
     "deploy": {
+      "connectRepo": "Connect Github repository to website",
+      "infoEmpty": "Connect Github repository to enable Continuous Deployment for this website",
       "new": "New deployment configuration",
+      "save": "Save deployment configuration",
+      "success": "Deployment configuration saved successfully",
       "update": "Update deployment configuration",
-      "empty-info": "Connect Github repository to enable Continuous Deployment for this website",
-      "connect-repo": "Connect Github repository to website",
       "env-vars": {
         "title": "Environment variables",
         "key": "Key",
@@ -121,34 +123,7 @@
           "4": "FAILED"
         }
       },
-      "form": {
-        "repository": "Repository",
-        "repository-placeholder": "Select repository",
-        "branch-name": "Branch name",
-        "branch-name-placeholder": "Enter branch",
-        "build-command": "Build command",
-        "build-command-placeholder": "Enter build command",
-        "build-directory": "Build directory",
-        "build-directory-placeholder": "Enter build directory",
-        "install-command": "Install command",
-        "install-command-placeholder": "Enter install command",
-        "api-key": "API key",
-        "api-key-placeholder": "Select API key",
-        "api-secret": "API secret",
-        "api-secret-placeholder": "Enter API secret",
-        "api-secret-set": "API secret is set",
-        "api-secret-change": "Change",
-        "save": "Save deployment configuration",
-        "success": "Deployment configuration saved successfully",
-        "validation": {
-          "repo-required": "Repository is required",
-          "branch-name-required": "Branch name is required",
-          "build-directory-required": "Build directory is required",
-          "api-key-required": "API key is required",
-          "api-secret-required": "API secret is required"
-        }
-      },
-      "update-config": "Update"
+      "updateConfig": "Update"
     },
     "clearAll": "Clear all",
     "clearAllFiles": "Do you want to remove all files?",

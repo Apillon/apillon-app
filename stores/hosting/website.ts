@@ -15,6 +15,7 @@ export const useWebsiteStore = defineStore('website', {
     uploadActive: false,
     form: {
       type: null as null | WebsiteType,
+      nftTemplateType: null as null | WebsiteType,
       name: '',
       description: '',
       branchName: 'main',

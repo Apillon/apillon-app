@@ -1,6 +1,8 @@
 {
   "validation": {
     "alreadyOnList": "{name} is already on list",
+    "apiKeyRequired": "API Key is required if API Secret is provided",
+    "apiSecretRequired": "API Secret is required if API Key is provided",
     "bucketNameRequired": "Please enter bucket name",
     "containsLowercase": "Must include a lowercase character",
     "containsNumber": "Must include a number character",
@@ -51,8 +53,6 @@
     "webhookRequired": "Please enter Webhook URL",
     "webhookUsernameRequired": "Please enter username",
     "webhookTokenRequired": "Please enter token",
-    "websiteNameRequired": "Please enter Website name",
-    "websiteDomainUrl": "Domain name is not a valid URL",
     "apiKey": {
       "nameRequired": "API key name is required",
       "rolesRequired": "Please select at least one permission"
@@ -121,8 +121,11 @@
       "uuid": "Cloud Function UUID"
     },
     "hosting": {
+      "branchNameRequired": "Branch name is required",
+      "buildDirectoryRequired": "Build directory is required",
       "missingHtml": "You have to upload at least one html file, to deploy website!",
       "missingIndex": "Please upload index.html file",
+      "repoRequired": "Repository is required",
       "waitActiveDeployment": "Staging deployment is still in progress. Please wait until it completes before proceeding with the production deployment."
     },
     "nft": {
@@ -152,6 +155,11 @@
     },
     "smartContracts": {
       "fieldRequired": "Please fill all fields"
+    },
+    "website": {
+      "nameRequired": "Please enter Website name",
+      "domainUrl": "Domain name is not a valid URL",
+      "typeRequired": "Type is required"
     }
   }
 }

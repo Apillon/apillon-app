@@ -5,18 +5,6 @@ export const useStorageStore = defineStore('storage', {
     info: {} as StorageInfoInterface,
     projectConfig: undefined as GithubProjectConfig | undefined,
     loading: false,
-    deployConfigForm: {
-      branchName: '',
-      buildCommand: 'npm run build',
-      buildDirectory: './out',
-      installCommand: 'npm install',
-      apiKey: undefined as string | undefined,
-      apiSecret: '',
-      repoId: undefined as number | undefined,
-      repoName: '',
-      repoOwnerName: '',
-      repoUrl: '',
-    },
     repos: [] as GithubRepo[],
   }),
   getters: {
@@ -84,14 +72,13 @@ export const useStorageStore = defineStore('storage', {
     },
 
     async fetchGithubProjectConfig() {
-      this.loading = true;
       const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
 
         if (!dataStore.projectUuid) return;
       }
-
+      this.loading = true;
       try {
         const res = await $api.get<GithubProjectConfigResponse>(endpoints.githubProjectConfig(dataStore.projectUuid));
         this.projectConfig = res.data;
@@ -102,17 +89,17 @@ export const useStorageStore = defineStore('storage', {
         this.projectConfig = undefined;
         window.$message.error(userFriendlyMsg(error));
       }
+      this.loading = false;
     },
 
     async fetchRepos() {
-      this.loading = true;
       const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
 
         if (!dataStore.projectUuid) return;
       }
-
+      this.loading = true;
       try {
         const res = await $api.get<GithubReposResponse>(endpoints.githubRepos(dataStore.projectUuid));
         this.repos = res.data;
@@ -123,6 +110,7 @@ export const useStorageStore = defineStore('storage', {
         this.repos = [];
         window.$message.error(userFriendlyMsg(error));
       }
+      this.loading = false;
     },
   },
 });

@@ -15,6 +15,10 @@
     },
     "label": {
       "authType": "Auth type",
+      "advancedSettings": "Advanced settings",
+      "apiKey": "API Key",
+      "apiSecret": "API Secret",
+      "apiSecretSet": "API secret is set",
       "apiKeyName": "API Key name",
       "apiKeyType": "API Key type",
       "bearerToken": "Bearer token",
@@ -57,8 +61,6 @@
       "webhookPassword": "Password",
       "webhookUrl": "Webhook URL",
       "webhookUsername": "User name",
-      "websiteDescription": "Website description",
-      "websiteName": "Website name",
       "assetHub": {
         "address": "Address",
         "admin": "Admin address",
@@ -202,6 +204,17 @@
       "rpcApiKey": {
         "name": "Name",
         "description": "Description"
+      },
+      "website": {
+        "description": "Website description",
+        "name": "Website name",
+        "repository": "Repository",
+        "repoUrl": "Repository URL",
+        "branchName": "Branch name",
+        "buildCommand": "Build command",
+        "buildDirectory": "Build directory",
+        "installCommand": "Install command",
+        "type": "Website type"
       }
     },
     "networkTypes": {
@@ -210,6 +223,8 @@
     },
     "placeholder": {
       "apiKeyName": "API Key name",
+      "apiKey": "Select your API key",
+      "apiSecret": "Enter your API secret",
       "bearerToken": "Enter Bearer token",
       "bucketDescription": "Bucket description",
       "bucketName": "Bucket name",
@@ -245,10 +260,6 @@
       "projectName": "Enter project name",
       "projectDescription": "Enter project description",
       "reenterPassword": "Re-enter your complex password",
-      "rpcApiKey": {
-        "name": "Enter key name",
-        "description": "Enter key description"
-      },
       "role": "Select role",
       "serviceName": "Enter the name for the new service",
       "select": "Select option",
@@ -260,8 +271,6 @@
       "webhookPassword": "Enter password",
       "webhookUrl": "Webhook URL",
       "webhookUsername": "Enter user name",
-      "websiteDescription": "Website description",
-      "websiteName": "Website name",
       "assetHub": {
         "address": "Enter target address",
         "amount": "Enter amount",
@@ -298,6 +307,19 @@
       },
       "nft": {
         "idsToMint": "Enter NFT IDs you want to mint"
+      },
+      "rpcApiKey": {
+        "name": "Enter key name",
+        "description": "Enter key description"
+      },
+      "website": {
+        "description": "Website description",
+        "name": "Website name",
+        "branchName": "Enter branch",
+        "buildCommand": "Enter build command",
+        "buildDirectory": "Enter build directory",
+        "installCommand": "Enter install command",
+        "repository": "Select repository"
       }
     },
     "error": {

@@ -106,8 +106,6 @@
 </template>
 
 <script lang="ts" setup>
-import { formatPrice } from '~/lib/utils/helpers';
-
 const props = defineProps({
   collapsed: { type: Boolean, default: false },
   showOnMobile: { type: Boolean, default: false },

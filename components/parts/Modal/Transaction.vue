@@ -5,7 +5,7 @@
     <h2 class="mb-2 mt-6">
       {{ $t('assetHub.transactionProcessed') }}
     </h2>
-    <i18n-t keypath="dashboard.service.assetHub.transactionDetails" tag="p">
+    <i18n-t keypath="assetHub.transactionDetails" tag="p">
       <a :href="transactionLink(transactionHash, chainId || assetHubChain)" class="link" target="_blank">
         {{ $t('general.here') }}
       </a>
@@ -27,8 +27,6 @@
 </template>
 
 <script lang="ts" setup>
-import { transactionLink } from '~/lib/utils/chain';
-
 defineEmits(['close']);
 defineProps({
   transactionHash: { type: String, required: true },

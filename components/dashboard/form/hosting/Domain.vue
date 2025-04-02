@@ -86,7 +86,7 @@ const rules: NFormRules = {
     {
       type: 'url',
       validator: validateDomain,
-      message: t('validation.websiteDomainUrl'),
+      message: t('validation.website.domainUrl'),
     },
   ],
 };

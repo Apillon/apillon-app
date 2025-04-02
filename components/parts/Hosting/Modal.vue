@@ -17,11 +17,10 @@
           websiteStore.stepWebsiteCreate === WebsiteCreateStep.FORM && websiteStore.form.type == WebsiteType.GITHUB
         "
         ref="formWebsiteGithubRef"
-        class="mx-auto max-w-lg"
         :title="$t('hosting.website.new')"
         hide-submit
-      >
-      </FormHostingWebsiteGitHub>
+        @back="websiteStore.stepWebsiteCreate -= 1"
+      />
       <FormHostingWebsite
         v-else-if="websiteStore.stepWebsiteCreate === WebsiteCreateStep.FORM"
         ref="formWebsiteRef"
@@ -64,10 +63,7 @@
 
 <script lang="ts" setup>
 import { useTemplateRef } from 'vue';
-import { WebsiteCreateStep } from '~/lib/types/hosting';
 
-const { t } = useI18n();
-const message = useMessage();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const storageStore = useStorageStore();
@@ -101,7 +97,11 @@ async function submitForm() {
 function back() {
   switch (websiteStore.stepWebsiteCreate) {
     case WebsiteCreateStep.FORM:
-      websiteStore.stepWebsiteCreate -= 1;
+      if (websiteStore.form.type === WebsiteType.GITHUB) {
+        formWebsiteGithubRef.value?.back();
+      } else {
+        websiteStore.stepWebsiteCreate -= 1;
+      }
       break;
     default:
       websiteStore.stepWebsiteCreate -= 1;
@@ -114,11 +114,7 @@ function nextStep() {
       break;
     case WebsiteCreateStep.TYPE:
       websiteTypeRef.value?.nextStep();
-      console.log(websiteTypeRef.value?.nextStep());
-      console.log(websiteStore.form.type, websiteStore.stepWebsiteCreate);
-      if (!websiteStore.form.type) {
-        message.warning(t('hosting.website.selectType'));
-      } else {
+      if (websiteStore.form.type) {
         websiteStore.stepWebsiteCreate += 1;
       }
       break;

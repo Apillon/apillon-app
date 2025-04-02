@@ -20,6 +20,16 @@ export default function useHosting() {
   /** Website ID from route */
   const websiteUuid = ref<string>(params.id ? `${params?.id}` : `${params?.slug}`);
 
+  /** Website rules */
+
+  const rulesWebsite: NFormRules = {
+    name: [ruleRequired(t('validation.website.nameRequired'))],
+    description: [ruleDescription(t('validation.descriptionTooLong'))],
+    repoId: [ruleRequired(t('validation.hosting.repoRequired'))],
+    branchName: [ruleRequired(t('validation.hosting.branchNameRequired'))],
+    buildDirectory: [ruleRequired(t('validation.hosting.buildDirectoryRequired'))],
+  };
+
   onUnmounted(() => {
     clearInterval(deploymentInterval);
     clearInterval(websiteInterval);
@@ -32,6 +42,7 @@ export default function useHosting() {
     fetchDeploymentConfig = false
   ) {
     websiteUuid.value = params.id ? `${params?.id}` : `${params?.slug}`;
+    websiteStore.resetForm();
     websiteStore.setWebsite(websiteUuid.value);
 
     await dataStore.waitOnPromises();
@@ -220,6 +231,7 @@ export default function useHosting() {
 
   return {
     pageLoading,
+    rulesWebsite,
     websiteUuid,
     checkUnfinishedWebsite,
     createWebsite,

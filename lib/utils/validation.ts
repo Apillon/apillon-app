@@ -71,3 +71,11 @@ export function validatePercent(_: FormItemRule, value: number | string | null):
 export function validateBoolean(_: FormItemRule, value: number | string | null): boolean {
   return value !== null && value !== undefined;
 }
+
+// API key
+export function validateApiKey(value: number | string | null, apiSecret: string | null | undefined): boolean {
+  return !apiSecret || !!value;
+}
+export function validateApiSecret(value: number | string | null, apiKey: string | null | undefined): boolean {
+  return !apiKey || !!value;
+}

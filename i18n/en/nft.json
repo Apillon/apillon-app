@@ -176,23 +176,12 @@
         "1": "Generic",
         "2": "Nestable"
       },
-      "website-deploy": {
+      "websiteDeploy": {
         "deploy": "Deploy NFT website",
         "plain_js": "Vanilla Javascript",
         "react": "React",
         "vue": "Vue",
-        "success": "NFT website deploy successfully triggered",
-        "form": {
-          "api-key": "API Key",
-          "api-key-placeholder": "Select your API key",
-          "api-secret": "API Secret",
-          "api-secret-placeholder": "Enter your API secret",
-          "type": "Website type",
-          "type-required": "Type is required",
-          "api-key-required": "API Key is required if API Secret is provided",
-          "api-secret-required": "API Secret is required if API Key is provided",
-          "advanced-settings": "Advanced settings"
-        }
+        "success": "NFT website deploy successfully triggered"
       }
     },
     "deploy": {

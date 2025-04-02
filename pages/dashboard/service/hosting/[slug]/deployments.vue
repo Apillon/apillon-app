@@ -10,7 +10,7 @@
             <!-- Actions : refresh, deploy -->
             <n-space>
               <n-button v-if="websiteStore.isActiveWebsiteGithubSource" size="small" @click="showUpdateModal">
-                {{ $t('hosting.deploy.update-config') }}
+                {{ $t('hosting.deploy.update') }}
               </n-button>
               <n-button size="small" :loading="deploymentStore.buildsLoading" @click="refreshBuilds">
                 <span class="icon-refresh mr-2 text-xl"></span>
@@ -23,8 +23,8 @@
           <TableHostingDeploymentBuilds :deployments="deploymentStore.builds" />
         </n-space>
       </template>
-      <Empty v-else :title="$t('general.nothingHere')" :info="$t('hosting.deploy.empty-info')" icon="storage/empty">
-        <Btn type="primary" @click="modalCreateKeyVisible = true">{{ $t('hosting.deploy.connect-repo') }}</Btn>
+      <Empty v-else :title="$t('general.nothingHere')" :info="$t('hosting.deploy.infoEmpty')" icon="storage/empty">
+        <Btn type="primary" @click="modalCreateKeyVisible = true">{{ $t('hosting.deploy.connectRepo') }}</Btn>
       </Empty>
 
       <modal
@@ -65,18 +65,13 @@ const refreshBuilds = async () => {
 };
 
 const showUpdateModal = async () => {
-  storageStore.deployConfigForm = {
-    branchName: deploymentStore.deploymentConfig?.branchName || '',
-    buildCommand: deploymentStore.deploymentConfig?.buildCommand || '',
-    buildDirectory: deploymentStore.deploymentConfig?.buildDirectory || '',
-    installCommand: deploymentStore.deploymentConfig?.installCommand || '',
-    apiKey: deploymentStore.deploymentConfig?.apiKey || '',
-    apiSecret: '',
-    repoId: deploymentStore.deploymentConfig?.repoId || 0,
-    repoName: deploymentStore.deploymentConfig?.repoName || '',
-    repoOwnerName: deploymentStore.deploymentConfig?.repoOwnerName || '',
-    repoUrl: '',
-  };
+  if (deploymentStore.deploymentConfig) {
+    Object.entries(deploymentStore.deploymentConfig).forEach(([key, value]) => {
+      if (value && key in websiteStore.form) {
+        websiteStore.form[key] = value;
+      }
+    });
+  }
   modalCreateKeyVisible.value = true;
 };
 </script>

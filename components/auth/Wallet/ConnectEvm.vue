@@ -31,7 +31,6 @@
 
 <script lang="ts" setup>
 import { useAccount, useConnect, useDisconnect, useConnectorClient, useAccountEffect } from '@wagmi/vue';
-import { truncateWallet } from '~/lib/utils/strings';
 
 const { t } = useI18n();
 const authStore = useAuthStore();
