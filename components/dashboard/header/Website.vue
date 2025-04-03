@@ -44,7 +44,7 @@ const websiteStore = useWebsiteStore();
 const websiteUuid = ref<string>(`${params?.id || ''}`);
 const showModalW3Warn = ref<boolean>(false);
 const hasGithubConnected = computed(() => {
-  return !!websiteStore.isActiveWebsiteGithubSource || !!websiteStore.active.nftCollectionUuid;
+  return !!websiteStore.isActiveWebsiteGithubSource;
 });
 
 onMounted(() => {
