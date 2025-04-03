@@ -35,6 +35,21 @@ export const useStorageStore = defineStore('storage', {
       this.info = {} as StorageInfoInterface;
     },
 
+    resetDeployConfigForm() {
+      this.deployConfigForm = {
+        branchName: '',
+        buildCommand: 'npm run build',
+        buildDirectory: './out',
+        installCommand: 'npm install',
+        apiKey: undefined as string | undefined,
+        apiSecret: '',
+        repoId: undefined as number | undefined,
+        repoName: '',
+        repoOwnerName: '',
+        repoUrl: '',
+      };
+    },
+
     /**
      *
      * Fetch wrappers
