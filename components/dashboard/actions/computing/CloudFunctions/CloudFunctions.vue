@@ -7,7 +7,7 @@
     <n-space size="large">
       <!-- Refresh cloudFunctions -->
       <n-button
-        size="small"
+        size="medium"
         :loading="cloudFunctionStore.loading"
         @click="cloudFunctionStore.fetchCloudFunctions(archive)"
       >
@@ -18,7 +18,7 @@
       <!-- Create new cloudFunction -->
       <n-button
         v-if="cloudFunctionStore.hasCloudFunctions && !archive"
-        size="small"
+        size="medium"
         :disabled="authStore.isAdmin()"
         @click="modalCreateCloudFunctionVisible = true"
       >

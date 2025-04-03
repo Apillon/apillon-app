@@ -1,17 +1,8 @@
 <template>
-  <Btn
-    v-if="!isConnected"
-    size="large"
-    type="secondary"
-    :loading="loading"
-    @click="connect({ connector: connectors[0] })"
-  >
+  <Btn v-if="!isConnected" type="secondary" :loading="loading" @click="connect({ connector: connectors[0] })">
     Connect your wallet
   </Btn>
-  <Btn v-else-if="wrongNetwork" size="large" type="primary" :loading="loading" @click="ensureCorrectNetwork">
-    Switch Network
-  </Btn>
-
+  <Btn v-else-if="wrongNetwork" type="primary" :loading="loading" @click="ensureCorrectNetwork"> Switch Network </Btn>
   <Btn v-else type="primary" class="w-full" native-type="submit" @click="e => $emit('submit', e)">
     {{ btnText }}
   </Btn>

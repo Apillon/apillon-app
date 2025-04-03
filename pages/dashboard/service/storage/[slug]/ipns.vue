@@ -15,13 +15,13 @@
           <n-space size="large">
             <ModalCreditCosts :service="ServiceTypeName.STORAGE" />
             <!-- Refresh files -->
-            <n-button size="small" :loading="ipnsStore.loading" @click="ipnsStore.fetchIpns(bucketUuid)">
+            <n-button :loading="ipnsStore.loading" @click="ipnsStore.fetchIpns(bucketUuid)">
               <span class="icon-refresh mr-2 text-xl"></span>
               {{ $t('general.refresh') }}
             </n-button>
 
             <!-- Create new website -->
-            <n-button v-if="ipnsStore.hasIpns" size="small" @click="modalCreateIpnsVisible = true">
+            <n-button v-if="ipnsStore.hasIpns" @click="modalCreateIpnsVisible = true">
               <span class="icon-create-folder mr-2 text-xl text-primary"></span>
               <span class="text-primary">{{ $t('general.addNew') }}</span>
             </n-button>

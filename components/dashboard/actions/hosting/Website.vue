@@ -12,7 +12,7 @@
             <template #trigger>
               <n-button
                 class="w-10"
-                size="small"
+                size="medium"
                 type="error"
                 :disabled="authStore.isAdmin()"
                 ghost
@@ -29,7 +29,7 @@
         </template>
 
         <!-- Refresh -->
-        <n-button size="small" :loading="bucketStore.folder.loading" @click="refreshWebpage(env)">
+        <n-button size="medium" :loading="bucketStore.folder.loading" @click="refreshWebpage(env)">
           <span class="icon-refresh mr-2 text-xl"></span>
           {{ $t('general.refresh') }}
         </n-button>
@@ -37,7 +37,7 @@
         <!-- Clear all files -->
         <n-button
           v-if="isUpload"
-          size="small"
+          size="medium"
           type="error"
           :disabled="authStore.isAdmin()"
           ghost
@@ -50,7 +50,7 @@
         <!-- Deploy to staging -->
         <div v-if="isUpload" class="flex items-center rounded-lg bg-primary align-middle">
           <n-button
-            size="small"
+            size="medium"
             type="primary"
             :bordered="false"
             :loading="deploying"
@@ -61,7 +61,7 @@
             {{ $t('hosting.deployStage') }}
           </n-button>
           <n-dropdown trigger="click" :options="deployOptions" @select="handleSelectDeploy">
-            <n-button class="!p-0" size="small" type="primary" :bordered="false">
+            <n-button class="!p-0" size="medium" type="primary" :bordered="false">
               <span class="icon-down text-3xl"></span>
             </n-button>
           </n-dropdown>
@@ -69,7 +69,7 @@
         <!-- Deploy to production -->
         <n-button
           v-if="env === DeploymentEnvironment.STAGING"
-          size="small"
+          size="medium"
           type="primary"
           :loading="deploying"
           :disabled="authStore.isAdmin()"

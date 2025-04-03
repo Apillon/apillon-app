@@ -135,6 +135,10 @@
   }
 }
 
+.hoverable:hover .hidden {
+  @apply block;
+}
+
 /** Payment package */
 .credits-package,
 .subscription-package {

@@ -2,7 +2,7 @@
   <button v-if="$slots.button" class="pointer" @click="modalCostsVisible = true">
     <slot name="button"></slot>
   </button>
-  <n-button v-else class="rounded-lg" size="small" @click="modalCostsVisible = true">
+  <n-button v-else class="rounded-lg" @click="modalCostsVisible = true">
     <span class="icon-credits mr-2 text-xl"></span>
     {{ $t('dashboard.credits.checkPrice') }}
   </n-button>

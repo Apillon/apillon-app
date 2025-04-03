@@ -6,7 +6,7 @@
 
     <n-space size="large">
       <!-- Create new contract -->
-      <n-button size="small" :disabled="authStore.isAdmin()" @click="modalCreateKeyVisible = true">
+      <n-button size="medium" :disabled="authStore.isAdmin()" @click="modalCreateKeyVisible = true">
         <span class="text-primary">{{ $t('rpc.apiKey.new') }}</span>
       </n-button>
     </n-space>

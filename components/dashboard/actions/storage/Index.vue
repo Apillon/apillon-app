@@ -9,7 +9,7 @@
         v-model:value="bucketStore.filter.bucketType"
         :options="bucketTypes"
         class="w-[20vw] min-w-[11rem] max-w-xs"
-        size="small"
+        size="medium"
         :placeholder="$t('form.placeholder.bucketType')"
         filterable
         clearable
@@ -24,7 +24,7 @@
           <template #trigger>
             <n-button
               class="w-10"
-              size="small"
+              size="medium"
               type="error"
               :disabled="authStore.isAdmin()"
               ghost
@@ -43,7 +43,7 @@
       <ModalCreditCosts :service="ServiceTypeName.STORAGE" />
 
       <!-- Refresh storage content -->
-      <n-button size="small" :loading="bucketStore.loading" @click="bucketStore.fetchBuckets()">
+      <n-button size="medium" :loading="bucketStore.loading" @click="bucketStore.fetchBuckets()">
         <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('storage.refresh') }}
       </n-button>
@@ -51,7 +51,7 @@
       <!-- Create new bucket -->
       <n-button
         v-if="bucketStore.hasBuckets"
-        size="small"
+        size="medium"
         :disabled="authStore.isAdmin()"
         @click="showModalNewBucket = true"
       >

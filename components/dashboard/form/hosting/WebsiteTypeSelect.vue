@@ -20,6 +20,7 @@
 
 <script setup lang="ts">
 defineExpose({ nextStep });
+const { t } = useI18n();
 const message = useMessage();
 const websiteStore = useWebsiteStore();
 
@@ -27,6 +28,7 @@ const selectedType = ref(websiteStore.form.type);
 
 function nextStep() {
   if (selectedType.value) {
+    websiteStore.resetForm();
     websiteStore.form.type = selectedType.value;
   } else {
     message.warning(t('hosting.website.selectType'));

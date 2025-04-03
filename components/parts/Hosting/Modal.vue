@@ -31,9 +31,14 @@
       <HostingPreviewWebsite
         v-else-if="websiteStore.stepWebsiteCreate === WebsiteCreateStep.REVIEW"
         @back="websiteStore.stepWebsiteCreate = WebsiteCreateStep.FORM"
-        @deploy="createWebsite()"
+        @deploy="deploy()"
       />
-      <AnimationDeploy v-else-if="websiteStore.stepWebsiteCreate === WebsiteCreateStep.DEPLOYING" class="min-h-full" />
+      <AnimationDeploy
+        v-else-if="websiteStore.stepWebsiteCreate === WebsiteCreateStep.DEPLOYING"
+        class="min-h-full"
+        :title="$t('hosting.website.deploying')"
+        :content="$t('hosting.website.deployingInfo')"
+      />
       <HostingWebsiteDeployed
         v-else-if="websiteStore.stepWebsiteCreate === WebsiteCreateStep.DEPLOYED"
         class="mx-auto max-w-5xl"
@@ -48,13 +53,13 @@
         <div class="flex items-center gap-2">
           <Btn
             v-if="websiteStore.stepWebsiteCreate !== WebsiteCreateStep.TYPE"
-            size="small"
+            class="min-w-40"
             type="secondary"
             @click="back"
           >
             {{ $t('general.back') }}
           </Btn>
-          <Btn size="small" @click="nextStep()">{{ $t('form.continue') }} </Btn>
+          <Btn class="min-w-40" @click="nextStep()">{{ $t('form.continue') }} </Btn>
         </div>
       </div>
     </template>
@@ -83,6 +88,7 @@ onMounted(async () => {
   await dataStore.waitOnPromises();
   storageStore.getStorageInfo();
   paymentStore.getPriceList();
+  websiteStore.stepWebsiteCreate = WebsiteCreateStep.DEPLOYED;
 });
 
 const submitFormRef = async formRef => (formRef ? await formRef.handleSubmit() : false);
@@ -122,5 +128,11 @@ function nextStep() {
       websiteStore.stepWebsiteCreate += 1;
       break;
   }
+}
+
+async function deploy() {
+  websiteStore.stepWebsiteCreate = WebsiteCreateStep.DEPLOYING;
+  const website = await createWebsite();
+  websiteStore.stepWebsiteCreate = website ? WebsiteCreateStep.DEPLOYED : WebsiteCreateStep.FORM;
 }
 </script>

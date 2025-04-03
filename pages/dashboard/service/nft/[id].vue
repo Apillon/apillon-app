@@ -78,11 +78,12 @@
                   {{ $t('nft.collection.websiteConnected') }}
                 </p>
 
-                <NuxtLink :to="`/dashboard/service/hosting/${collectionStore.active.websiteUuid}/deployments`">
-                  <Btn type="primary">
-                    {{ $t('nft.collection.showWebsite') }}
-                  </Btn>
-                </NuxtLink>
+                <Btn
+                  type="primary"
+                  :to="`/dashboard/service/hosting/${collectionStore.active.websiteUuid}/deployments`"
+                >
+                  {{ $t('nft.collection.showWebsite') }}
+                </Btn>
               </div>
             </slot>
           </n-tab-pane>

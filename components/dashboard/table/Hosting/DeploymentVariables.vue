@@ -2,10 +2,10 @@
   <n-space class="pb-8" :size="32" vertical>
     <div class="flex w-full flex-row-reverse justify-between gap-8">
       <n-space>
-        <n-button size="small" @click="modalCreateVariableVisible = true">
+        <n-button @click="modalCreateVariableVisible = true">
           {{ $t('hosting.deploy.env-vars.add-new') }}
         </n-button>
-        <n-button size="small" :loading="deploymentStore.loading" @click="refreshVariables">
+        <n-button :loading="deploymentStore.loading" @click="refreshVariables">
           <span class="icon-refresh mr-2 text-xl"></span>
           {{ $t('general.refresh') }}
         </n-button>

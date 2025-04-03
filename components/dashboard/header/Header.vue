@@ -13,7 +13,7 @@
 
         <div class="flex flex-nowrap items-center gap-3 lg:gap-4">
           <n-dropdown :options="docs" @select="handleSelect">
-            <n-button size="small">
+            <n-button>
               <NuxtIcon name="icon/help" class="text-xl" />
             </n-button>
           </n-dropdown>

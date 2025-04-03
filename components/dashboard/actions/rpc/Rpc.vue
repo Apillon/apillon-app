@@ -6,7 +6,7 @@
           v-model:value="rpcApiKeyStore.selectedId"
           :options="options"
           class="w-[20vw] min-w-[11rem] max-w-xs"
-          size="small"
+          size="medium"
           filterable
         />
         <Btn
@@ -24,7 +24,7 @@
     <div class="flex space-x-2">
       <n-button
         v-if="props.showUsageRefresh"
-        size="small"
+        size="medium"
         :loading="rpcApiKeyStore.loading"
         @click="rpcApiKeyStore.fetchRpcApiKeyUsagePerChain"
       >
@@ -32,12 +32,16 @@
         {{ $t('general.refresh') }}
       </n-button>
 
-      <n-button v-if="rpcApiKeyStore.selectedId" size="small" @click="$router.push(`/dashboard/service/rpc/endpoints`)">
+      <n-button
+        v-if="rpcApiKeyStore.selectedId"
+        size="medium"
+        @click="$router.push(`/dashboard/service/rpc/endpoints`)"
+      >
         <span class="text-primary">{{ $t('rpc.endpoint.viewAll') }}</span>
       </n-button>
 
       <BtnDocumentation
-        size="small"
+        size="medium"
         href="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html"
         hover-lighter
       />

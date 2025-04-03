@@ -43,10 +43,10 @@
           <span>{{ totalCredits }} {{ $t('dashboard.credits.credits') }}</span>
         </p>
         <div class="flex items-center gap-2">
-          <Btn v-if="showBack" size="small" type="secondary" @click="back">
+          <Btn v-if="showBack" class="min-w-40" type="secondary" @click="back">
             {{ $t('general.back') }}
           </Btn>
-          <Btn size="small" @click="nextStep">
+          <Btn class="min-w-40" @click="nextStep">
             <template v-if="metadataStore.stepMetadata === NftMetadataStep.SINGLE">
               {{ $t('nft.add') }}
             </template>

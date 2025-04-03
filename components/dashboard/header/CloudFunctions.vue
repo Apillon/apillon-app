@@ -9,7 +9,7 @@
 
     <template #info>
       <n-space size="large">
-        <BtnDocumentation size="small" href="https://wiki.apillon.io/web3-services/8-web3-cloud-functions.html" />
+        <BtnDocumentation href="https://wiki.apillon.io/web3-services/8-web3-cloud-functions.html" />
         <ModalCreditCosts :category="PriceServiceCategory.ACURAST" />
       </n-space>
     </template>

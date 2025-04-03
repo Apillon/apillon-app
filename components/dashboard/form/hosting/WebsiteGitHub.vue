@@ -6,11 +6,13 @@
       {{ $t('hosting.website.infoNewGithub') }}
     </p>
     <div class="my-8 flex flex-col gap-4 md:flex-row">
-      <div class="card p-8 md:w-1/2">
-        <h5>Import existing Git Repository</h5>
-        <FormFieldRepo v-model:value="websiteStore.form.repoId" />
+      <div class="card p-4 md:w-1/2 md:p-6 lg:p-8">
+        <h6 class="mb-2">{{ $t('hosting.github.import') }}</h6>
+        <p class="mb-4 mt-2">{{ $t('hosting.github.importInfo') }}</p>
+        <StorageGithubProjectConfig v-if="!storageStore.projectConfig" />
+        <FormFieldRepo v-else v-model:value="websiteStore.form.repoId" />
       </div>
-      <div class="card p-8 md:w-1/2">2</div>
+      <HostingCardTemplates class="md:w-1/2" @select-repo="repoSelected = true" />
     </div>
   </div>
   <div v-else class="mx-auto max-w-lg">
@@ -36,7 +38,24 @@
       </n-form-item>
 
       <!-- GitHub Specific Fields -->
-      <FormFieldRepo v-model:value="websiteStore.form.repoId" />
+      <n-form-item
+        v-if="selectedRepo"
+        path="repoId"
+        :label="$t('form.label.website.repository')"
+        :label-props="{ for: 'repo' }"
+      >
+        <div class="card-border flex w-full items-center justify-between rounded-lg px-4 py-[6px]">
+          <span class="flex items-center gap-1 text-xs">
+            <img :src="selectedRepo.owner.avatar_url" alt="" class="h-6 w-6 rounded-lg" />
+            <span class="capitalize">{{ selectedRepo.name.replaceAll('-', ' ') }}</span>
+            <small class="text-[10px]">{{ dateTimeToDate(selectedRepo.updated_at) }}</small>
+          </span>
+          <Btn class="float-right mt-[2px] text-xs text-yellow" type="link" @click="repoSelected = false">
+            {{ $t('general.change') }}
+          </Btn>
+        </div>
+      </n-form-item>
+      <FormFieldRepo v-else v-model:value="websiteStore.form.repoId" />
 
       <n-form-item path="branchName" :label="$t('form.label.website.branchName')" :label-props="{ for: 'branchName' }">
         <n-input
@@ -105,7 +124,7 @@
 
 <script lang="ts" setup>
 defineExpose({ back, handleSubmit });
-const emit = defineEmits(['back', 'submitSuccess', 'createSuccess', 'updateSuccess']);
+const emit = defineEmits(['back', 'next', 'submitSuccess', 'createSuccess', 'updateSuccess']);
 const props = defineProps({
   title: { type: String, default: null },
   hideSubmit: { type: Boolean, default: false },
@@ -114,6 +133,7 @@ const props = defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
+const storageStore = useStorageStore();
 const websiteStore = useWebsiteStore();
 const warningStore = useWarningStore();
 const { rulesWebsite, createWebsite } = useHosting();
@@ -140,6 +160,9 @@ const rules: NFormRules = {
 const isFormDisabled = computed<boolean>(() => {
   return dataStore.isProjectUser;
 });
+const selectedRepo = computed(() =>
+  [...storageStore.repos, ...apillonRepos].find(r => r.id === websiteStore.form.repoId)
+);
 
 function back() {
   if (repoSelected.value) {

@@ -6,13 +6,13 @@
 
     <n-space size="large">
       <!-- Refresh -->
-      <n-button size="small" :loading="indexerStore.loading" @click="indexerStore.fetchIndexers()">
+      <n-button size="medium" :loading="indexerStore.loading" @click="indexerStore.fetchIndexers()">
         <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('general.refresh') }}
       </n-button>
 
       <!-- Create new indexer -->
-      <n-button size="small" :disabled="authStore.isAdmin()" @click="showModalNewIndexer = true">
+      <n-button size="medium" :disabled="authStore.isAdmin()" @click="showModalNewIndexer = true">
         <span class="icon-file mr-2 text-xl text-primary"></span>
         <span class="text-primary">{{ $t('indexer.new') }}</span>
       </n-button>

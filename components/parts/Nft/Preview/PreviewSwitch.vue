@@ -5,7 +5,6 @@
     <n-button
       class="w-10 px-0"
       :class="{ '!bg-bg-lighter': !metadataStore.gridView }"
-      size="small"
       type="tertiary"
       quaternary
       round
@@ -16,7 +15,6 @@
     <n-button
       class="w-10 px-0"
       :class="{ '!bg-bg-lighter': metadataStore.gridView }"
-      size="small"
       type="tertiary"
       quaternary
       round

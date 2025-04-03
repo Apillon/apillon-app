@@ -18,13 +18,13 @@
           :title="$t('nft.collection.deployed.standalone')"
           :info="$t('nft.collection.deployed.standaloneInfo')"
         >
-          <Btn size="small">{{ $t('nft.marketplaces') }}</Btn>
+          <Btn>{{ $t('nft.marketplaces') }}</Btn>
         </NftCollectionDeployedCard>
         <NftCollectionDeployedCard
           :title="$t('nft.collection.deployed.standalone')"
           :info="$t('nft.collection.deployed.standaloneInfo')"
         >
-          <Btn size="small">{{ $t('nft.marketplaces') }}</Btn>
+          <Btn>{{ $t('nft.marketplaces') }}</Btn>
         </NftCollectionDeployedCard>
       </div>
     </div>

@@ -12,15 +12,11 @@
       <div v-else class="flex h-full flex-col items-center justify-center">
         <n-space size="large" class="mb-8 self-end">
           <!-- View template -->
-          <n-button size="small" tag="a" href="https://github.com/Apillon/cloud-function-template" target="_blank">
+          <n-button tag="a" href="https://github.com/Apillon/cloud-function-template" target="_blank">
             <span class="icon-cloud-functions mr-2 text-xl"></span>
             {{ $t('computing.cloudFunctions.job.viewTemplate') }}
           </n-button>
-          <BtnDocumentation
-            size="small"
-            href="https://wiki.apillon.io/web3-services/8-web3-cloud-functions.html"
-            hover-lighter
-          />
+          <BtnDocumentation href="https://wiki.apillon.io/web3-services/8-web3-cloud-functions.html" hover-lighter />
         </n-space>
         <div class="mt-8 flex max-w-xl flex-col gap-4 text-center">
           <h4>{{ $t('computing.cloudFunctions.job.title') }}</h4>

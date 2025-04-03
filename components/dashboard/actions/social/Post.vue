@@ -11,7 +11,7 @@
 
       <!-- Refresh posts -->
       <n-button
-        size="small"
+        size="medium"
         :loading="postStore.loading"
         @click="archive ? postStore.fetchPostsArchive() : postStore.fetchPosts()"
       >
@@ -20,7 +20,7 @@
       </n-button>
 
       <!-- Create new post -->
-      <n-button size="small" :disabled="authStore.isAdmin()" @click="modalCreatePostVisible = true">
+      <n-button size="medium" :disabled="authStore.isAdmin()" @click="modalCreatePostVisible = true">
         <span class="icon-create-folder mr-2 text-xl text-primary"></span>
         <span class="text-primary">{{ $t('social.post.new') }}</span>
       </n-button>

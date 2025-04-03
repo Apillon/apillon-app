@@ -9,7 +9,7 @@
     <n-space size="large">
       <!-- Encrypt file -->
       <n-button
-        size="small"
+        size="medium"
         :color="uploadActive ? colors.primary : ''"
         :disabled="authStore.isAdmin()"
         @click="uploadActive = !uploadActive"
@@ -21,7 +21,7 @@
       <!-- Open Bucket -->
       <n-button
         v-if="contractStore.active.bucket_uuid"
-        size="small"
+        size="medium"
         :loading="loadingBucket"
         @click="openBucket(contractStore.active.bucket_uuid)"
       >
@@ -30,7 +30,7 @@
       </n-button>
 
       <!-- Transfer contract -->
-      <n-button size="small" :disabled="actionsDisabled" @click="emit('transfer')">
+      <n-button size="medium" :disabled="actionsDisabled" @click="emit('transfer')">
         {{ $t('computing.contract.transfer') }}
       </n-button>
 
@@ -38,7 +38,7 @@
 
       <!-- Refresh contracts -->
       <n-button
-        size="small"
+        size="medium"
         :loading="transactionStore.loading"
         @click="
           transactionStore.fetchTransactions(contractStore.active.contract_uuid, {

@@ -122,9 +122,6 @@ function handleSubmit(e: Event | MouseEvent) {
 }
 
 async function createIpns() {
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-  }
   loading.value = true;
 
   try {

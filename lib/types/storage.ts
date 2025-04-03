@@ -100,8 +100,11 @@ declare global {
     clone_url: string;
     default_branch: string;
     owner: {
+      avatar_url: string;
       login: string;
     };
+    updated_at: string;
+    image?: string;
   }
 
   interface GithubReposResponse extends GeneralResponse<GithubRepo[]> {}

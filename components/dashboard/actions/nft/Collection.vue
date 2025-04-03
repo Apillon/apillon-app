@@ -4,7 +4,7 @@
     <n-button
       v-if="collectionStore.active.bucket_uuid && !collectionStore.isUnique"
       class="w-full"
-      size="small"
+      size="medium"
       :loading="loadingBucket"
       @click="openBucket(collectionStore.active.bucket_uuid)"
     >
@@ -13,7 +13,7 @@
     </n-button>
 
     <!-- Refresh -->
-    <n-button class="w-full" size="small" :loading="collectionStore.loading" @click="refresh">
+    <n-button class="w-full" size="medium" :loading="collectionStore.loading" @click="refresh">
       <span class="icon-refresh mr-2 text-xl"></span>
       {{ $t('general.refresh') }}
     </n-button>
@@ -31,7 +31,7 @@
     >
       <template #icon> <IconInfo /> </template>
       <template #trigger>
-        <n-button class="w-full" size="small">{{ $t('nft.addIpns') }}</n-button>
+        <n-button class="w-full" size="medium">{{ $t('nft.addIpns') }}</n-button>
       </template>
       {{ $t('nft.addIpnsInfo') }}
     </n-popconfirm>
@@ -43,7 +43,7 @@
         collectionStore.active.collectionStatus === CollectionStatus.CREATED
       "
       class="w-full"
-      size="small"
+      size="medium"
       :loading="loadingBucket"
       :disabled="!allowAddMetadata"
       @click="emit('addNfts')"
@@ -53,14 +53,14 @@
     </n-button>
 
     <!-- Mint -->
-    <n-button class="w-full" size="small" :disabled="authStore.isAdmin() || actionsDisabled" @click="emit('mint')">
+    <n-button class="w-full" size="medium" :disabled="authStore.isAdmin() || actionsDisabled" @click="emit('mint')">
       <span class="icon-nft mr-2 text-xl"></span>
       {{ $t('nft.collection.mint') }}
     </n-button>
     <n-button
       v-if="collectionStore.active?.collectionType === NFTCollectionType.NESTABLE"
       class="w-full"
-      size="small"
+      size="medium"
       :disabled="authStore.isAdmin() || actionsDisabled"
       @click="emit('nestMint')"
     >
@@ -72,7 +72,7 @@
     <n-button
       v-if="!collectionStore.active.adminAddress"
       class="w-full"
-      size="small"
+      size="medium"
       :disabled="authStore.isAdmin() || actionsDisabled"
       @click="emit('transfer')"
     >
@@ -82,7 +82,7 @@
     <!-- Change base URI -->
     <n-button
       class="w-full"
-      size="small"
+      size="medium"
       :disabled="authStore.isAdmin() || actionsDisabled"
       @click="emit('setBaseUri')"
     >
@@ -93,7 +93,7 @@
     <n-button
       v-if="collectionStore.active.isRevokable"
       class="w-full"
-      size="small"
+      size="medium"
       type="error"
       :disabled="authStore.isAdmin() || actionsDisabled"
       ghost

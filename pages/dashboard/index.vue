@@ -45,7 +45,7 @@
           <div class="flex flex-col gap-6 text-sm lg:w-1/3">
             <div class="flex items-center justify-between">
               <strong>{{ $t('dashboard.usage.title') }}</strong>
-              <Btn class="font-bold no-underline" size="small" type="link" :to="{ name: 'dashboard-payments' }">
+              <Btn class="font-bold no-underline" type="link" :to="{ name: 'dashboard-payments' }">
                 <template v-if="paymentStore.hasActiveSubscription">
                   {{ $t('dashboard.payment.managePlan') }}
                 </template>

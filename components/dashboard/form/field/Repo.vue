@@ -5,6 +5,7 @@
       :loading="storageStore.loading"
       :placeholder="$t('form.placeholder.website.repository')"
       :options="repoOptions"
+      filterable
       @update:value="handleUpdateValue"
     />
   </n-form-item>

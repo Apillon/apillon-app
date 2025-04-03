@@ -24,7 +24,7 @@ export const useWebsiteStore = defineStore('website', {
       installCommand: 'npm install',
       apiKey: undefined,
       apiSecret: '',
-      repoId: undefined,
+      repoId: undefined as number | undefined,
       repoName: '',
       repoOwnerName: '',
       repoUrl: '',
@@ -154,10 +154,6 @@ export const useWebsiteStore = defineStore('website', {
     },
 
     async fetchWebsite(uuid: string): Promise<WebsiteInterface> {
-      const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
       try {
         const res = await $api.get<WebsiteResponse>(endpoints.websites(uuid));
 

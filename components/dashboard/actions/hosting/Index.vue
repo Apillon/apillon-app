@@ -9,7 +9,7 @@
       <ModalCreditCosts :service="ServiceTypeName.HOSTING" />
 
       <!-- Refresh websites -->
-      <n-button size="small" :loading="websiteStore.loading" @click="websiteStore.fetchWebsites(archive)">
+      <n-button size="medium" :loading="websiteStore.loading" @click="websiteStore.fetchWebsites(archive)">
         <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('general.refresh') }}
       </n-button>
@@ -17,7 +17,7 @@
       <!-- Create new website -->
       <n-button
         v-if="websiteStore.hasWebsites"
-        size="small"
+        size="medium"
         :disabled="authStore.isAdmin()"
         @click="showModalEditWebsite = true"
       >

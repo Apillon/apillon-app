@@ -7,7 +7,7 @@
 
       <n-space size="large">
         <!-- Refresh files -->
-        <n-button size="small" :loading="fileStore.trash.loading" @click="fileStore.fetchDeletedFiles()">
+        <n-button :loading="fileStore.trash.loading" @click="fileStore.fetchDeletedFiles()">
           <span class="icon-refresh mr-2 text-xl"></span>
           {{ $t('general.refresh') }}
         </n-button>

@@ -25,7 +25,7 @@
         :input-props="{ id: 'csvFile' }"
         :custom-request="e => onCsvFileUpload(e)"
       >
-        <Btn size="small" type="secondary">
+        <Btn type="secondary">
           {{ $t('nft.upload.csvFile') }}
         </Btn>
       </n-upload>

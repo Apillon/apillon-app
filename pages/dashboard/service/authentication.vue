@@ -13,7 +13,7 @@
               v-if="dataStore.hasServicesByType(ServiceType.AUTHENTICATION)"
               :to="{ name: 'dashboard-api-keys' }"
             >
-              <n-button size="small">
+              <n-button>
                 <span class="icon-acess mr-2 text-xl"></span>
                 {{ $t('dashboard.pageMenu.apiKeys') }}
               </n-button>

@@ -14,7 +14,6 @@
     <NftPreview v-else>
       <Btn
         v-if="metadataStore.stepMetadata === NftMetadataStep.SINGLE_PREVIEW"
-        size="small"
         type="secondary"
         class="locked !min-w-0 lg:-translate-y-full"
         @click="back()"

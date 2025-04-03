@@ -3,20 +3,10 @@
     <div class="card-light relative w-1/4 min-w-[260px] border-none p-4">
       <div class="ml-2 flex">
         <div class="p-0.4 flex min-w-[158px] justify-center rounded-full bg-bg-lighter">
-          <n-button
-            size="small"
-            round
-            :class="selectedType === 'write' ? '!bg-bg-dark' : ''"
-            @click="selectType('write')"
-          >
+          <n-button :class="{ '!bg-bg-dark': selectedType === 'write' }" round @click="selectType('write')">
             <span class="px-2">Write</span>
           </n-button>
-          <n-button
-            size="small"
-            round
-            :class="selectedType === 'read' ? '!bg-bg-dark' : ''"
-            @click="selectType('read')"
-          >
+          <n-button :class="{ '!bg-bg-dark': selectedType === 'read' }" round @click="selectType('read')">
             <span class="px-2">Read</span>
           </n-button>
         </div>

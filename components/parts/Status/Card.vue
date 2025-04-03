@@ -11,7 +11,7 @@
               {{ $t('dashboard.refreshModal.title') }}
             </span>
             <!-- <n-button-group @click.stop>
-              <n-button size="small" @click="refresh">
+              <n-button @click="refresh">
                 <span class="icon-refresh text-xl mr-2"></span>
                 {{ $t('dashboard.refreshModal.refresh') }}
               </n-button>
@@ -21,7 +21,7 @@
                 :options="refreshStatusOptions"
                 @select="updateRefreshInterval"
               >
-                <n-button size="small">
+                <n-button>
                   <span>{{ refreshInterval.label }}</span> <span class="icon-down text-3xl"></span>
                 </n-button>
               </n-dropdown>

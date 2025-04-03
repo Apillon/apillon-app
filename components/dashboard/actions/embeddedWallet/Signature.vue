@@ -11,14 +11,14 @@
     </div>
 
     <n-space size="large">
-      <n-button size="small" @click="showModalEditEmbeddedWallet = true">
+      <n-button size="medium" @click="showModalEditEmbeddedWallet = true">
         <span class="icon-edit mr-2 text-xl text-primary"></span>
         <span class="text-primary">{{ $t('embeddedWallet.editIntegration') }}</span>
       </n-button>
 
       <!-- View documentation -->
       <BtnDocumentation
-        size="small"
+        size="medium"
         href="https://wiki.apillon.io/build/12-embedded-wallets-integration.html"
         hover-lighter
       />

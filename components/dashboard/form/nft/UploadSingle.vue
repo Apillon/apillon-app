@@ -90,7 +90,7 @@
           >
             <div class="flex w-full flex-col items-end gap-6">
               <TableNftAttributes />
-              <Btn size="small" type="secondary" class="!min-w-0" @click="addAttribute()">
+              <Btn type="secondary" @click="addAttribute()">
                 <span class="flex items-center gap-2">
                   <span class="icon-add rounded-md p-1 text-xl text-yellow"></span>
                   <span>{{ $t('nft.addAttribute') }}</span>

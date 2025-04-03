@@ -28,7 +28,11 @@ const pricing = computed<ProductPriceInterface[]>(() => {
 
 const data = ref<Record<string, string | boolean>[]>([
   { label: t('form.label.website.name'), value: websiteStore.form.name },
-  { label: t('form.label.website.description'), value: websiteStore.form.description },
+  {
+    label: t('form.label.website.description'),
+    value: websiteStore.form.description,
+    show: !!websiteStore.form.description,
+  },
 ]);
 
 onMounted(() => {
@@ -41,7 +45,11 @@ onMounted(() => {
     data.value.push({ label: t('form.label.website.installCommand'), value: websiteStore.form.installCommand });
     data.value.push({ label: t('form.label.website.buildCommand'), value: websiteStore.form.buildCommand });
     data.value.push({ label: t('form.label.website.buildDirectory'), value: websiteStore.form.buildDirectory });
-    data.value.push({ label: t('form.label.apiKey'), value: websiteStore.form.apiKey || '' });
+    data.value.push({
+      label: t('form.label.apiKey'),
+      value: websiteStore.form.apiKey || '',
+      show: !!websiteStore.form.apiKey,
+    });
   }
 });
 </script>

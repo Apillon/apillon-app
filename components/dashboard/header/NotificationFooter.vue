@@ -1,6 +1,6 @@
 <template>
   <div class="sticky -bottom-4 -mx-2 mb-2 flex items-center justify-between bg-bg-dark px-5 py-2">
-    <Btn v-if="showBtnReadAll" type="builders" size="small" @click="settingsStore.readAllNotifications()">
+    <Btn v-if="showBtnReadAll" type="builders" @click="settingsStore.readAllNotifications()">
       <strong>Mark all as read</strong>
     </Btn>
     <div v-else></div>

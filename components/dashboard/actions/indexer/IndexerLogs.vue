@@ -7,7 +7,7 @@
         v-model:value="indexerLogStore.filter.dateFrom"
         class="max-w-xs ml-2"
         type="datetime"
-        size="small"
+        size="medium"
         clearable
       /> -->
 
@@ -16,7 +16,7 @@
         v-model:value="indexerLogStore.filter.logLevels"
         :options="logLevels"
         :placeholder="$t('form.placeholder.indexer.logLevels')"
-        size="small"
+        size="medium"
         class="ml-2 w-[20vw] min-w-[11rem] max-w-xs"
         filterable
         clearable
@@ -28,7 +28,7 @@
         v-model:value="indexerLogStore.filter.containers"
         :options="containers"
         :placeholder="$t('form.placeholder.indexer.containers')"
-        size="small"
+        size="medium"
         class="ml-2 w-[20vw] min-w-[11rem] max-w-xs"
         filterable
         clearable
@@ -40,7 +40,7 @@
     <n-space size="large">
       <!-- Refresh -->
       <n-button
-        size="small"
+        size="medium"
         :loading="indexerLogStore.loading"
         @click="indexerLogStore.fetchLogs(indexerStore.active.indexer_uuid)"
       >

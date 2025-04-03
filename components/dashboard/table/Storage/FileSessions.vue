@@ -9,7 +9,6 @@
       <n-space>
         <!-- Refresh -->
         <n-button
-          size="small"
           :loading="loading"
           @click="getFiles(fileStore.session.pagination.page, fileStore.session.pagination.pageSize)"
         >
@@ -22,7 +21,6 @@
           v-model:value="fileStatus"
           :options="fileStatuses"
           class="w-[45vw] sm:w-[30vw] lg:w-[20vw] max-w-xs"
-          size="small"
           :placeholder="$t('form.placeholder.fileStatus')"
           filterable
           clearable

@@ -3,7 +3,6 @@
     <h5>{{ $t('embeddedWallet.codeSnippets') }}</h5>
     <div class="p-0.4 rounded-full bg-bg-lighter">
       <n-button
-        size="small"
         round
         :class="selectedLanguage === CodeFramework.REACT ? '!bg-bg-dark' : ''"
         @click="select(CodeFramework.REACT)"
@@ -11,7 +10,6 @@
         <span class="px-2">React</span>
       </n-button>
       <n-button
-        size="small"
         round
         :class="selectedLanguage === CodeFramework.VUE ? '!bg-bg-dark' : ''"
         @click="select(CodeFramework.VUE)"
@@ -19,7 +17,6 @@
         <span class="px-2">Vue</span>
       </n-button>
       <n-button
-        size="small"
         round
         :class="selectedLanguage === CodeFramework.TYPESCRIPT ? '!bg-bg-dark' : ''"
         @click="select(CodeFramework.TYPESCRIPT)"
@@ -27,11 +24,7 @@
         <span class="px-2">TypeScript</span>
       </n-button>
     </div>
-    <BtnDocumentation
-      size="small"
-      href="https://wiki.apillon.io/build/12-embedded-wallets-integration.html"
-      hover-lighter
-    />
+    <BtnDocumentation href="https://wiki.apillon.io/build/12-embedded-wallets-integration.html" hover-lighter />
   </div>
 
   <VCodeBlock :code="currentCode" lang="js" theme="github-dark" highlightjs :style="codeSize" />

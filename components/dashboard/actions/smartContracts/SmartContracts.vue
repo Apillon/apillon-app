@@ -8,7 +8,7 @@
     <n-space size="large">
       <!-- Refresh -->
       <n-button
-        size="small"
+        size="medium"
         :loading="archive ? deployedContractStore.archive.loading : deployedContractStore.loading"
         @click="
           archive
@@ -28,7 +28,7 @@
 
       <!-- Create new collection -->
       <n-button
-        size="small"
+        size="medium"
         :disabled="authStore.isAdmin()"
         @click="router.push({ name: 'dashboard-service-smart-contracts-new' })"
       >

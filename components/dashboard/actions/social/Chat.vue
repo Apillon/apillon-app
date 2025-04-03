@@ -11,7 +11,7 @@
 
       <!-- Refresh chats -->
       <n-button
-        size="small"
+        size="medium"
         :loading="chatStore.loading"
         @click="archive ? chatStore.fetchChatArchive() : chatStore.fetchChats()"
       >
@@ -20,7 +20,7 @@
       </n-button>
 
       <!-- Create new chat -->
-      <n-button size="small" :disabled="authStore.isAdmin()" @click="modalCreateChatVisible = true">
+      <n-button size="medium" :disabled="authStore.isAdmin()" @click="modalCreateChatVisible = true">
         <span class="icon-create-folder mr-2 text-xl text-primary"></span>
         <span class="text-primary">{{ $t('social.chat.new') }}</span>
       </n-button>

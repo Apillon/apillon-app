@@ -9,10 +9,10 @@
           <div class="flex w-full flex-row-reverse justify-between gap-8">
             <!-- Actions : refresh, deploy -->
             <n-space>
-              <n-button v-if="websiteStore.isActiveWebsiteGithubSource" size="small" @click="showUpdateModal">
+              <n-button v-if="websiteStore.isActiveWebsiteGithubSource" @click="showUpdateModal">
                 {{ $t('hosting.deploy.update') }}
               </n-button>
-              <n-button size="small" :loading="deploymentStore.buildsLoading" @click="refreshBuilds">
+              <n-button :loading="deploymentStore.buildsLoading" @click="refreshBuilds">
                 <span class="icon-refresh mr-2 text-xl"></span>
                 {{ $t('general.refresh') }}
               </n-button>

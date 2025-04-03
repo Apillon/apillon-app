@@ -1,4 +1,37 @@
 import { defineStore } from 'pinia';
+import NextJsPNG from '/assets/images/hosting/nextJs.png';
+
+const apillonOwner = { avatar_url: 'https://avatars.githubusercontent.com/u/68999895?s=48&v=4', login: 'Apillon' };
+
+export const apillonRepos: GithubRepo[] = [
+  {
+    clone_url: 'https://github.com/Apillon/nft-template.git',
+    default_branch: 'master',
+    id: 629913711,
+    image: NextJsPNG,
+    name: 'nft-template',
+    owner: apillonOwner,
+    updated_at: '2024-02-15T08:56:38Z',
+  },
+  {
+    clone_url: 'https://github.com/Apillon/nft-template-vue.git',
+    default_branch: 'master',
+    id: 657149828,
+    image: NextJsPNG,
+    name: 'nft-template-vue',
+    owner: apillonOwner,
+    updated_at: '2024-02-15T08:56:38Z',
+  },
+  {
+    clone_url: 'https://github.com/Apillon/nft-template-react.git',
+    default_branch: 'master',
+    id: 657149144,
+    image: NextJsPNG,
+    name: 'nft-template-react',
+    owner: apillonOwner,
+    updated_at: '2024-02-15T08:56:38Z',
+  },
+];
 
 export const useStorageStore = defineStore('storage', {
   state: () => ({
@@ -73,14 +106,11 @@ export const useStorageStore = defineStore('storage', {
 
     async fetchGithubProjectConfig() {
       const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
+      const projectUuid = await dataStore.getProjectUuid();
 
-        if (!dataStore.projectUuid) return;
-      }
       this.loading = true;
       try {
-        const res = await $api.get<GithubProjectConfigResponse>(endpoints.githubProjectConfig(dataStore.projectUuid));
+        const res = await $api.get<GithubProjectConfigResponse>(endpoints.githubProjectConfig(projectUuid));
         this.projectConfig = res.data;
 
         /** Save timestamp to SS */
@@ -94,14 +124,11 @@ export const useStorageStore = defineStore('storage', {
 
     async fetchRepos() {
       const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
+      const projectUuid = await dataStore.getProjectUuid();
 
-        if (!dataStore.projectUuid) return;
-      }
       this.loading = true;
       try {
-        const res = await $api.get<GithubReposResponse>(endpoints.githubRepos(dataStore.projectUuid));
+        const res = await $api.get<GithubReposResponse>(endpoints.githubRepos(projectUuid));
         this.repos = res.data;
 
         /** Save timestamp to SS */

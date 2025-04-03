@@ -6,23 +6,19 @@
 
     <n-space size="large">
       <!-- Refresh assets -->
-      <n-button size="small" :loading="assetHubStore.loading" @click="assetHubStore.fetchAssets()">
+      <n-button :loading="assetHubStore.loading" @click="assetHubStore.fetchAssets()">
         <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('general.refresh') }}
       </n-button>
 
       <!-- Create new asset -->
-      <n-button
-        size="small"
-        :disabled="authStore.isAdmin()"
-        @click="$router.push({ name: 'dashboard-service-asset-hub-new' })"
-      >
+      <n-button :disabled="authStore.isAdmin()" @click="$router.push({ name: 'dashboard-service-asset-hub-new' })">
         <span class="icon-create-folder mr-2 text-xl text-primary"></span>
         <span class="text-primary">{{ $t('assetHub.new') }}</span>
       </n-button>
 
       <!-- View Documentation -->
-      <BtnDocumentation size="small" href="https://wiki.polkadot.network/docs/learn-assets" />
+      <BtnDocumentation size="medium" href="https://wiki.polkadot.network/docs/learn-assets" />
     </n-space>
   </n-space>
 </template>

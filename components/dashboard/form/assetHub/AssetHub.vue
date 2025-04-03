@@ -11,7 +11,7 @@
           v-if="!assetId && formData.network === assetHubNetworks.westend.rpc"
           class="absolute bottom-full right-0 mb-2"
         >
-          <Btn size="small" type="link" href="https://faucet.polkadot.io/westend?parachain=1000">
+          <Btn type="link" href="https://faucet.polkadot.io/westend?parachain=1000">
             <span class="text-xs">Faucet</span>
           </Btn>
         </div>

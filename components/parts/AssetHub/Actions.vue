@@ -8,22 +8,22 @@
       </Btn>
     </div>
     <template v-else>
-      <Btn size="small" @click="modalSendTokensVisible = true">
+      <Btn @click="modalSendTokensVisible = true">
         <strong>{{ $t('assetHub.sendTokens') }}</strong>
       </Btn>
-      <Btn size="small" :color="colors.blue" @click="modalMintTokensVisible = true">
+      <Btn :color="colors.blue" @click="modalMintTokensVisible = true">
         <strong>{{ $t('assetHub.mintTokens') }}</strong>
       </Btn>
-      <n-button size="small" @click="modalTransferVisible = true">
+      <n-button @click="modalTransferVisible = true">
         {{ $t('assetHub.transfer') }}
       </n-button>
-      <n-button size="small" @click="modalChangeIssuerVisible = true">
+      <n-button @click="modalChangeIssuerVisible = true">
         {{ $t('assetHub.changeIssuer') }}
       </n-button>
-      <n-button size="small" @click="modalChangeFreezerVisible = true">
+      <n-button @click="modalChangeFreezerVisible = true">
         {{ $t('assetHub.changeFreezer') }}
       </n-button>
-      <n-button size="small" @click="modalEditAssetVisible = true">
+      <n-button @click="modalEditAssetVisible = true">
         <span class="icon-edit mr-2 text-xl"></span>
         {{ $t('assetHub.edit') }}
       </n-button></template

@@ -3,7 +3,7 @@
     <div class="relative overflow-hidden rounded-lg">
       <Image :src="props.image" width="514" height="320" alt="nft template" />
       <div class="flex-cc absolute bottom-0 left-0 right-0 top-0 bg-bg-dark/75">
-        <Btn type="info" size="small" :href="props.link">
+        <Btn type="info" :href="props.link">
           <span class="icon-github mr-2"></span>
           <strong class="body-sm"> {{ props.title }}</strong>
         </Btn>

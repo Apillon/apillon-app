@@ -1,5 +1,37 @@
 {
   "hosting": {
+    "deploy": {
+      "connectRepo": "Connect Github repository to website",
+      "infoEmpty": "Connect Github repository to enable Continuous Deployment for this website",
+      "new": "New deployment configuration",
+      "save": "Save deployment configuration",
+      "success": "Deployment configuration saved successfully",
+      "update": "Update deployment configuration",
+      "updateConfig": "Update",
+      "env-vars": {
+        "title": "Environment variables",
+        "key": "Key",
+        "value": "Value",
+        "save": "Save",
+        "revert": "Revert",
+        "success-save": "Environment variables have been saved successfully",
+        "add-new": "Add new",
+        "new-title": "New environment variable",
+        "key-placeholder": "Enter key",
+        "value-placeholder": "Enter value",
+        "error-empty": "Variable key and value can't be empty"
+      },
+      "build-table": {
+        "finished-time": "Finished at",
+        "build-status": "Build status",
+        "status": {
+          "1": "PENDING",
+          "2": "IN PROGRESS",
+          "3": "COMPLETED",
+          "4": "FAILED"
+        }
+      }
+    },
     "deployment": {
       "env": {
         "1": "Staging",
@@ -37,6 +69,20 @@
         "10": "Invalid, domain is not pointing to Apillon IP"
       }
     },
+    "github": {
+      "browseAll": "Browse all templates",
+      "connect": "Connect GitHub",
+      "connected": "GitHub connected",
+      "connectedNotice": "You have successfully connected your GitHub account.",
+      "disconnect": "Disconnect GitHub",
+      "disconnectQuestion": "Are you sure you want to disconnect your GitHub account?",
+      "disconnectedNotice": "You have successfully disconnected your GitHub account.",
+      "import": "Import existing Git Repository",
+      "importInfo": "Connect your GitHub account to see your repositories and deploy a project.",
+      "options": "GitHub options",
+      "template": "Start with our template",
+      "templateInfo": "Use an Apillon pre-made template to fork a repository on GitHub and connect it to CI/CD."
+    },
     "menu": {
       "archive": "Website Archive",
       "preview": "1. Upload",
@@ -63,10 +109,16 @@
     },
     "website": {
       "addFirst": "Add first website",
+      "apillon-source": "Apillon",
       "create": "Create website",
       "description": "Website description",
       "delete": "Delete website",
       "deleteConfirm": "Are you sure that you want to delete selected website?",
+      "deployed": "Yay, your website is live and waiting for content.",
+      "deployedInfo": "Upload your files with the CLI or drag & drop them when you're ready.",
+      "deploying": "Deploying your website",
+      "deployingInfo": "We’re building and making it live — hang tight!",
+      "deployments": "See deployments",
       "domain": "Domain name",
       "edit": "Edit website",
       "infoNew": "Deploy your static website over CLI or drag&drop files manually.",
@@ -75,7 +127,6 @@
       "name": "Website name",
       "new": "Create new website",
       "source": "Source",
-      "apillon-source": "Apillon",
       "github-source": "GitHub",
       "update": "Update website",
       "uuid": "Website UUID",
@@ -93,51 +144,12 @@
         "info": "Give your website a final review before creating."
       }
     },
-    "deploy": {
-      "connectRepo": "Connect Github repository to website",
-      "infoEmpty": "Connect Github repository to enable Continuous Deployment for this website",
-      "new": "New deployment configuration",
-      "save": "Save deployment configuration",
-      "success": "Deployment configuration saved successfully",
-      "update": "Update deployment configuration",
-      "env-vars": {
-        "title": "Environment variables",
-        "key": "Key",
-        "value": "Value",
-        "save": "Save",
-        "revert": "Revert",
-        "success-save": "Environment variables have been saved successfully",
-        "add-new": "Add new",
-        "new-title": "New environment variable",
-        "key-placeholder": "Enter key",
-        "value-placeholder": "Enter value",
-        "error-empty": "Variable key and value can't be empty"
-      },
-      "build-table": {
-        "finished-time": "Finished at",
-        "build-status": "Build status",
-        "status": {
-          "1": "PENDING",
-          "2": "IN PROGRESS",
-          "3": "COMPLETED",
-          "4": "FAILED"
-        }
-      },
-      "updateConfig": "Update"
-    },
     "clearAll": "Clear all",
     "clearAllFiles": "Do you want to remove all files?",
     "clearAllWarn": "With this action you will erase all files. To deploy new version to preview, you will have to upload whole website.",
     "deployProd": "Deploy to production",
     "deployStage": "Deploy to staging",
     "deploymentStatus": "Deployment status",
-    "disconnect-confirmation-title": "Disconnect GitHub",
-    "disconnect-confirmation-body": "Are you sure you want to disconnect your GitHub account?",
-    "disconnect-confirmation-button": "Disconnect",
-    "github-connected": "GitHub connected",
-    "github-connected-notice": "You have successfully connected your GitHub account.",
-    "github-disconnected-notice": "You have successfully disconnected your GitHub account.",
-    "connect-github": "Connect GitHub",
     "ipfsLink": "IPFS link",
     "ipns": "IPNS",
     "ipnsAddress": "IPNS Address",

@@ -26,7 +26,6 @@
         </div>
         <div class="mr-4 flex justify-end">
           <n-button
-            size="small"
             :loading="embeddedWalletStore.loading"
             @click="
               embeddedWalletStore.fetchSignatures(

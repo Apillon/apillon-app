@@ -13,7 +13,7 @@
         <Pill :type="domainStatusType">
           {{ $t(`hosting.domain.status.${domainStatus || 0}`) }}
         </Pill>
-        <n-button size="small" :disabled="btnDomainDisabled" :loading="loadingDomain" @click="refreshDomainStatus">
+        <n-button :disabled="btnDomainDisabled" :loading="loadingDomain" @click="refreshDomainStatus">
           <span class="icon-refresh mr-2 text-xl"></span>
           {{ $t('hosting.domain.refreshStatus') }}
         </n-button>
@@ -21,20 +21,20 @@
     </div>
 
     <n-space v-if="domain" class="w-full" :wrap="!isLg" align="center">
-      <Btn type="primary" size="small" @click="showModalConfiguration = true">
+      <Btn type="primary" @click="showModalConfiguration = true">
         {{ $t('hosting.domain.configure') }}
       </Btn>
 
-      <Btn type="error" size="small" :loading="loadingDelete" @click="deleteDomain">
+      <Btn type="error" :loading="loadingDelete" @click="deleteDomain">
         {{ $t('hosting.domain.remove') }}
       </Btn>
     </n-space>
-    <Btn v-else-if="editEnabled" type="primary" size="small" @click="showModalDomain = true">
+    <Btn v-else-if="editEnabled" type="primary" @click="showModalDomain = true">
       {{ $t('hosting.domain.add') }}
     </Btn>
     <n-tooltip v-else placement="top" :trigger="isMd ? 'hover' : 'click'">
       <template #trigger>
-        <Btn type="primary" size="small" class="locked cursor-default !bg-primary/50">
+        <Btn type="primary" class="locked cursor-default !bg-primary/50">
           {{ $t('hosting.domain.add') }}
         </Btn>
       </template>

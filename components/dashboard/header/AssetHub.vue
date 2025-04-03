@@ -36,7 +36,7 @@
         </p>
       </div>
       <div v-else-if="!switcher">
-        <Btn type="primary" size="small" :loading="loadingWallet" @click="modalWalletSelectVisible = true">
+        <Btn type="primary" :loading="loadingWallet" @click="modalWalletSelectVisible = true">
           {{ $t('assetHub.connectWallet') }}
         </Btn>
       </div>

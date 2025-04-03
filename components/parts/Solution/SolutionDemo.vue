@@ -3,7 +3,7 @@
     <div class="relative overflow-hidden rounded-lg">
       <Image :src="img" width="514" height="320" alt="nft template" />
       <div class="flex-cc absolute bottom-0 left-0 right-0 top-0 bg-bg-dark/75">
-        <Btn type="info" size="small">
+        <Btn type="info">
           <strong class="body-sm">
             {{ $t('general.viewDemo') }}
           </strong>

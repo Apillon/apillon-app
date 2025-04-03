@@ -121,15 +121,13 @@ function handleSubmit(e: Event | MouseEvent) {
 }
 
 async function createBucket() {
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-  }
+  const projectUuid = await dataStore.getProjectUuid();
 
   loading.value = true;
   emit('submit');
 
   const bodyData = {
-    project_uuid: dataStore.projectUuid,
+    project_uuid: projectUuid,
     bucketType: props.bucketType,
     name: formData.value.bucketName,
     description: formData.value.bucketDescription,

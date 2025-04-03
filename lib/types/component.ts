@@ -78,7 +78,7 @@ declare global {
     pageSize: number;
     showSizePicker: boolean;
     pageSizes: number[];
-    prefix: ({ itemCount }: { itemCount: number }) => string;
+    prefix: ({ itemCount }: { itemCount: number | undefined }) => string;
   };
 
   /** Naive UI */

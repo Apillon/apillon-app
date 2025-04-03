@@ -4,17 +4,17 @@
 
     <n-space v-if="indexerStore.active" size="large">
       <BtnDocumentation
-        size="small"
+        size="medium"
         href="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html#indexing-service"
         hover-lighter
       />
 
-      <n-button size="small" :loading="indexerStore.loading" @click="initIndexer">
+      <n-button size="medium" :loading="indexerStore.loading" @click="initIndexer">
         <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('general.refresh') }}
       </n-button>
 
-      <n-button size="small" @click="showModalEditIndexer = true">
+      <n-button size="medium" @click="showModalEditIndexer = true">
         <span class="icon-edit mr-2 text-xl text-primary"></span>
         <span class="text-primary">{{ $t('indexer.update') }}</span>
       </n-button>
@@ -27,7 +27,7 @@
         :options="options"
         :disabled="authStore.isAdmin()"
       >
-        <n-button size="small">
+        <n-button size="medium">
           <span class="text-primary">{{ $t('general.actions') }}</span>
           <div class="relative left-1 hidden items-center md:flex">
             <span class="icon-down text-2xl text-primary"></span>

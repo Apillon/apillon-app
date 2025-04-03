@@ -5,7 +5,7 @@
     <n-space size="large">
       <!-- Refresh -->
       <n-button
-        size="small"
+        size="medium"
         :loading="indexerDeploymentsStore.loading"
         @click="indexerDeploymentsStore.fetchDeployments(indexerStore.active.indexer_uuid)"
       >

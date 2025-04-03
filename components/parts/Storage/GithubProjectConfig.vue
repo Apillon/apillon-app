@@ -1,17 +1,25 @@
 <template>
-  <Btn :type="storageStore.projectConfig ? 'secondary' : 'primary'" :loading="loading" @click="handleGithubPress">
-    <span>{{ $t(storageStore.projectConfig ? 'hosting.github-connected' : 'hosting.connect-github') }}</span>
+  <Btn
+    size="large"
+    :inner-class="['flex items-center', { 'text-white': !storageStore.projectConfig }]"
+    :type="storageStore.projectConfig ? 'secondary' : 'primary'"
+    :color="storageStore.projectConfig ? '' : '#25292e'"
+    :loading="loading"
+    @click="handleGithubPress"
+  >
+    <span class="icon-github mr-2 text-lg"></span>
+    <span>{{ $t(storageStore.projectConfig ? 'hosting.github.connected' : 'hosting.github.connect') }}</span>
   </Btn>
 
   <!-- Modal - Delete file/folder -->
-  <ModalDelete v-model:show="isConfirmationModalVisible" :title="$t(`hosting.disconnect-confirmation-title`)">
+  <ModalDelete v-model:show="isConfirmationModalVisible" :title="$t(`hosting.github.disconnect`)">
     <template #content>
       <p>
-        {{ $t(`hosting.disconnect-confirmation-body`) }}
+        {{ $t(`hosting.github.disconnectQuestion`) }}
       </p>
     </template>
-    <Btn type="primary" :loading="loading" @click="disconnectGithub">
-      {{ $t('hosting.disconnect-confirmation-button') }}
+    <Btn class="w-full" type="primary" :loading="loading" @click="disconnectGithub">
+      {{ $t('general.disconnect') }}
     </Btn>
   </ModalDelete>
 </template>
@@ -38,7 +46,7 @@ onMounted(async () => {
         project_uuid: projectUuid,
       });
       $router.replace($route.path);
-      message.success(t('hosting.github-connected-notice'));
+      message.success(t('hosting.github.connectedNotice'));
     } catch (e) {
       console.error(e);
     }
@@ -83,7 +91,7 @@ async function disconnectGithub() {
       project_uuid: dataStore.projectUuid,
     });
     storageStore.projectConfig = undefined;
-    message.success(t('hosting.github-disconnected-notice'));
+    message.success(t('hosting.github.disconnectedNotice'));
   } catch (e) {
     message.error(userFriendlyMsg(e));
   }

@@ -6,25 +6,25 @@
 
     <n-space size="large">
       <!-- Refresh variables -->
-      <n-button size="small" :loading="cloudFunctionStore.loading" @click="refresh">
+      <n-button size="medium" :loading="cloudFunctionStore.loading" @click="refresh">
         <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('form.reset') }}
       </n-button>
 
       <!-- Add new variables -->
-      <n-button size="small" :disabled="authStore.isAdmin()" @click="modalCreateVariableVisible = true">
+      <n-button size="medium" :disabled="authStore.isAdmin()" @click="modalCreateVariableVisible = true">
         <span class="icon-create-folder mr-2 text-xl text-primary"></span>
         <span class="text-primary">{{ $t('computing.cloudFunctions.variable.btnAddVariable') }}</span>
       </n-button>
 
       <n-upload :show-file-list="false" :custom-request="e => uploadEnvFile(e)">
-        <n-button size="small" :disabled="authStore.isAdmin()">
+        <n-button size="medium" :disabled="authStore.isAdmin()">
           <span class="icon-create-folder mr-2 text-xl text-primary"></span>
           <span class="text-primary">{{ $t('computing.cloudFunctions.variable.btnUploadEnv') }}</span>
         </n-button>
       </n-upload>
 
-      <n-button size="small" type="primary" :disabled="isDisabled" :loading="envLoading" @click="updateVariables">
+      <n-button size="medium" type="primary" :disabled="isDisabled" :loading="envLoading" @click="updateVariables">
         <span v-if="isDisabled" class="text-primary">
           {{ textCreateOrUpdate }}
         </span>

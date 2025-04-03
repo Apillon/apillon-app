@@ -26,7 +26,7 @@
 
         <!--  Variable value -->
         <n-form-item-gi :class="{ 'hide-feedback': item.key || !formErrors }" :show-label="key === 0" :span="2">
-          <n-button v-if="key > 0" class="w-10" size="small" type="error" ghost @click="formData.splice(key, 1)">
+          <n-button v-if="key > 0" class="w-10" type="error" ghost @click="formData.splice(key, 1)">
             <span class="icon-delete text-xl"></span>
           </n-button>
         </n-form-item-gi>
@@ -34,7 +34,7 @@
     </n-grid>
 
     <div class="mb-8 mt-4 text-right">
-      <n-button size="small" @click="formData.push({ key: '', value: '' })">
+      <n-button @click="formData.push({ key: '', value: '' })">
         <span class="icon-add mr-2 text-xl text-primary"></span>
         <span class="text-primary">{{ $t('computing.cloudFunctions.variable.addRow') }}</span>
       </n-button>

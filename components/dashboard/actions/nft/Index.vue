@@ -8,7 +8,7 @@
     <n-space size="large">
       <!-- Refresh collections -->
       <n-button
-        size="small"
+        size="medium"
         :loading="archive ? collectionStore.archive.loading : collectionStore.loading"
         @click="collectionStore.fetchCollections(archive)"
       >
@@ -19,7 +19,7 @@
       <!-- Create new collection -->
       <n-button
         v-if="collectionStore.hasCollections"
-        size="small"
+        size="medium"
         :disabled="authStore.isAdmin()"
         @click="modalCreateCollectionVisible = true"
       >
