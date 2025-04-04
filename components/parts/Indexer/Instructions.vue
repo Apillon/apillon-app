@@ -10,7 +10,7 @@
     </div>
 
     <div class="mt-2 flex flex-row items-center gap-2 text-body">
-      {{ $t('rpc.apiKey.powered') }}
+      {{ $t('general.poweredBy') }}
       <NuxtIcon name="logo/sqd" class="icon-auto h-6 w-16 text-white" alt="sqd" />
     </div>
     <SolutionContent :content="content" />

@@ -102,7 +102,9 @@
       </div>
     </div>
 
-    <ModalYT v-model:show="showVideo" :video-id="videoId" :chapters="videoChapters" />
+    <Drawer v-model:show="showVideo">
+      <DemoVideo :video-id="videoId" :chapters="videoChapters" />
+    </Drawer>
   </div>
 </template>
 

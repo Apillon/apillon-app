@@ -1,6 +1,6 @@
 <template>
   <transition name="slide-down" appear>
-    <div class="p-4 sm:px-8">
+    <div class="bg-bg-light/65 p-4 pb-0 sm:px-8">
       <div class="flex items-center justify-between">
         <div class="flex items-center pr-2 sm:pr-4">
           <small v-if="pageTitle">{{ pageTitle }}</small>
@@ -13,7 +13,7 @@
 
         <div class="flex flex-nowrap items-center gap-3 lg:gap-4">
           <n-dropdown :options="docs" @select="handleSelect">
-            <n-button>
+            <n-button class="h-10 !p-[10px]">
               <NuxtIcon name="icon/help" class="text-xl" />
             </n-button>
           </n-dropdown>

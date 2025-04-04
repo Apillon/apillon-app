@@ -1,6 +1,7 @@
 <template>
   <Btn
     type="secondary"
+    class="!px-2"
     inner-class="text-white flex items-center justify-center"
     :class="{ 'locked rounded-lg transition-colors hover:bg-bg-lighter': hoverLighter }"
   >

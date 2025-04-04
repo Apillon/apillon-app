@@ -144,8 +144,6 @@
 </template>
 
 <script lang="ts" setup>
-import { CollectionStatus, ChainType } from '~/lib/types/nft';
-
 enum Tabs {
   TRANSACTIONS = 'transactions',
   DEPLOYS = 'deploys',

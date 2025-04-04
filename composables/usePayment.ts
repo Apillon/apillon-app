@@ -28,7 +28,7 @@ export default function usePayment() {
     loading.value = false;
 
     if (customerPortalUrl) {
-      window.open(customerPortalUrl, '_blank');
+      window.open(customerPortalUrl, '_blank', 'Apillon - Github connect');
     }
   }
 

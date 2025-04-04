@@ -46,7 +46,7 @@
       @click="onClick"
     >
       <span v-if="loading" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-        <Spinner />
+        <Spinner :size="size === 'large' ? 36 : 24" />
       </span>
       <span :class="[innerClass, { 'opacity-0': loading }]">
         <slot />

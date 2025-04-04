@@ -1,25 +1,35 @@
 <template>
-  <Heading>
+  <Heading
+    :service="ServiceTypeName.HOSTING"
+    :info="$t('w3Warn.hosting.upload')"
+    :technologies="['logo/crust', 'library/typescript', 'library/javascript', 'library/nextjs']"
+    docs="sdocnkslk"
+    demo="qQJnuvUo-xo"
+  >
     <slot>
-      <h1>{{ $t('dashboard.nav.hosting') }}</h1>
-    </slot>
-
-    <template #info>
-      <n-space :size="32" align="center">
-        <StorageProgress
-          :key="storageStore.info.usedStorage"
-          :size="storageStore.info.usedStorage"
-          :max-size="storageStore.info.availableStorage"
-        />
-
+      <n-space align="center">
+        <h3>{{ $t('dashboard.nav.hosting') }}</h3>
         <IconInfo v-if="$te('w3Warn.hosting.upload')" @click="modalW3WarnVisible = true" />
       </n-space>
-      <n-space :size="32" align="flex-end">
-        <StorageGithubProjectConfig />
-      </n-space>
-    </template>
+    </slot>
+
     <template #submenu>
       <MenuHosting />
+    </template>
+
+    <template #details>
+      <StorageProgress
+        :key="storageStore.info.usedStorage"
+        class="mt-2"
+        :size="storageStore.info.usedStorage"
+        :max-size="storageStore.info.availableStorage"
+        :label="$t('dashboard.pageMenu.usage')"
+        wrap
+      />
+      <hr class="my-10 border-bg-lighter" />
+    </template>
+    <template #links>
+      <StorageGithubProjectConfig />
     </template>
   </Heading>
 
@@ -29,6 +39,7 @@
 </template>
 
 <script lang="ts" setup>
-const storageStore = useStorageStore();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.HOSTING_NEW);
+
+const storageStore = useStorageStore();
 </script>

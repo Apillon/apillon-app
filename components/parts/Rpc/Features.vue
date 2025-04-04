@@ -8,7 +8,7 @@
         {{ $t('rpc.apiKey.description') }}
       </p>
       <div class="flex flex-row gap-4 text-body">
-        {{ $t('rpc.apiKey.powered') }}
+        {{ $t('general.poweredBy') }}
         <img src="/assets/images/rpc/Dwellir.png" class="h-6 w-auto object-contain" alt="Dwellir" />
       </div>
     </div>

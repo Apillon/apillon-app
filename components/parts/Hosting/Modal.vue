@@ -88,7 +88,7 @@ onMounted(async () => {
   await dataStore.waitOnPromises();
   storageStore.getStorageInfo();
   paymentStore.getPriceList();
-  websiteStore.stepWebsiteCreate = WebsiteCreateStep.DEPLOYED;
+  // websiteStore.stepWebsiteCreate = WebsiteCreateStep.DEPLOYED;
 });
 
 const submitFormRef = async formRef => (formRef ? await formRef.handleSubmit() : false);

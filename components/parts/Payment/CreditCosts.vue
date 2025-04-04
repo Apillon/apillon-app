@@ -2,7 +2,7 @@
   <Spinner v-if="loading" />
   <template v-else>
     <div v-if="!service || (servicePrices && servicePrices.length)">
-      <div class="mb-4 flex gap-6">
+      <div v-if="filterByChain || filterByService" class="mb-4 flex gap-6">
         <!-- Filter by service -->
         <div v-if="filterByService && !service">
           <strong class="mb-1 inline-block">{{ $t('dashboard.credits.filterByService') }}:</strong>

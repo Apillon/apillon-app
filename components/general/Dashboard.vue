@@ -1,7 +1,8 @@
 <template>
   <div v-if="loading">
     <transition name="fade" appear>
-      <div v-if="loadingAnimation" class="flex w-full flex-col gap-8" style="height: calc(100dvh - 88px)">
+      <div v-if="loadingAnimation" class="flex w-full flex-col gap-8" style="height: calc(100dvh - 56px)">
+        <div class="-mx-4 h-24 bg-bg-light/65 px-4 text-sm sm:-mx-8 sm:px-8"></div>
         <!-- Loading skeleton - on long page load show skeleton -->
         <n-skeleton height="40px" width="100%" />
         <n-skeleton height="40px" width="100%" />
@@ -74,12 +75,12 @@ const bucketStore = useBucketStore();
 const warningStore = useWarningStore();
 const { activeDeployments } = useRefreshStatus();
 
-const { isMd, isLg, isXl } = useScreen();
+const { isMd, isXl } = useScreen();
 
 /** Heading height */
 const headingRef = ref<HTMLElement>();
 
-const calcHeaderHeight = () => (headingRef.value?.clientHeight || 0) + (isLg.value ? 72 : 72);
+const calcHeaderHeight = () => (headingRef.value?.clientHeight || 96) + 56;
 const headingHeight = ref<number>(calcHeaderHeight());
 
 const scrollStyle = computed(() => ({

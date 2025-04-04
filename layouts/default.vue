@@ -20,12 +20,9 @@
       </n-layout-sider>
       <n-layout>
         <Header @toggle-sidebar="toggleSidebar"> </Header>
-        <n-scrollbar class="bg-bg" y-scrollable style="max-height: calc(100dvh - 72px)">
-          <div class="relative bg-bg px-4 pt-4 sm:px-8">
-            <slot />
-          </div>
-          <!-- <CookieConsent /> -->
-        </n-scrollbar>
+        <div class="relative bg-bg px-4 sm:px-8">
+          <slot />
+        </div>
       </n-layout>
     </n-layout>
 

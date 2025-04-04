@@ -1,8 +1,12 @@
 <template>
-  <Dashboard class="-mt-8" :loading="authStore.loadingProfile" :learn-collapsible="false">
+  <Dashboard :loading="authStore.loadingProfile" :learn-collapsible="false">
+    <template #heading>
+      <Heading>
+        <h4>{{ $t('dashboard.onboarding.welcome') }}</h4>
+      </Heading>
+    </template>
     <slot>
       <div class="mb-8">
-        <h4>{{ $t('dashboard.onboarding.welcome') }}</h4>
         <div class="mb-10 mt-8 flex gap-4">
           <div class="flex flex-col justify-between gap-8 rounded-lg bg-violet p-6 text-bg lg:w-5/12">
             <div>
@@ -70,17 +74,18 @@
             />
           </div>
         </div>
-        <ModalYT
-          v-model:show="show"
-          video-id="qQJnuvUo-xo"
-          :chapters="[
-            { time: '00:00', title: 'Intro' },
-            { time: '00:35', title: 'Dashboard' },
-            { time: '02:53', title: 'NFT Collection' },
-            { time: '05:20', title: 'Minting' },
-            { time: '07:15', title: 'Website' },
-          ]"
-        />
+        <Drawer v-model:show="show">
+          <DemoVideo
+            video-id="qQJnuvUo-xo"
+            :chapters="[
+              { time: '00:00', title: 'Intro' },
+              { time: '00:35', title: 'Dashboard' },
+              { time: '02:53', title: 'NFT Collection' },
+              { time: '05:20', title: 'Minting' },
+              { time: '07:15', title: 'Website' },
+            ]"
+          />
+        </Drawer>
 
         <!-- Services-->
         <h4 class="mb-8">{{ $t('dashboard.onboarding.servicesTitle') }}</h4>

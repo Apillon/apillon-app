@@ -1,6 +1,5 @@
 <template>
   <Btn
-    size="large"
     :inner-class="['flex items-center', { 'text-white': !storageStore.projectConfig }]"
     :type="storageStore.projectConfig ? 'secondary' : 'primary'"
     :color="storageStore.projectConfig ? '' : '#25292e'"
@@ -68,8 +67,7 @@ async function connectToGithub() {
       'https://github.com/login/oauth/authorize?client_id=' +
         config.public.deploymentGithubId +
         '&redirect_uri=' +
-        window.location.href,
-      '_self'
+        window.location.href
     );
   } catch (e) {
     console.log('Error connecting to Github');

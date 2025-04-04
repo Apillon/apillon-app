@@ -1,24 +1,22 @@
 <template>
-  <n-drawer :width="774">
-    <n-drawer-content :title="$t('dashboard.youTube.title')" closable>
-      <VueYtframe ref="youtubeRef" :video-id="videoId" :player-vars="{ autoplay: 0 }" height="390" @ready="onReady" />
+  <div>
+    <VueYtframe ref="youtubeRef" :video-id="videoId" :player-vars="{ autoplay: 0 }" height="390" @ready="onReady" />
 
-      <div v-if="ytChapters" class="my-8">
-        <h4>{{ $t('dashboard.youTube.chapters') }}</h4>
+    <div v-if="ytChapters?.length" class="my-8">
+      <h4>{{ $t('dashboard.youTube.chapters') }}</h4>
 
-        <table class="">
-          <tr v-for="chapter in ytChapters" :key="chapter.time">
-            <td>
-              <button class="inline-block h-6 w-full bg-bg-light px-1 text-center" @click="selectChapter(chapter.time)">
-                {{ chapter.time }}
-              </button>
-            </td>
-            <td class="pl-1">{{ chapter.title }}</td>
-          </tr>
-        </table>
-      </div>
-    </n-drawer-content>
-  </n-drawer>
+      <table class="">
+        <tr v-for="chapter in ytChapters" :key="chapter.time">
+          <td>
+            <button class="inline-block h-6 w-full bg-bg-light px-1 text-center" @click="selectChapter(chapter.time)">
+              {{ chapter.time }}
+            </button>
+          </td>
+          <td class="pl-1">{{ chapter.title }}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
