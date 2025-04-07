@@ -1,5 +1,6 @@
 <template>
   <Btn
+    v-bind="$attrs"
     :inner-class="['flex items-center', { 'text-white': !storageStore.projectConfig }]"
     :type="storageStore.projectConfig ? 'secondary' : 'primary'"
     :color="storageStore.projectConfig ? '' : '#25292e'"

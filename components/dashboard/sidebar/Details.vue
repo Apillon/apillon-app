@@ -1,6 +1,11 @@
 <template>
   <Drawer class="details" :title="title || $t('general.details')">
-    <n-tabs v-model:value="tab" animated>
+    <n-tabs
+      ref="tabsRef"
+      v-model:value="tab"
+      animated
+      :class="`n-tabs-${tabsRef?.renderNameListRef?.value?.length || 0}`"
+    >
       <n-tab-pane :name="Tabs.GENERAL">
         <slot> </slot>
       </n-tab-pane>
@@ -21,7 +26,7 @@
           <slot name="pricing"> </slot>
         </div>
       </n-tab-pane>
-      <n-tab-pane :name="Tabs.DEMO">
+      <n-tab-pane v-if="demo" :name="Tabs.DEMO">
         <DemoVideo :video-id="demo" />
       </n-tab-pane>
     </n-tabs>
@@ -46,4 +51,7 @@ defineProps({
   showCreateCollection: { type: Boolean, default: false },
 });
 const tab = ref(Tabs.GENERAL);
+const tabsRef = ref();
+
+const tabsHeaders = computed(() => tabsRef.value?.renderedNames);
 </script>

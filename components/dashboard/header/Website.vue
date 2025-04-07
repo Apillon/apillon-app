@@ -1,5 +1,5 @@
 <template>
-  <Heading :service="ServiceTypeName.HOSTING" :info="$t('w3Warn.hosting.upload')">
+  <Heading :info="$t('w3Warn.hosting.upload')">
     <slot>
       <n-space align="center" size="large" :wrap="false">
         <NuxtLink :to="{ name: 'dashboard-service-hosting' }">
@@ -8,13 +8,6 @@
         <h2>{{ websiteStore.active.name }}</h2>
       </n-space>
     </slot>
-
-    <template #info>
-      <n-space :size="32" align="center" :wrap="false">
-        <ModalCreditCosts :service="ServiceTypeName.HOSTING" />
-        <IconInfo @click="showModalW3Warn = true" />
-      </n-space>
-    </template>
 
     <template #submenu>
       <MenuWebsite :has-github-connected="hasGithubConnected" />

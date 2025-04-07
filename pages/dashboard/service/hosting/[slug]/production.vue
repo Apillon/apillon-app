@@ -22,14 +22,6 @@
                   :info="$t('hosting.ipnsInfo')"
                 />
               </div>
-
-              <!-- Generate short URL -->
-              <FormStorageShortUrl
-                v-if="websiteStore.active.w3ProductionLink"
-                :target-url="websiteStore.active.w3ProductionLink"
-                class="mb-[3px]"
-                size="small"
-              />
             </div>
           </div>
 

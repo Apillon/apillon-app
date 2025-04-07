@@ -6,8 +6,16 @@
 
     <slot>
       <n-space class="pb-8" :size="32" vertical>
-        <!-- Actions -->
-        <ActionsHostingWebsite />
+        <div class="flex gap-6">
+          <div class="card-light flex-1 rounded-lg px-6 py-4">
+            <HostingWebsiteInfo />
+          </div>
+
+          <div class="card max-w-64 px-6 py-4">
+            <h6 class="mb-2">{{ $t('general.quickActions') }}</h6>
+            <ActionsHostingWebsite />
+          </div>
+        </div>
 
         <!-- Upload files -->
         <FormHostingUploadWebsite :bucket-uuid="bucketStore.bucketUuid" />

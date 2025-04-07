@@ -1,84 +1,98 @@
 <template>
   <div>
-    <n-space v-bind="$attrs" justify="space-between">
-      <ActionsHostingWebsiteSearchFiles v-if="search" />
-      <div v-else></div>
-
-      <n-space size="large">
-        <!-- Show only if user select files -->
-        <template v-if="isUpload && bucketStore.folder.selectedItems.length > 0">
-          <!-- Delete files -->
-          <n-tooltip placement="bottom" :show="showPopoverDelete">
-            <template #trigger>
-              <n-button
-                class="w-10"
-                size="medium"
-                type="error"
-                :disabled="authStore.isAdmin()"
-                ghost
-                @click="deleteSelectedFiles"
-              >
-                <span class="icon-delete text-xl"></span>
-              </n-button>
-            </template>
-            <span>{{ $t('storage.delete.selectedFiles') }}</span>
-          </n-tooltip>
-
-          <!-- Separator -->
-          <n-divider class="mx-4 h-full" vertical />
-        </template>
-
-        <!-- Refresh -->
-        <n-button size="medium" :loading="bucketStore.folder.loading" @click="refreshWebpage(env)">
-          <span class="icon-refresh mr-2 text-xl"></span>
-          {{ $t('general.refresh') }}
-        </n-button>
-
-        <!-- Clear all files -->
-        <n-button
-          v-if="isUpload"
-          size="medium"
-          type="error"
-          :disabled="authStore.isAdmin()"
-          ghost
-          @click="showModalClearAll = true"
-        >
-          <span class="icon-delete mr-2 text-xl"></span>
-          {{ $t('hosting.clearAll') }}
-        </n-button>
-
-        <!-- Deploy to staging -->
-        <div v-if="isUpload" class="flex items-center rounded-lg bg-primary align-middle">
-          <n-button
-            size="medium"
-            type="primary"
-            :bordered="false"
-            :loading="deploying"
-            :disabled="authStore.isAdmin()"
-            @click="deployWebsite(DeploymentEnvironment.STAGING)"
-          >
-            <span class="icon-deploy mr-2 text-xl"></span>
-            {{ $t('hosting.deployStage') }}
-          </n-button>
-          <n-dropdown trigger="click" :options="deployOptions" @select="handleSelectDeploy">
-            <n-button class="!p-0" size="medium" type="primary" :bordered="false">
-              <span class="icon-down text-3xl"></span>
+    <n-space class="w-full lg:min-w-52" size="large" vertical>
+      <!-- Show only if user select files -->
+      <template v-if="isUpload && bucketStore.folder.selectedItems.length > 0">
+        <!-- Delete files -->
+        <n-tooltip placement="bottom" :show="showPopoverDelete">
+          <template #trigger>
+            <n-button
+              class="w-10"
+              size="medium"
+              type="error"
+              :disabled="authStore.isAdmin()"
+              ghost
+              @click="deleteSelectedFiles"
+            >
+              <span class="icon-delete text-xl"></span>
             </n-button>
-          </n-dropdown>
-        </div>
-        <!-- Deploy to production -->
+          </template>
+          <span>{{ $t('storage.delete.selectedFiles') }}</span>
+        </n-tooltip>
+
+        <!-- Separator -->
+        <n-divider class="mx-4 h-full" vertical />
+      </template>
+
+      <!-- Refresh -->
+      <n-button class="w-full" size="medium" :loading="bucketStore.folder.loading" @click="refreshWebpage(env)">
+        <span class="icon-refresh mr-2 text-xl"></span>
+        {{ $t('general.refresh') }}
+      </n-button>
+
+      <StorageGithubProjectConfig class="w-full" />
+
+      <!-- Clear all files -->
+      <n-button
+        v-if="isUpload"
+        class="w-full"
+        type="error"
+        :disabled="authStore.isAdmin()"
+        ghost
+        @click="showModalClearAll = true"
+      >
+        <span class="icon-delete mr-2 text-xl"></span>
+        {{ $t('hosting.clearAll') }}
+      </n-button>
+
+      <!-- Deploy to staging -->
+      <div v-if="isUpload" class="flex w-full items-center rounded-lg bg-primary align-middle">
         <n-button
-          v-if="env === DeploymentEnvironment.STAGING"
-          size="medium"
           type="primary"
+          :bordered="false"
           :loading="deploying"
           :disabled="authStore.isAdmin()"
-          @click="deployWebsite(DeploymentEnvironment.PRODUCTION)"
+          @click="deployWebsite(DeploymentEnvironment.STAGING)"
         >
           <span class="icon-deploy mr-2 text-xl"></span>
-          {{ $t('hosting.deployProd') }}
+          {{ $t('hosting.deployStage') }}
         </n-button>
-      </n-space>
+        <n-dropdown trigger="click" :options="deployOptions" @select="handleSelectDeploy">
+          <n-button class="!p-0" type="primary" :bordered="false">
+            <span class="icon-down text-3xl"></span>
+          </n-button>
+        </n-dropdown>
+      </div>
+      <!-- Deploy to production -->
+      <n-button
+        v-if="env === DeploymentEnvironment.STAGING"
+        class="w-full"
+        size="medium"
+        type="primary"
+        :loading="deploying"
+        :disabled="authStore.isAdmin()"
+        @click="deployWebsite(DeploymentEnvironment.PRODUCTION)"
+      >
+        <span class="icon-deploy mr-2 text-xl"></span>
+        {{ $t('hosting.deployProd') }}
+      </n-button>
+
+      <Btn
+        class="locked w-full"
+        :type="!websiteStore.active.domain ? 'primary' : 'secondary'"
+        :bordered="false"
+        :disabled="authStore.isAdmin()"
+        @click="modalWebsiteDomainVisible = true"
+      >
+        <span v-if="websiteStore.active.domain"> {{ $t('hosting.domain.update') }}</span>
+        <span v-else> {{ $t('hosting.domain.add') }}</span>
+      </Btn>
+      <!-- Generate short URL -->
+      <FormStorageShortUrl
+        v-if="websiteStore.active.w3ProductionLink"
+        :target-url="websiteStore.active.w3ProductionLink"
+        class="w-full"
+      />
     </n-space>
 
     <!-- Modal - Create new folder -->
@@ -125,16 +139,17 @@
         <PaymentCardPlan :show-card="false" btn-type="primary" :btn-text="$t('hosting.review.upgrade')" />
       </div>
     </Modal>
+
+    <!-- Modal -  Domain preview -->
+    <Modal v-model:show="modalWebsiteDomainVisible" :title="$t('hosting.domain.edit')">
+      <HostingDomain />
+    </Modal>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { translateItems } from '~/lib/utils';
-import { DeploymentEnvironment } from '~/lib/types/hosting';
-
 const props = defineProps({
   env: { type: Number, default: 0 },
-  search: { type: Boolean, default: true },
 });
 
 const { websiteUuid, refreshWebpage } = useHosting();
@@ -157,6 +172,7 @@ const showModalDelete = ref<boolean>(false);
 const showModalClearAll = ref<boolean>(false);
 const showPopoverDelete = ref<boolean>(false);
 const modalWebsiteReviewVisible = ref<boolean>(false);
+const modalWebsiteDomainVisible = ref<boolean>(false);
 
 const deploying = ref<boolean>(false);
 const deployEnv = ref<number>(DeploymentEnvironment.STAGING);

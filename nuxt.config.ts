@@ -74,6 +74,7 @@ export default defineNuxtConfig({
               '@wdns/vue-code-block',
               'vue3-youtube',
               'swiper/types',
+              'seemly',
             ]
           : [],
     },
@@ -167,5 +168,5 @@ export default defineNuxtConfig({
     },
   },
 
-  compatibilityDate: '2024-08-29',
+  compatibilityDate: '2025-04-07',
 });
