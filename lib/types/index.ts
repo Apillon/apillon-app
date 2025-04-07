@@ -1,8 +1,4 @@
-import type {
-  Composer,
-  ComposerTranslation,
-  UseI18nOptions,
-} from '@nuxtjs/i18n/dist/runtime/composables';
+import type { Composer, ComposerTranslation, UseI18nOptions } from '@nuxtjs/i18n/dist/runtime/composables';
 import type { MessageApiInjection } from 'naive-ui/es/message/src/MessageProvider';
 
 export enum SqlModelStatus {
@@ -64,7 +60,7 @@ declare global {
     name: string;
     description: string | null;
     createTime: string;
-    updateTime: string;
+    updateTime: string | null;
   }
 
   /**

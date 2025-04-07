@@ -424,9 +424,7 @@ async function createWebsite() {
     emit('createSuccess');
 
     /** Redirect to new web page */
-    router.push(
-      `/dashboard/service/hosting/${res.data.website_uuid}${selectedWebsiteType.value === 'github' ? '/deployments' : ''}`
-    );
+    router.push(websiteLink(res.data));
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

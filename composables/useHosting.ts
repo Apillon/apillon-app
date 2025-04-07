@@ -27,9 +27,10 @@ export default function useHosting() {
     fetchVariables: boolean = false,
     fetchDeploymentConfig = false
   ) {
+    deploymentStore.builds = [];
+    deploymentStore.deploymentConfig = undefined;
     websiteUuid.value = params.id ? `${params?.id}` : `${params?.slug}`;
     websiteStore.setWebsite(websiteUuid.value);
-    deploymentStore.builds = [] as DeploymentBuildInterface[];
 
     setTimeout(() => {
       Promise.all(Object.values(dataStore.promises)).then(async _ => {
