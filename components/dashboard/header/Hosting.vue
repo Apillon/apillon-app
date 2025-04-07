@@ -11,11 +11,7 @@
           :size="storageStore.info.usedStorage"
           :max-size="storageStore.info.availableStorage"
         />
-
         <IconInfo v-if="$te('w3Warn.hosting.upload')" @click="modalW3WarnVisible = true" />
-      </n-space>
-      <n-space :size="32" align="flex-end">
-        <StorageGithubProjectConfig />
       </n-space>
     </template>
     <template #submenu>

@@ -107,11 +107,14 @@ declare global {
   interface DeploymentsResponse extends GeneralItemsResponse<DeploymentInterface> {}
 
   interface DeploymentBuildInterface {
-    id: number;
     buildStatus: number;
-    logs: string;
     createTime: string;
+    deploymentConfigId: number;
     finishedTime: string;
+    id: number;
+    logs: string;
+    status: number;
+    websiteUuid: string;
   }
 
   interface DeploymentConfigVariable {

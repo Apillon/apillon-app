@@ -9,6 +9,7 @@ export default function useHosting() {
   const deploymentStore = useDeploymentStore();
   const pageLoading = ref<boolean>(true);
 
+  let buildInterval: any = null as any;
   let deploymentInterval: any = null as any;
   let websiteInterval: any = null as any;
 
@@ -28,6 +29,7 @@ export default function useHosting() {
   ) {
     websiteUuid.value = params.id ? `${params?.id}` : `${params?.slug}`;
     websiteStore.setWebsite(websiteUuid.value);
+    deploymentStore.builds = [] as DeploymentBuildInterface[];
 
     setTimeout(() => {
       Promise.all(Object.values(dataStore.promises)).then(async _ => {
@@ -99,7 +101,7 @@ export default function useHosting() {
     }, 10000);
   }
 
-  function checkUnfinishedDeployments(deployments: Array<DeploymentInterface>, env: number) {
+  function checkUnfinishedDeployments(deployments: DeploymentInterface[], env: number) {
     const unfinishedDeployment = deployments.find(
       deployment => deployment.deploymentStatus < DeploymentStatus.IN_REVIEW
     );
@@ -122,6 +124,22 @@ export default function useHosting() {
         clearInterval(deploymentInterval);
       }
     }, 10000);
+  }
+
+  async function checkUnfinishedBuilds() {
+    const builds = await deploymentStore.fetchBuilds(websiteStore.active.website_uuid);
+    const unfinishedBuilds = builds.find(deployment => deployment.buildStatus < DeploymentBuildStatus.SUCCESS);
+    if (unfinishedBuilds === undefined) {
+      return;
+    }
+
+    buildInterval = setInterval(async () => {
+      const refreshedBuilds = await deploymentStore.fetchBuilds(websiteStore.active.website_uuid, false);
+
+      if (refreshedBuilds.find(deployment => deployment.buildStatus < DeploymentBuildStatus.SUCCESS) === undefined) {
+        clearInterval(buildInterval);
+      }
+    }, 5000);
   }
 
   async function refreshWebpage(env: number) {
@@ -150,6 +168,7 @@ export default function useHosting() {
   return {
     pageLoading,
     websiteUuid,
+    checkUnfinishedBuilds,
     checkUnfinishedWebsite,
     initWebsite,
     refreshWebpage,

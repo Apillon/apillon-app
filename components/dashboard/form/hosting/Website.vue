@@ -11,20 +11,20 @@
 
       <!-- Website Type Selection Step -->
       <template v-if="!selectedWebsiteType">
-        <h2 class="mb-6 text-xl font-semibold">{{ $t('hosting.website.selectType') }}</h2>
+        <h4 class="mb-6 text-center">{{ $t('hosting.website.selectType') }}</h4>
         <div class="grid grid-cols-2 gap-4">
           <div
             class="hover:bg-gray-100 cursor-pointer rounded-lg border p-6 transition-colors"
             @click="selectWebsiteType('basic')"
           >
-            <h3 class="mb-2 text-lg font-medium">{{ $t('hosting.website.basicType') }}</h3>
+            <h5 class="mb-2"><span class="icon-file -ml-1 mr-2"></span>{{ $t('hosting.website.basicType') }}</h5>
             <p class="text-gray-600">{{ $t('hosting.website.basicTypeDescription') }}</p>
           </div>
           <div
             class="hover:bg-gray-100 cursor-pointer rounded-lg border p-6 transition-colors"
             @click="selectWebsiteType('github')"
           >
-            <h3 class="mb-2 text-lg font-medium">{{ $t('hosting.website.githubType') }}</h3>
+            <h5 class="mb-2"><span class="icon-github -ml-1 mr-2"></span>{{ $t('hosting.website.githubType') }}</h5>
             <p class="text-gray-600">{{ $t('hosting.website.githubTypeDescription') }}</p>
           </div>
         </div>
@@ -32,12 +32,6 @@
 
       <!-- Basic Website Form -->
       <template v-else-if="selectedWebsiteType === 'basic'">
-        <div class="mb-4">
-          <Btn type="secondary" @click="selectedWebsiteType = null">
-            {{ $t('form.goBack') }}
-          </Btn>
-        </div>
-
         <n-form
           ref="formRef"
           :model="formData"
@@ -70,23 +64,21 @@
           </n-form-item>
 
           <!-- Submit Button -->
-          <n-form-item :show-feedback="false">
-            <Btn type="primary" class="mt-2 w-full" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
+          <div class="flex justify-between gap-2">
+            <Btn type="secondary" @click="selectedWebsiteType = null">
+              {{ $t('form.goBack') }}
+            </Btn>
+            <Btn class="flex-1" type="primary" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
               {{ website ? $t('hosting.website.update') : $t('hosting.website.create') }}
             </Btn>
-          </n-form-item>
+          </div>
         </n-form>
       </template>
 
       <!-- GitHub Website Form -->
       <template v-else-if="selectedWebsiteType === 'github'">
-        <div class="mb-4">
-          <Btn type="secondary" @click="selectedWebsiteType = null">
-            {{ $t('form.goBack') }}
-          </Btn>
-        </div>
-
         <n-form
+          v-if="storageStore.projectConfig"
           ref="githubFormRef"
           :model="formData"
           :rules="githubRules"
@@ -121,6 +113,7 @@
               v-model:value="formData.repoId"
               :placeholder="$t('hosting.deploy.form.repository-placeholder')"
               :options="repoOptions"
+              filterable
               @update:value="handleUpdateValue"
             />
           </n-form-item>
@@ -176,7 +169,7 @@
             />
           </n-form-item>
 
-          <n-collapse accordion>
+          <n-collapse class="mb-6" accordion>
             <n-collapse-item>
               <template #header>
                 {{ $t('nft.collection.website-deploy.form.advanced-settings') }}
@@ -208,12 +201,18 @@
           </n-collapse>
 
           <!-- Submit Button -->
-          <n-form-item :show-feedback="false">
-            <Btn type="primary" class="mt-2 w-full" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
+          <div class="flex justify-between gap-2">
+            <Btn type="secondary" @click="selectedWebsiteType = null">
+              {{ $t('form.goBack') }}
+            </Btn>
+            <Btn type="primary" class="flex-1" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
               {{ website ? $t('hosting.website.update') : $t('hosting.website.create') }}
             </Btn>
-          </n-form-item>
+          </div>
         </n-form>
+        <div v-else class="my-8 text-center">
+          <StorageGithubProjectConfig class="locked" size="small" />
+        </div>
       </template>
     </div>
   </div>

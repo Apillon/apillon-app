@@ -70,10 +70,7 @@ export const useContractStore = defineStore('contract', {
     /**
      * API calls
      */
-    async fetchContracts(
-      archive: boolean = false,
-      showLoader: boolean = true
-    ): Promise<ContractInterface[]> {
+    async fetchContracts(archive: boolean = false, showLoader: boolean = true): Promise<ContractInterface[]> {
       this.loading = showLoader;
 
       const dataStore = useDataStore();
@@ -82,12 +79,8 @@ export const useContractStore = defineStore('contract', {
       }
 
       try {
-        const params: Record<string, string | number> = {
-          project_uuid: dataStore.projectUuid,
-          orderBy: 'createTime',
-          desc: 'true',
-          ...PARAMS_ALL_ITEMS,
-        };
+        const params = parseArguments(PARAMS_ALL_ITEMS);
+        params.project_uuid = dataStore.projectUuid;
         if (archive) {
           params.status = SqlModelStatus.ARCHIVED;
         }
