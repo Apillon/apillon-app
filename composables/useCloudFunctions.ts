@@ -134,7 +134,10 @@ export default function useCloudFunctions() {
       setJobStatus(data?.file?.name);
 
       const fileCid = await uploadFile(data.file);
-      if (!fileCid) return null;
+      if (!fileCid) {
+        clearIntervalJob();
+        return null;
+      }
 
       const bodyData = {
         project_uuid: dataStore.projectUuid,
@@ -149,7 +152,7 @@ export default function useCloudFunctions() {
       cloudFunctionStore.addJob(res.data);
 
       message.success(t('form.success.created.cloudFunctionJob'));
-      clearIntervalJob();
+      clearIntervalJob(true);
 
       return res.data;
     } catch (error) {
