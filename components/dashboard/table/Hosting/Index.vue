@@ -26,7 +26,7 @@ const props = defineProps({
   archive: { type: Boolean, default: false },
 });
 
-const { t, te } = useI18n();
+const { t } = useI18n();
 const router = useRouter();
 const message = useMessage();
 const authStore = useAuthStore();
@@ -118,9 +118,7 @@ const rowProps = (row: WebsiteBaseInterface) => {
       currentRow.value = row;
 
       if (canOpenColumnCell(e.composedPath())) {
-        router.push({
-          path: `/dashboard/service/hosting/${row.website_uuid}${row.source === WebsiteSource.GITHUB ? '/deployments' : ''}`,
-        });
+        router.push(websiteLink(row));
       }
     },
   };

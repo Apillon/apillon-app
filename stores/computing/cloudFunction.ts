@@ -113,10 +113,7 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
     },
 
     async getCloudFunction(functionUuid: string) {
-      if (
-        this.active?.function_uuid !== functionUuid ||
-        isCacheExpired(LsCacheKeys.CLOUD_FUNCTION)
-      ) {
+      if (this.active?.function_uuid !== functionUuid || isCacheExpired(LsCacheKeys.CLOUD_FUNCTION)) {
         this.active = await this.fetchCloudFunction(functionUuid);
       }
       return this.active;
@@ -147,10 +144,7 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
     /**
      * API calls
      */
-    async fetchCloudFunctions(
-      archive = false,
-      showLoader: boolean = true
-    ): Promise<CloudFunctionInterface[]> {
+    async fetchCloudFunctions(archive = false, showLoader: boolean = true): Promise<CloudFunctionInterface[]> {
       this.loading = showLoader;
 
       const dataStore = useDataStore();
@@ -159,12 +153,8 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
       }
 
       try {
-        const params: Record<string, string | number> = {
-          project_uuid: dataStore.projectUuid,
-          orderBy: 'createTime',
-          desc: 'true',
-          ...PARAMS_ALL_ITEMS,
-        };
+        const params = parseArguments(PARAMS_ALL_ITEMS);
+        params.project_uuid = dataStore.projectUuid;
         if (archive) {
           params.status = SqlModelStatus.ARCHIVED;
         }

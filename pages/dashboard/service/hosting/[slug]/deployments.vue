@@ -45,7 +45,7 @@ const $i18n = useI18n();
 const websiteStore = useWebsiteStore();
 const deploymentStore = useDeploymentStore();
 const storageStore = useStorageStore();
-const { pageLoading, initWebsite } = useHosting();
+const { pageLoading, initWebsite, checkUnfinishedBuilds } = useHosting();
 const modalCreateKeyVisible = ref<boolean>(false);
 
 useHead({
@@ -67,6 +67,8 @@ const refreshBuilds = async () => {
 const handleSubmitSuccess = async () => {
   storageStore.resetDeployConfigForm();
   modalCreateKeyVisible.value = false;
+
+  setTimeout(() => checkUnfinishedBuilds(), 3000);
 };
 
 const showUpdateModal = async () => {

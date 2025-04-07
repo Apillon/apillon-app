@@ -133,6 +133,7 @@
         "save": "Save deployment configuration",
         "remove": "Unlink repository",
         "success": "Deployment configuration saved successfully",
+        "updated": "Deployment configuration updated successfully",
         "validation": {
           "repo-required": "Repository is required",
           "branch-name-required": "Branch name is required",
@@ -141,7 +142,7 @@
           "api-secret-required": "API secret is required"
         }
       },
-      "update-config": "Update"
+      "update-config": "Update config"
     },
     "clearAll": "Clear all",
     "clearAllFiles": "Do you want to remove all files?",

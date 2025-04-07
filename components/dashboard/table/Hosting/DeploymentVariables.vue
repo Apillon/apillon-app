@@ -39,7 +39,7 @@ defineProps({
   variables: { type: Array<DeploymentConfigVariable>, default: [] },
 });
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const deploymentStore = useDeploymentStore();
 
 const rowInEdit = ref('');
@@ -49,8 +49,8 @@ const pagination = reactive(createPagination(false));
 const createColumns = (): NDataTableColumns<DeploymentConfigVariable> => {
   return [
     {
-      title: $i18n.t('hosting.deploy.env-vars.key'),
       key: 'key',
+      title: t('hosting.deploy.env-vars.key'),
       render(row: DeploymentConfigVariable) {
         return rowInEdit.value === row.key
           ? h(NInput, {
@@ -61,8 +61,8 @@ const createColumns = (): NDataTableColumns<DeploymentConfigVariable> => {
       },
     },
     {
-      title: $i18n.t('hosting.deploy.env-vars.value'),
       key: 'value',
+      title: t('hosting.deploy.env-vars.value'),
       render(row: DeploymentConfigVariable) {
         return rowInEdit.value === row.key
           ? h(NInput, {
@@ -77,12 +77,12 @@ const createColumns = (): NDataTableColumns<DeploymentConfigVariable> => {
       title: '',
       render(row: DeploymentConfigVariable) {
         if (rowInEdit.value === row.key) {
-          return h('div', { style: { display: 'flex', gap: '8px' } }, [
+          return h('div', { class: 'flex justify-end gap-2' }, [
             h('button', { class: 'icon-check text-2xl text-white', onClick: () => saveRow(row) }),
             h('button', { class: 'icon-close text-2xl text-white', onClick: () => revertRow() }),
           ]);
         } else {
-          return h('div', { style: { display: 'flex', gap: '8px' } }, [
+          return h('div', { class: 'flex justify-end gap-2' }, [
             h('button', { class: 'icon-edit text-2xl text-white', onClick: () => editRow(row) }),
             h('button', { class: 'icon-delete text-2xl text-white', onClick: () => deleteRow(row) }),
           ]);
@@ -104,7 +104,7 @@ const editRow = (row: DeploymentConfigVariable) => {
 const saveRow = async (row: DeploymentConfigVariable) => {
   rowInEdit.value = '';
   if (row.key === '' || row.value === '') {
-    window.$message.error($i18n.t('hosting.deploy.env-vars.error-empty'));
+    window.$message.error(t('hosting.deploy.env-vars.error-empty'));
     deploymentStore.revertVariableChanges();
   } else {
     saveVariables();

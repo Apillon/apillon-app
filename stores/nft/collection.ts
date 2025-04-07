@@ -240,12 +240,8 @@ export const useCollectionStore = defineStore('collection', {
       }
 
       try {
-        const params: Record<string, string | number> = {
-          project_uuid: dataStore.projectUuid,
-          orderBy: 'createTime',
-          desc: 'true',
-          ...PARAMS_ALL_ITEMS,
-        };
+        const params = parseArguments(PARAMS_ALL_ITEMS);
+        params.project_uuid = dataStore.projectUuid;
         if (archive) {
           params.status = SqlModelStatus.ARCHIVED;
         }
@@ -305,10 +301,10 @@ export const useCollectionStore = defineStore('collection', {
     async fetchCollectionTransactions(collectionUuid: string, showLoader = true): Promise<TransactionInterface[]> {
       this.loading = showLoader;
       try {
-        const params: Record<string, string | number> = {
-          ...PARAMS_ALL_ITEMS,
-        };
-        const res = await $api.get<TransactionResponse>(endpoints.collectionTransactions(collectionUuid), params);
+        const res = await $api.get<TransactionResponse>(
+          endpoints.collectionTransactions(collectionUuid),
+          PARAMS_ALL_ITEMS
+        );
         this.transaction = res.data.items;
         this.loading = false;
 
@@ -328,11 +324,7 @@ export const useCollectionStore = defineStore('collection', {
 
     async fetchMetadataDeploys(collectionUuid?: string): Promise<MetadataDeployInterface[]> {
       try {
-        const params: Record<string, string | number> = {
-          orderBy: 'createTime',
-          desc: 'true',
-          ...PARAMS_ALL_ITEMS,
-        };
+        const params = parseArguments(PARAMS_ALL_ITEMS);
 
         const res = await $api.get<MetadataDeploysResponse>(
           endpoints.collectionNftsMetadata(collectionUuid || this.collectionUuid),

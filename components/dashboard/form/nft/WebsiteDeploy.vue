@@ -136,7 +136,7 @@ async function deployNftWebsite() {
     message.success($i18n.t('nft.collection.website-deploy.success'));
 
     collectionStore.active.websiteUuid = res.data.website_uuid;
-    emit('submitSuccess');
+    emit('submitSuccess', res.data);
   } catch (e) {
     message.error(userFriendlyMsg(e));
   }

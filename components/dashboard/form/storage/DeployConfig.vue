@@ -11,11 +11,13 @@
     <n-form-item path="repoId" :label="$t('hosting.deploy.form.repository')" :label-props="{ for: 'repo' }">
       <n-skeleton v-if="!repoOptions.length" height="40px" width="100%" />
       <n-select
+        v-else
         v-model:value="storageStore.deployConfigForm.repoId"
+        :disabled="!!config_id"
         :placeholder="$t('hosting.deploy.form.repository-placeholder')"
         :options="repoOptions"
+        filterable
         @update:value="handleUpdateValue"
-        v-if="!!repoOptions.length"
       />
     </n-form-item>
     <n-form-item path="branchName" :label="$t('hosting.deploy.form.branch-name')" :label-props="{ for: 'branchName' }">
@@ -98,25 +100,25 @@
             clearable
           />
         </n-form-item>
+      </n-collapse-item>
+    </n-collapse>
+    <n-form-item :show-feedback="false" v-if="!$props.on_create_website">
+      <input type="submit" class="hidden" :value="'Save'" />
 
+      <div class="flex w-full gap-2">
         <Btn
           v-if="props.config_id"
           type="secondary"
-          class="mt-2"
           :loading="deleteLoading"
           :disabled="isFormDisabled"
           @click="handleRemove"
         >
           {{ $t('hosting.deploy.form.remove') }}
         </Btn>
-      </n-collapse-item>
-    </n-collapse>
-    <n-form-item :show-feedback="false" :show-label="false" v-if="!$props.on_create_website">
-      <input type="submit" class="hidden" :value="'Save'" />
-
-      <Btn type="primary" class="mt-2 w-full" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
-        {{ $t('hosting.deploy.form.save') }}
-      </Btn>
+        <Btn type="primary" class="flex-1" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
+          {{ $t('hosting.deploy.form.save') }}
+        </Btn>
+      </div>
     </n-form-item>
   </n-form>
 </template>
@@ -149,7 +151,7 @@ const loading = ref<boolean>(false);
 const deleteLoading = ref<boolean>(false);
 
 const isFormDisabled = computed<boolean>(() => {
-  return !dataStore.isUserOwner;
+  return dataStore.isProjectUser;
 });
 
 const showApiSecretInput = ref(false);
@@ -196,6 +198,8 @@ function handleSubmit(e: Event | MouseEvent) {
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
+    } else if (props.config_id) {
+      updateDeployConfig();
     } else {
       createDeployConfig();
     }
@@ -216,25 +220,46 @@ async function handleRemove() {
 }
 
 async function createDeployConfig() {
+  if (!websiteStore.active) return;
+
   loading.value = true;
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-
-    if (!dataStore.projectUuid) return;
-  }
-
-  if (!websiteStore.active) {
-    return;
-  }
+  const projectUuid = await dataStore.getProjectUuid();
 
   try {
     const bodyData = {
       websiteUuid: websiteStore.active.website_uuid,
-      projectUuid: dataStore.projectUuid,
+      projectUuid,
       ...storageStore.deployConfigForm,
     };
     await $api.post<DeploymentConfigResponse>(endpoints.deployConfig(), bodyData);
     message.success($i18n.t('hosting.deploy.form.success'));
+    websiteStore.active.source = WebsiteSource.GITHUB;
+    emit('submitSuccess');
+  } catch (error: any) {
+    if (error.message === 'DEPLOYMENT_CONFIG_ALREADY_EXISTS') {
+      message.error('Repository is already connected to Apillon. Remove the connection or use a different repository.');
+    } else {
+      message.error(userFriendlyMsg(error));
+    }
+  }
+
+  loading.value = false;
+}
+
+async function updateDeployConfig() {
+  if (!websiteStore.active) return;
+
+  loading.value = true;
+  const projectUuid = await dataStore.getProjectUuid();
+
+  try {
+    const bodyData = {
+      websiteUuid: websiteStore.active.website_uuid,
+      projectUuid,
+      ...storageStore.deployConfigForm,
+    };
+    await $api.patch<DeploymentConfigResponse>(endpoints.deployConfig(props.config_id), bodyData);
+    message.success($i18n.t('hosting.deploy.form.updated'));
     websiteStore.active.source = WebsiteSource.GITHUB;
     emit('submitSuccess');
   } catch (error: any) {
@@ -271,5 +296,9 @@ onMounted(async () => {
     value: item.id,
     label: item.name,
   }));
+
+  if (storageStore.deployConfigForm.repoId) {
+    handleUpdateValue(storageStore.deployConfigForm.repoId);
+  }
 });
 </script>

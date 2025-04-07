@@ -28,7 +28,15 @@
           <p>.</p>
         </div>
         <Btn
-          v-if="[1284, 1287, 529].includes($props.chain ?? 0)"
+          v-if="deployedWebsite?.website_uuid"
+          type="primary"
+          size="large"
+          :to="`/dashboard/service/hosting/${deployedWebsite?.website_uuid}/production`"
+        >
+          {{ $t('nft.upload.previewNfts') }}
+        </Btn>
+        <Btn
+          v-else-if="[1284, 1287, 529].includes(chain)"
           type="primary"
           size="large"
           @click="modalDeployWebsiteVisible = true"
@@ -85,13 +93,17 @@
 <script setup lang="ts">
 import { transactionLink } from '~/lib/utils/chain';
 
-defineProps({ showFooter: { type: Boolean, default: false }, chain: { type: Number, default: 0 } });
+defineProps({
+  showFooter: { type: Boolean, default: false },
+  chain: { type: Number, default: 0 },
+});
 
 const collectionStore = useCollectionStore();
 const { loadingBucket, openBucket } = useStorage();
-const modalDeployWebsiteVisible = ref<boolean>(false);
 
+const modalDeployWebsiteVisible = ref<boolean>(false);
 const modalW3WarnVisible = ref<boolean>(false);
+const deployedWebsite = ref<WebsiteInterface | null>();
 
 const backLink = computed(() =>
   collectionStore.active?.collection_uuid
@@ -102,8 +114,9 @@ const backLink = computed(() =>
     : { name: 'dashboard-service-nft' }
 );
 
-const handleSubmit = () => {
+const handleSubmit = (website: WebsiteInterface) => {
   modalDeployWebsiteVisible.value = false;
   collectionStore.websiteDeployForm = {} as WebsiteDeployForm;
+  deployedWebsite.value = website;
 };
 </script>

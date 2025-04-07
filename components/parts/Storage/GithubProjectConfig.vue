@@ -1,5 +1,10 @@
 <template>
-  <Btn :type="storageStore.projectConfig ? 'secondary' : 'primary'" :loading="loading" @click="handleGithubPress">
+  <Btn
+    v-bind="$attrs"
+    :type="storageStore.projectConfig ? 'secondary' : 'primary'"
+    :loading="loading"
+    @click="handleGithubPress"
+  >
     <span>{{ $t(storageStore.projectConfig ? 'hosting.github-connected' : 'hosting.connect-github') }}</span>
   </Btn>
 

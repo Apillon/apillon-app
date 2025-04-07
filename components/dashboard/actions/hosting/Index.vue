@@ -25,6 +25,8 @@
         {{ $t('general.refresh') }}
       </n-button>
 
+      <StorageGithubProjectConfig class="locked" size="small" />
+
       <!-- Create new website -->
       <n-button
         v-if="websiteStore.hasWebsites"
