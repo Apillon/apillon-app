@@ -11,5 +11,6 @@
   "i18n-ally.sourceLanguage": "english",
   "html.format.wrapLineLength": 120,
   "prettier.configPath": ".prettierrc",
-  "prettier.useEditorConfig": false
+  "prettier.useEditorConfig": false,
+  "i18n-ally.extract.ignored": ["`${type.label}`", "`${type.label}`"]
 }

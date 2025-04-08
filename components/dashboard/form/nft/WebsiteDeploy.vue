@@ -74,7 +74,7 @@ async function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || t('general.error'))));
     } else {
       deployNftWebsite();
     }
@@ -94,7 +94,7 @@ async function deployNftWebsite() {
     message.success(t('nft.collection.websiteDeploy.success'));
 
     collectionStore.active.websiteUuid = data.website_uuid;
-    emit('submitSuccess');
+    emit('submitSuccess', data);
   } catch (e) {
     message.error(userFriendlyMsg(e));
   }

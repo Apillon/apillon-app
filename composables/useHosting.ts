@@ -14,6 +14,7 @@ export default function useHosting() {
   const loading = ref<boolean>(false);
   const pageLoading = ref<boolean>(true);
 
+  let buildInterval: any = null as any;
   let deploymentInterval: any = null as any;
   let websiteInterval: any = null as any;
 
@@ -41,6 +42,8 @@ export default function useHosting() {
     fetchVariables: boolean = false,
     fetchDeploymentConfig = false
   ) {
+    deploymentStore.builds = [];
+    deploymentStore.deploymentConfig = undefined;
     websiteUuid.value = params.id ? `${params?.id}` : `${params?.slug}`;
     websiteStore.resetForm();
     websiteStore.setWebsite(websiteUuid.value);
@@ -112,7 +115,7 @@ export default function useHosting() {
     }, 10000);
   }
 
-  function checkUnfinishedDeployments(deployments: Array<DeploymentInterface>, env: number) {
+  function checkUnfinishedDeployments(deployments: DeploymentInterface[], env: number) {
     const unfinishedDeployment = deployments.find(
       deployment => deployment.deploymentStatus < DeploymentStatus.IN_REVIEW
     );
@@ -135,6 +138,22 @@ export default function useHosting() {
         clearInterval(deploymentInterval);
       }
     }, 10000);
+  }
+
+  async function checkUnfinishedBuilds() {
+    const builds = await deploymentStore.fetchBuilds(websiteStore.active.website_uuid);
+    const unfinishedBuilds = builds.find(deployment => deployment.buildStatus < DeploymentBuildStatus.SUCCESS);
+    if (unfinishedBuilds === undefined) {
+      return;
+    }
+
+    buildInterval = setInterval(async () => {
+      const refreshedBuilds = await deploymentStore.fetchBuilds(websiteStore.active.website_uuid, false);
+
+      if (refreshedBuilds.find(deployment => deployment.buildStatus < DeploymentBuildStatus.SUCCESS) === undefined) {
+        clearInterval(buildInterval);
+      }
+    }, 5000);
   }
 
   async function refreshWebpage(env: number) {
@@ -233,6 +252,7 @@ export default function useHosting() {
     pageLoading,
     rulesWebsite,
     websiteUuid,
+    checkUnfinishedBuilds,
     checkUnfinishedWebsite,
     createWebsite,
     initWebsite,

@@ -60,7 +60,7 @@ declare global {
     name: string;
     description: string | null;
     createTime: string;
-    updateTime: string;
+    updateTime: string | null;
   }
 
   /**

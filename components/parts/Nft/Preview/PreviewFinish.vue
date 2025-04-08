@@ -15,20 +15,28 @@
         <div class="mb-2 flex items-center justify-center text-body">
           <p>{{ $t('nft.collection.createToDisplay') }}&nbsp;</p>
           <a href="https://github.com/Apillon/nft-template-vue/fork" target="_blank">
-            <Btn type="builders" size="tiny"> Vue </Btn>
+            <Btn type="builders" size="tiny">{{ $t('nft.collection.websiteDeploy.vue') }}</Btn>
           </a>
           <p>,&nbsp;</p>
           <a href="https://github.com/Apillon/nft-template-react/fork" target="_blank">
-            <Btn type="builders" size="tiny"> React </Btn>
+            <Btn type="builders" size="tiny">{{ $t('nft.collection.websiteDeploy.react') }}</Btn>
           </a>
           <p>&nbsp;{{ $t('general.or') }}&nbsp;</p>
           <a href="https://github.com/Apillon/nft-template/fork" target="_blank">
-            <Btn type="builders" size="tiny"> javascript template </Btn>
+            <Btn type="builders" size="tiny">{{ $t('nft.collection.websiteDeploy.plain_js') }}</Btn>
           </a>
           <p>.</p>
         </div>
         <Btn
-          v-if="[1284, 1287, 529].includes($props.chain ?? 0)"
+          v-if="deployedWebsite?.website_uuid"
+          type="primary"
+          size="large"
+          :to="`/dashboard/service/hosting/${deployedWebsite?.website_uuid}/production`"
+        >
+          {{ $t('nft.upload.previewNfts') }}
+        </Btn>
+        <Btn
+          v-else-if="[1284, 1287, 529].includes(chain)"
           type="primary"
           size="large"
           @click="modalDeployWebsiteVisible = true"
@@ -77,21 +85,23 @@
       {{ $t('w3Warn.nft.new') }}
     </W3Warn>
     <modal v-model:show="modalDeployWebsiteVisible" :title="$t('nft.collection.created.deploy')">
-      <FormNftWebsiteDeploy @submit-success="modalDeployWebsiteVisible = false" />
+      <FormNftWebsiteDeploy @submit-success="handleSubmit" />
     </modal>
   </div>
 </template>
 
 <script setup lang="ts">
-import { transactionLink } from '~/lib/utils/chain';
-
-defineProps({ showFooter: { type: Boolean, default: false }, chain: { type: Number, default: 0 } });
+defineProps({
+  showFooter: { type: Boolean, default: false },
+  chain: { type: Number, default: 0 },
+});
 
 const collectionStore = useCollectionStore();
 const { loadingBucket, openBucket } = useStorage();
-const modalDeployWebsiteVisible = ref<boolean>(false);
 
+const modalDeployWebsiteVisible = ref<boolean>(false);
 const modalW3WarnVisible = ref<boolean>(false);
+const deployedWebsite = ref<WebsiteInterface | null>();
 
 const backLink = computed(() =>
   collectionStore.active?.collection_uuid
@@ -101,4 +111,8 @@ const backLink = computed(() =>
       }
     : { name: 'dashboard-service-nft' }
 );
+const handleSubmit = (website: WebsiteInterface) => {
+  modalDeployWebsiteVisible.value = false;
+  deployedWebsite.value = website;
+};
 </script>

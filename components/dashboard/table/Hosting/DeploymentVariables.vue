@@ -49,8 +49,8 @@ const pagination = reactive(createPagination(false));
 const createColumns = (): NDataTableColumns<DeploymentConfigVariable> => {
   return [
     {
-      title: t('hosting.deploy.env-vars.key'),
       key: 'key',
+      title: t('hosting.deploy.env-vars.key'),
       render(row: DeploymentConfigVariable) {
         return rowInEdit.value === row.key
           ? h(NInput, {
@@ -61,8 +61,8 @@ const createColumns = (): NDataTableColumns<DeploymentConfigVariable> => {
       },
     },
     {
-      title: t('hosting.deploy.env-vars.value'),
       key: 'value',
+      title: t('hosting.deploy.env-vars.value'),
       render(row: DeploymentConfigVariable) {
         return rowInEdit.value === row.key
           ? h(NInput, {
@@ -77,12 +77,12 @@ const createColumns = (): NDataTableColumns<DeploymentConfigVariable> => {
       title: '',
       render(row: DeploymentConfigVariable) {
         if (rowInEdit.value === row.key) {
-          return h('div', { style: { display: 'flex', gap: '8px' } }, [
+          return h('div', { class: 'flex justify-end gap-2' }, [
             h('button', { class: 'icon-check text-2xl text-white', onClick: () => saveRow(row) }),
             h('button', { class: 'icon-close text-2xl text-white', onClick: () => revertRow() }),
           ]);
         } else {
-          return h('div', { style: { display: 'flex', gap: '8px' } }, [
+          return h('div', { class: 'flex justify-end gap-2' }, [
             h('button', { class: 'icon-edit text-2xl text-white', onClick: () => editRow(row) }),
             h('button', { class: 'icon-delete text-2xl text-white', onClick: () => deleteRow(row) }),
           ]);

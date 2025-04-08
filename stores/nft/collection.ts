@@ -118,7 +118,8 @@ export const useCollectionStore = defineStore('collection', {
 
       (archive ? this.archive : this).loading = showLoader;
       try {
-        const params = parseArguments({ ...PARAMS_ALL_ITEMS, project_uuid: dataStore.projectUuid });
+        const params = parseArguments(PARAMS_ALL_ITEMS);
+        params.project_uuid = dataStore.projectUuid;
         if (archive) params.status = SqlModelStatus.ARCHIVED;
 
         const req = $api.get<CollectionsResponse>(endpoints.collections(), params);
@@ -192,6 +193,7 @@ export const useCollectionStore = defineStore('collection', {
 
     async fetchMetadataDeploys(collectionUuid?: string): Promise<MetadataDeployInterface[]> {
       try {
+        const params = parseArguments(PARAMS_ALL_ITEMS);
         const res = await $api.get<MetadataDeploysResponse>(
           endpoints.collectionNftsMetadata(collectionUuid || this.collectionUuid),
           parseArguments({ ...PARAMS_ALL_ITEMS })

@@ -170,12 +170,8 @@ export const useBucketStore = defineStore('bucket', {
 
       this.loading = true;
       try {
-        const params: Record<string, string | number> = {
-          project_uuid: dataStore.projectUuid,
-          orderBy: 'createTime',
-          desc: 'true',
-          ...PARAMS_ALL_ITEMS,
-        };
+        const params = parseArguments(PARAMS_ALL_ITEMS);
+        params.project_uuid = dataStore.projectUuid;
         params.status = statusDeleted ? SqlModelStatus.ARCHIVED : SqlModelStatus.ACTIVE;
 
         const req = $api.get<BucketsResponse>(endpoints.buckets, params);

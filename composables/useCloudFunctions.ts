@@ -125,7 +125,7 @@ export default function useCloudFunctions() {
 
       const fileCid = await uploadFile(data.file);
       if (!fileCid) {
-        setJobStatus(null);
+        clearIntervalJob();
         return null;
       }
 
@@ -142,7 +142,7 @@ export default function useCloudFunctions() {
       cloudFunctionStore.addJob(res.data);
 
       message.success(t('form.success.created.cloudFunctionJob'));
-      clearIntervalJob();
+      clearIntervalJob(true);
 
       return res.data;
     } catch (error) {

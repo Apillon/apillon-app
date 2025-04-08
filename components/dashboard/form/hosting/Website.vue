@@ -17,8 +17,8 @@
       <p v-else-if="!!websiteUuid && $te('hosting.website.infoEdit')" class="mb-8 text-body">
         {{ $t('hosting.website.infoEdit') }}
       </p>
-
       <n-form
+        v-if="storageStore.projectConfig"
         ref="formRef"
         :model="websiteStore.form"
         :rules="rules"
@@ -56,6 +56,9 @@
           </Btn>
         </n-form-item>
       </n-form>
+      <div v-else class="my-8 text-center">
+        <StorageGithubProjectConfig class="locked" size="small" />
+      </div>
     </div>
   </div>
 </template>
@@ -72,6 +75,7 @@ const props = defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
+const storageStore = useStorageStore();
 const websiteStore = useWebsiteStore();
 const warningStore = useWarningStore();
 const { createWebsite, updateWebsite } = useHosting();

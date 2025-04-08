@@ -71,11 +71,7 @@
       "transactions": "Credit transactions",
       "threshold": "Credit notification threshold",
       "yourFunds": "Your funds",
-      "includedServices": [
-        "All Web3 services",
-        "All prebuilt solutions",
-        "All smart contracts"
-      ],
+      "includedServices": ["All Web3 services", "All prebuilt solutions", "All smart contracts"],
       "services": {
         "ACURAST": {
           "name": "Cloud functions",
@@ -122,7 +118,7 @@
     "refreshModal": {
       "title": "Deployment Status",
       "refresh": "refresh",
-      "subtitle": "To check the deployment status, click the refresh button or select the time intervals for the automatic update."
+      "subtitle": "Uploading script file to IPFS"
     },
     "invoice": {
       "client": "Client",
@@ -271,11 +267,7 @@
       "assetHub": {
         "description": "Decentralized hub for secure digital asset management on the Polkadot network. \nSecure storage, easy transfer, cross-chain compatibility.",
         "name": "Asset Hub",
-        "usage": [
-          "secure storage",
-          "easy transfer",
-          "cross-chain compatibility"
-        ]
+        "usage": ["secure storage", "easy transfer", "cross-chain compatibility"]
       },
       "authentication": {
         "name": "Decentralized Authentication",
@@ -284,59 +276,34 @@
         "emptyTitle": "Your project does not have Authentication service yet",
         "emptyInfo": "Add Web3 Authentication and create an API key.",
         "emptyBtn": "Attach Web3 Auth",
-        "usage": [
-          "decentralized id",
-          "HIGH PRIVACY",
-          "SEAMLESS UI",
-          "OAuth protocol"
-        ]
+        "usage": ["decentralized id", "HIGH PRIVACY", "SEAMLESS UI", "OAuth protocol"]
       },
       "cloudFunctions": {
         "description": "Deploy any script or backend app to a secure, scalable, and decentralized cloud network. \nDecentralized cloud, fully scalable, API gateway, cross-chain apps.",
         "deploymentCount": "Number of deployments",
         "functionCount": "Number of functions",
         "name": "Cloud Functions",
-        "usage": [
-          "decentralized cloud",
-          "fully scalable",
-          "API gateway",
-          "cross-chain apps"
-        ]
+        "usage": ["decentralized cloud", "fully scalable", "API gateway", "cross-chain apps"]
       },
       "computing": {
         "contractCount": "Number of contracts",
         "computingTransactionCount": "Number of transactions",
         "description": "Embrace the future of Web3 off-chain computation. Access the internet, boost performance, fully multichain, and ultimate data security.",
         "name": "Computing",
-        "usage": [
-          "computing smart contracts",
-          "cross-chain",
-          "secure computing environment",
-          "internet access"
-        ]
+        "usage": ["computing smart contracts", "cross-chain", "secure computing environment", "internet access"]
       },
       "embeddedWallet": {
         "description": "Easily create secure and decentralized wallets for your users on any chain. \nWeb3 wallets, fully decentralized, easy integration, multi-chain support.",
         "integrationCount": "Number of integrations",
         "name": "Embedded Wallet",
         "walletCount": "Number of wallets",
-        "usage": [
-          "Web3 wallets",
-          "fully decentralized",
-          "easy integration",
-          "multi-chain support"
-        ]
+        "usage": ["Web3 wallets", "fully decentralized", "easy integration", "multi-chain support"]
       },
       "hosting": {
         "name": "Decentralized Hosting",
         "description": "Make your website or app unstoppable and free from third-party impact.",
         "title": "Web3 Hosting",
-        "usage": [
-          "unstoppable",
-          "domain support",
-          "free ssl support",
-          "drag-n-drop ui"
-        ],
+        "usage": ["unstoppable", "domain support", "free ssl support", "drag-n-drop ui"],
         "usedBandwidth": "Used bandwidth",
         "websiteCount": "Number of websites"
       },
@@ -344,22 +311,14 @@
         "description": "Fast and efficient data indexing for blockchain data. \nReal-time data sync, powerful APIs, on-chain data querying.",
         "deployedIndexerCount": "Number of deployed indexers",
         "name": "Indexing Service",
-        "usage": [
-          "real-time data sync",
-          "powerful APIs",
-          "on-chain data querying"
-        ]
+        "usage": ["real-time data sync", "powerful APIs", "on-chain data querying"]
       },
       "rpc": {
         "description": "Reliable and secure remote procedure call service for blockchain interaction. \nLow latency, high availability, multi-chain support.",
         "keyCount": "Number of keys",
         "name": "RPC Service",
         "selectedNetworkCount": "Number of selected networks",
-        "usage": [
-          "low latency",
-          "high availability",
-          "multi-chain support"
-        ]
+        "usage": ["low latency", "high availability", "multi-chain support"]
       },
       "nft": {
         "collectionCount": "Number of collections",
@@ -367,32 +326,15 @@
         "name": "NFTs",
         "nftTransactionCount": "Number of transactions",
         "pricing": "Depends on chain (500-1000 credits)",
-        "usage": [
-          "storage buckets",
-          "smart contracts",
-          "drag-n-drop ui",
-          "website template",
-          "hosting"
-        ],
-        "tags": [
-          "No code required",
-          "API",
-          "SDK",
-          "CLI"
-        ]
+        "usage": ["storage buckets", "smart contracts", "drag-n-drop ui", "website template", "hosting"],
+        "tags": ["No code required", "API", "SDK", "CLI"]
       },
       "social": {
         "description": "Connect and communicate with freedom. Experience social networking with secure and decentralized chat functionality.",
         "name": "Social",
         "postCount": "Number of channels",
         "spaceCount": "Number of hubs",
-        "usage": [
-          "social media",
-          "real-time chat",
-          "user-friendly UI",
-          "HIGH PRIVACY",
-          "configurable interface"
-        ]
+        "usage": ["social media", "real-time chat", "user-friendly UI", "HIGH PRIVACY", "configurable interface"]
       },
       "storage": {
         "bucket": "Web3 storage bucket",
@@ -401,21 +343,12 @@
         "fileCount": "Number of files",
         "name": "Decentralized Storage",
         "website": "Main Website Storage",
-        "usage": [
-          "storage buckets",
-          "different media",
-          "drag-n-drop ui",
-          "ipfs"
-        ]
+        "usage": ["storage buckets", "different media", "drag-n-drop ui", "ipfs"]
       },
       "smartContracts": {
         "description": "Simplify smart contract deployment across multiple chains. \nAutomated verification, multi-chain support, security checks.",
         "name": "Smart Contracts",
-        "usage": [
-          "automated verification",
-          "multi-chain support",
-          "security checks"
-        ]
+        "usage": ["automated verification", "multi-chain support", "security checks"]
       },
       "addFirst": "Add first service",
       "delete": "Delete service",
@@ -447,20 +380,13 @@
           "previewInfo": "Here is the overview of your deploy:",
           "previewNftCollection": "NFT Collection"
         },
-        "tabs": [
-          "Choose Computing Solution",
-          "Configure Deployment",
-          "Deploy"
-        ],
+        "tabs": ["Choose Computing Solution", "Configure Deployment", "Deploy"],
         "usage": []
       },
       "fileSharing": {
         "name": "Decentralized File Sharing",
         "description": "",
-        "usage": [
-          "metadata storage",
-          "file storage"
-        ]
+        "usage": ["metadata storage", "file storage"]
       },
       "smartContracts": {
         "name": "NFT Email Airdrop",
@@ -468,12 +394,7 @@
         "content": [
           {
             "title": "What do you get?",
-            "content": [
-              "Free metadata storage",
-              "No gas cost",
-              "Free web template",
-              "Free hosting"
-            ]
+            "content": ["Free metadata storage", "No gas cost", "Free web template", "Free hosting"]
           }
         ]
       },
@@ -546,17 +467,8 @@
             ]
           }
         ],
-        "tabs": [
-          "First task",
-          "Second task",
-          "Third task"
-        ],
-        "usage": [
-          "metadata storage",
-          "file storage",
-          "smart contracts",
-          "publish to opensea"
-        ]
+        "tabs": ["First task", "Second task", "Third task"],
+        "usage": ["metadata storage", "file storage", "smart contracts", "publish to opensea"]
       },
       "nftCollection": {
         "name": "Self-hosted NFT collection",
@@ -565,26 +477,11 @@
           {
             "title": "How does it work?",
             "content": "Launch your end-to-end decentralized NFT collection with one click. Create NFTs, deploy smart contract and host the collection website on Web3.",
-            "benefits": [
-              "Free metadata storage",
-              "0 gas cost",
-              "Free web template",
-              "Free hosting"
-            ]
+            "benefits": ["Free metadata storage", "0 gas cost", "Free web template", "Free hosting"]
           }
         ],
-        "tabs": [
-          "Create Collection",
-          "Preview Collection",
-          "Mint NFTs"
-        ],
-        "usage": [
-          "metadata storage",
-          "file storage",
-          "smart contracts",
-          "website template",
-          "hosting"
-        ]
+        "tabs": ["Create Collection", "Preview Collection", "Mint NFTs"],
+        "usage": ["metadata storage", "file storage", "smart contracts", "website template", "hosting"]
       },
       "nftContentDelivery": {
         "name": "NFT-Based Content Delivery",
@@ -601,22 +498,13 @@
             ]
           }
         ],
-        "tabs": [
-          "Choose Computing Solution",
-          "Configure Deployment",
-          "Deploy"
-        ],
-        "usage": [
-          "PHALA"
-        ]
+        "tabs": ["Choose Computing Solution", "Configure Deployment", "Deploy"],
+        "usage": ["PHALA"]
       },
       "nftDrop": {
         "name": "NFT Drop",
         "description": "",
-        "usage": [
-          "metadata storage",
-          "file storage"
-        ]
+        "usage": ["metadata storage", "file storage"]
       },
       "nftEmailSignupAirdrop": {
         "name": "NFT Email Signup Airdrop",
@@ -658,33 +546,18 @@
             ]
           }
         ],
-        "tabs": [
-          "First task",
-          "Second task",
-          "Third task"
-        ],
-        "usage": [
-          "metadata storage",
-          "file storage",
-          "smart contracts",
-          "publish to opensea"
-        ]
+        "tabs": ["First task", "Second task", "Third task"],
+        "usage": ["metadata storage", "file storage", "smart contracts", "publish to opensea"]
       },
       "nftLoyalty": {
         "name": "NFT-based Loyalty Program",
         "description": "",
-        "usage": [
-          "metadata storage",
-          "file storage"
-        ]
+        "usage": ["metadata storage", "file storage"]
       },
       "nftMembership": {
         "name": "NFT-based Brand Membership",
         "description": "",
-        "usage": [
-          "metadata storage",
-          "file storage"
-        ]
+        "usage": ["metadata storage", "file storage"]
       },
       "nftPoap": {
         "name": "PoAP - Proof of Attendance NFTs",
@@ -742,10 +615,7 @@
             ]
           }
         ],
-        "usage": [
-          "metadata storage",
-          "file storage"
-        ]
+        "usage": ["metadata storage", "file storage"]
       },
       "nftWhitelistClaim": {
         "name": "Whitelist NFT Claim",
@@ -763,9 +633,7 @@
           },
           {
             "title": "Before you start, you will need:",
-            "content": [
-              "A smart contract allowing eligible users to claim NFTs"
-            ]
+            "content": ["A smart contract allowing eligible users to claim NFTs"]
           },
           {
             "title": "System setup",
@@ -782,17 +650,8 @@
             ]
           }
         ],
-        "tabs": [
-          "First task",
-          "Second task",
-          "Third task"
-        ],
-        "usage": [
-          "metadata storage",
-          "file storage",
-          "smart contracts",
-          "publish to opensea"
-        ]
+        "tabs": ["First task", "Second task", "Third task"],
+        "usage": ["metadata storage", "file storage", "smart contracts", "publish to opensea"]
       },
       "openGov": {
         "name": "OpenGov WASM Proposal Airdrop",
@@ -833,33 +692,18 @@
             ]
           }
         ],
-        "tabs": [
-          "First task",
-          "Second task",
-          "Third task"
-        ],
-        "usage": [
-          "metadata storage",
-          "file storage",
-          "smart contracts",
-          "publish to opensea"
-        ]
+        "tabs": ["First task", "Second task", "Third task"],
+        "usage": ["metadata storage", "file storage", "smart contracts", "publish to opensea"]
       },
       "tokenGating": {
         "name": "Token Gating",
         "description": "",
-        "usage": [
-          "metadata storage",
-          "file storage"
-        ]
+        "usage": ["metadata storage", "file storage"]
       },
       "wallet": {
         "name": "Non-custodial Wallet",
         "description": "",
-        "usage": [
-          "metadata storage",
-          "file storage"
-        ]
+        "usage": ["metadata storage", "file storage"]
       },
       "indexing": {
         "content": [

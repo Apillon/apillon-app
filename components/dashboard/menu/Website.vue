@@ -30,14 +30,10 @@ const menuOptions: NMenuOption[] = props.hasGithubConnected
         key: 'dashboard-service-hosting-slug-configId-env-vars',
         label: t('hosting.menu.env-vars'),
         path: `/dashboard/service/hosting/${websiteStore.selected}/${deploymentStore.deploymentConfig?.id}/env-vars`,
+        show: !!deploymentStore.deploymentConfig?.id,
       },
     ]
   : [
-      {
-        key: 'dashboard-service-hosting-slug-deployments',
-        label: t('hosting.menu.deployments'),
-        path: `/dashboard/service/hosting/${websiteStore.selected}/deployments`,
-      },
       {
         key: 'dashboard-service-hosting-id',
         label: t('hosting.menu.preview'),

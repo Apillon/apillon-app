@@ -4,10 +4,13 @@
       <FormFieldSearch v-model:value="websiteStore.search" />
     </div>
 
-    <n-button :disabled="authStore.isAdmin()" @click="showModalEditWebsite = true">
-      <span class="icon-add mr-2 text-xl text-primary"></span>
-      <span class="text-primary">{{ $t('hosting.website.add') }}</span>
-    </n-button>
+    <n-space size="large">
+      <n-button :disabled="authStore.isAdmin()" @click="showModalEditWebsite = true">
+        <span class="icon-add mr-2 text-xl text-primary"></span>
+        <span class="text-primary">{{ $t('hosting.website.add') }}</span>
+      </n-button>
+      <StorageGithubProjectConfig class="locked" />
+    </n-space>
   </n-space>
 
   <!-- Modal - New website -->

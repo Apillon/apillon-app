@@ -54,7 +54,7 @@ onMounted(async () => {
   storageStore.getGithubProjectConfig();
 });
 
-async function handleGithubPress() {
+function handleGithubPress() {
   if (storageStore.projectConfig) {
     isConfirmationModalVisible.value = true;
   } else {
@@ -62,7 +62,7 @@ async function handleGithubPress() {
   }
 }
 
-async function connectToGithub() {
+function connectToGithub() {
   try {
     window.open(
       'https://github.com/login/oauth/authorize?client_id=' +
@@ -74,7 +74,6 @@ async function connectToGithub() {
     console.log('Error connecting to Github');
     console.log(e);
   }
-  return;
 }
 
 async function disconnectGithub() {

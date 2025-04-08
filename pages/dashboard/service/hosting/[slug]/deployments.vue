@@ -10,7 +10,7 @@
             <!-- Actions : refresh, deploy -->
             <n-space>
               <n-button v-if="websiteStore.isActiveWebsiteGithubSource" @click="showUpdateModal">
-                {{ $t('hosting.deploy.update') }}
+                {{ $t('hosting.deploy.updateConfig') }}
               </n-button>
               <n-button :loading="deploymentStore.buildsLoading" @click="refreshBuilds">
                 <span class="icon-refresh mr-2 text-xl"></span>
@@ -24,16 +24,16 @@
         </n-space>
       </template>
       <Empty v-else :title="$t('general.nothingHere')" :info="$t('hosting.deploy.infoEmpty')" icon="storage/empty">
-        <Btn type="primary" @click="modalCreateKeyVisible = true">{{ $t('hosting.deploy.connectRepo') }}</Btn>
+        <Btn type="primary" @click="modalGithubVisible = true">{{ $t('hosting.deploy.connectRepo') }}</Btn>
       </Empty>
 
       <modal
-        v-model:show="modalCreateKeyVisible"
+        v-model:show="modalGithubVisible"
         :title="$t(websiteStore.isActiveWebsiteGithubSource ? 'hosting.deploy.update' : 'hosting.deploy.new')"
       >
         <FormStorageDeployConfig
           :config-id="deploymentStore.deploymentConfig?.id"
-          @submit-success="modalCreateKeyVisible = false"
+          @submit-success="handleSubmitSuccess"
         />
       </modal>
     </slot>
@@ -45,8 +45,8 @@ const { t } = useI18n();
 const websiteStore = useWebsiteStore();
 const deploymentStore = useDeploymentStore();
 const storageStore = useStorageStore();
-const { pageLoading, initWebsite } = useHosting();
-const modalCreateKeyVisible = ref<boolean>(false);
+const { pageLoading, initWebsite, checkUnfinishedBuilds } = useHosting();
+const modalGithubVisible = ref<boolean>(false);
 
 useHead({
   title: t('dashboard.nav.hosting'),
@@ -64,6 +64,13 @@ const refreshBuilds = async () => {
   }
 };
 
+const handleSubmitSuccess = async () => {
+  websiteStore.resetForm();
+  modalGithubVisible.value = false;
+
+  setTimeout(() => checkUnfinishedBuilds(), 3000);
+};
+
 const showUpdateModal = async () => {
   if (deploymentStore.deploymentConfig) {
     Object.entries(deploymentStore.deploymentConfig).forEach(([key, value]) => {
@@ -72,6 +79,6 @@ const showUpdateModal = async () => {
       }
     });
   }
-  modalCreateKeyVisible.value = true;
+  modalGithubVisible.value = true;
 };
 </script>

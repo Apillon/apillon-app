@@ -76,12 +76,8 @@ export const useContractStore = defineStore('contract', {
 
       this.loading = showLoader;
       try {
-        const params: Record<string, string | number> = {
-          project_uuid: dataStore.projectUuid,
-          orderBy: 'createTime',
-          desc: 'true',
-          ...PARAMS_ALL_ITEMS,
-        };
+        const params = parseArguments(PARAMS_ALL_ITEMS);
+        params.project_uuid = dataStore.projectUuid;
         if (archive) {
           params.status = SqlModelStatus.ARCHIVED;
         }

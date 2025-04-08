@@ -113,10 +113,10 @@ const rowKey = (row: WebsiteInterface) => row.website_uuid;
 const currentRow = ref<WebsiteBaseInterface>(props.websites[0]);
 
 const websiteSource = (row: WebsiteBaseInterface) => {
-  return row.source === WebsiteSource.GITHUB ? 'github' : 'apillon';
+  return row.source === WebsiteSource.GITHUB ? 'github' : !!row.nftCollectionUuid ? 'nft' : 'apillon';
 };
 const websiteSourceIcon = (row: WebsiteBaseInterface) => {
-  return row.source === WebsiteSource.GITHUB ? 'icon-github' : 'icon-file';
+  return row.source === WebsiteSource.GITHUB ? 'icon-github' : !!row.nftCollectionUuid ? 'icon-NFTs' : 'icon-file';
 };
 
 /** On row click */
@@ -126,9 +126,7 @@ const rowProps = (row: WebsiteBaseInterface) => {
       currentRow.value = row;
 
       if (canOpenColumnCell(e.composedPath())) {
-        router.push({
-          path: `/dashboard/service/hosting/${row.website_uuid}${row.source === WebsiteSource.GITHUB ? '/deployments' : ''}`,
-        });
+        router.push(websiteLink(row));
       }
     },
   };

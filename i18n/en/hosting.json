@@ -6,8 +6,10 @@
       "new": "New deployment configuration",
       "save": "Save deployment configuration",
       "success": "Deployment configuration saved successfully",
+      "unlink": "Unlink repository",
       "update": "Update deployment configuration",
-      "updateConfig": "Update",
+      "updated": "Deployment configuration updated successfully",
+      "updateConfig": "Update config",
       "env-vars": {
         "title": "Environment variables",
         "key": "Key",

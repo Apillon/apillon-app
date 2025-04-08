@@ -102,12 +102,10 @@ export const useDeploymentStore = defineStore('deployment', {
     async fetchDeployments(websiteUuid: string, env: DeploymentEnvironment = DeploymentEnvironment.PRODUCTION) {
       this.loading = true;
       try {
-        const res = await $api.get<DeploymentsResponse>(endpoints.deployments(websiteUuid), {
-          environment: env,
-          orderBy: 'createTime',
-          desc: 'true',
-          ...PARAMS_ALL_ITEMS,
-        });
+        const params = parseArguments(PARAMS_ALL_ITEMS);
+        params.environment = env;
+
+        const res = await $api.get<DeploymentsResponse>(endpoints.deployments(websiteUuid), params);
 
         if (env === DeploymentEnvironment.PRODUCTION) {
           this.production = res.data.items;
@@ -169,16 +167,14 @@ export const useDeploymentStore = defineStore('deployment', {
 
       this.loading = false;
     },
-    async fetchBuilds(websiteUuid: string) {
-      this.buildsLoading = true;
+    async fetchBuilds(websiteUuid: string, loading = true) {
+      this.buildsLoading = loading;
 
       try {
-        const res = await $api.get<DeploymentBuildsResponse>(endpoints.deploymentBuilds, {
-          orderBy: 'createTime',
-          desc: 'true',
-          ...PARAMS_ALL_ITEMS,
-          websiteUuid,
-        });
+        const params = parseArguments(PARAMS_ALL_ITEMS);
+        params.websiteUuid = websiteUuid;
+
+        const res = await $api.get<DeploymentBuildsResponse>(endpoints.deploymentBuilds, params);
 
         this.builds = res.data.items;
 
@@ -188,9 +184,11 @@ export const useDeploymentStore = defineStore('deployment', {
       } catch (error: ApiError | any) {
         this.builds = [] as DeploymentBuildInterface[];
         window.$message.error(userFriendlyMsg(error));
+      } finally {
+        this.buildsLoading = false;
       }
 
-      this.buildsLoading = false;
+      return this.builds;
     },
 
     async fetchDeployment(websiteUuid: string, deploymentUuid: string): Promise<DeploymentInterface> {

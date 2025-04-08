@@ -78,25 +78,25 @@ declare global {
    * Website
    */
   interface WebsiteBaseInterface extends BaseObjectInterface {
-    source: WebsiteSource;
-    website_uuid: string;
-    domain: string | null;
-    domainChangeDate: string | null;
-  }
-  interface WebsiteInterface extends WebsiteBaseInterface {
     bucket_uuid: string;
-    bucket: BucketInterface;
     cidProduction: string | null;
     cidStaging: string | null;
     domain: string | null;
     domainChangeDate: string | null;
-    domainLastCheckDate: string | null;
     domainStatus: number;
     ipnsProduction: string | null;
-    ipnsStaging: string | null;
     nftCollectionUuid: string | null;
-    productionBucket: BucketInterface;
     source: WebsiteSource;
+    website_uuid: string;
+  }
+  interface WebsiteInterface extends WebsiteBaseInterface {
+    bucket: BucketInterface;
+    domainChangeDate: string | null;
+    domainLastCheckDate: string | null;
+    ipnsStaging: string | null;
+    lastDeployment_uuid: string | null;
+    lastDeploymentStatus: number | null;
+    productionBucket: BucketInterface;
     stagingBucket: BucketInterface;
     w3ProductionLink: string | null;
     w3StagingLink: string | null;
@@ -120,11 +120,14 @@ declare global {
   interface DeploymentsResponse extends GeneralItemsResponse<DeploymentInterface> {}
 
   interface DeploymentBuildInterface {
-    id: number;
     buildStatus: number;
-    logs: string;
     createTime: string;
+    deploymentConfigId: number;
     finishedTime: string;
+    id: number;
+    logs: string;
+    status: number;
+    websiteUuid: string;
   }
 
   interface DeploymentConfigVariable {
