@@ -5,7 +5,7 @@
     </template>
     <slot>
       <n-space v-if="websiteStore.hasWebsites" class="pb-8" :size="32" vertical>
-        <ActionsHosting />
+        <ActionsHosting v-if="websiteStore.hasWebsites" />
         <TableHosting :websites="websiteStore.items" />
       </n-space>
       <Empty v-else :title="$t('hosting.web3Hosting')" :info="$t('hosting.web3HostingEnable')" icon="storage/empty">

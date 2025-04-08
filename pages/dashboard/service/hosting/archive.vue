@@ -5,7 +5,7 @@
     </template>
     <slot>
       <n-space v-if="websiteStore.hasWebsiteArchive" class="pb-8" :size="32" vertical>
-        <ActionsHosting archive />
+        <ActionsHosting v-if="websiteStore.hasWebsiteArchive" archive />
         <TableHosting :websites="websiteStore.archive" archive />
       </n-space>
       <Empty

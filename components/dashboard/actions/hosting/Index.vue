@@ -4,14 +4,9 @@
       <FormFieldSearch v-model:value="websiteStore.search" />
     </div>
 
-    <n-button
-      v-if="websiteStore.hasWebsites"
-      size="medium"
-      :disabled="authStore.isAdmin()"
-      @click="showModalEditWebsite = true"
-    >
-      <span class="icon-create-folder mr-2 text-xl text-primary"></span>
-      <span class="text-primary">{{ $t('hosting.website.new') }}</span>
+    <n-button :disabled="authStore.isAdmin()" @click="showModalEditWebsite = true">
+      <span class="icon-add mr-2 text-xl text-primary"></span>
+      <span class="text-primary">{{ $t('hosting.website.add') }}</span>
     </n-button>
   </n-space>
 

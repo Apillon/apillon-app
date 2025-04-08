@@ -108,8 +108,8 @@
       "files": "Upload files and folders"
     },
     "website": {
+      "add": "Add website",
       "addFirst": "Add first website",
-      "apillon-source": "Apillon",
       "create": "Create website",
       "description": "Website description",
       "delete": "Delete website",
@@ -126,8 +126,6 @@
       "infoEdit": "",
       "name": "Website name",
       "new": "Create new website",
-      "source": "Source",
-      "github-source": "GitHub",
       "update": "Update website",
       "uuid": "Website UUID",
       "selectType": "Select type of your website",
@@ -142,6 +140,12 @@
       },
       "review": {
         "info": "Give your website a final review before creating."
+      },
+      "source": {
+        "apillon": "Website",
+        "github": "GitHub CI/CD",
+        "nft": "NFT template",
+        "title": "Type"
       }
     },
     "clearAll": "Clear all",

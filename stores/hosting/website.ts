@@ -5,8 +5,8 @@ import { WebsiteCreateStep, WebsiteSource } from '~/lib/types/hosting';
 export const useWebsiteStore = defineStore('website', {
   state: () => ({
     active: {} as WebsiteInterface,
-    archive: [] as Array<WebsiteBaseInterface>,
-    items: [] as Array<WebsiteBaseInterface>,
+    archive: [] as WebsiteBaseInterface[],
+    items: [] as WebsiteBaseInterface[],
     loading: false,
     missingHtml: false,
     search: '',

@@ -65,21 +65,22 @@ const createColumns = (): NDataTableColumns<WebsiteBaseInterface> => {
       className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
+      key: 'source',
+      title: t('hosting.website.source.title'),
+      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
+      render(row) {
+        return [
+          h('span', { class: `mr-1 text-lg ${websiteSourceIcon(row)}` }),
+          t(`hosting.website.source.${websiteSource(row)}`),
+        ];
+      },
+    },
+    {
       key: 'description',
       title: t('hosting.website.description'),
       className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.description });
-      },
-    },
-    {
-      key: 'source',
-      title: t('hosting.website.source'),
-      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
-      render(row) {
-        return t(
-          row.source === WebsiteSource.GITHUB ? 'hosting.website.github-source' : 'hosting.website.apillon-source'
-        );
       },
     },
     {
@@ -110,6 +111,13 @@ const createColumns = (): NDataTableColumns<WebsiteBaseInterface> => {
 const columns = createColumns();
 const rowKey = (row: WebsiteInterface) => row.website_uuid;
 const currentRow = ref<WebsiteBaseInterface>(props.websites[0]);
+
+const websiteSource = (row: WebsiteBaseInterface) => {
+  return row.source === WebsiteSource.GITHUB ? 'github' : 'apillon';
+};
+const websiteSourceIcon = (row: WebsiteBaseInterface) => {
+  return row.source === WebsiteSource.GITHUB ? 'icon-github' : 'icon-file';
+};
 
 /** On row click */
 const rowProps = (row: WebsiteBaseInterface) => {
