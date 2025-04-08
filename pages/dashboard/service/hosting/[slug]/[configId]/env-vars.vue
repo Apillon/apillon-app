@@ -4,9 +4,10 @@
       <HeaderWebsite />
     </template>
     <slot>
-      <template v-if="websiteStore.isActiveWebsiteGithubSource">
-        <TableHostingDeploymentVariables :variables="deploymentStore.variables" />
-      </template>
+      <TableHostingDeploymentVariables
+        v-if="websiteStore.isActiveWebsiteGithubSource"
+        :variables="deploymentStore.variables"
+      />
     </slot>
   </Dashboard>
 </template>

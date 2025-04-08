@@ -12,7 +12,10 @@
               <n-button v-if="websiteStore.isActiveWebsiteGithubSource" @click="showUpdateModal">
                 {{ $t('hosting.deploy.updateConfig') }}
               </n-button>
-              <n-button :loading="deploymentStore.buildsLoading" @click="refreshBuilds">
+              <n-button
+                :loading="deploymentStore.buildsLoading"
+                @click="deploymentStore.fetchBuilds(websiteStore.active.website_uuid)"
+              >
                 <span class="icon-refresh mr-2 text-xl"></span>
                 {{ $t('general.refresh') }}
               </n-button>
@@ -57,12 +60,9 @@ onMounted(async () => {
   storageStore.getGithubProjectConfig();
 });
 
-const refreshBuilds = async () => {
-  const websiteUuid = websiteStore.active?.website_uuid;
-  if (websiteUuid) {
-    await deploymentStore.fetchBuilds(websiteUuid);
-  }
-};
+const hasGithubConnected = computed(() => {
+  return !!websiteStore.isActiveWebsiteGithubSource || !!websiteStore.active.nftCollectionUuid;
+});
 
 const handleSubmitSuccess = async () => {
   websiteStore.resetForm();

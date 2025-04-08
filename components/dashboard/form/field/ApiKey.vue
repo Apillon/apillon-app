@@ -4,6 +4,7 @@
       <template #header>
         {{ $t('form.label.advancedSettings') }}
       </template>
+
       <n-form-item path="apiKey" :label="$t('form.label.apiKey')" :label-props="{ for: 'apiKey' }">
         <n-select
           :value="apiKey"

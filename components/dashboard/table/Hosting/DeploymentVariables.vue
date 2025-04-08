@@ -129,7 +129,7 @@ const refreshVariables = async () => {
 };
 
 const saveVariables = () => {
-  if (deploymentStore.deploymentConfig) {
+  if (deploymentStore.deploymentConfig?.id) {
     deploymentStore.saveVariables(deploymentStore.deploymentConfig.id);
   }
 };

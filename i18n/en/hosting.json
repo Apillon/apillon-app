@@ -87,13 +87,12 @@
     },
     "menu": {
       "archive": "Website Archive",
-      "preview": "1. Upload",
-      "staging": "2. Preview",
+      "preview": "Upload",
+      "staging": "Preview",
       "deployments": "Deployments",
-      "production": "3. Production",
-      "production-deploy": "Production",
+      "production": "Production",
       "website": "Websites",
-      "env-vars": "Environment variables"
+      "envVars": "Environment variables"
     },
     "review": {
       "confirm": "Proceed with Website Deployment, I'll wait",

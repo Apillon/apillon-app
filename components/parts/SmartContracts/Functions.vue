@@ -39,7 +39,6 @@ type Function = {
   name: string;
   type: string;
 };
-// import VCodeBlock from '@wdns/vue-code-block';
 
 const props = defineProps({
   abi: { type: Array<SmartContractABI>, default: [] },

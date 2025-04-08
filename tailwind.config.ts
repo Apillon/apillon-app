@@ -91,7 +91,12 @@ export default {
         fit200: 'repeat(auto-fit, minmax(200px,1fr))',
         fill100: 'repeat(auto-fill, minmax(100px, 1fr))',
       },
+      minHeight: {
+        17: '4.25rem',
+        18: '4.5rem',
+      },
       height: {
+        17: '4.25rem',
         18: '4.5rem',
       },
       padding: {

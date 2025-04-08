@@ -61,11 +61,11 @@
       :config-id="configId"
       :api-key="websiteStore.form.apiKey"
       :api-secret="websiteStore.form.apiSecret"
-      @update:api-key="e => console.log(e)"
-      @update:api-secret="e => console.log(e)"
+      @update:api-key="apiKey => (websiteStore.form.apiKey = apiKey)"
+      @update:api-secret="apiSecret => (websiteStore.form.apiSecret = apiSecret)"
     />
 
-    <n-form-item v-if="!$props.onCreateWebsite" :show-feedback="false" :show-label="false">
+    <n-form-item :show-feedback="false">
       <input type="submit" class="hidden" :value="'Save'" />
 
       <div class="flex w-full gap-2">
@@ -84,7 +84,6 @@
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess', 'close']);
 const props = defineProps({
   configId: { type: Number, default: 0 },
-  onCreateWebsite: { type: Boolean, default: false },
 });
 
 const { t } = useI18n();
@@ -139,7 +138,7 @@ async function handleRemove() {
   try {
     await $api.delete(endpoints.deployConfig(websiteStore.active.website_uuid));
     websiteStore.active.source = WebsiteSource.APILLON;
-    deploymentStore.deploymentConfig = undefined;
+    deploymentStore.deploymentConfig = {} as DeploymentConfigInterface;
     emit('submitSuccess');
   } catch (error) {
     message.error(userFriendlyMsg(error));

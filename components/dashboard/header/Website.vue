@@ -1,18 +1,11 @@
 <template>
-  <Heading :info="$t('w3Warn.hosting.upload')">
-    <slot>
-      <n-space align="center" size="large" :wrap="false">
-        <NuxtLink :to="{ name: 'dashboard-service-hosting' }">
-          <span class="icon-back align-sub text-2xl"></span>
-        </NuxtLink>
-        <h2>{{ websiteStore.active.name }}</h2>
-      </n-space>
-    </slot>
-
-    <template #submenu>
-      <MenuWebsite :has-github-connected="hasGithubConnected" />
-    </template>
-
+  <Heading
+    :back="{ name: 'dashboard-service-hosting' }"
+    :service="ServiceTypeName.HOSTING"
+    :serviceName="$t('dashboard.nav.hosting')"
+    :name="websiteStore.active.name"
+    :info="$t('w3Warn.hosting.upload')"
+  >
     <template #details>
       <TableEllipsis :prefix="$t('hosting.website.uuid')" :text="websiteStore.active.website_uuid" />
     </template>
@@ -35,9 +28,6 @@ const websiteStore = useWebsiteStore();
 /** Website ID from route */
 const websiteUuid = ref<string>(`${params?.id || ''}`);
 const showModalW3Warn = ref<boolean>(false);
-const hasGithubConnected = computed(() => {
-  return !!websiteStore.isActiveWebsiteGithubSource || !!websiteStore.active.nftCollectionUuid;
-});
 
 onMounted(() => {
   storageStore.getStorageInfo();

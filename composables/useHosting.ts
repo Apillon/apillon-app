@@ -42,9 +42,8 @@ export default function useHosting() {
     fetchVariables: boolean = false,
     fetchDeploymentConfig = false
   ) {
-    deploymentStore.builds = [];
-    deploymentStore.deploymentConfig = undefined;
     websiteUuid.value = params.id ? `${params?.id}` : `${params?.slug}`;
+    deploymentStore.resetData();
     websiteStore.resetForm();
     websiteStore.setWebsite(websiteUuid.value);
 
@@ -69,38 +68,35 @@ export default function useHosting() {
       await deploymentStore.getVariables(deploymentStore.deploymentConfig?.id);
     }
 
-    /** Get deployments for this website */
-    if (env > 0) {
-      await deploymentStore.getDeployments(websiteUuid.value, env);
-    }
-
-    if (env === DeploymentEnvironment.PRODUCTION) {
-      /** Show files from production bucket */
-      bucketStore.active = website.productionBucket;
-      bucketStore.setBucket(website.productionBucket.bucket_uuid);
-
-      /** Deployments polling */
-      checkUnfinishedDeployments(deploymentStore.production, env);
-    } else if (env === DeploymentEnvironment.STAGING) {
-      /** Show files from staging bucket */
-      bucketStore.active = website.stagingBucket;
-      bucketStore.setBucket(website.stagingBucket.bucket_uuid);
-
-      /** Deployments polling */
-      checkUnfinishedDeployments(deploymentStore.staging, env);
-    } else {
-      /** Show files from main bucket */
-      bucketStore.active = website.bucket;
-      bucketStore.setBucket(website.bucket.bucket_uuid);
-    }
-
-    /** Fetch directory content for bucket */
-    await bucketStore.fetchDirectoryContent({ bucketUuid: bucketStore.active.bucket_uuid });
+    await changeEnv(env);
 
     if (website.bucket.size === 0) {
       bucketStore.uploadActive = true;
     }
     pageLoading.value = false;
+  }
+
+  async function changeEnv(env: number = 0) {
+    /** Get deployments for this website */
+    if (env > 0) {
+      await deploymentStore.getDeployments(websiteUuid.value, env);
+
+      /** Deployments polling */
+      const deployments = env === DeploymentEnvironment.STAGING ? deploymentStore.staging : deploymentStore.production;
+      checkUnfinishedDeployments(deployments, env);
+    }
+
+    /** Set active bucket */
+    bucketStore.active =
+      env === DeploymentEnvironment.PRODUCTION
+        ? websiteStore.active.productionBucket
+        : env === DeploymentEnvironment.STAGING
+          ? websiteStore.active.stagingBucket
+          : websiteStore.active.bucket;
+    bucketStore.setBucket(bucketStore.active.bucket_uuid);
+
+    /** Fetch directory content for bucket */
+    await bucketStore.fetchDirectoryContent({ bucketUuid: bucketStore.active.bucket_uuid });
   }
 
   function checkUnfinishedWebsite(unfinishedWebsite: WebsiteInterface) {

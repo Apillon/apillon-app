@@ -23,12 +23,12 @@ const menuOptions: NMenuOption[] = props.hasGithubConnected
       },
       {
         key: 'dashboard-service-hosting-slug-production',
-        label: t('hosting.menu.production-deploy'),
+        label: t('hosting.menu.production'),
         path: `/dashboard/service/hosting/${websiteStore.selected}/production`,
       },
       {
         key: 'dashboard-service-hosting-slug-configId-env-vars',
-        label: t('hosting.menu.env-vars'),
+        label: t('hosting.menu.envVars'),
         path: `/dashboard/service/hosting/${websiteStore.selected}/${deploymentStore.deploymentConfig?.id}/env-vars`,
         show: !!deploymentStore.deploymentConfig?.id,
       },

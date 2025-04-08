@@ -27,11 +27,11 @@
     <BtnDocumentation href="https://wiki.apillon.io/build/12-embedded-wallets-integration.html" hover-lighter />
   </div>
 
-  <VCodeBlock :code="currentCode" lang="js" theme="github-dark" highlightjs :style="codeSize" />
+  <CodeBlock :code="currentCode" language="ts" theme="prismFunky" :style="codeSize" />
 </template>
 
 <script lang="ts" setup>
-import VCodeBlock from '@wdns/vue-code-block';
+import { CodeBlock } from 'vuejs-code-block';
 
 enum CodeFramework {
   REACT = 'react',
@@ -72,7 +72,7 @@ const currentCode = computed(() => {
 `;
   } else if (selectedLanguage.value === CodeFramework.TYPESCRIPT) {
     return `import { EmbeddedWalletUI } from '@apillon/wallet-ui';
-
+ 
 EmbeddedWalletUI("#wallet", {
   clientId: "${embeddedWalletStore.active.integration_uuid}",
   defaultNetworkId: 1287,
@@ -81,7 +81,7 @@ EmbeddedWalletUI("#wallet", {
 `;
   } else {
     return `import { WalletWidget } from '@apillon/wallet-vue';
-
+ 
 <WalletWidget
   clientId="${embeddedWalletStore.active.integration_uuid}"
   :defaultNetworkId="1287"

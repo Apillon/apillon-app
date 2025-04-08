@@ -1,5 +1,5 @@
 <template>
-  <div v-if="integrationUuid && !embeddedWallet" class="mt-20">
+  <div v-if="integrationUuid && !embeddedWallet" class="relative pb-10 pt-20">
     <Spinner />
   </div>
   <div v-else>

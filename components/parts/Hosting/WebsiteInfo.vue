@@ -44,7 +44,9 @@ const data = computed(() => {
       label: t('nft.collection.baseUri'),
       link: websiteStore.active.w3ProductionLink,
       value: websiteStore.active.w3ProductionLink,
+      info: t('hosting.ipnsInfo'),
       copy: true,
+      show: !!websiteStore.active?.domain,
     },
   ];
 });

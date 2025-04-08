@@ -43,6 +43,9 @@ export const useWebsiteStore = defineStore('website', {
     isActiveWebsiteGithubSource(state): boolean {
       return state.active.source === WebsiteSource.GITHUB;
     },
+    isActiveWebsiteStatic(state): boolean {
+      return state.active.source === WebsiteSource.APILLON && !state.active.nftCollectionUuid;
+    },
   },
   actions: {
     resetData() {

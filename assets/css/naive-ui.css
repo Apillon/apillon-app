@@ -86,11 +86,11 @@
   }
 
   .n-collapse .n-collapse-item__content-wrapper {
-    @apply mt-4;
+    @apply relative mt-1;
 
     &::before {
       content: '';
-      @apply absolute left-0 right-0 top-12 border-t border-bg-lighter;
+      @apply absolute left-0 right-0 top-0 border-t border-bg-lighter;
     }
   }
 }
