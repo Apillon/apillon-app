@@ -50,6 +50,7 @@ const deploymentStore = useDeploymentStore();
 const storageStore = useStorageStore();
 const { pageLoading, initWebsite, checkUnfinishedBuilds } = useHosting();
 const modalGithubVisible = ref<boolean>(false);
+let refreshInterval: NodeJS.Timeout | undefined;
 
 useHead({
   title: t('dashboard.nav.hosting'),
@@ -81,4 +82,28 @@ const showUpdateModal = async () => {
   }
   modalGithubVisible.value = true;
 };
+
+const checkAndStartAutoRefresh = () => {
+  const builds = deploymentStore.builds;
+  const hasPendingBuilds = builds.some(build =>
+    [DeploymentBuildStatus.IN_PROGRESS, DeploymentBuildStatus.PENDING].includes(build.buildStatus)
+  );
+  if (hasPendingBuilds && !refreshInterval) {
+    refreshInterval = setInterval(async () => {
+      await refreshBuilds();
+    }, 5000);
+  } else if (!hasPendingBuilds && refreshInterval) {
+    clearInterval(refreshInterval);
+    refreshInterval = undefined;
+  }
+};
+
+// Watch for changes in deploymentStore.builds
+watch(
+  () => deploymentStore.builds,
+  () => {
+    checkAndStartAutoRefresh();
+  },
+  { deep: true }
+);
 </script>

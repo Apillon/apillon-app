@@ -43,7 +43,10 @@ export default function useHosting() {
     fetchDeploymentConfig = false
   ) {
     websiteUuid.value = params.id ? `${params?.id}` : `${params?.slug}`;
-    deploymentStore.resetData();
+    if (websiteStore.active.website_uuid !== websiteUuid.value) {
+      deploymentStore.resetData();
+    }
+
     websiteStore.resetForm();
     websiteStore.setWebsite(websiteUuid.value);
 
