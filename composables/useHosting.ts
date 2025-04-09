@@ -27,9 +27,11 @@ export default function useHosting() {
     fetchVariables: boolean = false,
     fetchDeploymentConfig = false
   ) {
-    deploymentStore.builds = [];
-    deploymentStore.deploymentConfig = undefined;
     websiteUuid.value = params.id ? `${params?.id}` : `${params?.slug}`;
+    if (websiteStore.active.website_uuid !== websiteUuid.value) {
+      deploymentStore.builds = [];
+      deploymentStore.deploymentConfig = undefined;
+    }
     websiteStore.setWebsite(websiteUuid.value);
 
     setTimeout(() => {
