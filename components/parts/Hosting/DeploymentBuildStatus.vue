@@ -13,7 +13,9 @@
       :wrap="false"
     >
       <span class="mx-1">{{ $t(`hosting.deploy.build-table.status.${buildStatus}`) }}</span>
-      <AnimationTyping v-if="buildStatus == DeploymentBuildStatus.IN_PROGRESS" />
+      <AnimationTyping
+        v-if="[DeploymentBuildStatus.PENDING, DeploymentBuildStatus.IN_PROGRESS].includes(buildStatus)"
+      />
     </n-space>
   </n-tag>
 </template>
