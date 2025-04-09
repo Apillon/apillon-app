@@ -6,7 +6,6 @@
 const { t } = useI18n();
 const settingsStore = useSettingsStore();
 const loading = ref<boolean>(false);
-const SelectRole = resolveComponent('SelectRole');
 
 onMounted(async () => {
   if (!settingsStore.hasUsers) {
@@ -32,7 +31,7 @@ const createColumns = (): NDataTableColumns<ProjectUserInterface> => {
       className: '!py-0',
       render(row) {
         return h(
-          SelectRole,
+          resolveComponent('SelectRole'),
           {
             class: 'select-role',
             model: row.role_id,

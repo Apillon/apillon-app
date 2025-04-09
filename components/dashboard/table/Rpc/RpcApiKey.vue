@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NEllipsis, type DropdownOption } from 'naive-ui';
+import { NDropdown, NEllipsis, type DropdownOption } from 'naive-ui';
 
 const props = defineProps({
   isOwner: { type: Boolean, default: false },
@@ -83,12 +83,7 @@ const createColumns = (): NDataTableColumns<RpcApiKeyInterface> => {
             trigger: 'click',
           },
           {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
+            default: () => h(resolveComponent('BtnActions')),
           }
         );
       },

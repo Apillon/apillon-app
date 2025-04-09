@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NEllipsis } from 'naive-ui';
+import { NDropdown, NEllipsis } from 'naive-ui';
 
 const props = defineProps({
   websites: { type: Array<WebsiteBaseInterface>, default: [] },
@@ -33,6 +33,9 @@ const authStore = useAuthStore();
 const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
 const { deleteItem } = useDelete();
+const { availableColumns, selectedColumns, initTableColumns, handleColumnChange } = useTable(
+  LsTableColumnsKeys.HOSTING
+);
 
 const showModalEditWebsite = ref<boolean>(false);
 const pagination = reactive(createPagination(false));
@@ -42,12 +45,15 @@ const data = computed<Array<WebsiteBaseInterface>>(() => {
   return props.websites.filter(item => item.name.toLowerCase().includes(websiteStore.search.toLowerCase())) || [];
 });
 
-const createColumns = (): NDataTableColumns<WebsiteBaseInterface> => {
+const columns = computed<NDataTableColumns<WebsiteBaseInterface>>(() => {
   return [
     {
       key: 'name',
       title: t('hosting.website.name'),
-      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
+      className: [
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
+        { hidden: !selectedColumns.value.includes('name') },
+      ],
       render(row) {
         return h('strong', {}, { default: () => row.name });
       },
@@ -55,6 +61,7 @@ const createColumns = (): NDataTableColumns<WebsiteBaseInterface> => {
     {
       key: 'website_uuid',
       title: t('hosting.website.uuid'),
+      className: { hidden: !selectedColumns.value.includes('website_uuid') },
       render(row: WebsiteBaseInterface) {
         return h(resolveComponent('TableEllipsis'), { text: row.website_uuid }, '');
       },
@@ -62,12 +69,18 @@ const createColumns = (): NDataTableColumns<WebsiteBaseInterface> => {
     {
       key: 'domain',
       title: t('hosting.website.domain'),
-      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
+      className: [
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
+        { hidden: !selectedColumns.value.includes('domain') },
+      ],
     },
     {
       key: 'source',
       title: t('hosting.website.source.title'),
-      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
+      className: [
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
+        { hidden: !selectedColumns.value.includes('source') },
+      ],
       render(row) {
         return [
           h('span', { class: `mr-1 text-lg ${websiteSourceIcon(row)}` }),
@@ -76,18 +89,33 @@ const createColumns = (): NDataTableColumns<WebsiteBaseInterface> => {
       },
     },
     {
+      key: 'status',
+      title: t('general.status'),
+      className: [
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
+        { hidden: !selectedColumns.value.includes('status') },
+      ],
+      render(row: WebsiteBaseInterface) {
+        return h(resolveComponent('HostingDeploymentStatus'), { deploymentStatus: row.lastDeploymentStatus });
+      },
+    },
+    {
       key: 'description',
       title: t('hosting.website.description'),
-      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
+      className: [
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
+        { hidden: !selectedColumns.value.includes('description') },
+      ],
       render(row) {
         return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.description });
       },
     },
     {
       key: 'actions',
-      title: '',
       align: 'right',
       className: '!py-0 !sticky right-0',
+      filter: 'default',
+      filterOptionValue: null,
       render() {
         return h(
           NDropdown,
@@ -96,27 +124,36 @@ const createColumns = (): NDataTableColumns<WebsiteBaseInterface> => {
             trigger: 'click',
           },
           {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
+            default: () => h(resolveComponent('BtnActions')),
           }
+        );
+      },
+      renderFilterIcon: () => {
+        return h('span', { class: 'icon-more' }, '');
+      },
+      renderFilterMenu: () => {
+        return h(
+          resolveComponent('TableColumns'),
+          {
+            model: selectedColumns.value,
+            columns: availableColumns.value,
+            onColumnChange: handleColumnChange,
+          },
+          ''
         );
       },
     },
   ];
-};
-const columns = createColumns();
+});
 const rowKey = (row: WebsiteInterface) => row.website_uuid;
 const currentRow = ref<WebsiteBaseInterface>(props.websites[0]);
 
 const websiteSource = (row: WebsiteBaseInterface) => {
-  return row.source === WebsiteSource.GITHUB ? 'github' : !!row.nftCollectionUuid ? 'nft' : 'apillon';
+  return row.source === WebsiteSource.GITHUB ? 'github' : row.nftCollectionUuid ? 'nft' : 'apillon';
 };
+
 const websiteSourceIcon = (row: WebsiteBaseInterface) => {
-  return row.source === WebsiteSource.GITHUB ? 'icon-github' : !!row.nftCollectionUuid ? 'icon-NFTs' : 'icon-file';
+  return row.source === WebsiteSource.GITHUB ? 'icon-github' : row.nftCollectionUuid ? 'icon-NFTs' : 'icon-file';
 };
 
 /** On row click */
@@ -126,7 +163,7 @@ const rowProps = (row: WebsiteBaseInterface) => {
       currentRow.value = row;
 
       if (canOpenColumnCell(e.composedPath())) {
-        router.push(websiteLink(row));
+        router.push(`/dashboard/service/hosting/${row.website_uuid}`);
       }
     },
   };
@@ -167,6 +204,10 @@ const dropdownOptionsArchive = [
     },
   },
 ];
+
+onMounted(() => {
+  initTableColumns(columns.value);
+});
 
 /**
  * On deleteWebsite click

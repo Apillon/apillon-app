@@ -2,7 +2,7 @@
   <Heading
     :back="{ name: 'dashboard-service-hosting' }"
     :service="ServiceTypeName.HOSTING"
-    :serviceName="$t('dashboard.nav.hosting')"
+    :service-name="$t('dashboard.nav.hosting')"
     :name="websiteStore.active.name"
     :info="$t('w3Warn.hosting.upload')"
   >

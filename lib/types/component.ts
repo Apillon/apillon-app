@@ -24,6 +24,7 @@ declare global {
     title: string;
     key: string;
   };
+  type TableColumnSelect = { value: string; label: string };
   type MetadataAttributes = {
     value: string;
     label: string;

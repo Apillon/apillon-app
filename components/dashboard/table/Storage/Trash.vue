@@ -31,7 +31,7 @@
 <script lang="ts" setup>
 import { useDebounceFn } from '@vueuse/core';
 import type { DataTableSortState, DataTableInst } from 'naive-ui';
-import { NButton, NDropdown, NEllipsis, useMessage } from 'naive-ui';
+import { NDropdown, NEllipsis, useMessage } from 'naive-ui';
 
 const { t } = useI18n();
 const message = useMessage();
@@ -138,12 +138,7 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
             trigger: 'click',
           },
           {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
+            default: () => h(resolveComponent('BtnActions')),
           }
         );
       },

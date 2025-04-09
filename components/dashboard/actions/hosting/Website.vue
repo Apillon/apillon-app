@@ -30,54 +30,36 @@
         {{ $t('general.refresh') }}
       </n-button>
 
-      <StorageGithubProjectConfig class="w-full" />
-
-      <!-- Clear all files -->
-      <n-button
-        v-if="isUpload"
-        class="w-full"
-        type="error"
-        :disabled="authStore.isAdmin()"
-        ghost
-        @click="showModalClearAll = true"
-      >
-        <span class="icon-delete mr-2 text-xl"></span>
-        {{ $t('hosting.clearAll') }}
-      </n-button>
-
-      <!-- Deploy to staging -->
-      <div v-if="isUpload" class="flex w-full items-center rounded-lg bg-primary align-middle">
+      <template v-if="websiteStore.isActiveWebsiteGithubSource">
+        <!-- Clear all files -->
         <n-button
+          v-if="isUpload"
+          class="w-full"
+          type="error"
+          :disabled="authStore.isAdmin()"
+          ghost
+          @click="showModalClearAll = true"
+        >
+          <span class="icon-delete mr-2 text-xl"></span>
+          {{ $t('hosting.clearAll') }}
+        </n-button>
+
+        <!-- Deploy to staging -->
+        <n-button
+          class="w-full"
+          size="medium"
           type="primary"
-          :bordered="false"
           :loading="deploying"
           :disabled="authStore.isAdmin()"
-          @click="deployWebsite(DeploymentEnvironment.STAGING)"
+          @click="deployWebsite(DeploymentEnvironment.DIRECT_TO_PRODUCTION)"
         >
           <span class="icon-deploy mr-2 text-xl"></span>
-          {{ $t('hosting.deployStage') }}
+          {{ $t('hosting.deployProd') }}
         </n-button>
-        <n-dropdown trigger="click" :options="deployOptions" @select="handleSelectDeploy">
-          <n-button class="!p-0" type="primary" :bordered="false">
-            <span class="icon-down text-3xl"></span>
-          </n-button>
-        </n-dropdown>
-      </div>
-      <!-- Deploy to production -->
-      <n-button
-        v-if="env === DeploymentEnvironment.STAGING"
-        class="w-full"
-        size="medium"
-        type="primary"
-        :loading="deploying"
-        :disabled="authStore.isAdmin()"
-        @click="deployWebsite(DeploymentEnvironment.PRODUCTION)"
-      >
-        <span class="icon-deploy mr-2 text-xl"></span>
-        {{ $t('hosting.deployProd') }}
-      </n-button>
+      </template>
 
       <Btn
+        v-if="editDomainEnabled"
         class="locked w-full"
         :type="!websiteStore.active.domain ? 'primary' : 'secondary'"
         :bordered="false"
@@ -87,12 +69,23 @@
         <span v-if="websiteStore.active.domain"> {{ $t('hosting.domain.update') }}</span>
         <span v-else> {{ $t('hosting.domain.add') }}</span>
       </Btn>
+      <n-tooltip v-else placement="top" :trigger="isMd ? 'hover' : 'click'">
+        <template #trigger>
+          <Btn type="primary" class="locked cursor-default !bg-primary/50">
+            {{ $t('hosting.domain.add') }}
+          </Btn>
+        </template>
+        <span>{{ $t('hosting.domain.editDisabled') }}</span>
+      </n-tooltip>
       <!-- Generate short URL -->
       <FormStorageShortUrl
         v-if="websiteStore.active.w3ProductionLink"
         :target-url="websiteStore.active.w3ProductionLink"
         class="w-full"
       />
+      <n-button v-if="websiteStore.isActiveWebsiteGithubSource" @click="showUpdateModal">
+        {{ $t('hosting.deploy.updateConfig') }}
+      </n-button>
     </n-space>
 
     <!-- Modal - Create new folder -->
@@ -144,6 +137,13 @@
     <Modal v-model:show="modalWebsiteDomainVisible" :title="$t('hosting.domain.edit')">
       <HostingDomain />
     </Modal>
+
+    <modal
+      v-model:show="modalGithubConfigVisible"
+      :title="$t(websiteStore.isActiveWebsiteGithubSource ? 'hosting.deploy.update' : 'hosting.deploy.new')"
+    >
+      <FormStorageDeployConfig :config-id="deploymentStore.deploymentConfig?.id" @submit-success="handleConfigChange" />
+    </modal>
   </div>
 </template>
 
@@ -152,12 +152,12 @@ const props = defineProps({
   env: { type: Number, default: 0 },
 });
 
-const { websiteUuid, refreshWebpage } = useHosting();
+const { isMd } = useScreen();
+const { checkUnfinishedBuilds, refreshWebpage } = useHosting();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.HOSTING_DEPLOY);
 const { subscriptionMessage } = usePayment();
 
 const { t, te } = useI18n();
-const router = useRouter();
 const message = useMessage();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
@@ -173,6 +173,7 @@ const showModalClearAll = ref<boolean>(false);
 const showPopoverDelete = ref<boolean>(false);
 const modalWebsiteReviewVisible = ref<boolean>(false);
 const modalWebsiteDomainVisible = ref<boolean>(false);
+const modalGithubConfigVisible = ref<boolean>(false);
 
 const deploying = ref<boolean>(false);
 const deployEnv = ref<number>(DeploymentEnvironment.STAGING);
@@ -182,6 +183,10 @@ const isUpload = computed<boolean>(() => {
 });
 const hasActiveDeployments = computed<boolean>(() => {
   return deploymentStore.staging.some(deployment => deployment.deploymentStatus < DeploymentStatus.SUCCESSFUL);
+});
+const editDomainEnabled = computed<boolean>(() => {
+  const time = websiteStore.active.domainChangeDate;
+  return !time || new Date(time).getTime() + 15 * 60 * 1000 < Date.now();
 });
 
 const deployOptions = ref([
@@ -200,6 +205,24 @@ onMounted(async () => {
   await dataStore.waitOnPromises();
   subscriptionMessage();
 });
+
+const handleConfigChange = async () => {
+  websiteStore.resetForm();
+  modalGithubConfigVisible.value = false;
+
+  setTimeout(() => checkUnfinishedBuilds(), 3000);
+};
+
+const showUpdateModal = async () => {
+  if (deploymentStore.deploymentConfig) {
+    Object.entries(deploymentStore.deploymentConfig).forEach(([key, value]) => {
+      if (value && key in websiteStore.form) {
+        websiteStore.form[key] = value;
+      }
+    });
+  }
+  modalGithubConfigVisible.value = true;
+};
 
 function handleSelectDeploy(key: number) {
   deployWebsite(key);
@@ -253,22 +276,7 @@ function onAllFilesDeleted() {
 /** Deploy to stg/prod */
 async function deploy(env: number) {
   deploying.value = true;
-
-  const deployment = await deploymentStore.deploy(websiteStore.active.website_uuid, env);
-
-  /** After successful deploy redirect to next tab */
-  if (deployment && env === DeploymentEnvironment.STAGING) {
-    deploymentStore.staging = [] as Array<DeploymentInterface>;
-    setTimeout(() => {
-      router.push(`/dashboard/service/hosting/${websiteUuid.value}/staging`);
-    }, 1000);
-  } else if (deployment && env >= DeploymentEnvironment.PRODUCTION) {
-    deploymentStore.production = [] as Array<DeploymentInterface>;
-    setTimeout(() => {
-      router.push(`/dashboard/service/hosting/${websiteUuid.value}/production`);
-    }, 1000);
-  }
-
+  await deploymentStore.deploy(websiteStore.active.website_uuid, env);
   deploying.value = false;
 }
 

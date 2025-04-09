@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NTag } from 'naive-ui';
+import { NDropdown, NTag } from 'naive-ui';
 
 const props = defineProps({
   serviceType: {
@@ -41,8 +41,6 @@ const props = defineProps({
 
 const { t } = useI18n();
 const dataStore = useDataStore();
-const IconStatus = resolveComponent('IconStatus');
-const TableEllipsis = resolveComponent('TableEllipsis');
 
 const modalEditAuthVisible = ref<boolean>(false);
 const modalDeleteAuthVisible = ref<boolean>(false);
@@ -54,14 +52,17 @@ const createColumns = (): NDataTableColumns<ServiceInterface> => {
       key: 'name',
       title: t('general.serviceName'),
       render(row) {
-        return [h(IconStatus, { active: row.active === 1 }, ''), h('span', { class: 'ml-2 text-blue' }, row.name)];
+        return [
+          h(resolveComponent('IconStatus'), { active: row.active === 1 }, ''),
+          h('span', { class: 'ml-2 text-blue' }, row.name),
+        ];
       },
     },
     {
       key: 'service_uuid',
       title: t('general.uuid'),
       render(row: ServiceInterface) {
-        return h(TableEllipsis, { text: row.service_uuid }, '');
+        return h(resolveComponent('TableEllipsis'), { text: row.service_uuid }, '');
       },
     },
     {
@@ -103,12 +104,7 @@ const createColumns = (): NDataTableColumns<ServiceInterface> => {
             trigger: 'click',
           },
           {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
+            default: () => h(resolveComponent('BtnActions')),
           }
         );
       },

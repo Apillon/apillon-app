@@ -85,6 +85,7 @@ declare global {
     domainChangeDate: string | null;
     domainStatus: number;
     ipnsProduction: string | null;
+    lastDeploymentStatus: number | null;
     nftCollectionUuid: string | null;
     source: WebsiteSource;
     website_uuid: string;

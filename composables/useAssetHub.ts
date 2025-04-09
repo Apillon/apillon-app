@@ -20,21 +20,6 @@ export const assetHubNetworks = {
 export const getAssetHubRpc = (mainnet = false) =>
   mainnet ? assetHubNetworks.assetHub.rpc : assetHubNetworks.westend.rpc;
 
-/** Available columns - show/hide column */
-const selectedColumns = ref([
-  'id',
-  'name',
-  'symbol',
-  'decimals',
-  'supply',
-  'minBalance',
-  'deposit',
-  'owner',
-  'admin',
-  'issuer',
-  'freezer',
-  'status',
-]);
 const assetHubClient = ref<AssetHubClientType | null | undefined>();
 
 export const toNum = (text: string) => Number(text?.replaceAll(',', ''));

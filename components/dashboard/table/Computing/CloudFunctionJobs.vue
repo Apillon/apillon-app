@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown } from 'naive-ui';
+import { NDropdown } from 'naive-ui';
 
 const { t } = useI18n();
 const message = useMessage();
@@ -118,12 +118,7 @@ const createColumns = (): NDataTableColumns<JobInterface> => {
           NDropdown,
           { options: dropdownOptions.value, trigger: 'click' },
           {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
+            default: () => h(resolveComponent('BtnActions')),
           }
         );
       },

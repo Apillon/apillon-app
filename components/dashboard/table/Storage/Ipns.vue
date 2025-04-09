@@ -28,33 +28,18 @@
 <script lang="ts" setup>
 import { useDebounceFn } from '@vueuse/core';
 import type { DataTableInst, DataTableSortState } from 'naive-ui';
-import { NButton, NDropdown } from 'naive-ui';
+import { NDropdown } from 'naive-ui';
 
 const { t } = useI18n();
 const ipnsStore = useIpnsStore();
 const bucketStore = useBucketStore();
+const { availableColumns, selectedColumns, initTableColumns, handleColumnChange } = useTable(LsTableColumnsKeys.IPNS);
 
 const tableRef = ref<DataTableInst | null>(null);
 const currentRow = ref<IpnsInterface>({} as IpnsInterface);
 const sort = ref<DataTableSortState | null | undefined>();
 const modalEditIpnsVisible = ref<boolean>(false);
 const modalDeleteIpnsVisible = ref<boolean>(false);
-
-const TableColumns = resolveComponent('TableColumns');
-const TableEllipsis = resolveComponent('TableEllipsis');
-const TableLink = resolveComponent('TableLink');
-
-/** Available columns - show/hide column */
-const selectedColumns = ref(['name', 'ipns_uuid', 'description', 'ipnsName', 'ipnsValue', 'createTime']);
-const availableColumns = ref([
-  { value: 'name', label: t('general.name') },
-  { value: 'ipns_uuid', label: t('storage.ipns.uuid') },
-  { value: 'description', label: t('storage.ipns.description') },
-  { value: 'ipnsName', label: t('storage.ipns.ipnsName') },
-  { value: 'ipnsValue', label: t('storage.ipns.link') },
-  { value: 'createTime', label: t('dashboard.createTime') },
-  { value: 'updateTime', label: t('general.updateTime') },
-]);
 
 /** Columns */
 const columns = computed<NDataTableColumns<IpnsInterface>>(() => {
@@ -69,7 +54,7 @@ const columns = computed<NDataTableColumns<IpnsInterface>>(() => {
       key: 'ipns_uuid',
       title: t('storage.ipns.uuid'),
       render(row: IpnsInterface) {
-        return h(TableEllipsis, { text: row.ipns_uuid }, '');
+        return h(resolveComponent('TableEllipsis'), { text: row.ipns_uuid }, '');
       },
     },
     {
@@ -82,7 +67,7 @@ const columns = computed<NDataTableColumns<IpnsInterface>>(() => {
       title: t('storage.ipns.ipnsName'),
       className: { hidden: !selectedColumns.value.includes('ipnsName') },
       render(row: IpnsInterface) {
-        return h(TableEllipsis, { text: row.ipnsName }, '');
+        return h(resolveComponent('TableEllipsis'), { text: row.ipnsName }, '');
       },
     },
     {
@@ -90,7 +75,7 @@ const columns = computed<NDataTableColumns<IpnsInterface>>(() => {
       title: t('storage.ipns.link'),
       className: { hidden: !selectedColumns.value.includes('ipnsValue') },
       render(row: IpnsInterface) {
-        return h(TableLink, { link: row.link }, '');
+        return h(resolveComponent('TableLink'), { link: row.link }, '');
       },
     },
     {
@@ -124,12 +109,7 @@ const columns = computed<NDataTableColumns<IpnsInterface>>(() => {
             trigger: 'click',
           },
           {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
+            default: () => h(resolveComponent('BtnActions')),
           }
         );
       },
@@ -138,7 +118,7 @@ const columns = computed<NDataTableColumns<IpnsInterface>>(() => {
       },
       renderFilterMenu: () => {
         return h(
-          TableColumns,
+          resolveComponent('TableColumns'),
           {
             model: selectedColumns.value,
             columns: availableColumns.value,
@@ -148,14 +128,9 @@ const columns = computed<NDataTableColumns<IpnsInterface>>(() => {
         );
       },
     },
-  ];
+  ] as NDataTableColumns<IpnsInterface>;
 });
 const rowKey = (row: IpnsInterface) => row.ipns_uuid;
-
-function handleColumnChange(selectedValues: Array<string>) {
-  selectedColumns.value = selectedValues;
-  localStorage.setItem(LsTableColumnsKeys.IPNS, JSON.stringify(selectedColumns.value));
-}
 
 /** Dropdown options for files */
 const dropdownOptions = [
@@ -194,10 +169,7 @@ const data = computed<Array<IpnsInterface>>(() => {
 });
 
 onMounted(() => {
-  /** Check if selected columns are stored in LS */
-  if (localStorage.getItem(LsTableColumnsKeys.IPNS)) {
-    selectedColumns.value = JSON.parse(localStorage.getItem(LsTableColumnsKeys.IPNS) || '');
-  }
+  initTableColumns(columns.value);
 });
 
 /** Sort column - fetch directory content with order params  */

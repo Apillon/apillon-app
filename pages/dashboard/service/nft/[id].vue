@@ -78,10 +78,7 @@
                   {{ $t('nft.collection.websiteConnected') }}
                 </p>
 
-                <Btn
-                  type="primary"
-                  :to="`/dashboard/service/hosting/${collectionStore.active.websiteUuid}/deployments`"
-                >
+                <Btn type="primary" :to="`/dashboard/service/hosting/${collectionStore.active.websiteUuid}`">
                   {{ $t('nft.collection.showWebsite') }}
                 </Btn>
               </div>

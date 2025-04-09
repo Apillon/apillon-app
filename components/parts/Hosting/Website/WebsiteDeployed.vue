@@ -6,7 +6,7 @@
       <p>{{ $t('hosting.website.deployedInfo') }}</p>
 
       <div class="mt-8 inline-block">
-        <Btn size="large" :to="`/dashboard/service/hosting/${websiteStore.active.website_uuid}/deployments`">
+        <Btn size="large" :to="`/dashboard/service/hosting/${websiteStore.active.website_uuid}`">
           {{ $t('hosting.website.deployments') }}
         </Btn>
       </div>

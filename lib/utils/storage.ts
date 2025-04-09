@@ -124,8 +124,3 @@ export const calculateCID = async (content: any, options: UserImporterOptions) =
 
   return `${lastCid}`;
 };
-
-export const websiteLink = (website: WebsiteBaseInterface | WebsiteInterface) => {
-  const pathEnd = website.source === WebsiteSource.GITHUB || !!website.nftCollectionUuid ? '/deployments' : '';
-  return `/dashboard/service/hosting/${website.website_uuid}${pathEnd}`;
-};

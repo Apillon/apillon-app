@@ -1,7 +1,7 @@
 <template>
   <!-- Heading template -->
-  <div class="min-h-17 relative -mx-4 flex flex-col justify-end bg-bg-light/65 px-4 text-sm sm:-mx-8 sm:px-8">
-    <div v-if="back" class="absolute -top-2 left-8 -translate-y-full">
+  <div class="relative -mx-4 flex min-h-17 flex-col justify-end bg-bg-light/65 px-4 text-sm sm:-mx-8 sm:px-8">
+    <div v-if="back && isLg" class="absolute -top-2 left-8 -translate-y-full">
       <NuxtLink :to="{ name: 'dashboard-service-hosting' }">
         <span class="icon-back align-sub text-2xl"></span>
       </NuxtLink>
@@ -18,6 +18,9 @@
       <!-- Title - left side -->
       <slot>
         <div class="flex items-center gap-1">
+          <NuxtLink v-if="back && !isLg" :to="{ name: 'dashboard-service-hosting' }">
+            <span class="icon-back align-sub text-xl"></span>
+          </NuxtLink>
           <small v-if="serviceName">{{ serviceName }}</small>
           <h5>
             <span v-if="serviceName">/</span>
@@ -36,7 +39,7 @@
     <div v-if="$slots.submenu || $slots.details" class="flex justify-between">
       <slot name="submenu" />
     </div>
-    <div v-if="$slots.details" class="absolute bottom-2 right-8">
+    <div v-if="$slots.details" class="absolute bottom-2 right-4 sm:right-8">
       <Btn
         type="secondary"
         inner-class="flex items-center gap-2 text-white-primary"
@@ -86,7 +89,7 @@ defineProps({
   serviceName: { type: String, default: null },
   technologies: { type: Array<string>, default: [] },
 });
-const { isSm } = useScreen();
+const { isSm, isLg } = useScreen();
 
 const modalDetailsVisible = ref<boolean>(false);
 </script>

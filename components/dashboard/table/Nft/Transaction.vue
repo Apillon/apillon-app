@@ -25,10 +25,6 @@ const props = defineProps({
 const { t, te } = useI18n();
 const collectionStore = useCollectionStore();
 
-const NftTransactionStatus = resolveComponent('NftTransactionStatus');
-const NftTransactionType = resolveComponent('NftTransactionType');
-const TableLink = resolveComponent('TableLink');
-
 const pagination = reactive(createPagination(false));
 
 /** Data: filtered transactions */
@@ -64,7 +60,7 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
       title: t('nft.transaction.hash'),
       render(row: TransactionInterface) {
         return h(
-          TableLink,
+          resolveComponent('TableLink'),
           {
             link: transactionLink(row.transactionHash, collectionStore.active.chain || row.chainId),
             text: row.transactionHash,
@@ -77,14 +73,14 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
       key: 'transactionType',
       title: t('nft.transactionType'),
       render(row: TransactionInterface) {
-        return h(NftTransactionType, { transactionType: row.transactionType }, '');
+        return h(resolveComponent('NftTransactionType'), { transactionType: row.transactionType }, '');
       },
     },
     {
       key: 'transactionStatus',
       title: t('general.status'),
       render(row: TransactionInterface) {
-        return h(NftTransactionStatus, { transactionStatus: row.transactionStatus }, '');
+        return h(resolveComponent('NftTransactionStatus'), { transactionStatus: row.transactionStatus }, '');
       },
     },
   ];

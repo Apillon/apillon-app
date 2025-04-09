@@ -273,9 +273,6 @@
         @apply absolute -left-10 -right-10 h-full bg-bg-light/65;
       }
     }
-    .n-tabs.n-tabs-1 .n-tabs-nav {
-      @apply hidden;
-    }
   }
 }
 
@@ -896,7 +893,9 @@ body > .n-message-container {
       }
     }
   }
-
+  &.n-tabs-1 .n-tabs-nav {
+    @apply hidden;
+  }
   &.types-hidden .n-tabs-nav {
     @apply hidden;
   }

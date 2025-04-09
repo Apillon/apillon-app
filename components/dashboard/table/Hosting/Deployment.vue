@@ -19,7 +19,6 @@ defineProps({
 
 const { t } = useI18n();
 const deploymentStore = useDeploymentStore();
-const DeploymentStatus = resolveComponent('HostingDeploymentStatus');
 
 const pagination = reactive(createPagination(false));
 
@@ -43,7 +42,7 @@ const createColumns = (): NDataTableColumns<DeploymentInterface> => {
       title: t('hosting.deploymentStatus'),
       key: 'deploymentStatus',
       render(row) {
-        return h(DeploymentStatus, { deploymentStatus: row.deploymentStatus }, '');
+        return h(resolveComponent('HostingDeploymentStatus'), { deploymentStatus: row.deploymentStatus }, '');
       },
     },
     {

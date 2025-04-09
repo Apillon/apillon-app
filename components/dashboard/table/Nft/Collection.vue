@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown } from 'naive-ui';
+import { NDropdown } from 'naive-ui';
 
 const props = defineProps({
   archive: { type: Boolean, default: false },
@@ -30,36 +30,9 @@ const message = useMessage();
 const authStore = useAuthStore();
 const collectionStore = useCollectionStore();
 const { deleteItem } = useDelete();
-
-/** Available columns - show/hide column */
-const selectedColumns = ref([
-  'chain',
-  'symbol',
-  'name',
-  'type',
-  'collection_uuid',
-  'contractAddress',
-  'baseUri',
-  'dropPrice',
-  'dropReserve',
-  'maxSupply',
-  'collectionStatus',
-  'dropStart',
-]);
-const availableColumns = ref([
-  { value: 'chain', label: t('nft.transaction.chain') },
-  { value: 'symbol', label: t('nft.collection.symbol') },
-  { value: 'name', label: t('nft.collection.name') },
-  { value: 'type', label: t('general.type') },
-  { value: 'collection_uuid', label: t('nft.collection.uuid') },
-  { value: 'contractAddress', label: t('nft.collection.contractAddress') },
-  { value: 'baseUri', label: t('nft.collection.baseUri') },
-  { value: 'dropPrice', label: t('nft.collection.dropPrice') },
-  { value: 'dropReserve', label: t('nft.collection.dropReserve') },
-  { value: 'maxSupply', label: t('nft.collection.maxSupply') },
-  { value: 'collectionStatus', label: t('general.status') },
-  { value: 'dropStart', label: t('nft.collection.dropStart') },
-]);
+const { availableColumns, selectedColumns, initTableColumns, handleColumnChange } = useTable(
+  LsTableColumnsKeys.NFT_COLLECTION
+);
 
 /** Data: filtered collections */
 const data = computed<Array<CollectionInterface>>(() => {
@@ -204,7 +177,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
     {
       key: 'actions',
       align: 'right',
-      className: '!sticky right-0',
+      className: '!py-0 !sticky right-0',
       filter: 'default',
       filterOptionValue: null,
       render() {
@@ -215,12 +188,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
             trigger: 'click',
           },
           {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
+            default: () => h(resolveComponent('BtnActions')),
           }
         );
       },
@@ -231,6 +199,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
         return h(
           resolveComponent('TableColumns'),
           {
+            key: selectedColumns.value.length,
             model: selectedColumns.value,
             columns: availableColumns.value,
             onColumnChange: handleColumnChange,
@@ -281,10 +250,7 @@ const dropdownOptionsArchive = [
 ];
 
 onMounted(() => {
-  /** Check if selected columns are stored in LS */
-  if (localStorage.getItem(LsTableColumnsKeys.NFT_COLLECTION)) {
-    selectedColumns.value = JSON.parse(localStorage.getItem(LsTableColumnsKeys.NFT_COLLECTION) || '');
-  }
+  initTableColumns(columns.value);
 });
 
 /** On row click */
@@ -299,11 +265,6 @@ const rowProps = (row: CollectionInterface) => {
     },
   };
 };
-
-function handleColumnChange(selectedValues: Array<string>) {
-  selectedColumns.value = selectedValues;
-  localStorage.setItem(LsTableColumnsKeys.NFT_COLLECTION, JSON.stringify(selectedColumns.value));
-}
 
 function maxSupply(maxSupply: number) {
   return maxSupply > 0 ? maxSupply : t('form.supplyTypes.unlimited');

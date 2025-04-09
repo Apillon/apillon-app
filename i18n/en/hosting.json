@@ -41,13 +41,13 @@
         "3": "Direct to production"
       },
       "status": {
-        "0": "INITIATED",
-        "1": "IN PROGRESS",
-        "2": "IN REVIEW",
-        "3": "APPROVED",
-        "10": "SUCCESSFUL",
-        "100": "FAILED",
-        "101": "REJECTED"
+        "0": "Initiated",
+        "1": "Deploying",
+        "2": "In review",
+        "3": "Approved",
+        "10": "Successful",
+        "100": "Failed",
+        "101": "Rejected"
       }
     },
     "domain": {

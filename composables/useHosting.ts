@@ -18,6 +18,14 @@ export default function useHosting() {
   let deploymentInterval: any = null as any;
   let websiteInterval: any = null as any;
 
+  const tabs = {
+    UPLOAD: t('hosting.menu.preview'),
+    DEPLOYMENTS: t('hosting.menu.deployments'),
+    PRODUCTION: t('hosting.menu.production'),
+    VARIABLES: t('hosting.menu.envVars'),
+  };
+  const activeTab = ref();
+
   /** Website ID from route */
   const websiteUuid = ref<string>(params.id ? `${params?.id}` : `${params?.slug}`);
 
@@ -58,6 +66,7 @@ export default function useHosting() {
       router.push({ name: 'dashboard-service-hosting' });
       return;
     }
+    activeTab.value = websiteStore.isActiveWebsiteStatic ? tabs.UPLOAD : tabs.DEPLOYMENTS;
 
     if (fetchBuilds) {
       await deploymentStore.getBuilds(websiteUuid.value);
@@ -162,20 +171,13 @@ export default function useHosting() {
       deploymentStore.fetchDeployments(websiteUuid.value, env);
 
       /** Refresh active website data */
-      const website = await websiteStore.fetchWebsite(websiteUuid.value);
+      await websiteStore.fetchWebsite(websiteUuid.value);
 
-      /** Show files from staging bucket */
-      if (env === DeploymentEnvironment.STAGING) {
-        bucketStore.active = website.stagingBucket;
-        bucketStore.setBucket(website.stagingBucket.bucket_uuid);
-      } else {
-        bucketStore.active = website.productionBucket;
-        bucketStore.setBucket(website.productionBucket.bucket_uuid);
-      }
+      changeEnv(env);
     }
-
-    /** Refresh hosting files */
-    bucketStore.fetchDirectoryContent();
+    if (websiteStore.isActiveWebsiteGithubSource) {
+      deploymentStore.fetchBuilds(websiteStore.active.website_uuid);
+    }
   }
 
   async function createWebsite(): Promise<WebsiteInterface | null> {
@@ -248,12 +250,15 @@ export default function useHosting() {
   }
 
   return {
+    activeTab,
     pageLoading,
     rulesWebsite,
+    tabs,
     websiteUuid,
     checkUnfinishedBuilds,
     checkUnfinishedWebsite,
     createWebsite,
+    changeEnv,
     initWebsite,
     refreshWebpage,
     updateWebsite,

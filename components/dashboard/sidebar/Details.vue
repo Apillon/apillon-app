@@ -52,6 +52,4 @@ defineProps({
 });
 const tab = ref(Tabs.GENERAL);
 const tabsRef = ref();
-
-const tabsHeaders = computed(() => tabsRef.value?.renderedNames);
 </script>

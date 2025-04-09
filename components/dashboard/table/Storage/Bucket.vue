@@ -46,7 +46,7 @@
 
 <script lang="ts" setup>
 import type { DataTableRowKey } from 'naive-ui';
-import { NButton, NDropdown, NEllipsis } from 'naive-ui';
+import { NDropdown, NEllipsis } from 'naive-ui';
 import { PAGINATION_LIMIT } from '~/lib/values/general.values';
 
 const props = defineProps({
@@ -67,7 +67,6 @@ const showModalEditBucket = ref<boolean>(false);
 const showModalDestroyBucket = ref<boolean | null>(false);
 const checkedRowKeys = ref<Array<string | number>>([]);
 const bucketsToDelete = ref<BucketInterface[]>([]);
-const TableEllipsis = resolveComponent('TableEllipsis');
 
 /** Data: filtered buckets */
 const data = computed<Array<BucketInterface>>(() => {
@@ -109,7 +108,7 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
       key: 'bucket_uuid',
       title: t('storage.bucket.uuid'),
       render(row: BucketInterface) {
-        return h(TableEllipsis, { text: row.bucket_uuid }, '');
+        return h(resolveComponent('TableEllipsis'), { text: row.bucket_uuid }, '');
       },
     },
     {
@@ -146,12 +145,7 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
             trigger: 'click',
           },
           {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
+            default: () => h(resolveComponent('BtnActions')),
           }
         );
       },

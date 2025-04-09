@@ -19,7 +19,6 @@ defineProps({
 
 const { t } = useI18n();
 const deploymentStore = useDeploymentStore();
-const DeploymentBuildStatus = resolveComponent('HostingDeploymentBuildStatus');
 
 const pagination = reactive(createPagination(false));
 
@@ -36,7 +35,7 @@ const createColumns = (): NDataTableColumns<DeploymentBuildInterface> => {
       title: t('hosting.deploy.build-table.build-status'),
       key: 'buildStatus',
       render(row) {
-        return h(DeploymentBuildStatus, { buildStatus: row.buildStatus }, '');
+        return h(resolveComponent('HostingDeploymentBuildStatus'), { buildStatus: row.buildStatus }, '');
       },
     },
     {
