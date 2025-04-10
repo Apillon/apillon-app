@@ -8,7 +8,7 @@
     autocomplete="off"
     @submit.prevent="handleSubmit"
   >
-    <FormFieldRepo v-model:value="websiteStore.form.repoId" />
+    <FormFieldRepo v-model:value="websiteStore.form.repoId" :disabled="!!configId" />
     <n-form-item path="branchName" :label="$t('form.label.website.branchName')" :label-props="{ for: 'branchName' }">
       <n-input
         v-model:value="websiteStore.form.branchName"
@@ -69,9 +69,11 @@
       <input type="submit" class="hidden" :value="'Save'" />
 
       <div class="flex w-full gap-2">
+        <!-- Unlink is disabled
         <Btn v-if="configId" type="secondary" :loading="deleteLoading" :disabled="isFormDisabled" @click="handleRemove">
           {{ $t('hosting.deploy.unlink') }}
         </Btn>
+        -->
         <Btn type="primary" class="flex-1" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
           {{ $t('hosting.deploy.save') }}
         </Btn>
@@ -128,7 +130,7 @@ function handleSubmit(e: Event | MouseEvent) {
         websiteUuid: websiteStore.active.website_uuid,
         ...websiteStore.form,
       };
-      props.configId ? updateDeployConfig(bodyData) : createDeployConfig(bodyData);
+      return props.configId ? updateDeployConfig(bodyData) : createDeployConfig(bodyData);
     }
   });
 }

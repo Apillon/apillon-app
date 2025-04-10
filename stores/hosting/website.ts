@@ -156,14 +156,14 @@ export const useWebsiteStore = defineStore('website', {
 
     async fetchWebsite(uuid: string): Promise<WebsiteInterface> {
       try {
-        const res = await $api.get<WebsiteResponse>(endpoints.websites(uuid));
+        const { data } = await $api.get<WebsiteResponse>(endpoints.websites(uuid));
 
-        this.active = res.data;
+        this.active = data;
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.WEBSITE, Date.now().toString());
 
-        return res.data;
+        return data;
       } catch (error: any) {
         this.active = {} as WebsiteInterface;
 

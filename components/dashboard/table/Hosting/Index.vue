@@ -16,6 +16,11 @@
   <modal v-model:show="showModalEditWebsite" :title="$t('hosting.website.edit')">
     <FormHostingWebsite :website-uuid="currentRow.website_uuid" @submit-success="showModalEditWebsite = false" />
   </modal>
+
+  <!-- Modal - Delete Website -->
+  <ModalDelete v-model:show="showModalDeleteWebsite" :title="$t('hosting.website.delete')">
+    <FormDelete :id="currentRow?.website_uuid" :type="ItemDeleteKey.WEBSITE" @submit-success="onWebsiteDeleted" />
+  </ModalDelete>
 </template>
 
 <script lang="ts" setup>
@@ -32,12 +37,14 @@ const message = useMessage();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
-const { deleteItem } = useDelete();
+
+const { onWebsiteDeleted } = useHosting();
 const { availableColumns, selectedColumns, initTableColumns, handleColumnChange } = useTable(
   LsTableColumnsKeys.HOSTING
 );
 
 const showModalEditWebsite = ref<boolean>(false);
+const showModalDeleteWebsite = ref<boolean>(false);
 const pagination = reactive(createPagination(false));
 
 /** Data: filtered websites */
@@ -183,10 +190,12 @@ const dropdownOptions = [
   {
     key: 'hostingDelete',
     label: t('general.archive'),
+
     disabled: authStore.isAdmin(),
     props: {
+      class: '!text-pink',
       onClick: () => {
-        deleteWebsite();
+        showModalDeleteWebsite.value = true;
       },
     },
   },
@@ -208,18 +217,6 @@ const dropdownOptionsArchive = [
 onMounted(() => {
   initTableColumns(columns.value);
 });
-
-/**
- * On deleteWebsite click
- * */
-async function deleteWebsite() {
-  if (currentRow.value && (await deleteItem(ItemDeleteKey.WEBSITE, currentRow.value.website_uuid))) {
-    websiteStore.items = websiteStore.items.filter(item => item.website_uuid !== currentRow.value.website_uuid);
-
-    sessionStorage.removeItem(LsCacheKeys.WEBSITE);
-    sessionStorage.removeItem(LsCacheKeys.WEBSITE_ARCHIVE);
-  }
-}
 
 /**
  * Restore website

@@ -893,8 +893,13 @@ body > .n-message-container {
       }
     }
   }
-  &.n-tabs-1 .n-tabs-nav {
-    @apply hidden;
+  &.n-tabs-1 {
+    .n-tabs-nav {
+      @apply hidden;
+    }
+    .n-tab-pane {
+      @apply pt-0;
+    }
   }
   &.types-hidden .n-tabs-nav {
     @apply hidden;

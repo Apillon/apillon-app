@@ -99,6 +99,7 @@ declare global {
     name: string;
     clone_url: string;
     default_branch: string;
+    html_url: string;
     owner: {
       avatar_url: string;
       login: string;

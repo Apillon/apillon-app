@@ -54,6 +54,7 @@
       "add": "Add domain",
       "configure": "DNS Records",
       "domainStatus": "Domain status",
+      "edit": "Edit domain",
       "editDisabled": "Website domain can be changed every 15 minutes. ",
       "preview": "Domain preview",
       "refreshStatus": "Refresh domain status",
@@ -111,6 +112,7 @@
     "website": {
       "add": "Add website",
       "addFirst": "Add first website",
+      "branchDeployments": "Branch deployments",
       "create": "Create website",
       "description": "Website description",
       "delete": "Delete website",

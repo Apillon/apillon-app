@@ -1,5 +1,6 @@
 import { WebsiteSource } from '~/lib/types/hosting';
 
+const activeTab = ref();
 export default function useHosting() {
   const { t } = useI18n();
   const router = useRouter();
@@ -24,7 +25,6 @@ export default function useHosting() {
     PRODUCTION: t('hosting.menu.production'),
     VARIABLES: t('hosting.menu.envVars'),
   };
-  const activeTab = ref();
 
   /** Website ID from route */
   const websiteUuid = ref<string>(params.id ? `${params?.id}` : `${params?.slug}`);
@@ -44,12 +44,7 @@ export default function useHosting() {
     clearInterval(websiteInterval);
   });
 
-  async function initWebsite(
-    env: number = 0,
-    fetchBuilds: boolean = false,
-    fetchVariables: boolean = false,
-    fetchDeploymentConfig = false
-  ) {
+  async function initWebsite(env: number = 0) {
     websiteUuid.value = params.id ? `${params?.id}` : `${params?.slug}`;
     if (websiteStore.active.website_uuid !== websiteUuid.value) {
       deploymentStore.resetData();
@@ -68,16 +63,15 @@ export default function useHosting() {
     }
     activeTab.value = websiteStore.isActiveWebsiteStatic ? tabs.UPLOAD : tabs.DEPLOYMENTS;
 
-    if (fetchBuilds) {
-      await deploymentStore.getBuilds(websiteUuid.value);
-    }
-
-    if (fetchDeploymentConfig && website.source === WebsiteSource.GITHUB) {
+    if (website.source === WebsiteSource.GITHUB) {
       await deploymentStore.getDeploymentConfig(website.website_uuid);
-    }
+      deploymentStore.getBuilds(websiteUuid.value);
 
-    if (fetchVariables && website.source === WebsiteSource.GITHUB && deploymentStore.deploymentConfig) {
-      await deploymentStore.getVariables(deploymentStore.deploymentConfig?.id);
+      if (deploymentStore.deploymentConfig?.id) {
+        await deploymentStore.getVariables(deploymentStore.deploymentConfig?.id);
+      }
+    } else if (website.nftCollectionUuid) {
+      deploymentStore.getBuilds(websiteUuid.value);
     }
 
     await changeEnv(env);
@@ -164,16 +158,16 @@ export default function useHosting() {
     }, 5000);
   }
 
-  async function refreshWebpage(env: number) {
+  async function refreshWebpage(env: number = 0) {
+    changeEnv(env);
+
+    /** Refresh active website data */
+    websiteStore.fetchWebsite(websiteUuid.value);
+
     /** On tab stg/prod refresh also website and deployments */
     if (env === DeploymentEnvironment.STAGING || env === DeploymentEnvironment.PRODUCTION) {
       /** Refresh deployments */
       deploymentStore.fetchDeployments(websiteUuid.value, env);
-
-      /** Refresh active website data */
-      await websiteStore.fetchWebsite(websiteUuid.value);
-
-      changeEnv(env);
     }
     if (websiteStore.isActiveWebsiteGithubSource) {
       deploymentStore.fetchBuilds(websiteStore.active.website_uuid);
@@ -248,6 +242,15 @@ export default function useHosting() {
     loading.value = false;
     return null;
   }
+  async function onWebsiteDeleted(websitUuuid?: string) {
+    if (websitUuuid) {
+      websiteStore.items = websiteStore.items.filter(item => item.website_uuid !== websitUuuid);
+    }
+    sessionStorage.removeItem(LsCacheKeys.WEBSITE);
+    sessionStorage.removeItem(LsCacheKeys.WEBSITE_ARCHIVE);
+
+    router.push({ name: 'dashboard-service-hosting' });
+  }
 
   return {
     activeTab,
@@ -260,6 +263,7 @@ export default function useHosting() {
     createWebsite,
     changeEnv,
     initWebsite,
+    onWebsiteDeleted,
     refreshWebpage,
     updateWebsite,
   };

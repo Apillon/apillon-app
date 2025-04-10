@@ -48,7 +48,7 @@
           <span class="flex items-center gap-1 text-xs">
             <img :src="selectedRepo.owner.avatar_url" alt="" class="h-6 w-6 rounded-lg" />
             <span class="capitalize">{{ selectedRepo.name.replaceAll('-', ' ') }}</span>
-            <small class="text-[10px]">{{ dateTimeToDate(selectedRepo.updated_at) }}</small>
+            <small class="text-[10px]">{{ dateTimeToMonthDay(selectedRepo.updated_at) }}</small>
           </span>
           <Btn class="float-right mt-[2px] text-xs text-yellow" type="link" @click="repoSelected = false">
             {{ $t('general.change') }}

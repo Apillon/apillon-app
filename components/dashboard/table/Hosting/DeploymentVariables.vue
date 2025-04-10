@@ -1,61 +1,76 @@
 <template>
-  <n-space class="pb-8" :size="32" vertical>
-    <div class="flex w-full flex-row-reverse justify-between gap-8">
-      <n-space>
-        <n-button @click="modalCreateVariableVisible = true">
-          {{ $t('hosting.deploy.env-vars.add-new') }}
-        </n-button>
-        <n-button :loading="deploymentStore.loading" @click="refreshVariables">
-          <span class="icon-refresh mr-2 text-xl"></span>
-          {{ $t('general.refresh') }}
-        </n-button>
-      </n-space>
-    </div>
-  </n-space>
-  <n-data-table
-    ref="tableRef"
-    v-bind="$attrs"
-    :bordered="false"
-    :columns="columns"
-    :data="variables"
-    :loading="deploymentStore.loading"
-    :pagination="pagination"
-    :row-key="rowKey"
-    @update:page-size="(pz: number) => (pagination.pageSize = pz)"
-  />
-  <modal v-model:show="modalCreateVariableVisible" :title="$t('hosting.deploy.env-vars.new-title')">
-    <FormHostingDeploymentConfigVariable
-      :config-id="deploymentStore.deploymentConfig?.id ?? 0"
-      @submit-success="modalCreateVariableVisible = false"
+  <div class="">
+    <n-data-table
+      ref="tableRef"
+      v-bind="$attrs"
+      :bordered="false"
+      :columns="columns"
+      :data="deploymentStore.variables"
+      :loading="deploymentStore.loading"
+      :pagination="pagination"
+      :row-key="rowKey"
+      @update:page="p => (page = p)"
+      @update:page-size="(pz: number) => (pagination.pageSize = pz)"
     />
-  </modal>
+    <div class="mt-1 inline-flex -translate-y-full items-center gap-2">
+      <n-button @click="addEmptyVariable">
+        {{ $t('hosting.deploy.env-vars.add-new') }}
+      </n-button>
+      <n-button :loading="deploymentStore.loading" @click="refreshVariables">
+        <span class="icon-refresh mr-2 text-xl"></span>
+        {{ $t('general.refresh') }}
+      </n-button>
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { h } from 'vue';
 import { NInput, NDataTable } from 'naive-ui';
 
-defineProps({
-  variables: { type: Array<DeploymentConfigVariable>, default: [] },
+const props = defineProps({
+  configId: { type: Number, required: true },
 });
 
 const { t } = useI18n();
+const message = useMessage();
 const deploymentStore = useDeploymentStore();
 
-const rowInEdit = ref('');
-const modalCreateVariableVisible = ref<boolean>(false);
+const page = ref(1);
+const editingRow = ref(-1);
 const pagination = reactive(createPagination(false));
+const rowKey = (row: EnvVariable) =>
+  deploymentStore.variables.findIndex(item => item.key === row?.key && item.value === row?.value);
 
-const createColumns = (): NDataTableColumns<DeploymentConfigVariable> => {
+const isEditingRow = (i: number) => editingRow.value === (page.value - 1) * PAGINATION_LIMIT + i;
+const hasEmptyKey = () => deploymentStore.variables.some(variable => variable.key === '');
+const hasEmptyValue = () => deploymentStore.variables.some(variable => variable.value === '');
+const addEmptyVariable = () => {
+  deploymentStore.variables.push({ key: '', value: '' });
+  editingRow.value = deploymentStore.variables.length - 1;
+};
+const keys = () => deploymentStore.variables.map(item => item.key);
+const areKeysUnique = () => new Set(keys()).size === keys.length;
+
+const columns = computed<NDataTableColumns<DeploymentConfigVariable>>(() => {
   return [
     {
       key: 'key',
       title: t('hosting.deploy.env-vars.key'),
-      render(row: DeploymentConfigVariable) {
-        return rowInEdit.value === row.key
+      render(row: DeploymentConfigVariable, index: number) {
+        return isEditingRow(index)
           ? h(NInput, {
-              value: deploymentStore.variableForm.key,
-              onUpdateValue: (value: string) => (deploymentStore.variableForm.key = value),
+              value: row.key,
+              size: 'small',
+              onUpdateValue(k: string) {
+                if (isEditingRow(index)) {
+                  row.key = k;
+                }
+              },
+              onKeyup(e) {
+                if (e.key === 'Enter') {
+                  editingRow.value = -1;
+                }
+              },
             })
           : row.key;
       },
@@ -63,11 +78,21 @@ const createColumns = (): NDataTableColumns<DeploymentConfigVariable> => {
     {
       key: 'value',
       title: t('hosting.deploy.env-vars.value'),
-      render(row: DeploymentConfigVariable) {
-        return rowInEdit.value === row.key
+      render(row: DeploymentConfigVariable, index: number) {
+        return isEditingRow(index)
           ? h(NInput, {
-              value: deploymentStore.variableForm.value,
-              onUpdateValue: (value: string) => (deploymentStore.variableForm.value = value),
+              value: row.value,
+              size: 'small',
+              onUpdateValue(v: string) {
+                if (isEditingRow(index)) {
+                  row.value = v;
+                }
+              },
+              onKeyup(e) {
+                if (e.key === 'Enter') {
+                  editingRow.value = -1;
+                }
+              },
             })
           : row.value;
       },
@@ -75,37 +100,31 @@ const createColumns = (): NDataTableColumns<DeploymentConfigVariable> => {
     {
       key: 'actions',
       title: '',
-      render(row: DeploymentConfigVariable) {
-        if (rowInEdit.value === row.key) {
+      render(row: DeploymentConfigVariable, index: number) {
+        if (isEditingRow(index)) {
           return h('div', { class: 'flex justify-end gap-2' }, [
             h('button', { class: 'icon-check text-2xl text-white', onClick: () => saveRow(row) }),
             h('button', { class: 'icon-close text-2xl text-white', onClick: () => revertRow() }),
           ]);
         } else {
           return h('div', { class: 'flex justify-end gap-2' }, [
-            h('button', { class: 'icon-edit text-2xl text-white', onClick: () => editRow(row) }),
+            h('button', { class: 'icon-edit text-2xl text-white', onClick: () => (editingRow.value = index) }),
             h('button', { class: 'icon-delete text-2xl text-white', onClick: () => deleteRow(row) }),
           ]);
         }
       },
     },
   ];
-};
-
-const columns = createColumns();
-
-const rowKey = (row: DeploymentConfigVariable) => row.key;
-
-const editRow = (row: DeploymentConfigVariable) => {
-  rowInEdit.value = row.key;
-  deploymentStore.variableForm = { key: row.key, value: row.value, prevKey: row.key };
-};
+});
 
 const saveRow = async (row: DeploymentConfigVariable) => {
-  rowInEdit.value = '';
+  editingRow.value = -1;
   if (row.key === '' || row.value === '') {
-    window.$message.error(t('hosting.deploy.env-vars.error-empty'));
-    deploymentStore.revertVariableChanges();
+    message.error(t('hosting.deploy.env-vars.error-empty'));
+  } else if (hasEmptyKey() || hasEmptyValue()) {
+    message.error(t('hosting.deploy.env-vars.error-empty'));
+  } else if (areKeysUnique()) {
+    message.error(t('validation.cloudFunctions.keyNotUnique'));
   } else {
     saveVariables();
   }
@@ -117,20 +136,10 @@ const deleteRow = (row: DeploymentConfigVariable) => {
 };
 
 const revertRow = () => {
-  rowInEdit.value = '';
-  deploymentStore.variableForm = { key: '', value: '' };
+  editingRow.value = -1;
+  refreshVariables();
 };
 
-const refreshVariables = async () => {
-  const deploymentConfigId = deploymentStore.deploymentConfig?.id;
-  if (deploymentConfigId) {
-    await deploymentStore.fetchVariables(deploymentConfigId);
-  }
-};
-
-const saveVariables = () => {
-  if (deploymentStore.deploymentConfig?.id) {
-    deploymentStore.saveVariables(deploymentStore.deploymentConfig.id);
-  }
-};
+const refreshVariables = async () => deploymentStore.fetchVariables(props.configId);
+const saveVariables = () => deploymentStore.saveVariables(props.configId);
 </script>

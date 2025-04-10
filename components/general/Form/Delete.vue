@@ -18,7 +18,7 @@ const { loading, deleteItem } = useDelete();
 
 async function onDelete() {
   if (await deleteItem(props.type, props.id)) {
-    emit('submitSuccess');
+    emit('submitSuccess', props.id);
   }
 }
 </script>

@@ -29,10 +29,11 @@
             <HostingWebsiteTabUpload />
           </n-tab-pane>
           <n-tab-pane :name="tabs.PRODUCTION">
-            <HostingWebsiteProduciton />
+            <HostingWebsiteTabProduction />
           </n-tab-pane>
         </template>
         <n-tab-pane v-else :name="tabs.DEPLOYMENTS">
+          <h4 class="mb-6">{{ $t('hosting.website.branchDeployments') }}</h4>
           <TableHostingDeploymentBuilds v-if="storageStore.projectConfig" :deployments="deploymentStore.builds" />
         </n-tab-pane>
         <n-tab-pane v-if="websiteStore.isActiveWebsiteGithubSource" :name="tabs.VARIABLES">

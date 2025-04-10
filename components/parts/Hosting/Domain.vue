@@ -4,20 +4,18 @@
       <strong>{{ $t('hosting.domain.preview') }}</strong>
     </div>
 
-    <div class="mb-4 flex flex-wrap items-center gap-4 gap-y-6">
-      <HostingPreviewLink :link="`https://${domain}`" />
-      <div class="mb-2 flex flex-wrap items-center gap-3 sm:flex-nowrap">
-        <div class="body-sm">
-          <strong class="whitespace-nowrap">{{ $t('hosting.domain.domainStatus') }}:</strong>
-        </div>
-        <Pill :type="domainStatusType">
-          {{ $t(`hosting.domain.status.${domainStatus || 0}`) }}
-        </Pill>
-        <n-button :disabled="btnDomainDisabled" :loading="loadingDomain" @click="refreshDomainStatus">
-          <span class="icon-refresh mr-2 text-xl"></span>
-          {{ $t('hosting.domain.refreshStatus') }}
-        </n-button>
+    <HostingPreviewLink :link="`https://${domain}`" />
+    <div class="my-4 flex flex-wrap items-center gap-3">
+      <div class="body-sm">
+        <strong class="whitespace-nowrap">{{ $t('hosting.domain.domainStatus') }}:</strong>
       </div>
+      <Pill :type="domainStatusType">
+        {{ $t(`hosting.domain.status.${domainStatus || 0}`) }}
+      </Pill>
+      <n-button :disabled="btnDomainDisabled" :loading="loadingDomain" @click="refreshDomainStatus">
+        <span class="icon-refresh mr-2 text-xl"></span>
+        {{ $t('hosting.domain.refreshStatus') }}
+      </n-button>
     </div>
 
     <n-space class="w-full" :wrap="!isLg" align="center">

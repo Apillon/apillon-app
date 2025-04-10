@@ -150,6 +150,8 @@ async function createWebsiteDomain() {
     domainCreated.value = true;
     message.success(t('form.success.created.domain'));
 
+    websiteStore.fetchWebsite(props.websiteUuid);
+
     /** Emit events */
     emit('submitSuccess');
     emit('createSuccess');
