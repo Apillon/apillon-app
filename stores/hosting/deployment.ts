@@ -4,6 +4,7 @@ export const useDeploymentStore = defineStore('deployment', {
   state: () => ({
     active: {} as DeploymentInterface,
     loading: false,
+    deployLoading: false,
     buildsLoading: false,
     builds: [] as DeploymentBuildInterface[],
     buildWebsiteUuid: '',
@@ -235,6 +236,18 @@ export const useDeploymentStore = defineStore('deployment', {
       }
 
       this.revertVariableChanges();
+    },
+
+    async redeploy(websiteUuid: string) {
+      this.deployLoading = true;
+      try {
+        await $api.post<any>(endpoints.redeploy(websiteUuid));
+        await this.fetchBuilds(websiteUuid);
+      } catch (error: any) {
+        window.$message.error(userFriendlyMsg(error));
+      }
+
+      this.deployLoading = false;
     },
 
     async deploy(

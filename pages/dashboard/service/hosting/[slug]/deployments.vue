@@ -9,6 +9,9 @@
           <div class="flex w-full flex-row-reverse justify-between gap-8">
             <!-- Actions : refresh, deploy -->
             <n-space>
+              <Btn size="small" type="primary" @click="triggerRedeploy" :loading="deploymentStore.deployLoading">
+                {{ $t('hosting.deploy.redeploy') }}
+              </Btn>
               <n-button v-if="websiteStore.isActiveWebsiteGithubSource" size="small" @click="showUpdateModal">
                 {{ $t('hosting.deploy.update-config') }}
               </n-button>
@@ -68,8 +71,16 @@ const refreshBuilds = async () => {
 const handleSubmitSuccess = async () => {
   storageStore.resetDeployConfigForm();
   modalCreateKeyVisible.value = false;
+  await deploymentStore.getDeploymentConfig(websiteStore.active?.website_uuid);
 
   setTimeout(() => checkUnfinishedBuilds(), 3000);
+};
+
+const triggerRedeploy = async () => {
+  const websiteUuid = websiteStore.active?.website_uuid;
+  if (websiteUuid) {
+    await deploymentStore.redeploy(websiteUuid);
+  }
 };
 
 const showUpdateModal = async () => {

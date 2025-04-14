@@ -131,6 +131,19 @@
           </n-form-item>
 
           <n-form-item
+            path="installCommand"
+            :label="$t('hosting.deploy.form.install-command')"
+            :label-props="{ for: 'installCommand' }"
+          >
+            <n-input
+              v-model:value="formData.installCommand"
+              :input-props="{ id: 'installCommand' }"
+              :placeholder="$t('hosting.deploy.form.install-command-placeholder')"
+              clearable
+            />
+          </n-form-item>
+
+          <n-form-item
             path="buildCommand"
             :label="$t('hosting.deploy.form.build-command')"
             :label-props="{ for: 'buildCommand' }"
@@ -152,19 +165,6 @@
               v-model:value="formData.buildDirectory"
               :input-props="{ id: 'buildDirectory' }"
               :placeholder="$t('hosting.deploy.form.build-directory-placeholder')"
-              clearable
-            />
-          </n-form-item>
-
-          <n-form-item
-            path="installCommand"
-            :label="$t('hosting.deploy.form.install-command')"
-            :label-props="{ for: 'installCommand' }"
-          >
-            <n-input
-              v-model:value="formData.installCommand"
-              :input-props="{ id: 'installCommand' }"
-              :placeholder="$t('hosting.deploy.form.install-command-placeholder')"
               clearable
             />
           </n-form-item>
@@ -265,7 +265,7 @@ const formData = ref<FormWebsite>({
   description: website.value?.description || '',
   branchName: 'main',
   buildCommand: 'npm run build',
-  buildDirectory: './out',
+  buildDirectory: './dist',
   installCommand: 'npm install',
   apiKey: undefined,
   apiSecret: '',
