@@ -59,6 +59,14 @@ useHead({
 onMounted(async () => {
   initWebsite(DeploymentEnvironment.STAGING, true, false, true);
   storageStore.getGithubProjectConfig();
+  checkAndStartAutoRefresh();
+});
+
+onUnmounted(() => {
+  if (refreshInterval) {
+    clearInterval(refreshInterval);
+    refreshInterval = undefined;
+  }
 });
 
 const refreshBuilds = async () => {
@@ -71,9 +79,12 @@ const refreshBuilds = async () => {
 const handleSubmitSuccess = async () => {
   storageStore.resetDeployConfigForm();
   modalCreateKeyVisible.value = false;
+  const existingDeploymentConfigId = deploymentStore.deploymentConfig?.id;
   await deploymentStore.getDeploymentConfig(websiteStore.active?.website_uuid);
 
-  setTimeout(() => checkUnfinishedBuilds(), 3000);
+  if (!existingDeploymentConfigId) {
+    setTimeout(() => checkUnfinishedBuilds(), 3000);
+  }
 };
 
 const triggerRedeploy = async () => {
@@ -94,7 +105,7 @@ const showUpdateModal = async () => {
     repoId: deploymentStore.deploymentConfig?.repoId || 0,
     repoName: deploymentStore.deploymentConfig?.repoName || '',
     repoOwnerName: deploymentStore.deploymentConfig?.repoOwnerName || '',
-    repoUrl: '',
+    repoUrl: deploymentStore.deploymentConfig?.repoUrl || '',
   };
   modalCreateKeyVisible.value = true;
 };

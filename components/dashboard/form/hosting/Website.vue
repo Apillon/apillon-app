@@ -179,6 +179,7 @@
                   v-model:value="formData.apiKey"
                   :placeholder="$t('hosting.deploy.form.api-key-placeholder')"
                   :options="apiKeyOptions"
+                  clearable
                 >
                 </n-select>
               </n-form-item>
@@ -425,8 +426,12 @@ async function createWebsite() {
 
     /** Redirect to new web page */
     router.push(websiteLink(res.data));
-  } catch (error) {
-    message.error(userFriendlyMsg(error));
+  } catch (error: any) {
+    if (error.message === 'GITHUB_WEBHOOK_CREATION_FAILED') {
+      message.error($i18n.t('hosting.deploy.form.github-webhook-creation-failed'));
+    } else {
+      message.error(userFriendlyMsg(error));
+    }
   }
   loading.value = false;
 }
