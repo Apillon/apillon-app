@@ -8,7 +8,7 @@ export const useStorageStore = defineStore('storage', {
     deployConfigForm: {
       branchName: '',
       buildCommand: 'npm run build',
-      buildDirectory: './out',
+      buildDirectory: './dist',
       installCommand: 'npm install',
       apiKey: undefined as string | undefined,
       apiSecret: '',
@@ -39,7 +39,7 @@ export const useStorageStore = defineStore('storage', {
       this.deployConfigForm = {
         branchName: '',
         buildCommand: 'npm run build',
-        buildDirectory: './out',
+        buildDirectory: './dist',
         installCommand: 'npm install',
         apiKey: undefined as string | undefined,
         apiSecret: '',

@@ -30,6 +30,19 @@
     </n-form-item>
 
     <n-form-item
+      path="installCommand"
+      :label="$t('hosting.deploy.form.install-command')"
+      :label-props="{ for: 'installCommand' }"
+    >
+      <n-input
+        v-model:value="storageStore.deployConfigForm.installCommand"
+        :input-props="{ id: 'installCommand' }"
+        :placeholder="$t('hosting.deploy.form.install-command-placeholder')"
+        clearable
+      />
+    </n-form-item>
+
+    <n-form-item
       path="buildCommand"
       :label="$t('hosting.deploy.form.build-command')"
       :label-props="{ for: 'buildCommand' }"
@@ -51,19 +64,6 @@
         v-model:value="storageStore.deployConfigForm.buildDirectory"
         :input-props="{ id: 'buildDirectory' }"
         :placeholder="$t('hosting.deploy.form.build-directory-placeholder')"
-        clearable
-      />
-    </n-form-item>
-
-    <n-form-item
-      path="installCommand"
-      :label="$t('hosting.deploy.form.install-command')"
-      :label-props="{ for: 'installCommand' }"
-    >
-      <n-input
-        v-model:value="storageStore.deployConfigForm.installCommand"
-        :input-props="{ id: 'installCommand' }"
-        :placeholder="$t('hosting.deploy.form.install-command-placeholder')"
         clearable
       />
     </n-form-item>
@@ -106,15 +106,6 @@
       <input type="submit" class="hidden" :value="'Save'" />
 
       <div class="flex w-full gap-2">
-        <Btn
-          v-if="props.config_id"
-          type="secondary"
-          :loading="deleteLoading"
-          :disabled="isFormDisabled"
-          @click="handleRemove"
-        >
-          {{ $t('hosting.deploy.form.remove') }}
-        </Btn>
         <Btn type="primary" class="flex-1" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
           {{ $t('hosting.deploy.form.save') }}
         </Btn>
@@ -204,19 +195,6 @@ function handleSubmit(e: Event | MouseEvent) {
       createDeployConfig();
     }
   });
-}
-
-async function handleRemove() {
-  deleteLoading.value = true;
-  try {
-    await $api.delete(endpoints.deployConfig(websiteStore.active.website_uuid));
-    websiteStore.active.source = WebsiteSource.APILLON;
-    deploymentStore.deploymentConfig = undefined;
-    emit('submitSuccess');
-  } catch (error) {
-    message.error(userFriendlyMsg(error));
-  }
-  deleteLoading.value = false;
 }
 
 async function createDeployConfig() {

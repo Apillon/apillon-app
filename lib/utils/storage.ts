@@ -126,6 +126,6 @@ export const calculateCID = async (content: any, options: UserImporterOptions) =
 };
 
 export const websiteLink = (website: WebsiteBaseInterface | WebsiteInterface) => {
-  const pathEnd = website.source === WebsiteSource.GITHUB || !!website.nftCollectionUuid ? '/deployments' : '';
+  const pathEnd = website.source === WebsiteSource.GITHUB ? '/deployments' : '';
   return `/dashboard/service/hosting/${website.website_uuid}${pathEnd}`;
 };
