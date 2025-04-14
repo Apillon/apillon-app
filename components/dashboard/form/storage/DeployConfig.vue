@@ -8,7 +8,12 @@
     autocomplete="off"
     @submit.prevent="handleSubmit"
   >
-    <n-form-item path="repoId" :label="$t('hosting.deploy.form.repository')" :label-props="{ for: 'repo' }">
+    <n-form-item
+      v-if="storageStore.deployConfigForm.repoId || !$props.config_id"
+      path="repoId"
+      :label="$t('hosting.deploy.form.repository')"
+      :label-props="{ for: 'repo' }"
+    >
       <n-skeleton v-if="!repoOptions.length" height="40px" width="100%" />
       <n-select
         v-else

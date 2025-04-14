@@ -128,6 +128,7 @@ declare global {
     repoId: number;
     repoName: string;
     repoOwnerName: string;
+    repoUrl: string;
     hookId: number;
     branchName: string;
     websiteUuid: string;
