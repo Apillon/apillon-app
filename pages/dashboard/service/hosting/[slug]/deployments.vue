@@ -80,7 +80,7 @@ const handleSubmitSuccess = async () => {
   storageStore.resetDeployConfigForm();
   modalCreateKeyVisible.value = false;
   const existingDeploymentConfigId = deploymentStore.deploymentConfig?.id;
-  await deploymentStore.getDeploymentConfig(websiteStore.active?.website_uuid);
+  await deploymentStore.fetchDeploymentConfig(websiteStore.active?.website_uuid);
 
   if (!existingDeploymentConfigId) {
     setTimeout(() => checkUnfinishedBuilds(), 3000);

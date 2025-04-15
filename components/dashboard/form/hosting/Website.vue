@@ -429,6 +429,8 @@ async function createWebsite() {
   } catch (error: any) {
     if (error.message === 'GITHUB_WEBHOOK_CREATION_FAILED') {
       message.error($i18n.t('hosting.deploy.form.github-webhook-creation-failed'));
+    } else if (error.message === 'DEPLOYMENT_CONFIG_ALREADY_EXISTS') {
+      message.error($i18n.t('hosting.deploy.form.deployment-config-already-exists'));
     } else {
       message.error(userFriendlyMsg(error));
     }
