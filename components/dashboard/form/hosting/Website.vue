@@ -65,7 +65,7 @@
 
           <!-- Submit Button -->
           <div class="flex justify-between gap-2">
-            <Btn type="secondary" @click="selectedWebsiteType = null">
+            <Btn type="secondary" @click="selectedWebsiteType = null" v-if="storageStore.projectConfig">
               {{ $t('form.goBack') }}
             </Btn>
             <Btn class="flex-1" type="primary" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
@@ -320,7 +320,7 @@ onMounted(async () => {
 
     // Determine website type based on existing data
   }
-  await storageStore.getGithubProjectConfig();
+
   if (!storageStore.projectConfig || props.websiteUuid) {
     selectedWebsiteType.value = 'basic';
   } else {
@@ -429,6 +429,8 @@ async function createWebsite() {
   } catch (error: any) {
     if (error.message === 'GITHUB_WEBHOOK_CREATION_FAILED') {
       message.error($i18n.t('hosting.deploy.form.github-webhook-creation-failed'));
+    } else if (error.message === 'DEPLOYMENT_CONFIG_ALREADY_EXISTS') {
+      message.error($i18n.t('hosting.deploy.form.deployment-config-already-exists'));
     } else {
       message.error(userFriendlyMsg(error));
     }
