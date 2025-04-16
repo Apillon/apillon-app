@@ -10,7 +10,7 @@
       </Notification>
 
       <!-- Website Type Selection Step -->
-      <template v-if="!selectedWebsiteType">
+      <template v-if="!selectedWebsiteType && !loading">
         <h4 class="mb-6 text-center">{{ $t('hosting.website.selectType') }}</h4>
         <div class="grid grid-cols-2 gap-4">
           <div
@@ -65,7 +65,7 @@
 
           <!-- Submit Button -->
           <div class="flex justify-between gap-2">
-            <Btn type="secondary" @click="selectedWebsiteType = null">
+            <Btn type="secondary" @click="selectedWebsiteType = null" v-if="storageStore.projectConfig">
               {{ $t('form.goBack') }}
             </Btn>
             <Btn class="flex-1" type="primary" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
@@ -320,7 +320,9 @@ onMounted(async () => {
 
     // Determine website type based on existing data
   }
+  loading.value = true;
   await storageStore.getGithubProjectConfig();
+  loading.value = false;
   if (!storageStore.projectConfig || props.websiteUuid) {
     selectedWebsiteType.value = 'basic';
   } else {
