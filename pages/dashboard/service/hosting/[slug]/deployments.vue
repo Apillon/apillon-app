@@ -122,6 +122,7 @@ const checkAndStartAutoRefresh = () => {
   } else if (!hasPendingBuilds && refreshInterval) {
     clearInterval(refreshInterval);
     refreshInterval = undefined;
+    deploymentStore.fetchDeployments(websiteStore.active?.website_uuid);
   }
 };
 
