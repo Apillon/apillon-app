@@ -10,7 +10,7 @@
       </Notification>
 
       <!-- Website Type Selection Step -->
-      <template v-if="!selectedWebsiteType && !loading">
+      <template v-if="!selectedWebsiteType">
         <h4 class="mb-6 text-center">{{ $t('hosting.website.selectType') }}</h4>
         <div class="grid grid-cols-2 gap-4">
           <div
@@ -320,9 +320,7 @@ onMounted(async () => {
 
     // Determine website type based on existing data
   }
-  loading.value = true;
-  await storageStore.getGithubProjectConfig();
-  loading.value = false;
+
   if (!storageStore.projectConfig || props.websiteUuid) {
     selectedWebsiteType.value = 'basic';
   } else {
