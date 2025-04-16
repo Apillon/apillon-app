@@ -93,18 +93,6 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
         zeroProjects.value,
     },
     {
-      key: 'dashboard-service-cloud-functions',
-      label: t('dashboard.nav.cloudFunctions'),
-      to: 'dashboard-service-cloud-functions',
-      iconName: 'icon-cloud-functions',
-      soon: isMenuItemDisabled(Feature.CLOUD_FUNCTIONS),
-      beta: isBetaFeature(Feature.CLOUD_FUNCTIONS),
-      disabled:
-        isMenuItemDisabled(Feature.CLOUD_FUNCTIONS) ||
-        !authStore.isUserAllowed(Permission.COMPUTING) ||
-        zeroProjects.value,
-    },
-    {
       key: 'dashboard-service-rpc',
       label: t('dashboard.nav.rpc'),
       to: 'dashboard-service-rpc',
@@ -122,6 +110,18 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       beta: isBetaFeature(Feature.INDEXING),
       disabled:
         isMenuItemDisabled(Feature.INDEXING) || !authStore.isUserAllowed(Permission.INDEXING) || zeroProjects.value,
+    },
+    {
+      key: 'dashboard-service-cloud-functions',
+      label: t('dashboard.nav.cloudFunctions'),
+      to: 'dashboard-service-cloud-functions',
+      iconName: 'icon-cloud-functions',
+      soon: isMenuItemDisabled(Feature.CLOUD_FUNCTIONS),
+      beta: isBetaFeature(Feature.CLOUD_FUNCTIONS),
+      disabled:
+        isMenuItemDisabled(Feature.CLOUD_FUNCTIONS) ||
+        !authStore.isUserAllowed(Permission.COMPUTING) ||
+        zeroProjects.value,
     },
   ];
 
