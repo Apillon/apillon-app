@@ -9,6 +9,9 @@
           <div class="flex w-full flex-row-reverse justify-between gap-8">
             <!-- Actions : refresh, deploy -->
             <n-space>
+              <Btn size="small" type="primary" @click="triggerRedeploy" :loading="deploymentStore.deployLoading">
+                {{ $t('hosting.deploy.redeploy') }}
+              </Btn>
               <n-button v-if="websiteStore.isActiveWebsiteGithubSource" size="small" @click="showUpdateModal">
                 {{ $t('hosting.deploy.update-config') }}
               </n-button>
@@ -56,6 +59,14 @@ useHead({
 onMounted(async () => {
   initWebsite(DeploymentEnvironment.STAGING, true, false, true);
   storageStore.getGithubProjectConfig();
+  checkAndStartAutoRefresh();
+});
+
+onUnmounted(() => {
+  if (refreshInterval) {
+    clearInterval(refreshInterval);
+    refreshInterval = undefined;
+  }
 });
 
 const refreshBuilds = async () => {
@@ -68,8 +79,19 @@ const refreshBuilds = async () => {
 const handleSubmitSuccess = async () => {
   storageStore.resetDeployConfigForm();
   modalCreateKeyVisible.value = false;
+  const existingDeploymentConfigId = deploymentStore.deploymentConfig?.id;
+  await deploymentStore.fetchDeploymentConfig(websiteStore.active?.website_uuid);
 
-  setTimeout(() => checkUnfinishedBuilds(), 3000);
+  if (!existingDeploymentConfigId) {
+    setTimeout(() => checkUnfinishedBuilds(), 3000);
+  }
+};
+
+const triggerRedeploy = async () => {
+  const websiteUuid = websiteStore.active?.website_uuid;
+  if (websiteUuid) {
+    await deploymentStore.redeploy(websiteUuid);
+  }
 };
 
 const showUpdateModal = async () => {
@@ -83,7 +105,7 @@ const showUpdateModal = async () => {
     repoId: deploymentStore.deploymentConfig?.repoId || 0,
     repoName: deploymentStore.deploymentConfig?.repoName || '',
     repoOwnerName: deploymentStore.deploymentConfig?.repoOwnerName || '',
-    repoUrl: '',
+    repoUrl: deploymentStore.deploymentConfig?.repoUrl || '',
   };
   modalCreateKeyVisible.value = true;
 };
@@ -100,6 +122,7 @@ const checkAndStartAutoRefresh = () => {
   } else if (!hasPendingBuilds && refreshInterval) {
     clearInterval(refreshInterval);
     refreshInterval = undefined;
+    deploymentStore.fetchDeployments(websiteStore.active?.website_uuid);
   }
 };
 

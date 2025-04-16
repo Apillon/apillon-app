@@ -122,6 +122,8 @@
         "build-command-placeholder": "Enter build command",
         "build-directory": "Build directory",
         "build-directory-placeholder": "Enter build directory",
+        "github-webhook-creation-failed": "Failed to create GitHub webhook. Please check webhook is not already created.",
+        "deployment-config-already-exists": "Repository is already connected to Apillon. Remove the connection or use a different repository.",
         "install-command": "Install command",
         "install-command-placeholder": "Enter install command",
         "api-key": "API key",
@@ -131,7 +133,6 @@
         "api-secret-set": "API secret is set",
         "api-secret-change": "Change",
         "save": "Save deployment configuration",
-        "remove": "Unlink repository",
         "success": "Deployment configuration saved successfully",
         "updated": "Deployment configuration updated successfully",
         "validation": {
@@ -142,6 +143,7 @@
           "api-secret-required": "API secret is required"
         }
       },
+      "redeploy": "Redeploy",
       "update-config": "Update config"
     },
     "clearAll": "Clear all",

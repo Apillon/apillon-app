@@ -65,7 +65,7 @@
 
           <!-- Submit Button -->
           <div class="flex justify-between gap-2">
-            <Btn type="secondary" @click="selectedWebsiteType = null">
+            <Btn type="secondary" @click="selectedWebsiteType = null" v-if="storageStore.projectConfig">
               {{ $t('form.goBack') }}
             </Btn>
             <Btn class="flex-1" type="primary" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
@@ -131,6 +131,19 @@
           </n-form-item>
 
           <n-form-item
+            path="installCommand"
+            :label="$t('hosting.deploy.form.install-command')"
+            :label-props="{ for: 'installCommand' }"
+          >
+            <n-input
+              v-model:value="formData.installCommand"
+              :input-props="{ id: 'installCommand' }"
+              :placeholder="$t('hosting.deploy.form.install-command-placeholder')"
+              clearable
+            />
+          </n-form-item>
+
+          <n-form-item
             path="buildCommand"
             :label="$t('hosting.deploy.form.build-command')"
             :label-props="{ for: 'buildCommand' }"
@@ -156,19 +169,6 @@
             />
           </n-form-item>
 
-          <n-form-item
-            path="installCommand"
-            :label="$t('hosting.deploy.form.install-command')"
-            :label-props="{ for: 'installCommand' }"
-          >
-            <n-input
-              v-model:value="formData.installCommand"
-              :input-props="{ id: 'installCommand' }"
-              :placeholder="$t('hosting.deploy.form.install-command-placeholder')"
-              clearable
-            />
-          </n-form-item>
-
           <n-collapse class="mb-6" accordion>
             <n-collapse-item>
               <template #header>
@@ -179,6 +179,7 @@
                   v-model:value="formData.apiKey"
                   :placeholder="$t('hosting.deploy.form.api-key-placeholder')"
                   :options="apiKeyOptions"
+                  clearable
                 >
                 </n-select>
               </n-form-item>
@@ -265,7 +266,7 @@ const formData = ref<FormWebsite>({
   description: website.value?.description || '',
   branchName: 'main',
   buildCommand: 'npm run build',
-  buildDirectory: './out',
+  buildDirectory: './dist',
   installCommand: 'npm install',
   apiKey: undefined,
   apiSecret: '',
@@ -319,7 +320,7 @@ onMounted(async () => {
 
     // Determine website type based on existing data
   }
-  await storageStore.getGithubProjectConfig();
+
   if (!storageStore.projectConfig || props.websiteUuid) {
     selectedWebsiteType.value = 'basic';
   } else {
@@ -425,8 +426,14 @@ async function createWebsite() {
 
     /** Redirect to new web page */
     router.push(websiteLink(res.data));
-  } catch (error) {
-    message.error(userFriendlyMsg(error));
+  } catch (error: any) {
+    if (error.message === 'GITHUB_WEBHOOK_CREATION_FAILED') {
+      message.error($i18n.t('hosting.deploy.form.github-webhook-creation-failed'));
+    } else if (error.message === 'DEPLOYMENT_CONFIG_ALREADY_EXISTS') {
+      message.error($i18n.t('hosting.deploy.form.deployment-config-already-exists'));
+    } else {
+      message.error(userFriendlyMsg(error));
+    }
   }
   loading.value = false;
 }

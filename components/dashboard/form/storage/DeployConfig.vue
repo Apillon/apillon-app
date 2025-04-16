@@ -8,7 +8,12 @@
     autocomplete="off"
     @submit.prevent="handleSubmit"
   >
-    <n-form-item path="repoId" :label="$t('hosting.deploy.form.repository')" :label-props="{ for: 'repo' }">
+    <n-form-item
+      v-if="storageStore.deployConfigForm.repoId || !$props.config_id"
+      path="repoId"
+      :label="$t('hosting.deploy.form.repository')"
+      :label-props="{ for: 'repo' }"
+    >
       <n-skeleton v-if="!repoOptions.length" height="40px" width="100%" />
       <n-select
         v-else
@@ -25,6 +30,19 @@
         v-model:value="storageStore.deployConfigForm.branchName"
         :input-props="{ id: 'branchName' }"
         :placeholder="$t('hosting.deploy.form.branch-name-placeholder')"
+        clearable
+      />
+    </n-form-item>
+
+    <n-form-item
+      path="installCommand"
+      :label="$t('hosting.deploy.form.install-command')"
+      :label-props="{ for: 'installCommand' }"
+    >
+      <n-input
+        v-model:value="storageStore.deployConfigForm.installCommand"
+        :input-props="{ id: 'installCommand' }"
+        :placeholder="$t('hosting.deploy.form.install-command-placeholder')"
         clearable
       />
     </n-form-item>
@@ -51,19 +69,6 @@
         v-model:value="storageStore.deployConfigForm.buildDirectory"
         :input-props="{ id: 'buildDirectory' }"
         :placeholder="$t('hosting.deploy.form.build-directory-placeholder')"
-        clearable
-      />
-    </n-form-item>
-
-    <n-form-item
-      path="installCommand"
-      :label="$t('hosting.deploy.form.install-command')"
-      :label-props="{ for: 'installCommand' }"
-    >
-      <n-input
-        v-model:value="storageStore.deployConfigForm.installCommand"
-        :input-props="{ id: 'installCommand' }"
-        :placeholder="$t('hosting.deploy.form.install-command-placeholder')"
         clearable
       />
     </n-form-item>
@@ -106,15 +111,6 @@
       <input type="submit" class="hidden" :value="'Save'" />
 
       <div class="flex w-full gap-2">
-        <Btn
-          v-if="props.config_id"
-          type="secondary"
-          :loading="deleteLoading"
-          :disabled="isFormDisabled"
-          @click="handleRemove"
-        >
-          {{ $t('hosting.deploy.form.remove') }}
-        </Btn>
         <Btn type="primary" class="flex-1" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
           {{ $t('hosting.deploy.form.save') }}
         </Btn>
@@ -204,19 +200,6 @@ function handleSubmit(e: Event | MouseEvent) {
       createDeployConfig();
     }
   });
-}
-
-async function handleRemove() {
-  deleteLoading.value = true;
-  try {
-    await $api.delete(endpoints.deployConfig(websiteStore.active.website_uuid));
-    websiteStore.active.source = WebsiteSource.APILLON;
-    deploymentStore.deploymentConfig = undefined;
-    emit('submitSuccess');
-  } catch (error) {
-    message.error(userFriendlyMsg(error));
-  }
-  deleteLoading.value = false;
 }
 
 async function createDeployConfig() {

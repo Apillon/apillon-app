@@ -8,7 +8,7 @@ export const useStorageStore = defineStore('storage', {
     deployConfigForm: {
       branchName: '',
       buildCommand: 'npm run build',
-      buildDirectory: './out',
+      buildDirectory: './dist',
       installCommand: 'npm install',
       apiKey: undefined as string | undefined,
       apiSecret: '',
@@ -39,7 +39,7 @@ export const useStorageStore = defineStore('storage', {
       this.deployConfigForm = {
         branchName: '',
         buildCommand: 'npm run build',
-        buildDirectory: './out',
+        buildDirectory: './dist',
         installCommand: 'npm install',
         apiKey: undefined as string | undefined,
         apiSecret: '',
@@ -114,7 +114,6 @@ export const useStorageStore = defineStore('storage', {
       try {
         const res = await $api.get<GithubProjectConfigResponse>(endpoints.githubProjectConfig(dataStore.projectUuid));
         this.projectConfig = res.data;
-
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.GITHUB_PROJECT_CONFIG, Date.now().toString());
       } catch (error: any) {
