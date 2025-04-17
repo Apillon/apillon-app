@@ -4,9 +4,10 @@
     :columns="columns"
     :data="items"
     :loading="embeddedWalletStore.loading"
-    :pagination="createPagination(false)"
+    :pagination="pagination"
     :row-key="rowKey"
     :row-props="rowProps"
+    @update:page-size="(pz: number) => (pagination.pageSize = pz)"
   />
   <!-- Modal - Edit embedded wallet -->
   <modal v-model:show="modalEditEmbeddedWalletVisible" :title="$t('embeddedWallet.edit')">
@@ -30,6 +31,7 @@ const dataStore = useDataStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
 const modalEditEmbeddedWalletVisible = ref<boolean>(false);
 
+const pagination = reactive(createPagination(false));
 const items = computed(() => {
   return embeddedWalletStore.items.filter(item =>
     item.title.toLowerCase().includes(embeddedWalletStore.search.toLowerCase())

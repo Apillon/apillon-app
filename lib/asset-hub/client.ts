@@ -3,7 +3,7 @@ import { timeout } from '~/lib/asset-hub/helpers';
 import '@polkadot/api-augment';
 import '@polkadot/types-augment';
 import type { SubmittableExtrinsic } from '@polkadot/api/types';
-import type { ISubmittableResult } from '@polkadot/types/types';
+import type { AnyNumber, ISubmittableResult } from '@polkadot/types/types';
 
 export class AssetHubClient {
   private static instance: AssetHubClient | null;
@@ -162,14 +162,14 @@ export class AssetHubClient {
   }
 
   async getNextId() {
-    return await this.api.query.assetConversion.nextPoolAssetId();
+    return await this.api.query.assets.nextAssetId();
   }
 
   // TRANSACTIONS
 
   async createAsset(
     admin: string,
-    id: number,
+    id: AnyNumber,
     name: string,
     symbol: string,
     decimals: number,

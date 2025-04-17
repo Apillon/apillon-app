@@ -1,16 +1,7 @@
 <template>
   <div>
-    <n-form
-      ref="formRef"
-      class="max-w-xl"
-      :model="collectionStore.attribute"
-      @submit.prevent="handleSubmitForm"
-    >
-      <n-form-item
-        path="trait_type"
-        :label="infoLabel('traitType')"
-        :label-props="{ for: 'trait_type' }"
-      >
+    <n-form ref="formRef" class="max-w-xl" :model="collectionStore.attribute" @submit.prevent="handleSubmitForm">
+      <n-form-item path="trait_type" :label="infoLabel('traitType')" :label-props="{ for: 'trait_type' }">
         <n-input
           v-model:value="collectionStore.attribute.trait_type"
           :input-props="{ id: 'trait_type' }"
@@ -19,14 +10,11 @@
         />
       </n-form-item>
 
-      <n-form-item
-        path="display_type"
-        :label="infoLabel('displayType')"
-        :label-props="{ for: 'display_type' }"
-      >
+      <n-form-item path="display_type" :label="infoLabel('displayType')" :label-props="{ for: 'display_type' }">
         <select-options
           v-model:value="collectionStore.attribute.display_type"
           :options="displayTypes"
+          :input-props="{ id: 'display_type' }"
           :render-option="renderOption"
           filterable
           clearable

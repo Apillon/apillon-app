@@ -2,18 +2,18 @@
   <n-tag
     v-bind="$attrs"
     :type="getTransactionStatus(transactionStatus)"
-    :bordered="transactionStatus < TransactionStatus.FINISHED"
+    :bordered="transactionStatus < TransactionStatus.CONFIRMED"
     size="tiny"
     round
   >
     <n-space
-      :class="transactionStatus < TransactionStatus.FINISHED ? 'text-body' : 'text-bg-dark'"
+      :class="transactionStatus < TransactionStatus.CONFIRMED ? 'text-body' : 'text-bg-dark'"
       :size="0"
       align="center"
       :wrap="false"
     >
       <span class="mx-1 uppercase">{{ $t(`nft.transaction.status.${transactionStatus}`) }}</span>
-      <AnimationTyping v-if="transactionStatus < TransactionStatus.FINISHED" />
+      <AnimationTyping v-if="transactionStatus < TransactionStatus.CONFIRMED" />
     </n-space>
   </n-tag>
 </template>
@@ -30,11 +30,10 @@ function getTransactionStatus(status: number): TagType {
   switch (status) {
     case TransactionStatus.PENDING:
       return 'warning';
-    case TransactionStatus.FINISHED:
-      return 'success';
-    case TransactionStatus.VERIFIED:
+    case TransactionStatus.CONFIRMED:
       return 'success';
     case TransactionStatus.FAILED:
+    case TransactionStatus.ERROR:
       return 'error';
     default:
       return 'default';

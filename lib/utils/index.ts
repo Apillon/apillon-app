@@ -46,6 +46,16 @@ export function enumKeyValues(E: any): KeyValue[] {
     return { key: k, label: k, value: E[k as any] };
   });
 }
+export function mergeObjects(obj1: object, obj2: object) {
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
+  const maxLength = Math.max(keys1.length, keys2.length);
+  return Array.from({ length: maxLength }).reduce((acc: Object, _, i) => {
+    if (keys1[i]) acc[keys1[i]] = obj1[keys1[i]];
+    if (keys2[i]) acc[keys2[i]] = obj2[keys2[i]];
+    return acc;
+  }, {});
+}
 
 /**
  * Calculate expiration date on CRUST

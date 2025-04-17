@@ -99,6 +99,10 @@
       "nameRequired": "Please enter name",
       "nftIdRequired": "Please enter NFT ID"
     },
+    "deploy-env": {
+      "key-required": "Please enter variable key",
+      "value-required": "Please enter variable value"
+    },
     "embeddedWallet": {
       "titleRequired": "Embedded Wallet title is required",
       "whitelistedDomains": "Domains not valid"
@@ -127,14 +131,18 @@
       "collection": "Please select a Collection",
       "copies": "Please enter number of NFT copies",
       "description": "Please enter NFT's description",
-      "idRequired": "Please enter ID of NFT",
       "idDuplicate": "Please enter different ID",
+      "idRequired": "Please enter ID of NFT",
+      "idsToMint": "Please check NFT IDs you have entered, values should be between 1 and the maximum supply value of your collection",
+      "idsToMintMax": "You can mint a maximum of 20 NFTs at a time",
+      "idsToMintRequired": "Please enter ID of NFTs you want to mint",
       "image": "Please add image",
       "metadata": "Please insert missing data, fields ID, image, name and description are required!",
       "mintAddressRequired": "Please enter your wallet address for minting",
       "mintCollectionUuidRequired": "Please select collection",
       "mintParentNftIdRequired": "Please enter Parent NFT ID",
       "mintQuantity": "Please enter a lower number. You can only mint those tokens that you have reserved for yourself.",
+      "mintQuantityMax": "You can mint a maximum of 20 NFTs at a time",
       "mintQuantityRequired": "Please enter mint Quantity",
       "name": "Please enter name of NFT",
       "royalties": "Please enter royalties",

@@ -51,7 +51,7 @@ export function getExtension(filename: string): string {
   return filename.split('.').pop() || '';
 }
 
-/** Format folder name (remove dissallowed characters) */
+/** Format folder name (remove disallowed characters) */
 export function stripFolderName(value: string | [string, string]) {
   return textMarshal({
     input: value,
@@ -123,4 +123,9 @@ export const calculateCID = async (content: any, options: UserImporterOptions) =
   }
 
   return `${lastCid}`;
+};
+
+export const websiteLink = (website: WebsiteBaseInterface | WebsiteInterface) => {
+  const pathEnd = website.source === WebsiteSource.GITHUB ? '/deployments' : '';
+  return `/dashboard/service/hosting/${website.website_uuid}${pathEnd}`;
 };

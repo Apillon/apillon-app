@@ -1,11 +1,5 @@
 <template>
-  <n-form
-    ref="formRef"
-    class="max-w-lg"
-    :model="formData"
-    :rules="rules"
-    @submit.prevent="handleSubmit"
-  >
+  <n-form ref="formRef" class="max-w-lg" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
     <!-- Create inputs -->
     <template v-if="!args">
       <n-form-item
@@ -14,12 +8,7 @@
         :path="input.name"
         :label="labelInfoText(input.name, input?.description)"
       >
-        <n-input
-          v-if="input.name === 'data'"
-          v-model:value="formData[input.name]"
-          :maxlength="256"
-          required
-        >
+        <n-input v-if="input.name === 'data'" v-model:value="formData[input.name]" :maxlength="256" required>
           <template #prefix v-if="!formData[input.name]?.startsWith('0x')">
             <span class="text-bodyDark">0x</span>
           </template>
@@ -53,7 +42,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useAccount } from 'use-wagmi';
+import { useAccount } from '@wagmi/vue';
 import { createPublicClient, createWalletClient, custom, http } from 'viem';
 
 const emit = defineEmits(['submitSuccess', 'transferred']);
@@ -120,9 +109,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e?.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else if (props.read) {
       execRead(props.fn.name);
     } else if (props.owner) {

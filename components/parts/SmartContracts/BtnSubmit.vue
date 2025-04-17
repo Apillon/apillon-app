@@ -1,14 +1,14 @@
 <template>
-  <Btn v-if="!isConnected" size="large" type="secondary" :loading="loading" @click="connectWallet">
+  <Btn
+    v-if="!isConnected"
+    size="large"
+    type="secondary"
+    :loading="loading"
+    @click="connect({ connector: connectors[0] })"
+  >
     Connect your wallet
   </Btn>
-  <Btn
-    v-else-if="wrongNetwork"
-    size="large"
-    type="primary"
-    :loading="loading"
-    @click="ensureCorrectNetwork"
-  >
+  <Btn v-else-if="wrongNetwork" size="large" type="primary" :loading="loading" @click="ensureCorrectNetwork">
     Switch Network
   </Btn>
 
@@ -18,19 +18,20 @@
 </template>
 
 <script lang="ts" setup>
-import { useAccount, useConnect, useWalletClient, useNetwork, useSwitchNetwork } from 'use-wagmi';
+import { useAccount, useAccountEffect, useConnect, useConnectorClient, useChainId, useSwitchChain } from '@wagmi/vue';
 
 defineEmits(['submit']);
 defineProps({
   btnText: { type: String, default: null },
 });
 
-const { chain } = useNetwork();
-const { switchNetwork } = useSwitchNetwork();
+const chainId = useChainId();
+const { switchChain } = useSwitchChain();
 
 const { connect, connectors } = useConnect();
-const { refetch: refetchWalletClient } = useWalletClient();
-const { isConnected } = useAccount({ onConnect: onWalletConnected });
+const { refetch: refetchWalletClient } = useConnectorClient();
+const { isConnected } = useAccount();
+useAccountEffect({ onConnect: onWalletConnected });
 
 const deployedContractStore = useDeployedContractStore();
 
@@ -43,23 +44,8 @@ async function onWalletConnected() {
   }
 }
 
-async function connectWallet() {
-  if (!isConnected.value) {
-    await wagmiConnect(connectors.value[0]);
-  }
-}
-
-function wagmiConnect(connector) {
-  if (isConnected.value) {
-    refetchWalletClient();
-  } else if (connector.ready) {
-    connect({ connector });
-  }
-}
-
 const wrongNetwork = computed(() => {
-  // compare contract chain id to current wallet chain id
-  return !chain || !chain.value || chain.value.id !== deployedContractStore.active.chain;
+  return chainId.value?.id !== deployedContractStore.active.chain;
 });
 
 async function ensureCorrectNetwork() {

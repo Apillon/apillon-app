@@ -6,11 +6,9 @@
     :columns="columns"
     :data="deployments"
     :loading="deploymentStore.loading"
-    :pagination="{
-      pageSize: PAGINATION_LIMIT,
-      prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
-    }"
+    :pagination="pagination"
     :row-key="rowKey"
+    @update:page-size="(pz: number) => (pagination.pageSize = pz)"
   />
 </template>
 
@@ -22,6 +20,8 @@ defineProps({
 const $i18n = useI18n();
 const deploymentStore = useDeploymentStore();
 const DeploymentStatus = resolveComponent('HostingDeploymentStatus');
+
+const pagination = reactive(createPagination(false));
 
 const createColumns = (): NDataTableColumns<DeploymentInterface> => {
   return [

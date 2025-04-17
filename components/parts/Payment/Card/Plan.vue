@@ -1,22 +1,14 @@
 <template>
-  <n-card
-    v-if="showCard"
-    class="card-dark"
-    size="small"
-    :bordered="false"
-    :title="$t('dashboard.payment.currentPlan')"
-  >
-    <div class="h-full flex flex-col justify-between">
-      <div class="flex gap-4 items-center mb-4">
+  <n-card v-if="showCard" class="card-dark" size="small" :bordered="false" :title="$t('dashboard.payment.currentPlan')">
+    <div class="flex h-full flex-col justify-between">
+      <div class="mb-4 flex items-center gap-4">
         <span class="icon-billing text-xl"></span>
         <h3>
           <span class="block whitespace-nowrap">
             {{ paymentStore.getActiveSubscriptionPackage?.description }}&nbsp;
           </span>
           <span class="inline-block whitespace-nowrap">
-            {{ formatPrice(paymentStore.getActiveSubscriptionPackage?.price || 0) }}/{{
-              $t('general.month')
-            }}
+            {{ formatPrice(paymentStore.getActiveSubscriptionPackage?.price || 0) }}/{{ $t('general.month') }}
           </span>
         </h3>
       </div>
@@ -36,7 +28,7 @@
           }}
         </span>
       </div>
-      <div class="grid grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))] gap-4">
+      <div class="grid-cols-fit200 grid gap-4">
         <Btn
           :class="btnClass"
           :type="btnType"
@@ -81,7 +73,7 @@
   <modal v-model:show="modalSubscriptionPackagesVisible" size="large">
     <div
       v-drag-scroll.options="{ direction: 'x' }"
-      class="tablet:scrollable tablet:overflow-x-auto lg:!cursor-default pb-1"
+      class="tablet:scrollable pb-1 tablet:overflow-x-auto lg:!cursor-default"
     >
       <div class="flex gap-12">
         <PaymentSubscriptionPackage

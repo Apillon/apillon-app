@@ -1,7 +1,7 @@
 <template>
   <Heading>
     <slot>
-      <h1>{{ $t('dashboard.nav.nft') }}</h1>
+      <h1>{{ t('dashboard.nav.nft') }}</h1>
     </slot>
     <template #info>
       <n-space size="large">
@@ -17,5 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-import BtnDocumentation from '~/components/parts/Btn/BtnDocumentation.vue';
+import { ServiceTypeName } from '~/lib/types/service';
+
+const { t } = useI18n();
 </script>

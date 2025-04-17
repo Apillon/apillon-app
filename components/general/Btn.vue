@@ -28,7 +28,7 @@
     class="inline-block"
     :class="[
       { 'w-full': size === 'large' },
-      { 'pointer-events-none pointer-default': props.disabled || props.loading },
+      { 'pointer-default pointer-events-none': props.disabled || props.loading },
     ]"
     :to="props.disabled || props.loading || !to ? undefined : to"
     :href="props.disabled || props.loading || !href ? undefined : href"
@@ -57,10 +57,7 @@
 
 <script lang="ts" setup>
 import { NButton } from 'naive-ui';
-import {
-  type Type as NButtonType,
-  type Size as ButtonSize,
-} from 'naive-ui/es/button/src/interface';
+import { type Type as NButtonType, type Size as ButtonSize } from 'naive-ui/es/button/src/interface';
 
 export type ButtonType = NButtonType | 'secondary' | 'builders' | 'link';
 
@@ -93,6 +90,7 @@ const btnClass = computed(() => {
       'font-bold': props.type !== 'link',
       'pointer-events-none pointer-default': props.disabled || props.loading,
       'opacity-60': props.disabled,
+      'border-dark': props.type == 'secondary',
       'hover-bounce': props.type !== 'link' && props.type !== 'builders',
       quaternary: props.quaternary || props.type === 'builders',
       locked: isBtnLocked.value,

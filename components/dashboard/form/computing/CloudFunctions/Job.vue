@@ -1,14 +1,17 @@
 <template>
-  <div>
-    <Notification v-if="isFormDisabled" type="error" class="w-full mb-8">
+  <div v-if="loadingForm" class="min-h-52">
+    <Spinner />
+  </div>
+  <div v-else>
+    <Notification v-if="isFormDisabled" type="error" class="mb-8 w-full">
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
     <template v-else>
       <!-- Info text -->
-      <p v-if="$te('computing.cloudFunctions.infoNew')" class="text-body mb-8">
+      <p v-if="$te('computing.cloudFunctions.infoNew')" class="mb-8 text-body">
         {{ $t('computing.cloudFunctions.infoNew') }}
       </p>
-      <p v-else-if="$te('computing.cloudFunctions.infoEdit')" class="text-body mb-8">
+      <p v-else-if="$te('computing.cloudFunctions.infoEdit')" class="mb-8 text-body">
         {{ $t('computing.cloudFunctions.infoEdit') }}
       </p>
     </template>
@@ -21,6 +24,21 @@
       autocomplete="off"
       @submit.prevent="handleSubmit"
     >
+      <n-form-item
+        v-show="!cloudFunction?.bucket_uuid"
+        path="bucket_uuid"
+        :label="$t('form.label.bucketName')"
+        :label-props="{ for: 'bucket_uuid' }"
+      >
+        <select-options
+          v-model:value="formData.bucket_uuid"
+          :options="buckets"
+          :loading="loading"
+          :placeholder="$t('general.pleaseSelect')"
+          filterable
+          clearable
+        />
+      </n-form-item>
       <!--  CloudFunctions name -->
       <n-form-item
         path="name"
@@ -74,13 +92,7 @@
       <!--  Form submit -->
       <n-form-item :show-feedback="false" :show-label="false">
         <input type="submit" class="hidden" :value="$t('form.continue')" />
-        <Btn
-          type="primary"
-          class="w-full mt-2"
-          :loading="loading"
-          :disabled="isFormDisabled"
-          @click="handleSubmit"
-        >
+        <Btn type="primary" class="mt-2 w-full" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
           {{ $t('form.continue') }}
         </Btn>
       </n-form-item>
@@ -89,13 +101,14 @@
 </template>
 
 <script lang="ts" setup>
-import type { UploadCustomRequestOptions } from 'naive-ui';
+import type { SelectOption, UploadCustomRequestOptions } from 'naive-ui';
 
 export type FormCloudFunctions = {
   name: string | null;
   slots: number | null;
   scriptCid: string | null;
   file: FileListItemType | undefined | null;
+  bucket_uuid: string | null;
 };
 
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
@@ -107,12 +120,14 @@ const props = defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 const warningStore = useWarningStore();
 const cloudFunctionStore = useCloudFunctionStore();
 const { createNewJob } = useCloudFunctions();
 const { labelInfo } = useComputing();
 
 const loading = ref<boolean>(false);
+const loadingForm = ref<boolean>(true);
 const formRef = ref<NFormInst | null>(null);
 const cloudFunction = ref<CloudFunctionInterface | undefined>();
 const job = ref<JobInterface | undefined>();
@@ -122,6 +137,7 @@ const formData = ref<FormCloudFunctions>({
   slots: 1,
   scriptCid: null,
   file: null,
+  bucket_uuid: null,
 });
 
 const rules: NFormRules = {
@@ -133,17 +149,26 @@ const rules: NFormRules = {
 const isFormDisabled = computed<boolean>(() => {
   return dataStore.isProjectUser;
 });
+const buckets = computed<Array<SelectOption>>(() => {
+  return bucketStore.items.map(item => {
+    return { label: item.name, value: item.bucket_uuid };
+  });
+});
 
 onMounted(async () => {
-  if (props.jobUuid) {
-    cloudFunction.value = await cloudFunctionStore.getCloudFunction(props.functionUuid);
-    job.value = cloudFunctionStore.jobs.find(item => item.job_uuid === props.jobUuid);
+  cloudFunction.value = await cloudFunctionStore.getCloudFunction(props.functionUuid);
+  if (cloudFunction.value.bucket_uuid) {
+    formData.value.bucket_uuid = cloudFunction.value.bucket_uuid;
+  } else {
+    await bucketStore.getBuckets();
+  }
+  loadingForm.value = false;
 
-    if (job.value) {
-      formData.value.name = job.value.name;
-      formData.value.slots = Number(job.value.slots || 0);
-      formData.value.scriptCid = job.value.scriptCid;
-    }
+  job.value = cloudFunctionStore.jobs.find(item => item.job_uuid === props.jobUuid);
+  if (props.jobUuid && job.value) {
+    formData.value.name = job.value.name;
+    formData.value.slots = Number(job.value.slots || 0);
+    formData.value.scriptCid = job.value.scriptCid;
   }
 });
 
@@ -171,9 +196,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else if (props.jobUuid) {
       updateJob();
     } else {
@@ -185,6 +208,11 @@ function handleSubmit(e: Event | MouseEvent) {
 async function createJob() {
   loading.value = true;
   emit('submitSuccess');
+
+  if (cloudFunction.value && !cloudFunction.value.bucket_uuid) {
+    cloudFunctionStore.active.bucket_uuid = formData.value.bucket_uuid || '';
+    updateCloudFunctionBucket();
+  }
 
   const newJob = await createNewJob(formData.value, props.functionUuid);
   if (newJob) {
@@ -210,5 +238,25 @@ async function updateJob() {
     message.error(userFriendlyMsg(error));
   }
   loading.value = false;
+}
+
+async function updateCloudFunctionBucket() {
+  try {
+    const bodyData = {
+      ...cloudFunctionStore.active,
+      bucket_uuid: formData.value.bucket_uuid,
+    };
+    const res = await $api.patch<CloudFunctionResponse>(endpoints.cloudFunctions(props.functionUuid), bodyData);
+
+    cloudFunctionStore.active.bucket_uuid = res.data.bucket_uuid;
+    cloudFunctionStore.items.forEach(item => {
+      if (item.function_uuid === res.data.function_uuid) {
+        Object.assign(item, res.data);
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    message.error(userFriendlyMsg(error));
+  }
 }
 </script>

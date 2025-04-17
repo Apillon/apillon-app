@@ -17,11 +17,11 @@
       <FormCreditThreshold />
 
       <!-- Invoices -->
-      <h4 class="mt-4 mb-6">{{ $t('dashboard.invoice.invoices') }}</h4>
+      <h4 class="mb-6 mt-4">{{ $t('dashboard.invoice.invoices') }}</h4>
       <TablePaymentInvoices />
 
       <!-- Credit Transactions -->
-      <h4 class="mt-12 mb-6">{{ $t('dashboard.credits.transactions') }}</h4>
+      <h4 class="mb-6 mt-12">{{ $t('dashboard.credits.transactions') }}</h4>
       <TablePaymentCreditTransactions class="pb-8" />
     </slot>
   </Dashboard>
@@ -38,26 +38,13 @@ useHead({
 
 const loading = ref<boolean>(true);
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      const promises: Promise<any>[] = [];
+onMounted(async () => {
+  await sleep(100);
+  await Promise.all(Object.values(dataStore.promises));
 
-      promises.push(
-        new Promise<void>(resolve => {
-          paymentStore.getInvoices().then(() => resolve());
-        })
-      );
-      promises.push(
-        new Promise<void>(resolve => {
-          paymentStore.fetchCreditTransactions().then(() => resolve());
-        })
-      );
+  const promises = [paymentStore.getInvoices(), paymentStore.fetchCreditTransactions()];
 
-      await Promise.all(promises).then(_ => {
-        loading.value = false;
-      });
-    });
-  }, 100);
+  await Promise.all(promises);
+  loading.value = false;
 });
 </script>

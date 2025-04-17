@@ -68,7 +68,14 @@ const columns = computed(() => [
     className: [{ [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive }, { hidden: !selectedColumns.value.includes('chain') }],
     minWidth: 120,
     render(row: DeployedContractInterface) {
-      return h('span', {}, { default: () => t(`nft.chain.${row.chain}`) });
+      return h(
+        'span',
+        {},
+        {
+          default: () =>
+            te(`nft.chain.${EvmChain[row.chain]}`) ? t(`nft.chain.${EvmChain[row.chain]}`) : EvmChain[row.chain],
+        }
+      );
     },
   },
   {

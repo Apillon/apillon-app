@@ -6,13 +6,11 @@
     :columns="columns"
     :data="data"
     :loading="cloudFunctionStore.loadingVariables"
-    :pagination="{
-      pageSize: PAGINATION_LIMIT,
-      prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
-    }"
+    :pagination="pagination"
     :row-key="rowKey"
     :row-props="rowProps"
     @update:page="p => (page = p)"
+    @update:page-size="(pz: number) => (pagination.pageSize = pz)"
   />
 </template>
 
@@ -22,12 +20,12 @@ import { NButton, NDropdown, NInput } from 'naive-ui';
 const { t } = useI18n();
 const cloudFunctionStore = useCloudFunctionStore();
 
+const pagination = reactive(createPagination(false));
+
 const data = computed(
   () =>
     [...cloudFunctionStore.variables, ...cloudFunctionStore.variablesNew].filter(item =>
-      `${item.key} ${item.value}`
-        .toLowerCase()
-        .includes(cloudFunctionStore.searchVariables.toLowerCase())
+      `${item.key} ${item.value}`.toLowerCase().includes(cloudFunctionStore.searchVariables.toLowerCase())
     ) || []
 );
 

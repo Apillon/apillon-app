@@ -34,10 +34,10 @@ const createColumns = (): NDataTableColumns<SignatureInterface> => {
       },
     },
     {
-      key: 'dataHash',
-      title: t('embeddedWallet.table.dataHash'),
+      key: 'contractAddress',
+      title: t('embeddedWallet.table.contractAddress'),
       render(row) {
-        return h(resolveComponent('TableEllipsis'), { text: row.dataHash });
+        return h(resolveComponent('TableEllipsis'), { text: row.contractAddress });
       },
     },
     // {
@@ -61,7 +61,7 @@ const createColumns = (): NDataTableColumns<SignatureInterface> => {
       render(row: SignatureInterface) {
         return h(
           resolveComponent('pill'),
-          { type: 'info' },
+          { type: row.status === 5 ? 'success' : 'warning' },
           { default: () => SqlModelStatus[row.status] }
         );
       },

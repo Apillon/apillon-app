@@ -14,7 +14,7 @@
         },
         "table": {
           "created": "Created",
-          "dataHash": "Data Hash",
+          "contractAddress": "Contract Address",
           "hashedUsername": "Hashed Username",
           "integration_uuid": "Integration UUID",
           "numberOfSignatures": "Generated wallets this month",

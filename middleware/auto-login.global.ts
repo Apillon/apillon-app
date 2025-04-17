@@ -1,4 +1,4 @@
-import { useAuthStore } from '~/composables/stores/auth';
+import { useAuthStore } from '~/stores/auth';
 
 interface RouteInterface {
   name: string;

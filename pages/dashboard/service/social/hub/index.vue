@@ -10,12 +10,7 @@
         <ActionsSocialChat @create-success="checkUnfinishedChat" />
         <TableSocialChat />
       </n-space>
-      <Empty
-        v-else
-        :title="$t('social.chat.empty')"
-        :info="$t('social.chat.emptyInfo')"
-        icon="logo/grill-chat"
-      >
+      <Empty v-else :title="$t('social.chat.empty')" :info="$t('social.chat.emptyInfo')" icon="logo/grill-chat">
         <Btn type="primary" @click="modalCreateChatVisible = true">
           {{ $t('social.chat.createFirst') }}
         </Btn>
@@ -31,10 +26,7 @@
 
       <!-- Modal - Create Chat -->
       <modal v-model:show="modalCreateChatVisible" :title="$t('social.chat.new')">
-        <FormSocialChat
-          @submit-success="modalCreateChatVisible = false"
-          @create-success="checkUnfinishedChat"
-        />
+        <FormSocialChat @submit-success="modalCreateChatVisible = false" @create-success="checkUnfinishedChat" />
       </modal>
     </slot>
 
@@ -95,7 +87,7 @@ function checkUnfinishedChat() {
   }
 
   chatInterval = setInterval(async () => {
-    const chats = await chatStore.fetchChats(chatStore.pagination.page, false);
+    const chats = await chatStore.fetchChats(chatStore.pagination.page, chatStore.pagination.pageSize, false);
     const chat = chats.find(item => item.space_uuid === unfinishedChat.space_uuid);
     if (!chat || chat.status >= SocialStatus.ACTIVE) {
       clearInterval(chatInterval);

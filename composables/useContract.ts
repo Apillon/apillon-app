@@ -1,12 +1,6 @@
-import {
-  useAccount,
-  useNetwork,
-  usePublicClient,
-  useSwitchNetwork,
-  useWalletClient,
-} from 'use-wagmi';
+import { useAccount, useChains, useClient, useSwitchChain, useConnectorClient, useAccountEffect } from '@wagmi/vue';
 import { getContract } from 'viem';
-import { moonbeam, moonbaseAlpha } from 'use-wagmi/chains';
+import { moonbeam, moonbaseAlpha } from '@wagmi/vue/chains';
 const nuxtConfig = useRuntimeConfig();
 
 const contractAddress = nuxtConfig.public.nctrContract as `0x${string}`;
@@ -19,14 +13,14 @@ const loading = ref(false);
 const transactionHash = ref<`0x${string}` | undefined>(undefined);
 
 export default function useContract() {
-  const { chain } = useNetwork();
-  const { address } = useAccount();
-  const { switchNetwork } = useSwitchNetwork();
-  const publicClient = usePublicClient();
-  const { data: walletClient, refetch } = useWalletClient();
+  const { chains } = useChains();
+  const { address, isConnected } = useAccount();
+  const { switchChain } = useSwitchChain();
+  const publicClient = useClient();
+  const { data: walletClient, refetch } = useConnectorClient();
   const referralStore = useReferralStore();
   const savedWallet = ref(referralStore.tokenClaim.wallet);
-  const { isConnected } = useAccount({ onConnect: onWalletConnected });
+  useAccountEffect({ onConnect: onWalletConnected });
 
   /**
    * Init contract
@@ -92,7 +86,7 @@ export default function useContract() {
 
   // Helper
   async function ensureCorrectNetwork() {
-    await switchNetwork(usedChain.id);
+    await switchChain({ chainId: usedChain.id });
     return true;
   }
 

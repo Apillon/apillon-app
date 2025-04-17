@@ -77,6 +77,8 @@
         "symbol": "Asset symbol"
       },
       "collection": {
+        "adminAddress": "Admin address",
+        "autoIncrement": "Auto Increment",
         "baseUri": "Base URI",
         "baseExtension": "Base Extension",
         "chain": "Chain",
@@ -91,7 +93,7 @@
         "logo": "Collection logo",
         "maxSupply": "How many?",
         "name": "Name",
-        "revocable": "Revocable",
+        "revocable": "Revokable",
         "royaltiesAddress": "Royalties address",
         "royaltiesFees": "Royalties fees",
         "soulbound": "Soulbound",
@@ -102,6 +104,8 @@
         "useGateway": "Use apillon gateway for base URI",
         "useIpns": "Dynamic metadata",
         "labelInfo": {
+          "adminAddress": "The admin of a collection is able to grant and revoke control of the contract to addresses. You can change this later.",
+          "autoIncrement": "Disable Auto Increment to mint an NFT with a custom ID.",
           "baseExtension": "",
           "baseUri": "Paste the collection metadata base URI here.",
           "chain": "Select the network where your NFTs will be deployed",
@@ -120,7 +124,7 @@
           "revocable": "Collection owner can destroy NFT(s) at any point in time.",
           "royaltiesAddress": "It’s EVM address to receive Withdrawal tokens when tokens are being minted.",
           "royaltiesFees": "The % value of royalties you want to collect in the future NFT sales.",
-          "soulbound": "Soulbound NFTs are not tradeable, they cannot leave the wallet they were deposited into.",
+          "soulbound": "Soulbound NFTs are not tradeable or transferable, they cannot leave the wallet they were deposited into.",
           "supplyLimited": "If limited, please specify the actual number of the NFTs in total supply on the right.",
           "symbol": "A symbol acts as a token name on the blockchain for this NFT collection. It consists of 3 or 4 letters, in connection to the name of the NFT collection.",
           "type": "",
@@ -180,6 +184,8 @@
         "description": "Description",
         "displayType": "Type",
         "id": "ID",
+        "idsToMint": "IDs to Mint",
+        "image": "NFT image",
         "mintCollectionUuid": "Collection",
         "mintParentNftId": "Parent NFT ID",
         "mintQuantity": "Quantity",
@@ -287,6 +293,9 @@
       "indexer": {
         "logLevels": "Log levels",
         "containers": "Containers"
+      },
+      "nft": {
+        "idsToMint": "Enter NFT IDs you want to mint"
       }
     },
     "error": {
@@ -337,6 +346,7 @@
         "hosting": "Hosting has been created",
         "ipns": "IPNS has been created",
         "item": "Item has been created",
+        "nftCollection": "NFT collection successfully created",
         "rpcApiKey": "RPC API key has been created",
         "rpcEndpoint": "RPC endpoint has been added",
         "service": "Service has been created",

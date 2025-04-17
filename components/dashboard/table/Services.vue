@@ -7,11 +7,9 @@
       :columns="columns"
       :data="data"
       :loading="dataStore.service.loading"
-      :pagination="{
-        pageSize: PAGINATION_LIMIT,
-        prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
-      }"
+      :pagination="pagination"
       :row-props="rowProps"
+      @update:page-size="(pz: number) => (pagination.pageSize = pz)"
     />
   </n-space>
 
@@ -48,6 +46,7 @@ const TableEllipsis = resolveComponent('TableEllipsis');
 
 const modalEditAuthVisible = ref<boolean>(false);
 const modalDeleteAuthVisible = ref<boolean>(false);
+const pagination = reactive(createPagination(false));
 
 const createColumns = (): NDataTableColumns<ServiceInterface> => {
   return [
@@ -55,10 +54,7 @@ const createColumns = (): NDataTableColumns<ServiceInterface> => {
       key: 'name',
       title: $i18n.t('general.serviceName'),
       render(row) {
-        return [
-          h(IconStatus, { active: row.active === 1 }, ''),
-          h('span', { class: 'ml-2 text-blue' }, row.name),
-        ];
+        return [h(IconStatus, { active: row.active === 1 }, ''), h('span', { class: 'ml-2 text-blue' }, row.name)];
       },
     },
     {
@@ -168,8 +164,6 @@ const dropdownOptions = [
  */
 function onServiceDeleted() {
   modalDeleteAuthVisible.value = false;
-  dataStore.services = dataStore.services.filter(
-    item => item.service_uuid !== currentRow.value.service_uuid
-  );
+  dataStore.services = dataStore.services.filter(item => item.service_uuid !== currentRow.value.service_uuid);
 }
 </script>

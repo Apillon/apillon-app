@@ -19,25 +19,22 @@
 
       <!-- Storage -->
       <div class="mt-6">
-        <div class="p-3 border-b border-bg-lighter flex gap-2">
+        <div class="flex gap-2 border-b border-bg-lighter p-3">
           <span class="icon-storage text-xl"></span>
           <h5>
             {{ $t('dashboard.usage.storage') }} -
             {{ paymentStore.getActiveSubscriptionPackage?.name }}
           </h5>
         </div>
-        <div class="p-3 border-b border-bg-lighter sm:flex items-center gap-3 text-body">
+        <div class="items-center gap-3 border-b border-bg-lighter p-3 text-body sm:flex">
           <div class="min-w-[12rem]">
             {{ $t('dashboard.usage.bytesStored') }}
           </div>
           <div class="w-full">
-            <PaymentProgress
-              :size="storageStore.info.usedStorage"
-              :total-size="storageStore.info.availableStorage"
-            />
+            <PaymentProgress :size="storageStore.info.usedStorage" :total-size="storageStore.info.availableStorage" />
           </div>
         </div>
-        <div class="p-3 border-b border-bg-lighter sm:flex items-center gap-3 text-body">
+        <div class="items-center gap-3 border-b border-bg-lighter p-3 text-body sm:flex">
           <div class="min-w-[12rem]">
             {{ $t('dashboard.usage.bandwith') }}
           </div>
@@ -83,7 +80,7 @@
       </div>
       -->
 
-      <div v-if="showUpgrade" class="grid sm:grid-cols-2 gap-8 my-12">
+      <div v-if="showUpgrade" class="my-12 grid gap-8 sm:grid-cols-2">
         <div>
           <h4 class="mb-6">{{ $t('dashboard.usage.upgrade') }}</h4>
           <PaymentCardCurrentPlan />
@@ -106,32 +103,18 @@ useHead({
 
 const loading = ref<boolean>(true);
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      const promises: Promise<any>[] = [];
+onMounted(async () => {
+  await sleep(100);
+  await Promise.all(Object.values(dataStore.promises));
 
-      promises.push(
-        new Promise<void>(resolve => {
-          storageStore.getStorageInfo().then(() => resolve());
-        })
-      );
-      promises.push(
-        new Promise<void>(resolve => {
-          paymentStore.getSubscriptionPackages().then(() => resolve());
-        })
-      );
-      promises.push(
-        new Promise<void>(resolve => {
-          paymentStore.getActiveSubscription().then(() => resolve());
-        })
-      );
+  const promises = [
+    storageStore.getStorageInfo(),
+    paymentStore.getSubscriptionPackages(),
+    paymentStore.getActiveSubscription(),
+  ];
 
-      await Promise.all(promises).then(_ => {
-        loading.value = false;
-      });
-    });
-  }, 100);
+  await Promise.all(promises);
+  loading.value = false;
 });
 
 const showUpgrade = computed(() => {

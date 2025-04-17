@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-bg-dark -m-3 p-3">
+  <div class="-m-3 bg-bg-dark p-3">
     <n-data-table
       remote
       :bordered="false"
@@ -8,6 +8,8 @@
       :loading="loading"
       :pagination="pagination"
       :row-key="rowKey"
+      @update:page="(page: number) => getSessionDetails(page, pagination.pageSize)"
+      @update:page-size="(pageSize: number) => getSessionDetails(1, pageSize)"
     />
   </div>
 </template>
@@ -22,22 +24,7 @@ const bucketStore = useBucketStore();
 
 const loading = ref<boolean>(true);
 const sessions = ref<FileUploadInterface[]>([]);
-const pagination = reactive({
-  itemCount: 0,
-  page: 1,
-  pageSize: PAGINATION_LIMIT,
-  showSizePicker: true,
-  pageSizes: enumValues(PageSize) as number[],
-  prefix({ itemCount }) {
-    return t('general.total', { total: itemCount });
-  },
-  onChange: (page: number) => {
-    getSessionDetails(page, pagination.pageSize);
-  },
-  onUpdatePageSize: (pageSize: number) => {
-    getSessionDetails(1, pageSize);
-  },
-});
+const pagination = reactive(createPagination());
 
 /** Columns */
 const createColumns = (): NDataTableColumns<FileUploadInterface> => {
@@ -107,10 +94,7 @@ async function fetchSessionDetails(sessionUuid: string, args: FetchParams = {}) 
     const params = parseArguments(args);
     params.session_uuid = sessionUuid;
 
-    const res = await $api.get<SessionDetailsResponse>(
-      endpoints.storageFileUploads(bucketStore.bucketUuid),
-      params
-    );
+    const res = await $api.get<SessionDetailsResponse>(endpoints.storageFileUploads(bucketStore.bucketUuid), params);
     sessions.value = res.data.items;
     pagination.itemCount = res.data.total;
   } catch (error: any) {

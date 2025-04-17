@@ -12,8 +12,8 @@ declare global {
     id: number;
     chainName: string;
     network: string;
-    httpsUrl: string;
-    wssUrl: string;
+    httpsUrl: string | null;
+    wssUrl: string | null;
   }
 
   interface RpcEndpointInterface extends BaseObjectInterface {
@@ -49,8 +49,7 @@ declare global {
     }[];
   }
 
-  interface RpcFavoriteEndpointsResponse
-    extends GeneralItemsResponse<RpcFavoriteEndpointInterface> {}
+  interface RpcFavoriteEndpointsResponse extends GeneralItemsResponse<RpcFavoriteEndpointInterface> {}
 
   interface RpcFavoriteEndpointResponse extends GeneralResponse<RpcFavoriteEndpointInterface> {}
 
@@ -60,8 +59,7 @@ declare global {
 
   interface RpcApiKeyUsageResponse extends GeneralResponse<RpcApiKeyUsageInterface> {}
 
-  interface RpcApiKeyUsagePerChainResponse
-    extends GeneralResponse<RpcApiKeyUsagePerChainInterface> {}
+  interface RpcApiKeyUsagePerChainResponse extends GeneralResponse<RpcApiKeyUsagePerChainInterface> {}
 }
 
 export enum RpcPlanType {

@@ -6,20 +6,15 @@
     :columns="columns"
     :data="data"
     :loading="contractStore.loading"
-    :pagination="{
-      pageSize: PAGINATION_LIMIT,
-      prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
-    }"
+    :pagination="pagination"
     :row-key="rowKey"
     :row-props="rowProps"
+    @update:page-size="(pz: number) => (pagination.pageSize = pz)"
   />
 
   <!-- Modal - Contract Transfer -->
   <modal v-model:show="modalTransferOwnershipVisible" :title="$t('computing.contract.transfer')">
-    <FormComputingTransfer
-      :contract-uuid="currentRow.contract_uuid"
-      @submit-success="onContractTransferred"
-    />
+    <FormComputingTransfer :contract-uuid="currentRow.contract_uuid" @submit-success="onContractTransferred" />
   </modal>
 </template>
 
@@ -40,15 +35,12 @@ const contractStore = useContractStore();
 const { checkUnfinishedContracts } = useComputing();
 const { deleteItem } = useDelete();
 
+const pagination = reactive(createPagination(false));
 const modalTransferOwnershipVisible = ref<boolean | null>(false);
 
 /** Data: filtered contracts */
 const data = computed<Array<ContractInterface>>(() => {
-  return (
-    props.contracts.filter(item =>
-      item.name.toLowerCase().includes(contractStore.search.toLowerCase())
-    ) || []
-  );
+  return props.contracts.filter(item => item.name.toLowerCase().includes(contractStore.search.toLowerCase())) || [];
 });
 
 const createColumns = (): NDataTableColumns<ContractInterface> => {
@@ -75,9 +67,7 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
       className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       minWidth: 130,
       render(row) {
-        return t(
-          `computing.contract.type.${row.contractType || ComputingContractType.SCHRODINGER}`
-        );
+        return t(`computing.contract.type.${row.contractType || ComputingContractType.SCHRODINGER}`);
       },
     },
     {
@@ -106,11 +96,7 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
       key: 'contractStatus',
       title: t('general.status'),
       render(row) {
-        return h(
-          resolveComponent('ComputingContractStatus'),
-          { contractStatus: row.contractStatus },
-          ''
-        );
+        return h(resolveComponent('ComputingContractStatus'), { contractStatus: row.contractStatus }, '');
       },
     },
     {
@@ -229,13 +215,8 @@ function onContractTransferred() {
  * contract delete
  * */
 async function deleteContract() {
-  if (
-    currentRow.value &&
-    (await deleteItem(ItemDeleteKey.CONTRACT, currentRow.value.contract_uuid))
-  ) {
-    contractStore.items = contractStore.items.filter(
-      item => item.contract_uuid !== currentRow.value.contract_uuid
-    );
+  if (currentRow.value && (await deleteItem(ItemDeleteKey.CONTRACT, currentRow.value.contract_uuid))) {
+    contractStore.items = contractStore.items.filter(item => item.contract_uuid !== currentRow.value.contract_uuid);
 
     sessionStorage.removeItem(LsCacheKeys.CONTRACTS);
     sessionStorage.removeItem(LsCacheKeys.CONTRACT_ARCHIVE);
@@ -250,9 +231,7 @@ async function restoreContract() {
 
   try {
     await $api.patch<ContractResponse>(endpoints.contractActivate(currentRow.value.contract_uuid));
-    contractStore.archive = contractStore.archive.filter(
-      item => item.contract_uuid !== currentRow.value.contract_uuid
-    );
+    contractStore.archive = contractStore.archive.filter(item => item.contract_uuid !== currentRow.value.contract_uuid);
 
     sessionStorage.removeItem(LsCacheKeys.CONTRACTS);
     sessionStorage.removeItem(LsCacheKeys.CONTRACT_ARCHIVE);

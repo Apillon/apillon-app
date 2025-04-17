@@ -102,11 +102,7 @@ export function copyToClipboard(text: string) {
     }
   );
 }
-export function copyToClipboardWithResponseTexts(
-  text: string,
-  successMsg?: string,
-  errorMsg?: string
-) {
+export function copyToClipboardWithResponseTexts(text: string, successMsg?: string, errorMsg?: string) {
   navigator.clipboard.writeText(text).then(
     () => {
       /* Resolved - text copied to clipboard successfully */
@@ -150,76 +146,8 @@ export function formatCurrency(currency: string) {
 }
 
 export function generatePriceServiceName(service: string, chain: number, action: string) {
-  const chainName = Chains[chain] || SubstrateChain[chain];
+  const chainName = EvmChain[chain] || SubstrateChain[chain];
   return service + '_' + chainName + '_' + action;
-}
-
-/**
- * Crypto
- */
-
-export function contractLink(contractAddress?: string | null, chainId?: number): string {
-  const address = contractAddress ? `address/${contractAddress}` : '';
-
-  switch (chainId) {
-    case Chains.MOONBEAM:
-      return `https://moonbeam.moonscan.io/${address}`;
-    case Chains.MOONBASE:
-      return `https://moonbase.moonscan.io/${address}`;
-    case Chains.ASTAR:
-      return `https://astar.blockscout.com/${address}`;
-    case SubstrateChain.ASTAR:
-      if (useRuntimeConfig().public.ENV === AppEnv.DEV) {
-        return `https://shibuya.subscan.io/${address}`;
-      } else {
-        return `https://astar.subscan.io/${address}`;
-      }
-    case SubstrateChain.PHALA:
-      return `https://phala.subscan.io/${address}`;
-    case SubstrateChain.UNIQUE:
-      if (useRuntimeConfig().public.ENV === AppEnv.DEV) {
-        return `https://uniquescan.io/opal/collections/${contractAddress}`;
-      } else {
-        return `https://uniquescan.io/unique/collections/${contractAddress}`;
-      }
-    default:
-      console.warn('Missing chainId');
-      return '';
-  }
-}
-
-export function transactionLink(transactionHash?: string | null, chainId?: number): string {
-  const hash = transactionHash ? `tx/${transactionHash}` : '';
-
-  switch (chainId) {
-    case Chains.MOONBEAM:
-      return `https://moonbeam.moonscan.io/${hash}`;
-    case Chains.MOONBASE:
-      return `https://moonbase.moonscan.io/${hash}`;
-    case Chains.ASTAR:
-      return `https://astar.blockscout.com/${hash}`;
-    case SubstrateChain.ASTAR:
-      if (useRuntimeConfig().public.ENV === AppEnv.DEV) {
-        return `https://shibuya.subscan.io/${hash}`;
-      } else {
-        return `https://astar.subscan.io/${hash}`;
-      }
-    case SubstrateChain.PHALA:
-      return `https://phala.subscan.io/${hash}`;
-    case SubstrateChain.UNIQUE:
-      if (useRuntimeConfig().public.ENV === AppEnv.DEV) {
-        return `https://opal.subscan.io/extrinsic/${transactionHash}`;
-      } else {
-        return `https://unique.subscan.io/extrinsic/${transactionHash}`;
-      }
-    case SubstrateChain.ASSET_HUB:
-      return `https://assethub-polkadot.subscan.io/extrinsic/${transactionHash}`;
-    case SubstrateChain.WESTEND_ASSET_HUB:
-      return `https://assethub-westend.subscan.io/extrinsic/${transactionHash}`;
-    default:
-      console.warn('Missing chainId');
-      return '';
-  }
 }
 
 /**

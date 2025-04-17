@@ -32,11 +32,7 @@ const dataStore = useDataStore();
 const menuKey = computed<string>(() => `menu-${dataStore.project.items.length}`);
 const zeroProjects = computed(() => dataStore.hasProjects === false);
 
-const defaultExpandedKeys = computed(() => [
-  'coreWeb3Infrastructure',
-  'assetManagement',
-  'utility',
-]);
+const defaultExpandedKeys = computed(() => ['coreWeb3Infrastructure', 'assetManagement', 'utility']);
 
 const menuOptions = computed<MenuMixedOption[]>(() => {
   const dashboard = {
@@ -73,9 +69,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       iconName: 'icon-storage',
       soon: isMenuItemDisabled(Feature.STORAGE),
       disabled:
-        isMenuItemDisabled(Feature.STORAGE) ||
-        !authStore.isUserAllowed(Permission.STORAGE) ||
-        zeroProjects.value,
+        isMenuItemDisabled(Feature.STORAGE) || !authStore.isUserAllowed(Permission.STORAGE) || zeroProjects.value,
     },
     {
       key: 'dashboard-service-hosting',
@@ -84,9 +78,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       iconName: 'icon-hosting',
       soon: isMenuItemDisabled(Feature.HOSTING),
       disabled:
-        isMenuItemDisabled(Feature.HOSTING) ||
-        !authStore.isUserAllowed(Permission.HOSTING) ||
-        zeroProjects.value,
+        isMenuItemDisabled(Feature.HOSTING) || !authStore.isUserAllowed(Permission.HOSTING) || zeroProjects.value,
     },
     {
       key: 'dashboard-service-embedded-wallet',
@@ -101,6 +93,25 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
         zeroProjects.value,
     },
     {
+      key: 'dashboard-service-rpc',
+      label: t('dashboard.nav.rpc'),
+      to: 'dashboard-service-rpc',
+      iconName: 'icon-rpc',
+      soon: isMenuItemDisabled(Feature.RPC),
+      beta: isBetaFeature(Feature.RPC),
+      disabled: isMenuItemDisabled(Feature.RPC) || !authStore.isUserAllowed(Permission.RPC) || zeroProjects.value,
+    },
+    {
+      key: 'dashboard-service-indexing',
+      label: t('dashboard.nav.indexing'),
+      to: 'dashboard-service-indexing',
+      iconName: 'icon-indexer',
+      soon: isMenuItemDisabled(Feature.INDEXING),
+      beta: isBetaFeature(Feature.INDEXING),
+      disabled:
+        isMenuItemDisabled(Feature.INDEXING) || !authStore.isUserAllowed(Permission.INDEXING) || zeroProjects.value,
+    },
+    {
       key: 'dashboard-service-cloud-functions',
       label: t('dashboard.nav.cloudFunctions'),
       to: 'dashboard-service-cloud-functions',
@@ -112,30 +123,6 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
         !authStore.isUserAllowed(Permission.COMPUTING) ||
         zeroProjects.value,
     },
-    {
-      key: 'dashboard-service-rpc',
-      label: t('dashboard.nav.rpc'),
-      to: 'dashboard-service-rpc',
-      iconName: 'icon-rpc',
-      soon: isMenuItemDisabled(Feature.RPC),
-      beta: isBetaFeature(Feature.RPC),
-      disabled:
-        isMenuItemDisabled(Feature.RPC) ||
-        !authStore.isUserAllowed(Permission.RPC) ||
-        zeroProjects.value,
-    },
-    {
-      key: 'dashboard-service-indexing',
-      label: t('dashboard.nav.indexing'),
-      to: 'dashboard-service-indexing',
-      iconName: 'icon-indexer',
-      soon: isMenuItemDisabled(Feature.INDEXING),
-      beta: isBetaFeature(Feature.INDEXING),
-      disabled:
-        isMenuItemDisabled(Feature.INDEXING) ||
-        !authStore.isUserAllowed(Permission.INDEXING) ||
-        zeroProjects.value,
-    },
   ];
 
   const assetManagementDevelopment = [
@@ -145,10 +132,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       to: 'dashboard-service-nft',
       iconName: 'icon-NFTs',
       soon: isMenuItemDisabled(Feature.NFT),
-      disabled:
-        isMenuItemDisabled(Feature.NFT) ||
-        !authStore.isUserAllowed(Permission.NFTS) ||
-        zeroProjects.value,
+      disabled: isMenuItemDisabled(Feature.NFT) || !authStore.isUserAllowed(Permission.NFTS) || zeroProjects.value,
     },
     {
       key: 'dashboard-service-smart-contracts',
@@ -178,9 +162,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       iconName: 'icon-computing',
       soon: isMenuItemDisabled(Feature.COMPUTING),
       disabled:
-        isMenuItemDisabled(Feature.COMPUTING) ||
-        !authStore.isUserAllowed(Permission.COMPUTING) ||
-        zeroProjects.value,
+        isMenuItemDisabled(Feature.COMPUTING) || !authStore.isUserAllowed(Permission.COMPUTING) || zeroProjects.value,
     },
     {
       key: 'dashboard-service-authentication',
@@ -198,10 +180,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       label: t('dashboard.nav.social'),
       to: 'dashboard-service-social',
       iconName: 'icon-social',
-      disabled:
-        isMenuItemDisabled(Feature.SOCIAL) ||
-        !authStore.isUserAllowed(Permission.SOCIAL) ||
-        zeroProjects.value,
+      disabled: isMenuItemDisabled(Feature.SOCIAL) || !authStore.isUserAllowed(Permission.SOCIAL) || zeroProjects.value,
     },
   ];
 

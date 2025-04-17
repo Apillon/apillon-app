@@ -7,6 +7,7 @@ const config: ConfigInterface = {
   oauthUrl: 'http://localhost:5173',
   adminUrl: 'http://localhost:3001',
   mailerLiteSubscribeUrl: '',
+  deploymentGithubId: 'Ov23li86OJHAvoIF7UUg',
   captchaKey: '5FPCpm2ycomt2c9FcSS551mjZJ6iyA1vP5Ucx8hjQrk3NfDA',
   githubId: 'd0482598d8adbd8adffa',
   gtmId: '',

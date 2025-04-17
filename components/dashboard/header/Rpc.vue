@@ -11,9 +11,9 @@
             :max-calls="hasRpcPlan ? 25000000 : 5000000"
           />
         </div>
-        <div class="flex flex-row gap-4 items-center justify-end">
+        <div class="flex flex-row items-center justify-end gap-4">
           <div>
-            <p class="text-white font-bold">
+            <p class="font-bold text-white">
               {{ $t('dashboard.payment.currentPlan') }}: {{ hasRpcPlan ? 'Developer' : 'Free' }}
             </p>
           </div>
@@ -23,14 +23,14 @@
             type="link"
             @click="modalSubscriptionVisible = true"
           >
-            <span class="text-blue text-sm">{{ $t('dashboard.payment.upgrade') }}</span>
+            <span class="text-sm text-blue">{{ $t('dashboard.payment.upgrade') }}</span>
           </Btn>
         </div>
       </div>
     </template>
     <template #submenu>
       <div
-        class="flex mb-4 flex-row justify-start border-yellow border-2 p-4 items-center gap-4 max-w-xl"
+        class="mb-4 flex max-w-xl flex-row items-center justify-start gap-4 border-2 border-yellow p-4"
         v-if="
           dataStore.isUserOwner &&
           paymentStore.isRpcPlanLoaded &&
@@ -46,21 +46,12 @@
       </div>
 
       <div class="relative">
-        <MenuRpc class="lg:absolute top-0 left-0 w-2/3 z-1" />
-        <n-collapse
-          v-if="isLg"
-          class="justify-end"
-          accordion
-          @update:expanded-names="onUpdateAccordion"
-        >
+        <MenuRpc class="left-0 top-0 z-1 w-full" />
+        <n-collapse accordion @update:expanded-names="onUpdateAccordion" v-if="isLg">
           <n-collapse-item>
             <template #header>
-              {{
-                instructionsVisible
-                  ? $t('general.information.hide')
-                  : $t('general.information.show')
-              }}
-              <span class="icon-info text-xl ml-2"></span>
+              {{ instructionsVisible ? $t('general.information.hide') : $t('general.information.show') }}
+              <span class="icon-info ml-2 text-xl"></span>
             </template>
             <RpcFeatures />
           </n-collapse-item>
@@ -70,11 +61,7 @@
   </Heading>
 
   <!-- Modal - Subscription -->
-  <modal
-    v-model:show="modalSubscriptionVisible"
-    class="max-w-3xl"
-    :title="$t('rpc.apiKey.headline')"
-  >
+  <modal v-model:show="modalSubscriptionVisible" class="max-w-3xl" :title="$t('rpc.apiKey.headline')">
     <RpcSubscriptions @close="modalSubscriptionVisible = false" />
   </modal>
 </template>
