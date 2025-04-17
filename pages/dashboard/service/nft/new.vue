@@ -135,7 +135,7 @@ onMounted(async () => {
   paymentStore.getPriceList();
 
   /** Check if user can create Ethereum collection */
-  collectionStore.getQuota();
+  // collectionStore.getQuota();
 
   pageLoading.value = false;
 });
@@ -165,7 +165,7 @@ async function w3WarnAndDeploy() {
   }
 }
 
-async function onModalW3WarnConfirm() {
+function onModalW3WarnConfirm() {
   if (isUnique.value) {
     createUniqueMetadata.value = true;
   } else {
