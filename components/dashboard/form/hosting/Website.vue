@@ -21,7 +21,7 @@
             <p class="text-gray-600">{{ $t('hosting.website.basicTypeDescription') }}</p>
           </div>
           <div
-            class="hover:bg-gray-100 w-full cursor-pointer rounded-lg border p-6 transition-colors"
+            class="hover:bg-gray-100 w-[110%] cursor-pointer rounded-lg border p-6 transition-colors"
             @click="selectWebsiteType('github')"
           >
             <h5 class="mb-2">

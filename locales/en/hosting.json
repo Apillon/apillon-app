@@ -83,7 +83,7 @@
       "basicType": "Blank website",
       "basicTypeDescription": "Deploy your static website over API/CLI or drag & drop files manually",
       "githubType": "Import GitHub repo",
-      "githubTypeDescription": "Connect your GitHub repo - we will build and deploy your project automatically"
+      "githubTypeDescription": "Connect your GitHub repo - we will build and deploy your project automatically on every commit"
     },
     "deploy": {
       "new": "New deployment configuration",
