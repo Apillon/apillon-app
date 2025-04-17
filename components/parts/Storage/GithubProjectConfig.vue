@@ -5,7 +5,9 @@
     :loading="loading"
     @click="handleGithubPress"
   >
-    <span>{{ $t(storageStore.projectConfig ? 'hosting.github-connected' : 'hosting.connect-github') }}</span>
+    <span class="icon-github -ml-1 mr-2" /><span>{{
+      $t(storageStore.projectConfig ? 'hosting.github-connected' : 'hosting.connect-github')
+    }}</span>
   </Btn>
 
   <!-- Modal - Delete file/folder -->
@@ -15,7 +17,7 @@
         {{ $t(`hosting.disconnect-confirmation-body`) }}
       </p>
     </template>
-    <Btn type="primary" :loading="loading" @click="disconnectGithub">
+    <Btn type="secondary" :loading="loading" @click="disconnectGithub">
       {{ $t('hosting.disconnect-confirmation-button') }}
     </Btn>
   </ModalDelete>

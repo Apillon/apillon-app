@@ -12,19 +12,23 @@
       <!-- Website Type Selection Step -->
       <template v-if="!selectedWebsiteType">
         <h4 class="mb-6 text-center">{{ $t('hosting.website.selectType') }}</h4>
-        <div class="grid grid-cols-2 gap-4">
+        <div class="mx-auto grid grid-cols-2 gap-4">
           <div
-            class="hover:bg-gray-100 cursor-pointer rounded-lg border p-6 transition-colors"
+            class="hover:bg-gray-100 w-full cursor-pointer rounded-lg border p-6 transition-colors"
             @click="selectWebsiteType('basic')"
           >
             <h5 class="mb-2"><span class="icon-file -ml-1 mr-2"></span>{{ $t('hosting.website.basicType') }}</h5>
             <p class="text-gray-600">{{ $t('hosting.website.basicTypeDescription') }}</p>
           </div>
           <div
-            class="hover:bg-gray-100 cursor-pointer rounded-lg border p-6 transition-colors"
+            class="hover:bg-gray-100 w-[110%] cursor-pointer rounded-lg border p-6 transition-colors"
             @click="selectWebsiteType('github')"
           >
-            <h5 class="mb-2"><span class="icon-github -ml-1 mr-2"></span>{{ $t('hosting.website.githubType') }}</h5>
+            <h5 class="mb-2">
+              <span class="icon-github -ml-1 mr-1"></span>
+              {{ $t('hosting.website.githubType') }}
+              <img src="/icons/beta.svg" class="ml-2 inline-block h-4 w-14" alt="Beta" />
+            </h5>
             <p class="text-gray-600">{{ $t('hosting.website.githubTypeDescription') }}</p>
           </div>
         </div>
@@ -65,7 +69,7 @@
 
           <!-- Submit Button -->
           <div class="flex justify-between gap-2">
-            <Btn type="secondary" @click="selectedWebsiteType = null" v-if="storageStore.projectConfig">
+            <Btn v-if="storageStore.projectConfig" type="secondary" @click="selectedWebsiteType = null">
               {{ $t('form.goBack') }}
             </Btn>
             <Btn class="flex-1" type="primary" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
@@ -180,8 +184,7 @@
                   :placeholder="$t('hosting.deploy.form.api-key-placeholder')"
                   :options="apiKeyOptions"
                   clearable
-                >
-                </n-select>
+                />
               </n-form-item>
 
               <n-form-item
@@ -323,21 +326,19 @@ onMounted(async () => {
 
   if (!storageStore.projectConfig || props.websiteUuid) {
     selectedWebsiteType.value = 'basic';
-  } else {
-    if (storageStore.projectConfig) {
-      await settingsStore.getApiKeys();
-      await storageStore.getRepos();
-      apiKeyOptions.value = settingsStore.apiKeys.map((item: ApiKeyInterface) => {
-        return {
-          label: item.name,
-          value: item.apiKey,
-        };
-      });
-      repoOptions.value = storageStore.repos.map((item: GithubRepo) => ({
-        value: item.id,
+  } else if (storageStore.projectConfig) {
+    await settingsStore.getApiKeys();
+    await storageStore.getRepos();
+    apiKeyOptions.value = settingsStore.apiKeys.map((item: ApiKeyInterface) => {
+      return {
         label: item.name,
-      }));
-    }
+        value: item.apiKey,
+      };
+    });
+    repoOptions.value = storageStore.repos.map((item: GithubRepo) => ({
+      value: item.id,
+      label: item.name,
+    }));
   }
 });
 

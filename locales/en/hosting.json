@@ -79,17 +79,17 @@
       "github-source": "GitHub",
       "update": "Update website",
       "uuid": "Website UUID",
-      "selectType": "Select type of your website",
+      "selectType": "Select Website Type",
       "basicType": "Blank website",
-      "basicTypeDescription": "Deploy your static website over CLI or drag&drop files manually.",
-      "githubType": "Github import repository",
-      "githubTypeDescription": "Connect your GitHub repo - we will build and deploy your project automatically."
+      "basicTypeDescription": "Deploy your static website over API/CLI or drag & drop files manually",
+      "githubType": "Import GitHub repo",
+      "githubTypeDescription": "Connect your GitHub repo - we will build and deploy your project automatically on every commit"
     },
     "deploy": {
       "new": "New deployment configuration",
       "update": "Update deployment configuration",
-      "empty-info": "Connect Github repository to enable Continuous Deployment for this website",
-      "connect-repo": "Connect Github repository to website",
+      "empty-info": "Connect GitHub repository to enable Continuous Deployment for this website",
+      "connect-repo": "Connect GitHub repository to website",
       "env-vars": {
         "title": "Environment variables",
         "key": "Key",
