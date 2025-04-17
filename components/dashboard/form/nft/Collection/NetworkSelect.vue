@@ -114,7 +114,7 @@ const content = computed(() => {
 const chains = computed(() => nftChains.filter(c => !hiddenChain(c.value)));
 
 onMounted(() => {
-  collectionStore.getQuota();
+  // collectionStore.getQuota();
 });
 
 function onChainChange(chainId: number) {
