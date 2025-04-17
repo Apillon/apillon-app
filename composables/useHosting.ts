@@ -1,3 +1,5 @@
+import { WebsiteSource } from '~/lib/types/hosting';
+
 export default function useHosting() {
   const router = useRouter();
   const { params } = useRoute();
@@ -7,6 +9,7 @@ export default function useHosting() {
   const deploymentStore = useDeploymentStore();
   const pageLoading = ref<boolean>(true);
 
+  let buildInterval: any = null as any;
   let deploymentInterval: any = null as any;
   let websiteInterval: any = null as any;
 
@@ -18,8 +21,17 @@ export default function useHosting() {
     clearInterval(websiteInterval);
   });
 
-  function initWebsite(env: number = 0) {
+  function initWebsite(
+    env: number = 0,
+    fetchBuilds: boolean = false,
+    fetchVariables: boolean = false,
+    fetchDeploymentConfig = false
+  ) {
     websiteUuid.value = params.id ? `${params?.id}` : `${params?.slug}`;
+    if (websiteStore.active.website_uuid !== websiteUuid.value) {
+      deploymentStore.builds = [];
+      deploymentStore.deploymentConfig = undefined;
+    }
     websiteStore.setWebsite(websiteUuid.value);
 
     setTimeout(() => {
@@ -31,6 +43,19 @@ export default function useHosting() {
           router.push({ name: 'dashboard-service-hosting' });
           return;
         }
+
+        if (fetchBuilds) {
+          await deploymentStore.getBuilds(websiteUuid.value);
+        }
+
+        if (fetchDeploymentConfig && website.source === WebsiteSource.GITHUB) {
+          await deploymentStore.getDeploymentConfig(website.website_uuid);
+        }
+
+        if (fetchVariables && website.source === WebsiteSource.GITHUB && deploymentStore.deploymentConfig) {
+          await deploymentStore.getVariables(deploymentStore.deploymentConfig?.id);
+        }
+
         /** Get deployments for this website */
         if (env > 0) {
           await deploymentStore.getDeployments(websiteUuid.value, env);
@@ -79,7 +104,7 @@ export default function useHosting() {
     }, 10000);
   }
 
-  function checkUnfinishedDeployments(deployments: Array<DeploymentInterface>, env: number) {
+  function checkUnfinishedDeployments(deployments: DeploymentInterface[], env: number) {
     const unfinishedDeployment = deployments.find(
       deployment => deployment.deploymentStatus < DeploymentStatus.IN_REVIEW
     );
@@ -102,6 +127,22 @@ export default function useHosting() {
         clearInterval(deploymentInterval);
       }
     }, 10000);
+  }
+
+  async function checkUnfinishedBuilds() {
+    const builds = await deploymentStore.fetchBuilds(websiteStore.active.website_uuid);
+    const unfinishedBuilds = builds.find(deployment => deployment.buildStatus < DeploymentBuildStatus.SUCCESS);
+    if (unfinishedBuilds === undefined) {
+      return;
+    }
+
+    buildInterval = setInterval(async () => {
+      const refreshedBuilds = await deploymentStore.fetchBuilds(websiteStore.active.website_uuid, false);
+
+      if (refreshedBuilds.find(deployment => deployment.buildStatus < DeploymentBuildStatus.SUCCESS) === undefined) {
+        clearInterval(buildInterval);
+      }
+    }, 5000);
   }
 
   async function refreshWebpage(env: number) {
@@ -130,6 +171,7 @@ export default function useHosting() {
   return {
     pageLoading,
     websiteUuid,
+    checkUnfinishedBuilds,
     checkUnfinishedWebsite,
     initWebsite,
     refreshWebpage,

@@ -4,7 +4,7 @@
   "compilerOptions": {
     "isolatedModules": true,
     "noImplicitAny": false,
-    "types": ["node", "naive-ui/volar", "@nuxt/types", "@nuxtjs/i18n", "@pinia/nuxt"],
+    "types": ["node", "@nuxtjs/i18n", "@pinia/nuxt"],
     "typeRoots": ["./node_modules/@types", "./lib/types", "./node_modules/@types/body-scroll-lock"]
   }
 }

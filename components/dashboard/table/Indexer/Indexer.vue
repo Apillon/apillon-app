@@ -6,16 +6,14 @@
     :columns="columns"
     :data="data"
     :loading="indexerStore.loading"
-    :pagination="createPagination(false)"
+    :pagination="pagination"
     :row-key="rowKey"
     :row-props="rowProps"
+    @update:page-size="(pz: number) => (pagination.pageSize = pz)"
   />
   <!-- Modal - Update Indexer -->
   <modal v-model:show="showModalEditIndexer" :title="$t('indexer.update')">
-    <FormIndexer
-      :indexer-uuid="currentRow.indexer_uuid"
-      @submit-success="showModalEditIndexer = false"
-    />
+    <FormIndexer :indexer-uuid="currentRow.indexer_uuid" @submit-success="showModalEditIndexer = false" />
   </modal>
 </template>
 
@@ -32,13 +30,10 @@ const message = useMessage();
 
 const rowKey = (row: IndexerBaseInterface) => row.indexer_uuid;
 const currentRow = ref<IndexerBaseInterface>(indexerStore.items[0]);
+const pagination = reactive(createPagination(false));
 
 const data = computed<IndexerBaseInterface[]>(() => {
-  return (
-    indexerStore.items.filter(item =>
-      item.name.toLowerCase().includes(indexerStore.search.toLowerCase())
-    ) || []
-  );
+  return indexerStore.items.filter(item => item.name.toLowerCase().includes(indexerStore.search.toLowerCase())) || [];
 });
 
 const columns = computed(() => [

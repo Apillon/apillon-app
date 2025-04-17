@@ -65,6 +65,7 @@ declare global {
     mailerLiteSubscribeUrl: string;
     captchaKey: string;
     githubId: string;
+    deploymentGithubId: string;
     gtmId: string;
   }
 }

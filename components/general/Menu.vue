@@ -40,29 +40,16 @@ function removeIdOrSlug(text) {
  * Render functions
  */
 function renderMenuLabel(option: NMenuOption) {
-  const colorClass =
-    option?.color === 'yellow' ? '!text-yellow' : option?.color === 'blue' ? '!text-blue' : '';
+  const colorClass = option?.color === 'yellow' ? '!text-yellow' : option?.color === 'blue' ? '!text-blue' : '';
 
   if ('disabled' in option && option.disabled) {
     return h('span', { class: 'text-body' }, { default: () => option.label as string });
   } else if ('href' in option) {
-    return h(
-      'a',
-      { href: option.href, class: colorClass, target: '_blank' },
-      () => option.label as string
-    );
+    return h('a', { href: option.href, class: colorClass, target: '_blank' }, () => option.label as string);
   } else if ('path' in option) {
-    return h(
-      NuxtLink,
-      { to: { path: option.path }, class: colorClass },
-      () => option.label as string
-    );
+    return h(NuxtLink, { to: { path: option.path }, class: colorClass }, () => option.label as string);
   } else if ('to' in option) {
-    return h(
-      NuxtLink,
-      { to: { name: option.to }, class: colorClass },
-      () => option.label as string
-    );
+    return h(NuxtLink, { to: { name: option.to }, class: colorClass }, () => option.label as string);
   }
   return h('span', { class: 'text' }, { default: () => option.label as string });
 }

@@ -1,26 +1,46 @@
+import type { Address } from 'viem';
+
+export type Merge<T, K> = Omit<T, keyof K> & K;
+
 export enum ChainType {
   SUBSTRATE = 1,
   EVM = 2,
 }
 
+export enum NftWebsiteType {
+  PLAIN_JS = 1,
+  REACT = 2,
+  VUE = 3,
+}
+
 /** NFT Chains */
-export enum Chains {
-  MOONBASE = 1287,
-  MOONBEAM = 1284,
-  ASTAR_SHIBUYA = 81,
-  ASTAR = 592,
-}
-export enum EvmChain {
+export enum EvmChainMainnet {
   ETHEREUM = 1,
-  SEPOLIA = 11155111,
   MOONBEAM = 1284,
-  MOONBASE = 1287,
-  ASTAR_SHIBUYA = 81, // testnet
   ASTAR = 592,
-  OASIS = 42262,
-  ALFAJORES = 44787, // Celo testnet
+  // OASIS = 42262,
   CELO = 42220,
+  BASE = 8453,
+  ARBITRUM_ONE = 42161,
+  AVALANCHE = 43114,
+  OPTIMISM = 10,
+  POLYGON = 137,
 }
+export enum EvmChainTestnet {
+  SEPOLIA = 11155111,
+  MOONBASE = 1287,
+  // ASTAR_SHIBUYA = 81, // testnet
+  // OASIS_SAPPHIRE = 23294,
+  ALFAJORES = 44787, // Celo testnet
+  BASE_SEPOLIA = 84532,
+  ARBITRUM_ONE_SEPOLIA = 421614,
+  AVALANCHE_FUJI = 43113,
+  OPTIMISM_SEPOLIA = 11155420,
+  POLYGON_AMOY = 80002,
+}
+
+export const EvmChain = mergeObjects(EvmChainMainnet, EvmChainTestnet);
+
 export enum SubstrateChain {
   CRUST = 1,
   KILT = 2,
@@ -58,21 +78,12 @@ export enum CollectionStatus {
   FAILED = 5,
 }
 
-/** NFT Collection create step */
-export enum CollectionStep {
-  STORAGE_TYPE = 0,
-  ENVIRONMENT = 1,
-  METADATA = 2,
-  BEHAVIOR = 3,
-}
-
 /** NFT Transaction status */
 export enum TransactionStatus {
-  REQUESTED = 0,
   PENDING = 1,
-  FINISHED = 2,
-  VERIFIED = 3,
-  FAILED = 4,
+  CONFIRMED = 2,
+  FAILED = 3,
+  ERROR = 4,
 }
 
 /** NFT Transaction type */
@@ -90,13 +101,6 @@ export enum NftAmount {
   SINGLE = 1,
   MULTIPLE = 2,
 }
-/** Mint steps */
-export enum NftCreateTab {
-  METADATA = 1,
-  PREVIEW = 2,
-  IMAGES = 3,
-  DEPLOY = 4,
-}
 /** NFT create steps */
 export enum NftCreateStep {
   AMOUNT = 1,
@@ -110,15 +114,7 @@ export enum NftUploadStep {
   FILE = 1,
   IMAGES = 2,
   PREVIEW = 3,
-}
-
-/** NFT Collection deploy status */
-export enum NftDeployStatus {
-  IDLE = 0,
-  CREATING = 1,
-  UPLOADING = 2,
-  DEPLOYING = 3,
-  DEPLOYED = 4,
+  ATTRIBUTES = 4,
 }
 
 export enum PrepareCollectionMetadataStep {
@@ -148,6 +144,7 @@ declare global {
    * Collection
    */
   interface CollectionInterface extends BaseObjectInterface {
+    adminAddress: string | null;
     baseExtension: string;
     baseUri: string;
     bucket_uuid: string;
@@ -157,12 +154,13 @@ declare global {
     collectionType: number;
     collectionStatus: number;
     collection_uuid: string;
-    contractAddress: string | null;
+    contractAddress: Address | null;
     dropStart: number;
     drop: boolean;
     ipns_uuid: string;
     isRevokable: boolean;
     isSoulbound: boolean;
+    isAutoIncrement: boolean;
     maxSupply: number;
     dropPrice: number;
     dropReserve: number;
@@ -173,11 +171,18 @@ declare global {
     updateTime: string;
     useApillonIpfsGateway: boolean;
     useIpns: boolean;
+    websiteUuid: string | null;
   }
 
   interface CollectionResponse extends GeneralResponse<CollectionInterface> {}
   interface CollectionUpdateResponse extends GeneralResponse<CollectionInterface> {}
   interface CollectionsResponse extends GeneralItemsResponse<CollectionInterface> {}
+
+  interface WebsiteDeployForm {
+    apiKey: string;
+    apiSecret: string;
+    type: NftWebsiteType;
+  }
 
   /**
    * Transaction
@@ -191,6 +196,12 @@ declare global {
   }
 
   interface TransactionResponse extends GeneralItemsResponse<TransactionInterface> {}
+
+  interface MintInterface {
+    success: boolean;
+    transactionHash: string | null;
+  }
+  interface MintResponse extends GeneralResponse<MintInterface> {}
 
   /**
    * Metadata deploys

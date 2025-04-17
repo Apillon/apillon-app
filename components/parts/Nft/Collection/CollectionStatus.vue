@@ -19,13 +19,10 @@
 </template>
 
 <script lang="ts" setup>
+import { CollectionStatus } from '~/lib/types/nft';
+
 defineProps({
-  collectionStatus: {
-    type: Number,
-    validator: (collectionStatus: number) =>
-      Object.values(CollectionStatus).includes(collectionStatus),
-    default: 0,
-  },
+  collectionStatus: { type: Number as PropType<CollectionStatus>, default: 0 },
 });
 
 /** Deployment status */

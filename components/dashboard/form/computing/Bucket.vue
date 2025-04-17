@@ -1,19 +1,19 @@
 <template>
-  <div class="w-full max-w-lg mx-auto text-center">
+  <div class="mx-auto w-full max-w-lg text-center">
     <!-- Creating new bucket -->
     <template v-if="loadingBucket">
       <AnimationLoader />
       <h2>{{ $t('computing.contract.titleBucketCreation') }}</h2>
-      <p class="mb-8 text-body whitespace-pre-line">
+      <p class="mb-8 whitespace-pre-line text-body">
         {{ $t('computing.contract.infoBucketCreation') }}
       </p>
     </template>
 
     <!-- New bucket created -->
     <template v-else-if="contractStore.bucketUuid && loadingBucket === false">
-      <IconSuccessful class="text-4xl mb-7" />
+      <IconSuccess class="mb-7 text-4xl" />
       <h2>{{ $t('computing.contract.titleBucketCreated') }}</h2>
-      <p class="mb-9 text-body whitespace-pre-line">
+      <p class="mb-9 whitespace-pre-line text-body">
         {{ $t('computing.contract.infoBucketCreated') }}
       </p>
 
@@ -25,20 +25,15 @@
     <!-- Select/create bucket  -->
     <div v-else class="w-full max-w-lg text-center">
       <h2>{{ $t('computing.contract.titleBucket') }}</h2>
-      <p class="mb-8 text-body whitespace-pre-line">
+      <p class="mb-8 whitespace-pre-line text-body">
         {{ $t('computing.contract.infoBucket') }}
       </p>
-      <Btn
-        type="secondary"
-        size="large"
-        :disabled="actionsDisabled"
-        @click="modalNewBucketVisible = true"
-      >
+      <Btn type="secondary" size="large" :disabled="actionsDisabled" @click="modalNewBucketVisible = true">
         {{ $t('computing.contract.createBucket') }}
       </Btn>
 
       <div class="my-6 flex items-center">
-        <span class="w-full inline-block text-body whitespace-nowrap">
+        <span class="inline-block w-full whitespace-nowrap text-body">
           {{ $t('computing.contract.orSelectExisting') }}
         </span>
       </div>
@@ -64,13 +59,7 @@
         <!--  Form submit -->
         <n-form-item :show-label="false">
           <input type="submit" class="hidden" :value="$t('computing.contract.selectBucket')" />
-          <Btn
-            type="primary"
-            class="w-full mt-2"
-            :loading="loading"
-            :disabled="actionsDisabled"
-            @click="handleSubmit"
-          >
+          <Btn type="primary" class="mt-2 w-full" :loading="loading" :disabled="actionsDisabled" @click="handleSubmit">
             {{ $t('computing.contract.selectBucket') }}
           </Btn>
         </n-form-item>
@@ -137,9 +126,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
       emit('submitSuccess', formData.value.bucket);
     }

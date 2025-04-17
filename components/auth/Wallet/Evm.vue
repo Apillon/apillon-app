@@ -1,60 +1,50 @@
 <script lang="ts" setup>
-import { useAccount, useConnect, useWalletClient } from 'use-wagmi';
+import type { Connector } from '@wagmi/vue';
+import { useAccount, useConnect, useConnectorClient, useAccountEffect } from '@wagmi/vue';
 
+const emit = defineEmits(['connected']);
 defineProps({
   loading: { type: Boolean, default: false },
 });
 
-const { fullPath } = useRoute();
-const config = useRuntimeConfig();
-const { connector: activeConnector, isConnected } = useAccount();
-const { refetch } = useWalletClient();
-const { connect, connectors, pendingConnector, isLoading } = useConnect();
+const { connector: activeConnector, isConnected, isConnecting } = useAccount();
+const { refetch } = useConnectorClient();
+const { connect, connectors } = useConnect();
 
-const Btn = resolveComponent('Btn');
+const connectorLoading = ref();
 
-function connectWallet(connector) {
+useAccountEffect({ onConnect: onWalletConnected });
+
+function connectWallet(connector: Connector) {
+  connectorLoading.value = connector.id;
   if (isConnected.value) {
     refetch();
-  } else if (connector.ready) {
+  } else {
     connect({ connector });
   }
+}
+
+function onWalletConnected(args) {
+  emit('connected', args.address);
 }
 </script>
 
 <template>
-  <n-space :size="24" vertical>
-    <component
-      :is="connector.ready ? Btn : 'div'"
+  <n-space class="text-left" :size="24" vertical>
+    <Btn
       v-for="(connector, key) in connectors"
       :key="key"
-      class="flex justify-start"
-      :class="{
-        'relative card flex items-center py-3 pl-2 pr-4 pointer-events-none': !connector.ready,
-      }"
       type="secondary"
       size="large"
       :loading="
-        (connector.id === pendingConnector?.id && isLoading) ||
-        (connector.id === activeConnector?.id && loading)
+        (connector.id === connectorLoading && isConnecting) || (connector.id === activeConnector?.id && loading)
       "
-      :disabled="!connector.ready"
       @click="connectWallet(connector)"
     >
-      <span class="flex flex-1 justify-start gap-2 items-center ml-2">
-        <NuxtIcon :name="`wallet/${connector.id}`" class="text-xl" filled />
-        <span class="text-white font-normal">{{ connector.name }}</span>
+      <span class="flex w-full items-center justify-start gap-2">
+        <NuxtIcon :name="`wallet/${connector.type}`" class="text-xl" filled />
+        <span class="font-normal text-white">{{ connector.name }}</span>
       </span>
-
-      <Btn
-        v-if="!connector.ready"
-        class="inline-block relative pointer-events-auto z-1"
-        type="link"
-        :href="`https://metamask.app.link/dapp/${config.public.url}${fullPath}`"
-        target="_blank"
-      >
-        {{ $t('general.install') }}
-      </Btn>
-    </component>
+    </Btn>
   </n-space>
 </template>

@@ -15,6 +15,7 @@ declare global {
 export default function useService() {
   const { t } = useI18n();
   const authStore = useAuthStore();
+  const config = useRuntimeConfig();
 
   const services = {
     storage: ServiceType.STORAGE,
@@ -81,7 +82,12 @@ export default function useService() {
     };
   });
 
+  const isDev = () => {
+    return config.public.ENV === AppEnv.DEV || config.public.ENV === AppEnv.LOCAL;
+  };
+
   return {
     web3Services,
+    isDev,
   };
 }

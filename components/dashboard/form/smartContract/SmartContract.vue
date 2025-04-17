@@ -1,11 +1,5 @@
 <template>
-  <n-form
-    ref="formRef"
-    :model="form"
-    :rules="rules"
-    class="max-w-lg mx-auto my-10"
-    @submit.prevent="handleSubmit"
-  >
+  <n-form ref="formRef" :model="form" :rules="rules" class="mx-auto my-10 max-w-lg" @submit.prevent="handleSubmit">
     <!-- general fields -->
     <!-- chainId -->
     <n-form-item :span="6" :label-props="{ for: 'chainId' }" label="Select Chain" path="chain">
@@ -42,20 +36,11 @@
               required
             />
             <!-- number -->
-            <n-input-number
-              v-else-if="i.type.includes('uint')"
-              v-model:value="form[i.name]"
-              :min="0"
-              required
-            />
+            <n-input-number v-else-if="i.type.includes('uint')" v-model:value="form[i.name]" :min="0" required />
           </n-form-item>
         </div>
       </template>
-      <n-form-item
-        v-else
-        :label="labelInfo(input.name, 'form.label.collection')"
-        :path="input.name"
-      >
+      <n-form-item v-else :label="labelInfo(input.name, 'form.label.collection')" :path="input.name">
         <template v-if="!isSpecialField(input)">
           <!-- string -->
           <n-input
@@ -75,23 +60,14 @@
                   :show-label="false"
                   :show-feedback="false"
                 >
-                  <n-checkbox
-                    v-model:checked="settings[index]"
-                    size="medium"
-                    :label="`option ${index + 1}`"
-                  />
+                  <n-checkbox v-model:checked="settings[index]" size="medium" :label="`option ${index + 1}`" />
                 </n-form-item-gi>
               </n-grid>
             </div>
           </template>
 
           <!-- number -->
-          <n-input-number
-            v-else-if="input.type.includes('uint')"
-            v-model:value="form[input.name]"
-            :min="0"
-            required
-          />
+          <n-input-number v-else-if="input.type.includes('uint')" v-model:value="form[input.name]" :min="0" required />
         </template>
 
         <n-date-picker
@@ -101,7 +77,6 @@
           required
           clearable
           :is-date-disabled="disablePastDate"
-          :is-time-disabled="disablePastTime"
         />
       </n-form-item>
     </div>
@@ -135,7 +110,7 @@ const deployedContractStore = useDeployedContractStore();
 
 const { labelInfo } = useComputing();
 const { isSpecialField } = useSmartContracts();
-const { chains, disablePastDate, disablePastTime } = useCollection();
+const { chains, disablePastDate } = useCollection();
 
 const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
@@ -228,15 +203,15 @@ function createValidation(input: any): FormItemRule[] {
 
 function getServiceName(chainId?: number | null) {
   switch (chainId) {
-    case Chains.ASTAR:
+    case EvmChainMainnet.ASTAR:
       return PriceServiceName.CONTRACT_ASTAR_CREATE;
-    case Chains.MOONBASE:
+    case EvmChainTestnet.MOONBASE:
       return PriceServiceName.CONTRACT_MOONBASE_CREATE;
-    case Chains.MOONBEAM:
+    case EvmChainMainnet.MOONBEAM:
       return PriceServiceName.CONTRACT_MOONBEAM_CREATE;
-    case EvmChain.SEPOLIA:
+    case EvmChainTestnet.SEPOLIA:
       return PriceServiceName.CONTRACT_SEPOLIA_CREATE;
-    case EvmChain.ETHEREUM:
+    case EvmChainMainnet.ETHEREUM:
       return PriceServiceName.CONTRACT_ETHEREUM_CREATE;
     default:
       return PriceServiceName.CONTRACT_MOONBASE_CREATE;
@@ -248,9 +223,7 @@ function handleSubmit(e: Event | MouseEvent) {
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
       warningStore.showSpendingWarning(getServiceName(form.value.chain), () => deployContract());
     }
