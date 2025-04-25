@@ -112,7 +112,6 @@ export const useStorageStore = defineStore('storage', {
       try {
         const res = await $api.get<GithubProjectConfigResponse>(endpoints.githubProjectConfig(projectUuid));
         this.projectConfig = res.data;
-
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.GITHUB_PROJECT_CONFIG, Date.now().toString());
       } catch (error: any) {

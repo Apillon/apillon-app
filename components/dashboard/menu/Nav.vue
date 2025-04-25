@@ -110,6 +110,18 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       beta: isBetaFeature(Feature.INDEXING),
       disabled: isMenuItemDisabled(Feature.INDEXING) || !authStore.isUserAllowed(Permission.INDEXING),
     },
+    {
+      key: 'dashboard-service-cloud-functions',
+      label: t('dashboard.nav.cloudFunctions'),
+      to: 'dashboard-service-cloud-functions',
+      iconName: 'icon-cloud-functions',
+      soon: isMenuItemDisabled(Feature.CLOUD_FUNCTIONS),
+      beta: isBetaFeature(Feature.CLOUD_FUNCTIONS),
+      disabled:
+        isMenuItemDisabled(Feature.CLOUD_FUNCTIONS) ||
+        !authStore.isUserAllowed(Permission.COMPUTING) ||
+        zeroProjects.value,
+    },
   ];
 
   const assetManagementDevelopment = [

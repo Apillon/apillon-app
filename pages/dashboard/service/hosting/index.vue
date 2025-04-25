@@ -9,9 +9,12 @@
         <TableHosting :websites="websiteStore.items" />
       </n-space>
       <Empty v-else :title="$t('hosting.web3Hosting')" :info="$t('hosting.web3HostingEnable')" icon="storage/empty">
-        <Btn type="primary" @click="createNewWebsite">
-          {{ $t('hosting.website.addFirst') }}
-        </Btn>
+        <div class="flex flex-col gap-4">
+          <StorageGithubProjectConfig class="locked" size="small" />
+          <Btn type="primary" @click="createNewWebsite">
+            {{ $t('hosting.website.addFirst') }}
+          </Btn>
+        </div>
       </Empty>
 
       <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnHide">

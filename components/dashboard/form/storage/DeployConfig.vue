@@ -19,6 +19,19 @@
     </n-form-item>
 
     <n-form-item
+      path="installCommand"
+      :label="$t('hosting.deploy.form.install-command')"
+      :label-props="{ for: 'installCommand' }"
+    >
+      <n-input
+        v-model:value="storageStore.deployConfigForm.installCommand"
+        :input-props="{ id: 'installCommand' }"
+        :placeholder="$t('hosting.deploy.form.install-command-placeholder')"
+        clearable
+      />
+    </n-form-item>
+
+    <n-form-item
       path="buildCommand"
       :label="$t('form.label.website.buildCommand')"
       :label-props="{ for: 'buildCommand' }"

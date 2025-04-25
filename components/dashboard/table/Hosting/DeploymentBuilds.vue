@@ -7,6 +7,7 @@
     :data="deployments"
     :loading="deploymentStore.buildsLoading"
     :pagination="pagination"
+    :default-expanded-row-keys="defaultExpandedRowKey"
     :row-key="rowKey"
     @update:page-size="(pz: number) => (pagination.pageSize = pz)"
   />
@@ -56,4 +57,7 @@ const createColumns = (): NDataTableColumns<DeploymentBuildInterface> => {
 };
 const columns = createColumns();
 const rowKey = (row: DeploymentBuildInterface) => row.id;
+const defaultExpandedRowKey = computed(() => {
+  return deploymentStore.builds.length ? [rowKey(deploymentStore.builds[0])] : [];
+});
 </script>

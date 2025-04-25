@@ -77,7 +77,7 @@
     "FILE_VERSION_NOT_PRESENT": "File version is missing",
     "FILE_BODY_NOT_PRESENT": "File body is missing",
     "FILE_NOT_FOUND": "File not found",
-    "GITHUB_WEBHOOK_CREATION_FAILED": "WGitHub Webhook creation failed.",
+    "GITHUB_WEBHOOK_CREATION_FAILED": "GitHub Webhook creation failed.",
     "WEBSITE_DOMAIN_CHANGE_NOT_ALLOWED": "Website domain can be changed every 15 minutes.",
     "DEPLOYMENT_CONFIG_ALREADY_EXISTS": "Repository is already connected to Apillon. Remove the connection or use a different repository.",
     "DEPLOYMENT_CONFIG_VARIABLES_DUPLICATE": "Deployment variables keys are not unique.",

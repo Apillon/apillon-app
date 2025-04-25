@@ -93,6 +93,7 @@ const Endpoints = {
   githubProjectConfig: (projectUuid: string) => `/deploy/project-config/${projectUuid}`,
   githubRepos: (projectUuid: string) => `/deploy/github/list-repos/${projectUuid}`,
   deployConfig: (id?: string | number) => (id ? `/deploy/config/${id}` : '/deploy/config'),
+  redeploy: (websiteUuid: string) => `/deploy/${websiteUuid}/redeploy`,
   deployNftWebsite: `/deploy/nft`,
 
   /** IPNS */

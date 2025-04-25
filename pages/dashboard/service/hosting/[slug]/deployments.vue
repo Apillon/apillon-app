@@ -59,17 +59,42 @@ useHead({
 onMounted(async () => {
   initWebsite(DeploymentEnvironment.STAGING, true, false, true);
   storageStore.getGithubProjectConfig();
+  checkAndStartAutoRefresh();
+});
+
+onUnmounted(() => {
+  if (refreshInterval) {
+    clearInterval(refreshInterval);
+    refreshInterval = undefined;
+  }
 });
 
 const hasGithubConnected = computed(() => {
   return !!websiteStore.isActiveWebsiteGithubSource || !!websiteStore.active.nftCollectionUuid;
 });
+const refreshBuilds = async () => {
+  const websiteUuid = websiteStore.active?.website_uuid;
+  if (websiteUuid) {
+    await deploymentStore.fetchBuilds(websiteUuid);
+  }
+};
 
 const handleSubmitSuccess = async () => {
   websiteStore.resetForm();
   modalGithubVisible.value = false;
+  const existingDeploymentConfigId = deploymentStore.deploymentConfig?.id;
+  await deploymentStore.fetchDeploymentConfig(websiteStore.active?.website_uuid);
 
-  setTimeout(() => checkUnfinishedBuilds(), 3000);
+  if (!existingDeploymentConfigId) {
+    setTimeout(() => checkUnfinishedBuilds(), 3000);
+  }
+};
+
+const triggerRedeploy = async () => {
+  const websiteUuid = websiteStore.active?.website_uuid;
+  if (websiteUuid) {
+    await deploymentStore.redeploy(websiteUuid);
+  }
 };
 
 const showUpdateModal = async () => {
@@ -95,6 +120,7 @@ const checkAndStartAutoRefresh = () => {
   } else if (!hasPendingBuilds && refreshInterval) {
     clearInterval(refreshInterval);
     refreshInterval = undefined;
+    deploymentStore.fetchDeployments(websiteStore.active?.website_uuid);
   }
 };
 

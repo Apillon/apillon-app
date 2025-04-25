@@ -59,6 +59,6 @@ useHead({
 });
 
 onMounted(() => {
-  initWebsite(DeploymentEnvironment.PRODUCTION);
+  initWebsite(DeploymentEnvironment.PRODUCTION, false, false, true);
 });
 </script>

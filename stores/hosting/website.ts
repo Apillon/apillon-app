@@ -20,7 +20,7 @@ export const useWebsiteStore = defineStore('website', {
       description: '',
       branchName: 'main',
       buildCommand: 'npm run build',
-      buildDirectory: './out',
+      buildDirectory: './dist',
       installCommand: 'npm install',
       apiKey: undefined,
       apiSecret: '',
