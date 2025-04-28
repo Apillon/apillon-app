@@ -27,6 +27,8 @@ const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
+const message = useMessage();
+const $i18n = useI18n();
 
 const loading = ref(true);
 const action = ref<typeof OauthActionTypes | string | null>(sessionStorage.getItem(SessionKeys.OAUTH_ACTION));
@@ -48,12 +50,15 @@ async function login() {
   loading.value = true;
 
   try {
-    const { data } = await $api.post<LoginResponse>(`/oauth/${oauthType.value}/login`, getOauthParams());
-
+    const { data } = await $api.get<LoginResponse>(`/users/${oauthType.value}/callback`, getOauthParams());
     authStore.saveUser(data);
     await dataStore.fetchProjects(true);
   } catch (e: ApiError | any) {
-    console.error(e);
+    if (e.message === 'USER_IS_NOT_AUTHENTICATED') {
+      message.error($i18n.t('form.error.wrongLoginType'));
+    } else {
+      console.error(e);
+    }
     router.replace('/login');
   }
 
@@ -68,6 +73,7 @@ function getOauthParams() {
 
   if (oauthType.value === OauthTypes.GOOGLE) {
     params.code = route.query.code;
+    params.state = route.query.state;
     params.redirectUrl = `${window.location.origin}/login/oauth/google`;
   }
 
