@@ -32,11 +32,7 @@
       </n-form-item>
 
       <!--  CloudFunctions description -->
-      <n-form-item
-        path="description"
-        :label="$t('form.label.cloudFunctions.description')"
-        :label-props="{ for: 'description' }"
-      >
+      <n-form-item path="description" :label="$t('form.label.description')" :label-props="{ for: 'description' }">
         <n-input
           v-model:value="formData.description"
           type="textarea"

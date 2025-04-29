@@ -158,7 +158,7 @@ const services = [
   {
     title: t('dashboard.nav.solutions'),
     content: t('dashboard.solution.info'),
-    link: 'dashboard-solution',
+    link: 'dashboard-simplet',
   },
 ];
 </script>

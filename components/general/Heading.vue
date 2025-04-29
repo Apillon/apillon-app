@@ -2,7 +2,7 @@
   <!-- Heading template -->
   <div class="relative -mx-4 flex min-h-17 flex-col justify-end bg-bg-light/65 px-4 text-sm sm:-mx-8 sm:px-8">
     <div v-if="back && isLg" class="absolute -top-2 left-8 -translate-y-full">
-      <NuxtLink :to="{ name: 'dashboard-service-hosting' }">
+      <NuxtLink :to="back">
         <span class="icon-back align-sub text-2xl"></span>
       </NuxtLink>
     </div>
@@ -18,7 +18,7 @@
       <!-- Title - left side -->
       <slot>
         <div class="flex items-center gap-1">
-          <NuxtLink v-if="back && !isLg" :to="{ name: 'dashboard-service-hosting' }">
+          <NuxtLink v-if="back && !isLg" :to="back">
             <span class="icon-back align-sub text-xl"></span>
           </NuxtLink>
           <small v-if="serviceName">{{ serviceName }}</small>
@@ -57,12 +57,7 @@
     <slot name="details" />
 
     <template v-if="technologies.length">
-      <div class="flex items-center justify-between">
-        <span class="text-xs">{{ $t('general.poweredBy') }}</span>
-        <div class="flex items-center gap-2">
-          <NuxtIcon v-for="tech in technologies" :key="tech" :name="`${tech}`" class="text-2xl" filled />
-        </div>
-      </div>
+      <PoweredBy :icons="technologies" />
       <hr class="my-10 border-bg-lighter" />
     </template>
     <div v-if="docs || $slots.links" class="flex items-center justify-between">

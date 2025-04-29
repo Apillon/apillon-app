@@ -24,6 +24,7 @@ export enum ServiceTypeName {
   INDEXING = 'INDEXING',
   NFT = 'NFT',
   RPC = 'RPC',
+  SIMPLETS = 'SIMPLETS',
   SOCIAL = 'SOCIAL',
   STORAGE = 'STORAGE',
   EMBEDDED_WALLET = 'WALLET',
@@ -111,6 +112,7 @@ export enum PriceServiceName {
   OASIS_SIGNATURE = 'OASIS_SIGNATURE',
   IPNS = 'IPNS',
   INDEXER = 'INDEXER',
+  SIMPLET = 'SIMPLET',
 }
 export enum PriceServiceCategory {
   WEBSITE = 'WEBSITE',

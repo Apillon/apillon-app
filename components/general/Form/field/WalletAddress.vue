@@ -1,6 +1,6 @@
 <template>
   <div class="flex w-full items-center gap-4">
-    <n-input v-bind="$attrs" :placeholder="$t('general.typeHere')" clearable />
+    <n-input v-bind="$attrs" :placeholder="placeholder || $t('general.typeHere')" clearable />
     <Btn v-if="!isConnected" type="secondary" @click="modalWalletVisible = true">
       {{ $t('auth.wallet.connect.wallet') }}
     </Btn>
@@ -18,6 +18,9 @@
 <script lang="ts" setup>
 import { useAccount, useDisconnect, useConnectorClient } from '@wagmi/vue';
 
+defineProps({
+  placeholder: { type: String, default: null },
+});
 const emit = defineEmits(['connected']);
 const authStore = useAuthStore();
 const { address, isConnected } = useAccount();

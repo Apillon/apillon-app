@@ -153,8 +153,18 @@
       "setBaseUriRequired": "Please enter base URI",
       "transferAddressRequired": "Please enter wallet address"
     },
+    "simplet": {
+      "nameRequired": "Please fill the title",
+      "walletAddressRequired": "Please fill wallet address"
+    },
     "smartContracts": {
       "fieldRequired": "Please fill all fields"
+    },
+    "smtp": {
+      "host": "Please enter SMTP Host",
+      "port": "Please enter SMTP Port",
+      "username": "Please enter SMTP Username",
+      "password": "Please enter SMTP Password"
     },
     "website": {
       "nameRequired": "Please enter Website name",

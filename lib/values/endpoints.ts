@@ -223,6 +223,14 @@ const Endpoints = {
   posts: (uuid?: number | string) => (uuid ? `/social/posts/${uuid}` : `/social/posts`),
   postActivate: (uuid: number | string) => `/social/posts/${uuid}/activate`,
 
+  /**
+   * Simplets
+   */
+  simplets: (uuid?: number | string) => (uuid ? `/simplets/${uuid}` : '/simplets'),
+  simpletActivate: (uuid: number | string) => `/simplets/${uuid}/activate`,
+  simpletDeploy: (uuid: number | string) => `/simplets/${uuid}/deploy`,
+  simpletDeployed: (uuid?: number | string) => (uuid ? `/simplets/deployed/${uuid}` : `/simplets/deployed/`),
+
   /** Oauth links */
   oauthLinks: '/users/oauth-links/',
 

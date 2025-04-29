@@ -51,7 +51,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
     {
       key: 'dashboard-simplets',
       label: t('dashboard.nav.simplets'),
-      to: 'dashboard-solution',
+      to: 'dashboard-simplet',
       color: 'blue',
       svgIcon: 'menu/tools',
     },
@@ -84,15 +84,6 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       disabled: isMenuItemDisabled(Feature.EMBEDDED_WALLET) || !authStore.isUserAllowed(Permission.EMBEDDED_WALLET),
     },
     {
-      key: 'dashboard-service-cloud-functions',
-      label: t('dashboard.nav.cloudFunctions'),
-      to: 'dashboard-service-cloud-functions',
-      iconName: 'icon-cloud-functions',
-      soon: isMenuItemDisabled(Feature.CLOUD_FUNCTIONS),
-      beta: isBetaFeature(Feature.CLOUD_FUNCTIONS),
-      disabled: isMenuItemDisabled(Feature.CLOUD_FUNCTIONS) || !authStore.isUserAllowed(Permission.COMPUTING),
-    },
-    {
       key: 'dashboard-service-rpc',
       label: t('dashboard.nav.rpc'),
       to: 'dashboard-service-rpc',
@@ -117,10 +108,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       iconName: 'icon-cloud-functions',
       soon: isMenuItemDisabled(Feature.CLOUD_FUNCTIONS),
       beta: isBetaFeature(Feature.CLOUD_FUNCTIONS),
-      disabled:
-        isMenuItemDisabled(Feature.CLOUD_FUNCTIONS) ||
-        !authStore.isUserAllowed(Permission.COMPUTING) ||
-        zeroProjects.value,
+      disabled: isMenuItemDisabled(Feature.CLOUD_FUNCTIONS) || !authStore.isUserAllowed(Permission.COMPUTING),
     },
   ];
 
@@ -181,34 +169,34 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
 
   const simplets = [
     {
-      key: 'dashboard-solution-proof-of-attendance',
+      key: 'dashboard-simplet-proof-of-attendance',
       label: t('dashboard.solution.nftPoap.name'),
       iconName: 'icon-poap',
-      to: 'dashboard-solution-proof-of-attendance',
+      to: 'dashboard-simplet-proof-of-attendance',
     },
     {
-      key: 'dashboard-solution-airdrop',
+      key: 'dashboard-simplet-airdrop',
       label: t('dashboard.solution.nftAirdrop.name'),
       iconName: 'icon-nft-mint-airdrop',
-      to: 'dashboard-solution-airdrop',
+      to: 'dashboard-simplet-airdrop',
     },
     {
-      key: 'dashboard-solution-email-signup-airdrop',
+      key: 'dashboard-simplet-email-signup-airdrop',
       label: t('dashboard.solution.nftEmailSignupAirdrop.name'),
       iconName: 'icon-nft-drop',
-      to: 'dashboard-solution-email-signup-airdrop',
+      to: 'dashboard-simplet-email-signup-airdrop',
     },
     {
-      key: 'dashboard-solution-whitelist-claim',
+      key: 'dashboard-simplet-whitelist-claim',
       label: t('dashboard.solution.nftWhitelistClaim.name'),
       iconName: 'icon-gift',
-      to: 'dashboard-solution-whitelist-claim',
+      to: 'dashboard-simplet-whitelist-claim',
     },
     {
-      key: 'dashboard-solution-openGov',
+      key: 'dashboard-simplet-openGov',
       label: t('dashboard.solution.openGov.name'),
       iconName: 'icon-brand-membership',
-      to: 'dashboard-solution-openGov',
+      to: 'dashboard-simplet-openGov',
     },
   ];
 

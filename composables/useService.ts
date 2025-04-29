@@ -1,5 +1,5 @@
 export type ServiceTypeItem = {
-  id: ServiceType | SolutionKey;
+  id: ServiceType | SolutionKey | SimpletType | number | string;
   key: string;
   name: string;
   description: string;

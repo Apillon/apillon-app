@@ -14,12 +14,29 @@ import type { Size } from 'naive-ui/es/button/src/interface';
 
 const props = defineProps({
   animation: { type: Boolean, default: false },
+  filled: { type: Boolean, default: false },
   onHover: { type: Boolean, default: false },
   size: { type: String as PropType<Size>, default: 'small' },
   type: { type: String as PropType<TagType>, default: 'default' },
 });
 
 const tagClass = computed(() => {
+  if (props.filled) {
+    switch (props.type) {
+      case 'warning':
+        return 'bg-yellow text-bg-dark';
+      case 'success':
+        return 'bg-green text-bg-dark';
+      case 'error':
+        return 'bg-pink text-bg-dark';
+      case 'primary':
+        return 'bg-violet text-bg-dark';
+      case 'info':
+        return 'bg-blue text-bg-dark';
+      default:
+        return 'bg-bg-lighter/70 text-bg-dark';
+    }
+  }
   if (props.onHover) {
     switch (props.type) {
       case 'warning':

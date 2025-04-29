@@ -7,12 +7,9 @@
           <div>
             <slot name="header-center">
               <div v-if="steps" class="flex items-center gap-4 text-xs">
-                <template v-for="(step, key) in enumValues(steps)" :key="key">
-                  <span v-if="key > 0 && $te(`${transKey}.${step}`)" class="card-border w-3"></span>
-                  <strong
-                    v-if="$te(`${transKey}.${step}`)"
-                    :class="step === activeStep ? 'text-yellow' : 'text-disabled'"
-                  >
+                <template v-for="(step, key) in enumValues(steps).filter(s => $te(`${transKey}.${s}`))" :key="key">
+                  <span v-if="key" class="card-border w-3"></span>
+                  <strong :class="step === activeStep ? 'text-yellow' : 'text-disabled'">
                     {{ $t(`${transKey}.${step}`) }}
                   </strong>
                 </template>

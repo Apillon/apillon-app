@@ -1,33 +1,31 @@
 <template>
   <div>
-    <div v-for="(item, key) in content" :key="key" :class="innerClass">
-      <h3 v-if="item.headline">{{ item.headline }}</h3>
+    <div v-for="(item, key) in content" :key="key" class="mb-6" :class="innerClass">
+      <h4 v-if="item.headline">{{ item.headline }}</h4>
+      <h5 v-if="item.title" :class="{ 'mt-4': item.headline }">{{ item.title }}</h5>
+      <strong
+        v-if="item.subtitle"
+        class="mb-4 block whitespace-break-spaces"
+        :class="{ 'mt-3': item.headline || item.title }"
+      >
+        {{ item.subtitle }}
+      </strong>
 
-      <p v-if="item.headline && item.title" :class="{ 'mt-6': item.headline }">{{ item.title }}</p>
-      <h4 v-else-if="item.title" :class="{ 'mt-6': item.headline }">{{ item.title }}</h4>
-      <p v-if="item.subtitle" class="mb-2 whitespace-break-spaces">{{ item.subtitle }}</p>
+      <p v-if="item.p" class="mt-2 whitespace-break-spaces" v-html="transformLinks(item.p)"></p>
 
-      <template v-if="icons">
-        <ul v-if="item.content && Array.isArray(item.content)" class="mb-4 text-green">
-          <li v-for="(c, keyC) in item.content" :key="keyC">
-            <NuxtIcon name="icon/success" class="float-left mr-2 inline-block text-2xl" />
-            <span class="text-body" v-html="transformLinks(c)"></span>
-          </li>
-        </ul>
-      </template>
-      <template v-else>
-        <ul v-if="item.content && Array.isArray(item.content)" class="mb-4 list-disc pl-4 text-body">
-          <li v-for="(c, keyC) in item.content" :key="keyC" v-html="transformLinks(c)"></li>
-        </ul>
-        <p v-else-if="item.content" class="mb-6 mt-2 whitespace-break-spaces" v-html="transformLinks(item.content)"></p>
+      <ul v-if="item.content && Array.isArray(item.content)" class="mb-4 mt-0 list-disc pl-5 text-white-secondary">
+        <li v-for="(c, keyC) in item.content" :key="keyC" v-html="transformLinks(c)"></li>
+      </ul>
+      <p v-else-if="item.content" class="mb-4 mt-2 whitespace-break-spaces" v-html="transformLinks(item.content)"></p>
 
-        <ul v-if="item.benefits" class="my-6 text-white">
-          <li v-for="(benefit, keyB) in item.benefits" :key="keyB" class="my-2">
-            <NuxtIcon name="icon/success" class="float-left mr-2 inline-block text-2xl text-green" />
-            <span v-html="benefit"></span>
-          </li>
-        </ul>
-      </template>
+      <ul v-if="item.benefits" class="my-4 text-white-secondary">
+        <li v-for="(benefit, keyB) in item.benefits" :key="keyB" class="my-2">
+          <NuxtIcon name="icon/success" class="float-left mr-2 inline-block text-2xl text-green" />
+          <span v-html="benefit"></span>
+        </li>
+      </ul>
+
+      <hr v-if="item.border" class="my-8 border-bg-lighter" />
     </div>
 
     <slot />

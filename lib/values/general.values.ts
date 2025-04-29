@@ -40,6 +40,7 @@ export const SessionKeys = {
   METADATA_STORE: 'al_metadata_store',
   OAUTH_ACTION: 'al_oauth_action',
   SETTINGS_STORE: 'al_settings_store',
+  SIMPLETS_STORE: 'al_simplets_store',
   SUBSCRIPTION_MSG: 'al_subscription_msg',
   WEBSITE_REVIEW: 'al_website_review',
 };
@@ -54,6 +55,7 @@ export const LsTableColumnsKeys = {
   HOSTING: 'al_table_hosting_columns',
   IPNS: 'al_table_ipns_columns',
   NFT_COLLECTION: 'al_table_nft_collection_columns',
+  SIMPLETS: 'al_table_simplets',
   SMART_CONTRACTS: 'al_table_smart_contracts',
   SOCIAL_POST: 'al_table_social_channel',
 };
@@ -154,6 +156,9 @@ export const LsCacheKeys = {
   WEBSITE: 'al_cache_website',
   WEBSITES: 'al_cache_websites',
   WEBSITE_ARCHIVE: 'al_cache_website_archive',
+  SIMPLET: 'al_cache_simplet',
+  SIMPLETS: 'al_cache_simplets',
+  SIMPLETS_ARCHIVED: 'al_cache_simplets_archived',
   SMART_CONTRACT: 'al_cache_smart_contract',
   SMART_CONTRACTS: 'al_cache_smart_contracts',
   SMART_CONTRACT_DEPLOYED: 'al_smart_contract_deployed',

@@ -36,6 +36,7 @@
       "confirmPassword": "Confirm password",
       "creditThreshold": "Notify me when credits are below the limit",
       "cvv": "CVV",
+      "description": "Description",
       "domain": "Domain name",
       "email": "Email address",
       "folderName": "Folder name",
@@ -156,7 +157,6 @@
         }
       },
       "cloudFunctions": {
-        "description": "Description",
         "name": "Title",
         "jobName": "Job name",
         "slots": "Number of processors",
@@ -184,7 +184,6 @@
         "burnTokenId": "Token ID",
         "collection": "Collection",
         "copies": "Copies",
-        "description": "Description",
         "displayType": "Type",
         "id": "ID",
         "idsToMint": "IDs to Mint",
@@ -204,6 +203,18 @@
       "rpcApiKey": {
         "name": "Name",
         "description": "Description"
+      },
+      "simplet": {
+        "name": "Simplet title",
+        "walletAddress": "Wallet address"
+      },
+      "smtp": {
+        "host": "SMTP Host",
+        "port": "SMTP Port",
+        "username": "SMTP Username",
+        "password": "SMTP Password",
+        "sender": "Sender name (from)",
+        "email": "Sender email (from)"
       },
       "website": {
         "description": "Website description",
@@ -311,6 +322,19 @@
       "rpcApiKey": {
         "name": "Enter key name",
         "description": "Enter key description"
+      },
+      "simplet": {
+        "name": "Just for your eyes—helps you keep things organized.",
+        "description": "Optional. Add a note for future-you (or teammates) to remember what this setup is for.",
+        "walletAddress": "Where the NFTs will come from. Enter the wallet address that will power this Simplet."
+      },
+      "smtp": {
+        "host": "Your mail server host (e.g. smtp.yourdomain.com)",
+        "port": "465",
+        "username": "e.g. user'@'gmail.com",
+        "password": "***",
+        "sender": "Who the emails will be from (e.g. NFT Airdrop)",
+        "email": "e.g. user/@gmail.com"
       },
       "website": {
         "description": "Website description",

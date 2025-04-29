@@ -32,8 +32,8 @@ function routeNameToKey(name: string) {
   return props.sliceName ? removeIdOrSlug(name) : name;
 }
 
-function removeIdOrSlug(text) {
-  return text.replace(/(-id|-slug|-archive|-deployed|-new).*/g, '');
+function removeIdOrSlug(text: string) {
+  return text.replace(/(-id|-slug|-archive|-deployed|-new|-airdrop).*/g, '');
 }
 
 /**
