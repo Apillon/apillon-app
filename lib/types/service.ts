@@ -12,6 +12,7 @@ export enum ServiceType {
   SMART_CONTRACTS = 8,
   RPC = 9,
   INDEXING = 10,
+  SIMPLETS = 11,
   CLOUD_FUNCTIONS = 50,
   ASSET_HUB = 51,
 }
@@ -24,6 +25,7 @@ export enum ServiceTypeName {
   INDEXING = 'INDEXING',
   NFT = 'NFT',
   RPC = 'RPC',
+  SIMPLETS = 'SIMPLETS',
   SOCIAL = 'SOCIAL',
   STORAGE = 'STORAGE',
   EMBEDDED_WALLET = 'WALLET',
