@@ -1,9 +1,10 @@
 <template>
-  <Menu :options="menuOptions" mode="horizontal" slice-name />
+  <Menu :options="menuOptions" mode="horizontal" :slice-name="route.name !== 'dashboard-simplet-archive'" />
 </template>
 
 <script lang="ts" setup>
 const { t } = useI18n();
+const route = useRoute();
 
 const menuOptions: NMenuOption[] = [
   {

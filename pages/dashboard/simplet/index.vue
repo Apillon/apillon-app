@@ -7,12 +7,12 @@
       <p class="mb-2 max-w-lg">{{ $t('dashboard.simplet.templates') }}</p>
 
       <div class="grid gap-4 lg:grid-cols-3">
-        <Card v-for="(service, key) in simpletsContent" :key="key" :service="service" dark title-new-line>
+        <Card v-for="(simplet, key) in simpletsContent" :key="key" :service="simplet" dark title-new-line>
           <div class="grid grid-cols-2 gap-2">
-            <Btn class="w-full" type="secondary" :to="`/dashboard/simplet/${service.key}`">
+            <Btn class="w-full" type="secondary" :to="`/dashboard/simplet/${simplet.key}`">
               {{ $t('general.details') }}
             </Btn>
-            <Btn class="w-full" @click="openModal(Number(service.id))">{{ $t('auth.onboarding.getStarted') }}</Btn>
+            <Btn class="w-full" @click="openModal(Number(simplet.id))">{{ $t('auth.onboarding.getStarted') }}</Btn>
           </div>
         </Card>
       </div>
@@ -45,6 +45,7 @@ onMounted(() => {
 });
 
 function openModal(type: number) {
+  simpletsStore.resetForm();
   simpletType.value = type;
   simpletsStore.stepSimpletCreate = SimpletCreateStep.COLLECTION;
   showModalNewSimplet.value = true;

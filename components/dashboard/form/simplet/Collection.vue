@@ -8,7 +8,8 @@
           : $t('dashboard.simplet.wizard.collection.empty')
       "
     />
-    <template v-if="collections.length">
+    <Spinner v-if="collectionStore.loading" />
+    <template v-else-if="collections.length">
       <CardSelect
         v-for="(collection, key) in collections"
         :key="key"
@@ -61,7 +62,6 @@ const logoImg = (uuid: string) => {
 
 function nextStep() {
   if (selectedCollection.value) {
-    simpletsStore.resetForm();
     simpletsStore.form.collection = selectedCollection.value;
   } else {
     message.warning(t('dashboard.simplet.wizard.selectCollection'));

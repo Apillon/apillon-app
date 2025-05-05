@@ -14,13 +14,18 @@ export const useSimpletsStore = defineStore('simplets', {
       search: '',
       pagination: createPagination(),
     },
-    stepSimpletCreate: SimpletCreateStep.TYPE,
+    stepSimpletCreate: SimpletCreateStep.COLLECTION,
     form: {
-      type: null as null | SimpletType,
+      type: null as Optional<SimpletType>,
       collection: '',
       name: '',
       description: '',
-      walletAddress: '',
+      embeddedWallet: null as Optional<string>,
+      walletAddress: null as Optional<string>,
+      startTime: null as Optional<number>,
+      endTime: null as Optional<number>,
+      apiKey: null as Optional<string>,
+      apiSecret: null as Optional<string>,
       smtp: {
         host: '',
         port: 465,
@@ -55,13 +60,19 @@ export const useSimpletsStore = defineStore('simplets', {
       this.archive.pagination.page = 1;
       this.archive.pagination.itemCount = 0;
       this.archive.search = '';
+      this.resetForm();
     },
     resetForm() {
-      this.form.type = null as null | SimpletType;
+      this.form.type = null as Optional<SimpletType>;
       this.form.collection = '';
       this.form.name = '';
       this.form.description = '';
-      this.form.adminWallet = '';
+      this.form.embeddedWallet = null;
+      this.form.walletAddress = '';
+      this.form.startTime = null;
+      this.form.endTime = null;
+      this.form.apiKey = null;
+      this.form.apiSecret = '';
       this.form.smtp.host = '';
       this.form.smtp.port = 465;
       this.form.smtp.username = '';

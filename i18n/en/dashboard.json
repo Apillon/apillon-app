@@ -518,14 +518,17 @@
         "createStep": {
           "2": "Select",
           "3": "Data",
-          "4": "Review"
+          "5": "Review"
         },
         "smtp": {
           "info": "Add your SMTP settings so your emails are sent straight from your domain—no sketchy senders here.",
           "setup": "Email server setup",
+          "skip": "Skip email server setup for now. A default SMTP server will be pre-configured inside the Docker image. You can update the SMTP configuration later if needed.",
           "warning": "Don’t worry—your SMTP details are safe. Simplets run in a Trusted Execution Environment (TEE), which means your sensitive data stays protected. Learn more about TEEs and confidential computing."
         },
         "create": "Deploy simplet",
+        "deploying": "Creating Simplet",
+        "deployingInfo": "Deploying NFT Studio...",
         "info": "You’re about to deploy a Simplet that sets up your NFT distribution dashboard. Here, you’ll manage everything—email drops, wallet airdrops, public minting, and more.",
         "selectType": "Select simplet type",
         "setData": "Set your Simplet data"

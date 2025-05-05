@@ -44,7 +44,7 @@ import type { SelectOption } from 'naive-ui';
 
 defineEmits(['update:apiKey', 'update:apiSecret']);
 defineProps({
-  apiKey: { type: String, default: '' },
+  apiKey: { type: [String, null], default: null },
   apiSecret: { type: String, default: '' },
   configId: { type: Number, default: 0 },
 });

@@ -14,8 +14,7 @@ export const useWebsiteStore = defineStore('website', {
     stepWebsiteCreate: WebsiteCreateStep.TYPE,
     uploadActive: false,
     form: {
-      type: null as null | WebsiteType,
-      nftTemplateType: null as null | WebsiteType,
+      type: null as Optional<WebsiteType>,
       name: '',
       description: '',
       branchName: 'main',
@@ -56,7 +55,7 @@ export const useWebsiteStore = defineStore('website', {
       this.selected = '';
     },
     resetForm() {
-      this.form.type = null as null | WebsiteType;
+      this.form.type = null as Optional<WebsiteType>;
       this.form.name = '';
       this.form.description = '';
       this.form.branchName = 'main';

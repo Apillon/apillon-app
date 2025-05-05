@@ -22,6 +22,8 @@ export enum ServiceStatusType {
 }
 
 declare global {
+  type Optional<T> = null | T;
+
   type KeyValue = {
     key: string | number;
     value: string | number;

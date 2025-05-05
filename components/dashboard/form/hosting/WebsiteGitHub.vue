@@ -24,7 +24,7 @@
     <n-form
       ref="formRef"
       :model="websiteStore.form"
-      :rules="rules"
+      :rules="rulesWebsite"
       :disabled="isFormDisabled"
       @submit.prevent="handleSubmit"
     >
@@ -142,20 +142,6 @@ const loading = ref<boolean>(false);
 const repoSelected = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
 const website = ref<WebsiteInterface | null>(null);
-
-const rules: NFormRules = {
-  ...rulesWebsite,
-  apiKey: {
-    validator: (_, value) => validateApiKey(value, websiteStore.form.apiSecret),
-    message: t('validation.apiKeyRequired'),
-    trigger: 'blur',
-  },
-  apiSecret: {
-    validator: (_, value) => validateApiKey(value, websiteStore.form.apiKey),
-    message: t('validation.apiSecretRequired'),
-    trigger: 'blur',
-  },
-};
 
 const isFormDisabled = computed<boolean>(() => {
   return dataStore.isProjectUser;

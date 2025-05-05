@@ -36,7 +36,7 @@ useHead({
 
 onMounted(async () => {
   await dataStore.waitOnPromises();
-  await simpletsStore.getSimplets();
+  await simpletsStore.getSimpletsArchive();
   paymentStore.getPriceList();
 
   pageLoading.value = false;

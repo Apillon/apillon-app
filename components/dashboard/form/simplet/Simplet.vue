@@ -34,7 +34,7 @@
         />
       </n-form-item>
 
-      <!-- Admin Address -->
+      <!-- Admin Wallet Address -->
       <n-form-item
         path="walletAddress"
         :label="$t('form.label.simplet.walletAddress')"
@@ -43,8 +43,53 @@
         <FormFieldWalletAddress
           v-model:value="simpletsStore.form.walletAddress"
           :placeholder="$t('form.placeholder.simplet.walletAddress')"
+          @connected="address => (simpletsStore.form.walletAddress = address)"
         />
       </n-form-item>
+
+      <FormFieldEmbeddedWallet
+        v-if="embeddedWalletStore.hasEmbeddedWallets"
+        v-model:value="simpletsStore.form.embeddedWallet"
+        @update:value="ew => (simpletsStore.form.embeddedWallet = ew)"
+      />
+
+      <n-grid v-if="simpletsStore.form.type === SimpletType.POAP" :cols="12" :x-gap="32">
+        <n-form-item-gi
+          path="startTime"
+          :span="6"
+          :label="$t('form.label.simplet.startTime')"
+          :label-props="{ for: 'startTime' }"
+        >
+          <n-date-picker
+            v-model:value="simpletsStore.form.startTime"
+            class="w-full"
+            type="datetime"
+            :input-props="{ id: 'startTime' }"
+            clearable
+          />
+        </n-form-item-gi>
+        <n-form-item-gi
+          path="endTime"
+          :span="6"
+          :label="$t('form.label.simplet.endTime')"
+          :label-props="{ for: 'endTime' }"
+        >
+          <n-date-picker
+            v-model:value="simpletsStore.form.endTime"
+            class="w-full"
+            type="datetime"
+            :input-props="{ id: 'endTime' }"
+            clearable
+          />
+        </n-form-item-gi>
+      </n-grid>
+
+      <FormFieldApiKey
+        :api-key="simpletsStore.form.apiKey"
+        :api-secret="simpletsStore.form.apiSecret"
+        @update:api-key="apiKey => (simpletsStore.form.apiKey = apiKey)"
+        @update:api-secret="apiSecret => (simpletsStore.form.apiSecret = apiSecret)"
+      />
     </n-form>
   </div>
 </template>
@@ -55,14 +100,22 @@ defineExpose({ handleSubmit });
 const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
-const warningStore = useWarningStore();
 const simpletsStore = useSimpletsStore();
+const embeddedWalletStore = useEmbeddedWalletStore();
+
+const { ruleApiKey, ruleApiSecret } = useHosting();
 const formRef = ref<NFormInst | null>(null);
 
 const rules: NFormRules = {
   name: [ruleRequired(t('validation.simplet.nameRequired'))],
   description: [ruleDescription(t('validation.descriptionTooLong'))],
   walletAddress: [ruleRequired(t('validation.simplet.walletAddressRequired'))],
+  apiKey: ruleApiKey(simpletsStore.form),
+  apiSecret: ruleApiSecret(simpletsStore.form),
+  embeddedWallet: {
+    required: embeddedWalletStore.hasEmbeddedWallets,
+    message: t('validation.embeddedWallet.integrationRequired'),
+  },
 };
 
 const isFormDisabled = computed<boolean>(() => {

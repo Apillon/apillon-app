@@ -2,7 +2,11 @@
   <ModalFullScreen
     :progress="progress"
     :steps="SimpletCreateStep"
-    :active-step="simpletsStore.stepSimpletCreate"
+    :active-step="
+      simpletsStore.stepSimpletCreate === SimpletCreateStep.SMTP
+        ? SimpletCreateStep.FORM
+        : simpletsStore.stepSimpletCreate
+    "
     trans-key="dashboard.simplet.wizard.createStep"
     :title="$t('dashboard.simplet.wizard.create')"
   >
@@ -21,13 +25,12 @@
         v-else-if="simpletsStore.stepSimpletCreate === SimpletCreateStep.FORM"
         ref="simpletFormRef"
         class="mx-auto max-w-lg"
-        hide-submit
       />
       <FormSimpletSmtp
         v-else-if="simpletsStore.stepSimpletCreate === SimpletCreateStep.SMTP"
         ref="simpletFormSmtpRef"
         class="mx-auto max-w-lg"
-        hide-submit
+        @skip="skipSmtp()"
       />
       <SimpletPreview
         v-else-if="simpletsStore.stepSimpletCreate === SimpletCreateStep.REVIEW"
@@ -71,9 +74,12 @@
 const props = defineProps({
   type: { type: Number, default: 0 },
 });
+const { t } = useI18n();
+const message = useMessage();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const simpletsStore = useSimpletsStore();
+const embeddedWalletStore = useEmbeddedWalletStore();
 
 const simpletTypeRef = useTemplateRef('simpletTypeRef');
 const simpletCollectionRef = useTemplateRef('simpletCollectionRef');
@@ -84,15 +90,23 @@ const totalCredits = 150;
 const progress = computed(() => Math.min(100, 20 * (simpletsStore.stepSimpletCreate - 1)));
 
 onMounted(async () => {
-  if (props.type > 0) {
-    simpletsStore.form.type = props.type;
-    simpletsStore.stepSimpletCreate = SimpletCreateStep.COLLECTION;
-  } else {
-    simpletsStore.stepSimpletCreate = SimpletCreateStep.TYPE;
-  }
   await dataStore.waitOnPromises();
   paymentStore.getPriceList();
+  simpletsStore.getSimpletTemplates();
+  embeddedWalletStore.getEmbeddedWallets();
 });
+
+watch(
+  () => props.type,
+  newType => {
+    if (newType > 0) {
+      simpletsStore.form.type = newType;
+      simpletsStore.stepSimpletCreate = SimpletCreateStep.COLLECTION;
+    } else {
+      simpletsStore.stepSimpletCreate = SimpletCreateStep.TYPE;
+    }
+  }
+);
 
 async function submitForm() {
   if (await simpletFormRef.value?.handleSubmit()) {
@@ -142,13 +156,97 @@ function nextStep() {
   }
 }
 
+async function skipSmtp() {
+  simpletsStore.form.smtp.host = '';
+  simpletsStore.form.smtp.username = '';
+  simpletsStore.form.smtp.password = '';
+  simpletsStore.form.smtp.senderName = '';
+  simpletsStore.form.smtp.senderEmail = '';
+  simpletsStore.stepSimpletCreate = SimpletCreateStep.REVIEW;
+}
+
 async function deploy() {
   simpletsStore.stepSimpletCreate = SimpletCreateStep.DEPLOYING;
-  const simplet = await createSimplet();
+
+  const simpletUuid =
+    simpletsStore.templates.find(t => t.id === simpletsStore.form.type)?.simplet_uuid ||
+    simpletsStore.templates[0].simplet_uuid;
+  const simplet = await createSimplet(simpletUuid);
+
   simpletsStore.stepSimpletCreate = simplet ? SimpletCreateStep.DEPLOYED : SimpletCreateStep.FORM;
 }
 
-function createSimplet() {
-  return true;
+const prepareVariablesBE = (): KeyValue[] => [
+  { key: 'CLAIM_TYPE', value: simpletsStore.form.type || SimpletType.AIRDROP },
+  { key: 'ADMIN_WALLET', value: simpletsStore.form.walletAddress || '' },
+  ...(simpletsStore.form.smtp.host
+    ? [
+        { key: 'SMTP_HOST', value: simpletsStore.form.smtp.host },
+        { key: 'SMTP_PORT', value: simpletsStore.form.smtp.port },
+        { key: 'SMTP_USERNAME', value: simpletsStore.form.smtp.username },
+        { key: 'SMTP_PASSWORD', value: simpletsStore.form.smtp.password },
+        { key: 'SMTP_NAME_FROM', value: simpletsStore.form.smtp.senderName },
+        { key: 'SMTP_EMAIL_FROM', value: simpletsStore.form.smtp.senderEmail },
+      ]
+    : []),
+];
+const prepareVariablesFE = (embeddedWallet: string): KeyValue[] => {
+  const frontendVariables: KeyValue[] = [
+    { key: 'NUXT_PUBLIC_CLAIM_TYPE', value: simpletsStore.form.type || SimpletType.AIRDROP },
+    { key: 'NUXT_PUBLIC_EMBEDDED_WALLET_CLIENT', value: embeddedWallet },
+    ...(simpletsStore.form.type === SimpletType.POAP && simpletsStore.form.startTime
+      ? [{ key: 'NUXT_PUBLIC_CLAIM_START', value: simpletsStore.form.startTime }]
+      : []),
+    ...(simpletsStore.form.type === SimpletType.POAP && simpletsStore.form.endTime
+      ? [{ key: 'NUXT_PUBLIC_CLAIM_END', value: simpletsStore.form.endTime }]
+      : []),
+  ];
+  return frontendVariables;
+};
+
+async function createSimplet(simpletUuid: string) {
+  try {
+    const embeddedWallet = await getEmbeddedWallet(simpletsStore.form.embeddedWallet);
+
+    const bodyData = {
+      project_uuid: dataStore.projectUuid,
+      name: simpletsStore.form.name,
+      description: simpletsStore.form.description,
+      apillonApiKey: simpletsStore.form.apiKey || null,
+      apillonApiSecret: simpletsStore.form.apiSecret || null,
+      nftCollection_uuid: simpletsStore.form.collection,
+      backendVariables: prepareVariablesBE(),
+      frontendVariables: prepareVariablesFE(embeddedWallet),
+    };
+
+    const { data } = await $api.post<SimpletResponse>(endpoints.simpletDeploy(simpletUuid), bodyData);
+    message.success(t('nft.collection.websiteDeploy.success'));
+
+    return data;
+  } catch (e) {
+    message.error(userFriendlyMsg(e));
+  }
+  return null;
+}
+
+async function getEmbeddedWallet(integrationUuid?: string | null): Promise<string> {
+  if (integrationUuid) return integrationUuid;
+
+  const embeddedWallet = await createEmbeddedWallet();
+  return embeddedWallet?.integration_uuid || '';
+}
+
+async function createEmbeddedWallet() {
+  try {
+    const bodyData = {
+      title: `Embedded wallet: ${simpletsStore.form.name}`,
+      description: `Embedded wallet: ${simpletsStore.form.description}`,
+      project_uuid: dataStore.projectUuid,
+    };
+    const { data } = await $api.post<EmbeddedWalletResponse>(endpoints.embeddedWalletIntegration, bodyData);
+    return data;
+  } catch (error: ApiError | any) {
+    message.error(userFriendlyMsg(error));
+  }
 }
 </script>

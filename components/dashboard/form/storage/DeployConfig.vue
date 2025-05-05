@@ -4,7 +4,7 @@
     ref="formRef"
     :model="websiteStore.form"
     :disabled="isFormDisabled"
-    :rules="rules"
+    :rules="rulesWebsite"
     autocomplete="off"
     @submit.prevent="handleSubmit"
   >
@@ -24,7 +24,7 @@
       :label-props="{ for: 'installCommand' }"
     >
       <n-input
-        v-model:value="storageStore.deployConfigForm.installCommand"
+        v-model:value="websiteStore.form.installCommand"
         :input-props="{ id: 'installCommand' }"
         :placeholder="$t('hosting.deploy.form.install-command-placeholder')"
         clearable
@@ -116,20 +116,6 @@ const deleteLoading = ref<boolean>(false);
 const isFormDisabled = computed<boolean>(() => {
   return dataStore.isProjectUser;
 });
-
-const rules: NFormRules = {
-  ...rulesWebsite,
-  apiKey: {
-    validator: (_, value) => validateApiKey(value, websiteStore.form.apiSecret),
-    message: t('validation.apiKeyRequired'),
-    trigger: 'blur',
-  },
-  apiSecret: {
-    validator: (_, value) => validateApiKey(value, websiteStore.form.apiKey),
-    message: t('validation.apiSecretRequired'),
-    trigger: 'blur',
-  },
-};
 
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();

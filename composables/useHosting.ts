@@ -29,14 +29,26 @@ export default function useHosting() {
   /** Website ID from route */
   const websiteUuid = ref<string>(params.id ? `${params?.id}` : `${params?.slug}`);
 
-  /** Website rules */
+  const ruleApiKey = (form: Record<string, any>) => ({
+    validator: (_, value) => validateApiKey(value, form?.apiSecret),
+    message: t('validation.apiKeyRequired'),
+    trigger: 'blur',
+  });
+  const ruleApiSecret = (form: Record<string, any>) => ({
+    validator: (_, value) => validateApiSecret(value, form?.apiKey),
+    message: t('validation.apiKeyRequired'),
+    trigger: 'blur',
+  });
 
+  /** Website rules */
   const rulesWebsite: NFormRules = {
     name: [ruleRequired(t('validation.website.nameRequired'))],
     description: [ruleDescription(t('validation.descriptionTooLong'))],
     repoId: [ruleRequired(t('validation.hosting.repoRequired'))],
     branchName: [ruleRequired(t('validation.hosting.branchNameRequired'))],
     buildDirectory: [ruleRequired(t('validation.hosting.buildDirectoryRequired'))],
+    apiKey: ruleApiKey(websiteStore.form),
+    apiSecret: ruleApiSecret(websiteStore.form),
   };
 
   onUnmounted(() => {
@@ -265,6 +277,8 @@ export default function useHosting() {
     initWebsite,
     onWebsiteDeleted,
     refreshWebpage,
+    ruleApiKey,
+    ruleApiSecret,
     updateWebsite,
   };
 }

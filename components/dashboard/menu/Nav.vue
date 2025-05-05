@@ -169,34 +169,22 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
 
   const simplets = [
     {
-      key: 'dashboard-simplet-proof-of-attendance',
-      label: t('dashboard.solution.nftPoap.name'),
-      iconName: 'icon-poap',
-      to: 'dashboard-simplet-proof-of-attendance',
-    },
-    {
       key: 'dashboard-simplet-airdrop',
       label: t('dashboard.solution.nftAirdrop.name'),
       iconName: 'icon-nft-mint-airdrop',
       to: 'dashboard-simplet-airdrop',
     },
     {
-      key: 'dashboard-simplet-email-signup-airdrop',
-      label: t('dashboard.solution.nftEmailSignupAirdrop.name'),
-      iconName: 'icon-nft-drop',
-      to: 'dashboard-simplet-email-signup-airdrop',
+      key: 'dashboard-simplet-poap',
+      label: t('dashboard.solution.nftPoap.name'),
+      iconName: 'icon-poap',
+      to: 'dashboard-simplet-proof-of-attendance',
     },
     {
-      key: 'dashboard-simplet-whitelist-claim',
-      label: t('dashboard.solution.nftWhitelistClaim.name'),
-      iconName: 'icon-gift',
-      to: 'dashboard-simplet-whitelist-claim',
-    },
-    {
-      key: 'dashboard-simplet-openGov',
-      label: t('dashboard.solution.openGov.name'),
-      iconName: 'icon-brand-membership',
-      to: 'dashboard-simplet-openGov',
+      key: 'dashboard-simplet-free-mint',
+      label: t('dashboard.solution.free-mint.name'),
+      iconName: 'icon-poap',
+      to: 'dashboard-simplet-free-mint',
     },
   ];
 

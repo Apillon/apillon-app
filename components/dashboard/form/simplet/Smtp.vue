@@ -72,12 +72,22 @@
         />
       </n-form-item>
     </n-form>
+    <n-tooltip placement="top" :trigger="isMd ? 'hover' : 'click'">
+      <template #trigger>
+        <Btn class="float-right" type="secondary" @click="$emit('skip')">
+          {{ $t('general.skip') }}
+        </Btn>
+      </template>
+      <span>{{ $t('dashboard.simplet.wizard.smtp.skip') }}</span>
+    </n-tooltip>
   </div>
 </template>
 
 <script lang="ts" setup>
+defineEmits(['skip']);
 defineExpose({ handleSubmit });
 const { t } = useI18n();
+const { isMd } = useScreen();
 const message = useMessage();
 const dataStore = useDataStore();
 const simpletsStore = useSimpletsStore();
@@ -88,6 +98,8 @@ const rules: NFormRules = {
   port: [ruleRequired(t('validation.simplet.nameRequired'))],
   username: [ruleRequired(t('validation.simplet.nameRequired'))],
   password: [ruleRequired(t('validation.simplet.nameRequired'))],
+  senderName: [ruleRequired(t('validation.simplet.senderNameRequired'))],
+  senderEmail: [ruleRequired(t('validation.simplet.senderEmailRequired'))],
 };
 
 const isFormDisabled = computed<boolean>(() => {

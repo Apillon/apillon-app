@@ -37,8 +37,9 @@ type FormWebsiteDeploy = {
 const emit = defineEmits(['submitSuccess']);
 const { t } = useI18n();
 const message = useMessage();
-const collectionStore = useCollectionStore();
 const dataStore = useDataStore();
+const collectionStore = useCollectionStore();
+const { ruleApiKey, ruleApiSecret } = useHosting();
 
 const loading = ref<boolean>(false);
 
@@ -58,16 +59,8 @@ const formData = reactive<FormWebsiteDeploy>({
 
 const rules: NFormRules = {
   type: [ruleRequired(t('validation.website.typeRequired'))],
-  apiKey: {
-    validator: (_, value) => validateApiKey(value, formData.apiSecret),
-    message: t('validation.apiKeyRequired'),
-    trigger: 'blur',
-  },
-  apiSecret: {
-    validator: (_, value) => validateApiKey(value, formData.apiKey),
-    message: t('validation.apiSecretRequired'),
-    trigger: 'blur',
-  },
+  apiKey: ruleApiKey(formData),
+  apiSecret: ruleApiSecret(formData),
 };
 
 async function handleSubmit(e: Event | MouseEvent) {

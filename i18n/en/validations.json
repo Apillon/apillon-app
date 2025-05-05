@@ -104,6 +104,7 @@
       "value-required": "Please enter variable value"
     },
     "embeddedWallet": {
+      "integrationRequired": "Please select Embedded Wallet integration",
       "titleRequired": "Embedded Wallet title is required",
       "whitelistedDomains": "Domains not valid"
     },
@@ -164,7 +165,9 @@
       "host": "Please enter SMTP Host",
       "port": "Please enter SMTP Port",
       "username": "Please enter SMTP Username",
-      "password": "Please enter SMTP Password"
+      "password": "Please enter SMTP Password",
+      "senderNameRequired": "Please enter sender name",
+      "senderEmailRequired": "Please enter sender email"
     },
     "website": {
       "nameRequired": "Please enter Website name",
