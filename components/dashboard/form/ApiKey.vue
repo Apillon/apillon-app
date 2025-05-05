@@ -35,11 +35,7 @@
           :name="service.service_uuid"
         >
           <template #arrow>
-            <span
-              :class="`icon-${service.serviceType.toLowerCase()}`"
-              class="min-w-[20px] text-center"
-            >
-            </span>
+            <span :class="`icon-${service.serviceType.toLowerCase()}`" class="min-w-[20px] text-center"> </span>
           </template>
           <template #header-extra>
             <n-switch v-model:value="service.enabled" class="pointer-events-none" />
@@ -57,9 +53,7 @@
                 v-model:checked="permission.value"
                 size="medium"
                 :label="permission.label"
-                @update:checked="
-                  updatePermission(service.service_uuid, permission.key, permission.value)
-                "
+                @update:checked="updatePermission(service.service_uuid, permission.key, permission.value)"
               />
             </n-form-item-gi>
           </n-grid>
@@ -98,7 +92,7 @@
       <input type="submit" class="hidden" :value="$t('form.generate')" />
       <Btn
         type="primary"
-        class="w-full mt-8"
+        class="mt-8 w-full"
         :loading="loading"
         :disabled="dataStore.isProjectUser"
         @click="handleSubmit"
@@ -185,11 +179,7 @@ const rules: NFormRules = {
   roles: [
     {
       validator(_: FormItemRule, value: any) {
-        return (
-          Array.isArray(value) &&
-          value.length > 0 &&
-          value.some(item => isAnyPermissionEnabled(item))
-        );
+        return Array.isArray(value) && value.length > 0 && value.some(item => isAnyPermissionEnabled(item));
       },
       message: t('validation.apiKey.rolesRequired'),
     },
@@ -200,41 +190,46 @@ const unusedServices = computed<ServiceTypeField[]>(() => {
   return dataStore.serviceTypes.reduce((acc, serviceType) => {
     const isServiceInUse = dataStore.services.some(item => item.serviceType_id === serviceType.id);
     const newServiceType = { ...serviceType, enabled: false };
-    return !isServiceEnabled(serviceType) || isServiceInUse || serviceType.active === 0
+    return !isServiceEnabled(serviceType) ||
+      isServiceInUse ||
+      serviceType.active === 0 ||
+      serviceType.id === ServiceType.SIMPLETS
       ? acc
       : [...acc, newServiceType];
   }, [] as ServiceTypeField[]);
 });
 
 const createRoles = () => {
-  return dataStore.services.map(service => {
-    return {
-      enabled: isAnyPermissionEnabled(service),
-      name: service.name,
-      serviceType: service.serviceType,
-      service_uuid: service.service_uuid,
-      permissions: [
-        {
-          key: ApiKeyRole.READ,
-          value: isPermissionEnabled(service.service_uuid, ApiKeyRole.READ),
-          name: 'read',
-          label: t('dashboard.permissions.read'),
-        },
-        {
-          key: ApiKeyRole.EXECUTE,
-          value: isPermissionEnabled(service.service_uuid, ApiKeyRole.EXECUTE),
-          name: 'execute',
-          label: t('dashboard.permissions.execute'),
-        },
-        {
-          key: ApiKeyRole.WRITE,
-          value: isPermissionEnabled(service.service_uuid, ApiKeyRole.WRITE),
-          name: 'write',
-          label: t('dashboard.permissions.write'),
-        },
-      ],
-    };
-  });
+  return dataStore.services
+    .filter(s => s.serviceType_id !== ServiceType.SIMPLETS)
+    .map(service => {
+      return {
+        enabled: isAnyPermissionEnabled(service),
+        name: service.name,
+        serviceType: service.serviceType,
+        service_uuid: service.service_uuid,
+        permissions: [
+          {
+            key: ApiKeyRole.READ,
+            value: isPermissionEnabled(service.service_uuid, ApiKeyRole.READ),
+            name: 'read',
+            label: t('dashboard.permissions.read'),
+          },
+          {
+            key: ApiKeyRole.EXECUTE,
+            value: isPermissionEnabled(service.service_uuid, ApiKeyRole.EXECUTE),
+            name: 'execute',
+            label: t('dashboard.permissions.execute'),
+          },
+          {
+            key: ApiKeyRole.WRITE,
+            value: isPermissionEnabled(service.service_uuid, ApiKeyRole.WRITE),
+            name: 'write',
+            label: t('dashboard.permissions.write'),
+          },
+        ],
+      };
+    });
 };
 
 const createExpandedPermissions = () => {
@@ -321,9 +316,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else if (props.id > 0) {
       await updateApiKey();
     } else {
@@ -410,10 +403,7 @@ function isPermissionEnabled(serviceUuid: string, roleId: number) {
 
   const projectUuid = dataStore.projectUuid;
   return apiKeyRoles.value.some(
-    role =>
-      role.project_uuid === projectUuid &&
-      role.service_uuid === serviceUuid &&
-      role.role_id === roleId
+    role => role.project_uuid === projectUuid && role.service_uuid === serviceUuid && role.role_id === roleId
   );
 }
 function isAnyPermissionEnabled(service: ServiceInterface) {
