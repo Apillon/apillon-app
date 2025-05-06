@@ -106,7 +106,7 @@ const chains = computed(() =>
 );
 
 onMounted(() => {
-  collectionStore.getQuota();
+  // collectionStore.getQuota();
 });
 
 function onChainChange(chainId: number) {

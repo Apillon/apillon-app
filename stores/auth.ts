@@ -26,6 +26,7 @@ export const useAuthStore = defineStore('auth', {
       name: localStorage.getItem(AuthLsKeys.WALLET) || '',
       signature: '',
       timestamp: 0,
+      isEvmWallet: false,
     },
   }),
   getters: {

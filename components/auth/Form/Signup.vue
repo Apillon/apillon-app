@@ -136,7 +136,7 @@ async function signupWithEmail() {
 
   // Wallet register params
   if (authStore.wallet.signature && authStore.wallet.timestamp) {
-    formData.isEvmWallet = isConnected.value;
+    formData.isEvmWallet = authStore.wallet.isEvmWallet;
     formData.signature = authStore.wallet.signature;
     formData.timestamp = authStore.wallet.timestamp;
     formData.wallet = isConnected.value ? address.value : authStore.wallet.address;

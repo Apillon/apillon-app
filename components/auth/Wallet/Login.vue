@@ -14,7 +14,7 @@
     <h6 class="flex-cc mb-6">
       {{ $t('auth.wallet.evm.connect') }}
     </h6>
-    <AuthWalletEvm :loading="loadingWallet" />
+    <AuthWalletEvm :loading="loadingWallet" @connected="evmWalletLogin" />
   </modal>
 </template>
 
@@ -63,6 +63,7 @@ async function walletLogin(account: WalletAccount) {
 
     const signature = await getMessageSignature(account.address, message);
 
+    authStore.wallet.isEvmWallet = false;
     authStore.wallet.signature = signature;
     authStore.wallet.timestamp = timestamp;
 
@@ -101,6 +102,7 @@ async function evmWalletLogin() {
   try {
     const { signature, timestamp } = sign;
 
+    authStore.wallet.isEvmWallet = true;
     authStore.wallet.signature = signature;
     authStore.wallet.timestamp = timestamp;
 
