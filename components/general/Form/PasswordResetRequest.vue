@@ -12,9 +12,9 @@
       </n-form-item>
     </div>
 
-    <n-form-item path="captcha" :show-label="false">
+    <n-form-item v-if="showCaptcha" path="captcha" :show-label="false">
       <div class="block h-20 w-full">
-        <Captcha />
+        <Captcha @captcha-verified="onCaptchaVerified" />
       </div>
       <n-input v-model:value="formData.captcha" class="absolute hidden" />
     </n-form-item>
@@ -53,11 +53,11 @@ const props = defineProps({
 
 const { t } = useI18n();
 const message = useMessage();
-const config = useRuntimeConfig();
+const { showCaptcha, formCaptcha, captchaReset, captchaReload, onCaptchaVerified } = useCaptcha();
 
 const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
-const formData = ref<PasswordResetForm>({
+const formData = reactive<PasswordResetForm>({
   email: props.email,
   captcha: null,
   refCode: undefined,
@@ -77,9 +77,13 @@ const rules: NFormRules = {
   captcha: ruleRequired(t('validation.captchaRequired')),
 };
 
+onMounted(() => {
+  showCaptcha.value = true;
+});
+
 function handleSubmit(e: Event | MouseEvent | null) {
   e?.preventDefault();
-  formData.value.captcha = sessionStorage.getItem(AuthLsKeys.PROSOPO);
+  formData.captcha = formCaptcha.value;
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
@@ -94,26 +98,18 @@ function handleSubmit(e: Event | MouseEvent | null) {
 async function passwordChangeRequest() {
   loading.value = true;
 
-  const prosopoToken = sessionStorage.getItem(AuthLsKeys.PROSOPO);
-  if (prosopoToken) {
-    formData.value.captcha = { token: prosopoToken, eKey: config.public.captchaKey };
-  }
   try {
-    const res = await $api.post<PasswordResetRequestResponse>(endpoints.passwordResetRequest, formData.value);
+    const res = await $api.post<PasswordResetRequestResponse>(endpoints.passwordResetRequest, formData);
 
     if (res.data) {
       message.success(t('form.success.requestPasswordChange'));
     }
   } catch (error) {
     message.error(userFriendlyMsg(error));
-  } finally {
     captchaReset();
+    captchaReload();
+  } finally {
     loading.value = false;
   }
-}
-
-function captchaReset() {
-  formData.value.captcha = undefined;
-  sessionStorage.removeItem(AuthLsKeys.PROSOPO);
 }
 </script>

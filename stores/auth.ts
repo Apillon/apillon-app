@@ -6,7 +6,6 @@ export const AuthLsKeys = {
   EMAIL: 'al_email',
   WALLET: 'al_wallet',
   CAPTCHA: 'al_captcha',
-  PROSOPO: 'al_prosopo',
 };
 
 export const useAuthStore = defineStore('auth', {
@@ -109,7 +108,7 @@ export const useAuthStore = defineStore('auth', {
 
     getCaptchaLS(): Record<string, any> {
       try {
-        const data = JSON.parse(localStorage.getItem(AuthLsKeys.PROSOPO) || '{}');
+        const data = JSON.parse(localStorage.getItem(AuthLsKeys.CAPTCHA) || '{}');
         return typeof data === 'object' ? data : {};
       } catch (error: ApiError | any) {
         console.warn(error);
@@ -133,7 +132,7 @@ export const useAuthStore = defineStore('auth', {
         ts: Date.now().toString(),
         jwt: captchaJwt,
       };
-      localStorage.setItem(AuthLsKeys.PROSOPO, JSON.stringify(data));
+      localStorage.setItem(AuthLsKeys.CAPTCHA, JSON.stringify(data));
     },
 
     removeCaptchaJwt(email?: string) {
@@ -142,10 +141,10 @@ export const useAuthStore = defineStore('auth', {
         const emails = Object.keys(data);
         if (emails.includes(email)) {
           const { [email]: _, ...newData } = data;
-          localStorage.setItem(AuthLsKeys.PROSOPO, JSON.stringify(newData));
+          localStorage.setItem(AuthLsKeys.CAPTCHA, JSON.stringify(newData));
         }
       } else {
-        localStorage.removeItem(AuthLsKeys.PROSOPO);
+        localStorage.removeItem(AuthLsKeys.CAPTCHA);
       }
     },
 

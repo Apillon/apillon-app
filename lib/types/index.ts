@@ -48,8 +48,6 @@ declare global {
     $message: MessageApiInjection;
     $i18n: i18nType;
     _paq: Array<string[]>;
-    loadProcaptcha: Func;
-    procaptchaLoaded: boolean;
   }
 
   /**
