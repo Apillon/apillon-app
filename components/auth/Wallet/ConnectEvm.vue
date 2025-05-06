@@ -25,12 +25,12 @@
     <p class="mb-8">
       {{ $t('auth.wallet.evm.info') }}
     </p>
-    <AuthWalletEvm :loading="loading" />
+    <AuthWalletEvm :loading="loading" @connected="onWalletConnected" />
   </modal>
 </template>
 
 <script lang="ts" setup>
-import { useAccount, useConnect, useDisconnect, useConnectorClient, useAccountEffect } from '@wagmi/vue';
+import { useAccount, useConnect, useDisconnect, useConnectorClient } from '@wagmi/vue';
 
 const { t } = useI18n();
 const authStore = useAuthStore();
@@ -41,7 +41,6 @@ const { connect, connectors } = useConnect();
 const { refetch: refetchWalletClient } = useConnectorClient();
 const { address, isConnected } = useAccount();
 const { disconnect } = useDisconnect();
-useAccountEffect({ onConnect: onWalletConnected });
 
 const loading = ref<boolean>(false);
 const loadingRemove = ref<boolean>(false);
