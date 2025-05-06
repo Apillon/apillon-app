@@ -34,7 +34,7 @@
 
 <script lang="ts" setup>
 defineProps({
-  content: { type: Array<SolutionContent>, default: [] },
+  content: { type: Array<SimpletContent>, default: [] },
   icons: { type: Boolean, default: false },
   innerClass: { type: String, default: '' },
 });

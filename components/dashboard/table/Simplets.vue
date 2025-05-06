@@ -44,7 +44,7 @@ const authStore = useAuthStore();
 const dataStore = useDataStore();
 const simpletsStore = useSimpletsStore();
 
-const { simplets } = useSolution();
+const { simplets } = useSimplet();
 const { availableColumns, selectedColumns, initTableColumns, handleColumnChange } = useTable(
   LsTableColumnsKeys.SIMPLETS
 );
@@ -88,8 +88,8 @@ const columns = computed<NDataTableColumns<SimpletInterface>>(() => {
     {
       title: t('dashboard.created'),
       key: 'created',
-      render(row) {
-        return h('span', {}, { default: () => dateTimeToMonthDay(row.createdTime) });
+      render(row: SimpletInterface) {
+        return h('span', {}, { default: () => dateTimeToMonthDay(row.createTime) });
       },
     },
     {
@@ -100,7 +100,7 @@ const columns = computed<NDataTableColumns<SimpletInterface>>(() => {
         { hidden: !selectedColumns.value.includes('type') },
       ],
       render(row: SimpletInterface) {
-        return t(`dashboard.simplet.${simplets[row?.type || 1]}.name`);
+        return t(`dashboard.simplet.${simplets[row?.id || 1]}.name`);
       },
     },
     {

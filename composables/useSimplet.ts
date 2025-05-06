@@ -2,7 +2,7 @@ import type { MessageFunction, VueMessageType } from 'vue-i18n';
 
 export type VueMsg = VueMessageType | MessageFunction<VueMessageType>;
 
-export type SolutionContent = {
+export type SimpletContent = {
   headline?: string;
   title?: string;
   p?: string;
@@ -11,7 +11,7 @@ export type SolutionContent = {
   subtitle?: string;
   border?: string;
 };
-type SolutionContentTrans = {
+type SimpletContentTrans = {
   headline?: VueMsg;
   title?: VueMsg;
   subtitle?: VueMsg;
@@ -21,7 +21,7 @@ type SolutionContentTrans = {
   border?: VueMsg;
 };
 
-export default function useSolution() {
+export default function useSimplet() {
   const { t, te, tm, rt } = useI18n();
 
   const simplets = {
@@ -42,9 +42,9 @@ export default function useSolution() {
     };
   });
 
-  function generateContent(solution: string, BASE = 'dashboard.solution') {
-    if (te(`${BASE}.${solution}.content`) || tm(`${BASE}.${solution}.content`)) {
-      const translations = (tm(`${BASE}.${solution}.content`) as SolutionContentTrans[]) || [];
+  function generateContent(simplet: string, BASE = 'dashboard.simplet') {
+    if (te(`${BASE}.${simplet}.content`) || tm(`${BASE}.${simplet}.content`)) {
+      const translations = (tm(`${BASE}.${simplet}.content`) as SimpletContentTrans[]) || [];
 
       return (
         (Array.isArray(translations) &&
@@ -57,7 +57,7 @@ export default function useSolution() {
               content: trans.content ? translate(trans.content) : undefined,
               benefits: trans.benefits ? translate(trans.benefits) : undefined,
               border: trans.border ? translate(trans.border) : undefined,
-            } as SolutionContent;
+            } as SimpletContent;
           })) ||
         []
       );

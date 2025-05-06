@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-wrap gap-y-8">
     <div>
-      <SolutionContent :content="content" />
+      <SimpletContent :content="content" />
 
       <h4 class="my-4">{{ $t('computing.cloudFunctions.startNew') }}</h4>
 
@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts" setup>
-const { generateContent } = useSolution();
+const { generateContent } = useSimplet();
 const content = generateContent('cloudFunctions', 'computing');
 const modalCreateCloudFunctionsVisible = ref<boolean | null>(false);
 </script>

@@ -170,19 +170,19 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
   const simplets = [
     {
       key: 'dashboard-simplet-airdrop',
-      label: t('dashboard.solution.nftAirdrop.name'),
+      label: t('dashboard.simplet.airdrop.name'),
       iconName: 'icon-nft-mint-airdrop',
       to: 'dashboard-simplet-airdrop',
     },
     {
       key: 'dashboard-simplet-poap',
-      label: t('dashboard.solution.nftPoap.name'),
+      label: t('dashboard.simplet.poap.name'),
       iconName: 'icon-poap',
       to: 'dashboard-simplet-proof-of-attendance',
     },
     {
       key: 'dashboard-simplet-free-mint',
-      label: t('dashboard.solution.free-mint.name'),
+      label: t('dashboard.simplet.free-mint.name'),
       iconName: 'icon-poap',
       to: 'dashboard-simplet-free-mint',
     },

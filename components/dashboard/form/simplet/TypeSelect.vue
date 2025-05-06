@@ -19,7 +19,7 @@ defineExpose({ nextStep });
 const { t } = useI18n();
 const message = useMessage();
 const simpletsStore = useSimpletsStore();
-const { simpletsContent } = useSolution();
+const { simpletsContent } = useSimplet();
 
 const selectedType = ref(simpletsStore.form.type);
 

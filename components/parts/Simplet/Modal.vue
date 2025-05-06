@@ -94,6 +94,7 @@ onMounted(async () => {
   paymentStore.getPriceList();
   simpletsStore.getSimpletTemplates();
   embeddedWalletStore.getEmbeddedWallets();
+  simpletsStore.stepSimpletCreate = 7;
 });
 
 watch(

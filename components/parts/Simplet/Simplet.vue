@@ -1,7 +1,7 @@
 <template>
   <div class="flex gap-8 pb-8">
     <div class="flex-1">
-      <SolutionContent :content="content" />
+      <SimpletContent :content="content" />
       <CardServices
         :services="[ServiceType.STORAGE, ServiceType.HOSTING, ServiceType.NFT, ServiceType.EMBEDDED_WALLET]"
       />
@@ -20,11 +20,11 @@
         </div>
       </div>
       <div class="card relative p-6">
-        <h6>{{ $t('dashboard.solution.deploy') }}</h6>
+        <h6>{{ $t('dashboard.simplet.deploy') }}</h6>
         <div class="mt-5 flex flex-col gap-4">
           <Btn class="w-full" type="info" href="https://github.com/Apillon/nft-studio-template">
             <span class="icon-github mr-2"></span>
-            <strong> {{ $t('dashboard.solution.viewCode') }}</strong>
+            <strong> {{ $t('dashboard.simplet.viewCode') }}</strong>
           </Btn>
           <Btn>
             {{ $t('auth.onboarding.getStarted') }}
@@ -39,7 +39,7 @@
 const props = defineProps({
   simpletId: { type: Number, default: SimpletType.AIRDROP },
 });
-const { simplets, generateContent } = useSolution();
+const { simplets, generateContent } = useSimplet();
 
-const content = generateContent(simplets[props.simpletId], 'dashboard.simplet');
+const content = generateContent(simplets[props.simpletId]);
 </script>

@@ -30,7 +30,7 @@
 <script lang="ts" setup>
 const { t } = useI18n();
 const simpletsStore = useSimpletsStore();
-const { simpletsContent } = useSolution();
+const { simpletsContent } = useSimplet();
 
 const simpletType = ref<number>(SimpletType.AIRDROP);
 const showModalNewSimplet = ref<boolean>(false);

@@ -7,7 +7,7 @@
         html-content="https://www.youtube.com/embed/9y-9nz0tpVs"
         class="w-full max-w-lg"
       />
-      <SolutionContent :content="content" />
+      <SimpletContent :content="content" />
 
       <h4 class="my-4">{{ $t('embeddedWallet.generate.title') }}</h4>
       <div class="mb-4 flex gap-4">
@@ -44,8 +44,8 @@ import img4 from '/assets/images/embedded-wallet/4.png';
 import img5 from '/assets/images/embedded-wallet/5.png';
 import img6 from '/assets/images/embedded-wallet/6.png';
 
-const { generateContent } = useSolution();
-const content = generateContent(SolutionKey.EMBEDDED_WALLET);
+const { generateContent } = useSimplet();
+const content = generateContent('instructions', 'embeddedWallet');
 
 const modalNewEmbeddedWalletVisible = ref<boolean>(false);
 </script>

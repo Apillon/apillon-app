@@ -5,7 +5,7 @@
         {{ $t('indexer.instructions.title') }}
       </h4>
       <p>
-        {{ $t('indexer.instructions.content') }}
+        {{ $t('indexer.instructions.info') }}
       </p>
     </div>
 
@@ -13,7 +13,7 @@
       {{ $t('general.poweredBy') }}
       <NuxtIcon name="logo/sqd" class="icon-auto h-6 w-16 text-white" alt="sqd" />
     </div>
-    <SolutionContent :content="content" />
+    <SimpletContent :content="content" />
 
     <h6 class="my-4">{{ $t('indexer.startNew') }}</h6>
 
@@ -31,8 +31,8 @@
 </template>
 
 <script lang="ts" setup>
-const { generateContent } = useSolution();
-const content = generateContent(SolutionKey.INDEXING);
+const { generateContent } = useSimplet();
+const content = generateContent('content', 'indexer');
 
 const showModalNewIndexer = ref<boolean | null>(false);
 </script>
