@@ -1,6 +1,6 @@
 <template>
   <Btn v-bind="$attrs" type="info" :color="colors.blue" @click="modalWalletSelectVisible = true">
-    <span class="icon-wallet text-xl align-sub mr-2"></span>
+    <span class="icon-wallet mr-2 align-sub text-xl"></span>
     <span v-if="register">{{ $t('auth.signup.wallet') }}</span>
     <span v-else>{{ $t('auth.login.wallet') }}</span>
   </Btn>
@@ -18,7 +18,7 @@
     <h6 class="flex-cc mb-6">
       {{ $t('auth.wallet.evm.connect') }}
     </h6>
-    <AuthWalletEvm :loading="loadingWallet" />
+    <AuthWalletEvm :loading="loadingWallet" @connected="evmWalletLogin" />
   </modal>
 </template>
 
@@ -42,7 +42,7 @@ const { clearAll } = useStore();
 
 /** Evm wallet - wagmi */
 const { disconnect } = useDisconnect();
-const { address } = useAccount({ onConnect: evmWalletLogin });
+const { address } = useAccount();
 
 const loadingWallet = ref<boolean>(false);
 const modalWalletSelectVisible = ref<boolean>(false);
@@ -67,6 +67,7 @@ async function walletLogin(account: WalletAccount) {
 
     const signature = await getMessageSignature(account.address, message);
 
+    authStore.wallet.isEvmWallet = false;
     authStore.wallet.signature = signature;
     authStore.wallet.timestamp = timestamp;
 
@@ -105,6 +106,7 @@ async function evmWalletLogin() {
   try {
     const { signature, timestamp } = sign;
 
+    authStore.wallet.isEvmWallet = true;
     authStore.wallet.signature = signature;
     authStore.wallet.timestamp = timestamp;
 
