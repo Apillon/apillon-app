@@ -221,6 +221,7 @@ async function createSimplet(simpletUuid: string) {
     };
 
     const { data } = await $api.post<SimpletResponse>(endpoints.simpletDeploy(simpletUuid), bodyData);
+    simpletsStore.active = data;
     message.success(t('nft.collection.websiteDeploy.success'));
 
     return data;
