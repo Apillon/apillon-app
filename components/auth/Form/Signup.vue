@@ -10,13 +10,13 @@
       />
     </n-form-item>
 
-    <div v-show="!sendAgain" class="relative" :class="formErrors ? '-top-2 ' : 'mt-2'">
+    <div v-show="!sendAgain" class="relative" :class="formErrors ? '-top-2' : 'mt-2'">
       <n-form-item path="terms" :show-label="false" :show-feedback="formErrors && !formData.terms">
         <n-checkbox v-model:checked="formData.terms" size="medium" :label="termsLabel" />
       </n-form-item>
     </div>
 
-    <div v-show="!sendAgain" class="relative" :class="formErrors ? ' mb-4' : 'mb-6'">
+    <div v-show="!sendAgain" class="relative" :class="formErrors ? 'mb-4' : 'mb-6'">
       <n-checkbox
         v-model:checked="newsletterChecked"
         size="medium"
@@ -25,7 +25,7 @@
     </div>
 
     <n-form-item path="captcha" :show-label="false">
-      <div class="block w-full h-20">
+      <div class="block h-20 w-full">
         <Captcha />
       </div>
       <n-input v-model:value="formData.captcha" class="absolute hidden" />
@@ -154,7 +154,7 @@ async function signupWithEmail() {
 
   // Wallet register params
   if (authStore.wallet.signature && authStore.wallet.timestamp) {
-    formData.value.isEvmWallet = isConnected.value;
+    formData.value.isEvmWallet = authStore.wallet.isEvmWallet;
     formData.value.signature = authStore.wallet.signature;
     formData.value.timestamp = authStore.wallet.timestamp;
     formData.value.wallet = isConnected.value ? address.value : authStore.wallet.address;
