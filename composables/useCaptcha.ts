@@ -20,7 +20,6 @@ export default function useProvider() {
   }
 
   function onCaptchaVerified(token: string) {
-    console.log('onVerified', token);
     formCaptcha.value = { token, eKey: config.public.captchaKey };
   }
 

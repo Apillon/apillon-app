@@ -1,7 +1,7 @@
 <template>
   <Dashboard :loading="false">
     <template #heading>
-      <HeaderSimplet :name="$t('dashboard.simplet.airdrop.name')" />
+      <HeaderSimplet :name="$t('simplet.airdrop.name')" />
     </template>
 
     <Simplet :simplet-id="SimpletType.POAP" />
@@ -12,6 +12,6 @@
 const { t } = useI18n();
 
 useHead({
-  title: t('dashboard.simplet.poap.name'),
+  title: t('simplet.poap.name'),
 });
 </script>

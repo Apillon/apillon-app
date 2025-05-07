@@ -20,14 +20,18 @@ export enum SimpletCreateStep {
   DEPLOYED = 7,
 }
 
+export enum ResourceStatus {
+  REQUESTED,
+  DEPLOYING,
+  ONLINE,
+  STOPPED,
+  SHUT_DOWN,
+  FAILED,
+}
+
 declare global {
-  interface SimpletTemplateInterface {
-    id: number;
-    createTime: string;
-    updateTime: string;
+  interface SimpletTemplateInterface extends BaseObjectInterface {
     simplet_uuid: string;
-    name: string;
-    description: string | null;
     contract_uuid: string | null;
     backendRepo: string;
     backendPath: string;
@@ -44,21 +48,16 @@ declare global {
   }
   interface SimpletTemplatesResponse extends GeneralItemsResponse<SimpletTemplateInterface> {}
 
-  interface SimpletInterface {
-    id: number;
-    createTime: string;
-    updateTime: string;
+  interface SimpletInterface extends BaseObjectInterface {
+    backendStatus: number;
+    backendUrl: string;
+    backend_uuid: string;
+    contractStatus: number;
+    contract_uuid: string;
+    frontendStatus: number;
     project_uuid: string;
     simpletDeploy_uuid: string;
     simplet_uuid: string;
-    name: string;
-    description: string;
-    backend_uuid: string;
-    backendStatus: number;
-    backendUrl: string;
-    contract_uuid: string;
-    contractStatus: number;
-    frontendStatus: number;
   }
   interface SimpletResponse extends GeneralResponse<SimpletInterface> {}
   interface SimpletsResponse extends GeneralItemsResponse<SimpletInterface> {}

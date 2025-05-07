@@ -13,6 +13,7 @@
     "available": "Available",
     "back": "Back",
     "cancel": "No, cancel",
+    "change": "Change",
     "close": "Close",
     "comingSoon": "Coming soon",
     "confirm": "Confirm",
@@ -89,6 +90,7 @@
     "uuid": "UUID",
     "view": "View",
     "viewDemo": "View demo",
+    "website": "Website",
     "instructions": {
       "hide": "Hide instructions",
       "show": "Show instructions"
@@ -96,7 +98,6 @@
     "information": {
       "hide": "Hide information",
       "show": "Show information"
-    },
-    "change": "Change"
+    }
   }
 }

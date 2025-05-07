@@ -1,0 +1,205 @@
+{
+  "simplet": {
+    "airdrop": {
+      "name": "NFT Brand Booster",
+      "description": "<b>Send NFTs via email or wallets.</b> Build a whitelist, reward the most loyal users, grow your email list in exchange for rewards, or hand-pick who gets the drop.",
+      "usage": ["Hosting", "Storage", "NFTs"],
+      "content": [
+        {
+          "title": "About",
+          "p": "Boost your visibility and grow your community with collectible NFTs."
+        },
+        {
+          "p": "Use this Simplet to drop branded NFTs that double as rewards, access passes, or referral incentives. Send them to emails or allow pre-approved wallets to mint—no technical setup required."
+        },
+        {
+          "subtitle": "How it works",
+          "p": "Brand Booster gives you two ways to distribute NFTs:",
+          "content": [
+            "<b>Email Mint</b>: Upload email addresses to send mint invites—perfect for onboarding newcomers.",
+            "<b>Wallet Mint</b>: Upload a wallet list to let selected users mint directly—ideal for loyalty rewards or whitelisted drops."
+          ]
+        },
+        {
+          "content": "Manage everything through the admin dashboard and track who minted what.",
+          "border": "true"
+        },
+        {
+          "subtitle": "What you’ll need before you start:",
+          "content": [
+            "Create an NFT collection using Apillon’s step-by-step [NFT Wizard](/dashboard/service/nft), keeping in mind that attendees will mint from that collection.",
+            "If you're using email, you’ll need your [SMTP]() details so you can send invies directly from your domain."
+          ]
+        },
+        {
+          "subtitle": "What it’s made of:",
+          "content": [
+            "Frontend: Built with Vue.js",
+            "Backend: Powered by Node.js and MySQL for data storage",
+            "Employs: Trusted Execution Environment (TEE) to keep your SMTP credentials safe"
+          ]
+        },
+        {
+          "subtitle": "How to deploy:",
+          "content": [
+            "Frontend: Use Apillon GitHub integration for a quick auto-deploy directly from the [Apillon's Web3 Hosting](/dashboard/service/hosting). You can also run it locally or host it with any provider.",
+            "Backend: Use Phala Docker for a secure auto-deploy. You can also run it locally or with Docker—just configure your NFT and email setup [(see instructions on GitHub)](https://github.com/Apillon/nft-studio-simplet)"
+          ]
+        }
+      ]
+    },
+    "free-mint": {
+      "name": "NFT Wild West",
+      "description": "<b>First-come-first-served NFTs.</b> Run bold, experimental campaigns. Use memes, mystery, or chaos to go viral - and reward the fastest fingers.",
+      "usage": ["Hosting", "Storage", "NFTs"],
+      "content": [
+        {
+          "title": "About",
+          "p": "Boost your visibility and grow your community with collectible NFTs."
+        },
+        {
+          "p": "Use this Simplet to drop branded NFTs that double as rewards, access passes, or referral incentives. Send them to emails or allow pre-approved wallets to mint—no technical setup required."
+        },
+        {
+          "subtitle": "How it works",
+          "p": "Brand Booster gives you two ways to distribute NFTs:",
+          "content": [
+            "<b>Email Mint</b>: Upload email addresses to send mint invites—perfect for onboarding newcomers.",
+            "<b>Wallet Mint</b>: Upload a wallet list to let selected users mint directly—ideal for loyalty rewards or whitelisted drops."
+          ]
+        },
+        {
+          "content": "Manage everything through the admin dashboard and track who minted what.",
+          "border": "true"
+        },
+        {
+          "subtitle": "What you’ll need before you start:",
+          "content": [
+            "Create an NFT collection using Apillon’s step-by-step [NFT Wizard](/dashboard/service/nft), keeping in mind that attendees will mint from that collection.",
+            "If you're using email, you’ll need your [SMTP]() details so you can send invies directly from your domain."
+          ]
+        },
+        {
+          "subtitle": "What it’s made of:",
+          "content": [
+            "Frontend: Built with Vue.js",
+            "Backend: Powered by Node.js and MySQL for data storage",
+            "Employs: Trusted Execution Environment (TEE) to keep your SMTP credentials safe"
+          ]
+        },
+        {
+          "subtitle": "How to deploy:",
+          "content": [
+            "Frontend: Use Apillon GitHub integration for a quick auto-deploy directly from the [Apillon's Web3 Hosting](/dashboard/service/hosting). You can also run it locally or host it with any provider.",
+            "Backend: Use Phala Docker for a secure auto-deploy. You can also run it locally or with Docker—just configure your NFT and email setup [(see instructions on GitHub)](https://github.com/Apillon/nft-studio-simplet)"
+          ]
+        }
+      ]
+    },
+    "menu": {
+      "archive": "Archive",
+      "list": "Active Simplets",
+      "templates": "Templates"
+    },
+    "poap": {
+      "name": "NFT Event Experience",
+      "description": "<b>Easy to claim, fun to keep.</b> Create digital badges for your event attendees. Drop NFTs at the event or online and let people collect proof they attented.",
+      "usage": ["Hosting", "Storage", "NFTs"],
+      "content": [
+        {
+          "title": "About",
+          "p": "Boost your visibility and grow your community with collectible NFTs."
+        },
+        {
+          "p": "Use this Simplet to drop branded NFTs that double as rewards, access passes, or referral incentives. Send them to emails or allow pre-approved wallets to mint—no technical setup required."
+        },
+        {
+          "subtitle": "How it works",
+          "p": "Brand Booster gives you two ways to distribute NFTs:",
+          "content": [
+            "<b>Email Mint</b>: Upload email addresses to send mint invites—perfect for onboarding newcomers.",
+            "<b>Wallet Mint</b>: Upload a wallet list to let selected users mint directly—ideal for loyalty rewards or whitelisted drops."
+          ]
+        },
+        {
+          "content": "Manage everything through the admin dashboard and track who minted what.",
+          "border": "true"
+        },
+        {
+          "subtitle": "What you’ll need before you start:",
+          "content": [
+            "Create an NFT collection using Apillon’s step-by-step [NFT Wizard](/dashboard/service/nft), keeping in mind that attendees will mint from that collection.",
+            "If you're using email, you’ll need your [SMTP]() details so you can send invies directly from your domain."
+          ]
+        },
+        {
+          "subtitle": "What it’s made of:",
+          "content": [
+            "Frontend: Built with Vue.js",
+            "Backend: Powered by Node.js and MySQL for data storage",
+            "Employs: Trusted Execution Environment (TEE) to keep your SMTP credentials safe"
+          ]
+        },
+        {
+          "subtitle": "How to deploy:",
+          "content": [
+            "Frontend: Use Apillon GitHub integration for a quick auto-deploy directly from the [Apillon's Web3 Hosting](/dashboard/service/hosting). You can also run it locally or host it with any provider.",
+            "Backend: Use Phala Docker for a secure auto-deploy. You can also run it locally or with Docker—just configure your NFT and email setup [(see instructions on GitHub)](https://github.com/Apillon/nft-studio-simplet)"
+          ]
+        }
+      ]
+    },
+    "status": {
+      "0": "Requested",
+      "1": "Deploying",
+      "2": "Online",
+      "3": "Stopped",
+      "4": "Shut down",
+      "5": "Failed"
+    },
+    "wizard": {
+      "collection": {
+        "empty": "To get started, you’ll need at least one NFT collection in Apillon. Each Simplet needs a collection to work with—it’s where the NFTs will be minted, managed, and sent from.",
+        "first": "You don’t have any NFT collections yet. To continue, create one in Apillon first.",
+        "info": "Each Simplet needs an NFT collection to work with—it’s where the NFTs will be minted, managed, and sent from.",
+        "select": "Select NFT Collection"
+      },
+      "createStep": {
+        "2": "Select",
+        "3": "Data",
+        "5": "Review"
+      },
+      "deployed": {
+        "title": "Boom. Simplet ready.",
+        "info": "Now let’s decide how you want to spread the NFT love.",
+        "proceed": "Proceed to your Simplet dashboard",
+        "domain": "Prefer a custom domain? Let’s spark it up.",
+        "addDomain": "Don’t let a random link steal your thunder. \nAdd your own domain anytime in {0}."
+      },
+      "smtp": {
+        "info": "Add your SMTP settings so your emails are sent straight from your domain—no sketchy senders here.",
+        "setup": "Email server setup",
+        "skip": "Skip email server setup for now. A default SMTP server will be pre-configured inside the Docker image. You can update the SMTP configuration later if needed.",
+        "warning": "Don’t worry—your SMTP details are safe. Simplets run in a Trusted Execution Environment (TEE), which means your sensitive data stays protected. Learn more about TEEs and confidential computing."
+      },
+      "create": "Deploy simplet",
+      "deploying": "Creating Simplet",
+      "deployingInfo": "Deploying NFT Studio...",
+      "info": "You’re about to deploy a Simplet that sets up your NFT distribution dashboard. Here, you’ll manage everything—email drops, wallet airdrops, public minting, and more.",
+      "selectType": "Select simplet type",
+      "setData": "Set your Simplet data"
+    },
+    "backendStatus": "Backend status",
+    "delete": "Delete Simplet",
+    "deploy": "Deploy simplet",
+    "edit": "Edit Simplet",
+    "endpoint": "Endpoint URL",
+    "frontendStatus": "Frontend status",
+    "includedServices": "Web3 services, included in the Simplet:",
+    "name": "Simplet name",
+    "settings": "Simplet settings",
+    "templates": "Pre-build templates",
+    "uuid": "Simplet UUID",
+    "viewCode": "View code"
+  }
+}

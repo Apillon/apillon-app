@@ -1,16 +1,16 @@
 <template>
   <n-space v-bind="$attrs" justify="space-between">
     <div class="w-[20vw] min-w-[11rem] max-w-xs">
-      <FormFieldSearch v-if="archive" v-model:value="simpletsStore.archive.search" />
-      <FormFieldSearch v-else v-model:value="simpletsStore.search" />
+      <FormFieldSearch v-if="archive" v-model:value="simpletStore.archive.search" />
+      <FormFieldSearch v-else v-model:value="simpletStore.search" />
     </div>
 
     <n-space size="large">
       <!-- Refresh collections -->
       <n-button
         size="medium"
-        :loading="archive ? simpletsStore.archive.loading : simpletsStore.loading"
-        @click="simpletsStore.fetchSimplets(1, PAGINATION_LIMIT, archive)"
+        :loading="archive ? simpletStore.archive.loading : simpletStore.loading"
+        @click="simpletStore.fetchSimplets(1, PAGINATION_LIMIT, archive)"
       >
         <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('general.refresh') }}
@@ -18,7 +18,7 @@
 
       <!-- Create new collection -->
       <n-button
-        v-if="simpletsStore.hasSimplets"
+        v-if="simpletStore.hasSimplets"
         size="medium"
         :disabled="authStore.isAdmin()"
         @click="modalCreateCollectionVisible = true"
@@ -38,6 +38,6 @@ defineProps({
 });
 
 const authStore = useAuthStore();
-const simpletsStore = useSimpletsStore();
+const simpletStore = useSimpletStore();
 const modalCreateCollectionVisible = ref<boolean>(false);
 </script>

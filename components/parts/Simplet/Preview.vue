@@ -8,7 +8,7 @@
       <ReviewPricing
         class="mt-8 md:!w-1/2"
         :pricing="pricing"
-        :deploy-text="$t('dashboard.simplet.wizard.create')"
+        :deploy-text="$t('simplet.wizard.create')"
         @deploy="$emit('deploy')"
       />
     </template>
@@ -20,7 +20,7 @@ defineEmits(['back', 'deploy']);
 
 const { t } = useI18n();
 const paymentStore = usePaymentStore();
-const simpletsStore = useSimpletsStore();
+const simpletStore = useSimpletStore();
 const collectionStore = useCollectionStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
 
@@ -38,37 +38,37 @@ const ewIntergationName = (uuid?: string | null) =>
   embeddedWalletStore.items.find(c => c.integration_uuid === uuid)?.title || '';
 
 const data = ref<Record<string, string | boolean>[]>([
-  { label: t('form.label.simplet.name'), value: simpletsStore.form.name },
-  { label: t('form.label.description'), value: simpletsStore.form.description },
-  { label: t('nft.collection.name'), value: collectionName(simpletsStore.form.collection) },
-  { label: t('form.label.simplet.walletAddress'), value: simpletsStore.form.walletAddress },
+  { label: t('form.label.simplet.name'), value: simpletStore.form.name },
+  { label: t('form.label.description'), value: simpletStore.form.description },
+  { label: t('nft.collection.preview'), value: collectionName(simpletStore.form.collection) },
+  { label: t('form.label.simplet.walletAddress'), value: simpletStore.form.walletAddress || '' },
   {
     label: t('form.label.embeddedWallet.integration'),
-    value: ewIntergationName(simpletsStore.form.embeddedWallet),
-    show: !!simpletsStore.form.embeddedWallet,
+    value: ewIntergationName(simpletStore.form.embeddedWallet),
+    show: !!simpletStore.form.embeddedWallet,
   },
   {
     label: t('form.label.simplet.startTime'),
-    value: timestampToDateAndTime((simpletsStore.form.startTime || 0) / 1000),
-    show: !!simpletsStore.form.startTime,
+    value: timestampToDateAndTime((simpletStore.form.startTime || 0) / 1000),
+    show: !!simpletStore.form.startTime,
   },
   {
     label: t('form.label.simplet.endTime'),
-    value: timestampToDateAndTime((simpletsStore.form.endTime || 0) / 1000),
-    show: !!simpletsStore.form.startTime,
+    value: timestampToDateAndTime((simpletStore.form.endTime || 0) / 1000),
+    show: !!simpletStore.form.startTime,
   },
 ]);
 
 onMounted(() => {
   paymentStore.getPriceList();
 
-  if (simpletsStore.form.type !== SimpletType.FREE_MINT && simpletsStore.form.smtp.host) {
-    data.value.push({ label: t('form.label.smtp.host'), value: simpletsStore.form.smtp.host });
-    data.value.push({ label: t('form.label.smtp.port'), value: `${simpletsStore.form.smtp.port}` });
-    data.value.push({ label: t('form.label.smtp.username'), value: simpletsStore.form.smtp.username });
-    data.value.push({ label: t('form.label.smtp.password'), value: simpletsStore.form.smtp.password });
-    data.value.push({ label: t('form.label.smtp.sender'), value: simpletsStore.form.smtp.senderName });
-    data.value.push({ label: t('form.label.smtp.email'), value: simpletsStore.form.smtp.senderEmail });
+  if (simpletStore.form.type !== SimpletType.FREE_MINT && simpletStore.form.smtp.host) {
+    data.value.push({ label: t('form.label.smtp.host'), value: simpletStore.form.smtp.host });
+    data.value.push({ label: t('form.label.smtp.port'), value: `${simpletStore.form.smtp.port}` });
+    data.value.push({ label: t('form.label.smtp.username'), value: simpletStore.form.smtp.username });
+    data.value.push({ label: t('form.label.smtp.password'), value: simpletStore.form.smtp.password });
+    data.value.push({ label: t('form.label.smtp.sender'), value: simpletStore.form.smtp.senderName });
+    data.value.push({ label: t('form.label.smtp.email'), value: simpletStore.form.smtp.senderEmail });
   }
 });
 </script>

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-export const useSimpletsStore = defineStore('simplets', {
+export const useSimpletStore = defineStore('simplets', {
   state: () => ({
     active: {} as SimpletInterface,
     items: [] as SimpletInterface[],
@@ -124,8 +124,6 @@ export const useSimpletsStore = defineStore('simplets', {
       try {
         const { data } = await $api.get<SimpletTemplatesResponse>(endpoints.simplets());
         this.templates = data.items;
-
-        sessionStorage.setItem(LsCacheKeys.SIMPLET_TEMPLATES, Date.now().toString());
       } catch (error: any) {
         this.templates = [];
 

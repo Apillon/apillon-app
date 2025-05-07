@@ -1,6 +1,6 @@
 <template>
   <div>
-    <strong class="mb-3 block">{{ $t('dashboard.simplet.includedServices') }}</strong>
+    <strong class="mb-3 block">{{ $t('simplet.includedServices') }}</strong>
 
     <div class="card-light relative flex flex-col justify-between gap-4 p-8">
       <n-table class="plain" :bordered="false" single-line>

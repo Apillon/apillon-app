@@ -4,8 +4,8 @@
     v-bind="$attrs"
     :bordered="false"
     :columns="columns"
-    :data="archive ? simpletsStore.archive.items : simpletsStore.items"
-    :loading="archive ? simpletsStore.archive.loading : simpletsStore.loading"
+    :data="archive ? simpletStore.archive.items : simpletStore.items"
+    :loading="archive ? simpletStore.archive.loading : simpletStore.loading"
     :pagination="pagination"
     :row-key="rowKey"
     :row-props="rowProps"
@@ -15,17 +15,17 @@
   />
 
   <!-- Modal - Edit simplet -->
-  <modal v-model:show="showModalEditSimplet" :title="$t('dashboard.simplet.edit')">
+  <modal v-model:show="showModalEditSimplet" :title="$t('simplet.edit')">
     <FormHostingSimplet
-      v-if="currentRow?.simplet_uuid"
-      :simplet-uuid="currentRow.simplet_uuid"
+      v-if="currentRow?.simpletDeploy_uuid"
+      :simplet-uuid="currentRow.simpletDeploy_uuid"
       @submit-success="showModalEditSimplet = false"
     />
   </modal>
 
   <!-- Modal - Delete Simplet -->
-  <ModalDelete v-model:show="showModalDeleteSimplet" :title="$t('dashboard.simplet.delete')">
-    <FormDelete :id="currentRow?.simplet_uuid" :type="ItemDeleteKey.WEBSITE" @submit-success="() => {}" />
+  <ModalDelete v-model:show="showModalDeleteSimplet" :title="$t('simplet.delete')">
+    <FormDelete :id="currentRow?.simpletDeploy_uuid" :type="ItemDeleteKey.WEBSITE" @submit-success="() => {}" />
   </ModalDelete>
 </template>
 
@@ -42,13 +42,13 @@ const router = useRouter();
 const message = useMessage();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
-const simpletsStore = useSimpletsStore();
+const simpletStore = useSimpletStore();
 
-const { simplets } = useSimplet();
+const { getSimpletType } = useSimplet();
 const { availableColumns, selectedColumns, initTableColumns, handleColumnChange } = useTable(
   LsTableColumnsKeys.SIMPLETS
 );
-const pagination = reactive(props.archive ? simpletsStore.archive.pagination : simpletsStore.pagination);
+const pagination = reactive(props.archive ? simpletStore.archive.pagination : simpletStore.pagination);
 
 const showModalEditSimplet = ref<boolean>(false);
 const showModalDeleteSimplet = ref<boolean>(false);
@@ -57,7 +57,7 @@ const columns = computed<NDataTableColumns<SimpletInterface>>(() => {
   return [
     {
       key: 'name',
-      title: t('dashboard.simplet.name'),
+      title: t('simplet.name'),
       className: [
         { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
         { hidden: !selectedColumns.value.includes('name') },
@@ -67,29 +67,40 @@ const columns = computed<NDataTableColumns<SimpletInterface>>(() => {
       },
     },
     {
-      key: 'status',
-      title: t('general.status'),
-      className: [
-        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
-        { hidden: !selectedColumns.value.includes('status') },
-      ],
+      key: 'simpletDeploy_uuid',
+      title: t('simplet.uuid'),
+      className: { hidden: !selectedColumns.value.includes('simpletDeploy_uuid') },
       render(row: SimpletInterface) {
-        return h(resolveComponent('HostingDeploymentStatus'), { deploymentStatus: row.contractStatus });
+        return h(resolveComponent('TableEllipsis'), { text: row.simpletDeploy_uuid }, '');
       },
     },
     {
-      key: 'simplet_uuid',
-      title: t('dashboard.simplet.uuid'),
-      className: { hidden: !selectedColumns.value.includes('simplet_uuid') },
+      key: 'backendStatus',
+      title: t('simplet.backendStatus'),
+      className: [
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
+        { hidden: !selectedColumns.value.includes('backendStatus') },
+      ],
       render(row: SimpletInterface) {
-        return h(resolveComponent('TableEllipsis'), { text: row.simplet_uuid }, '');
+        return h(resolveComponent('SimpletStatus'), { status: row.backendStatus });
+      },
+    },
+    {
+      key: 'frontendStatus',
+      title: t('simplet.frontendStatus'),
+      className: [
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
+        { hidden: !selectedColumns.value.includes('frontendStatus') },
+      ],
+      render(row: SimpletInterface) {
+        return h(resolveComponent('SimpletStatus'), { status: row.frontendStatus });
       },
     },
     {
       title: t('dashboard.created'),
       key: 'created',
       render(row: SimpletInterface) {
-        return h('span', {}, { default: () => dateTimeToMonthDay(row.createTime) });
+        return h('span', {}, { default: () => dateTimeToDate(row.createTime) });
       },
     },
     {
@@ -100,7 +111,7 @@ const columns = computed<NDataTableColumns<SimpletInterface>>(() => {
         { hidden: !selectedColumns.value.includes('type') },
       ],
       render(row: SimpletInterface) {
-        return t(`dashboard.simplet.${simplets[row?.id || 1]}.name`);
+        return getSimpletType(row.simplet_uuid);
       },
     },
     {
@@ -138,7 +149,7 @@ const columns = computed<NDataTableColumns<SimpletInterface>>(() => {
     },
   ];
 });
-const rowKey = (row: SimpletInterface) => row.simplet_uuid;
+const rowKey = (row: SimpletInterface) => row.simpletDeploy_uuid;
 const currentRow = ref<SimpletInterface>();
 
 /** On row click */
@@ -148,7 +159,7 @@ const rowProps = (row: SimpletInterface) => {
       currentRow.value = row;
 
       if (canOpenColumnCell(e.composedPath())) {
-        router.push(`/dashboard/simplets/${row.simplet_uuid}`);
+        router.push(`/dashboard/simplet/${row.simpletDeploy_uuid}`);
       }
     },
   };
@@ -194,22 +205,23 @@ const dropdownOptionsArchive = [
 
 onMounted(() => {
   initTableColumns(columns.value);
+  simpletStore.getSimpletTemplates();
 });
 
 /** Search posts */
 watch(
   () => props.search,
   _ => {
-    simpletsStore.loading = true;
+    simpletStore.loading = true;
     debouncedSearchFilter();
   }
 );
 const debouncedSearchFilter = useDebounceFn(handlePageChange, 500);
 
 async function handlePageChange(page: number = 1, limit: number = PAGINATION_LIMIT) {
-  await simpletsStore.fetchSimplets(page, limit, props.archive);
+  await simpletStore.fetchSimplets(page, limit, props.archive);
 
-  const p = props.archive ? simpletsStore.archive.pagination : simpletsStore.pagination;
+  const p = props.archive ? simpletStore.archive.pagination : simpletStore.pagination;
   p.page = page;
   p.pageSize = limit;
 }
@@ -218,14 +230,14 @@ async function handlePageChange(page: number = 1, limit: number = PAGINATION_LIM
  * Restore simplet
  * */
 async function restoreSimplet() {
-  if (!currentRow.value?.simplet_uuid) return;
-  simpletsStore.loading = true;
+  if (!currentRow.value?.simpletDeploy_uuid) return;
+  simpletStore.loading = true;
 
   try {
-    await $api.patch<SimpletResponse>(endpoints.simpletActivate(currentRow.value.simplet_uuid));
+    await $api.patch<SimpletResponse>(endpoints.simpletActivate(currentRow.value.simpletDeploy_uuid));
 
-    simpletsStore.archive.items = simpletsStore.archive.items.filter(
-      item => item.simplet_uuid !== currentRow.value?.simplet_uuid
+    simpletStore.archive.items = simpletStore.archive.items.filter(
+      item => item.simpletDeploy_uuid !== currentRow.value?.simpletDeploy_uuid
     );
 
     sessionStorage.removeItem(LsCacheKeys.SIMPLETS);
@@ -235,6 +247,6 @@ async function restoreSimplet() {
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
-  simpletsStore.loading = false;
+  simpletStore.loading = false;
 }
 </script>

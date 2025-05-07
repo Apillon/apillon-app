@@ -4,7 +4,7 @@
       <HeaderSimplets />
     </template>
     <div class="pb-8">
-      <p class="mb-2 max-w-lg">{{ $t('dashboard.simplet.templates') }}</p>
+      <p class="mb-2 max-w-lg">{{ $t('simplet.templates') }}</p>
 
       <div class="grid gap-4 lg:grid-cols-3">
         <Card v-for="(simplet, key) in simpletsContent" :key="key" :service="simplet" dark title-new-line>
@@ -19,17 +19,13 @@
     </div>
 
     <!-- Modal - New Simplet -->
-    <SimpletModal
-      v-model:show="showModalNewSimplet"
-      :type="simpletType"
-      :title="$t('dashboard.simplet.wizard.create')"
-    />
+    <SimpletModal v-model:show="showModalNewSimplet" :type="simpletType" :title="$t('simplet.wizard.create')" />
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
 const { t } = useI18n();
-const simpletsStore = useSimpletsStore();
+const simpletStore = useSimpletStore();
 const { simpletsContent } = useSimplet();
 
 const simpletType = ref<number>(SimpletType.AIRDROP);
@@ -40,14 +36,14 @@ useHead({
 });
 
 onMounted(() => {
-  simpletsStore.fetchSimplets();
-  simpletsStore.fetchSimpletTemplates();
+  simpletStore.fetchSimplets();
+  simpletStore.fetchSimpletTemplates();
 });
 
 function openModal(type: number) {
-  simpletsStore.resetForm();
+  simpletStore.resetForm();
   simpletType.value = type;
-  simpletsStore.stepSimpletCreate = SimpletCreateStep.COLLECTION;
+  simpletStore.stepSimpletCreate = SimpletCreateStep.COLLECTION;
   showModalNewSimplet.value = true;
 }
 </script>

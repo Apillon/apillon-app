@@ -9,17 +9,17 @@ const route = useRoute();
 const menuOptions: NMenuOption[] = [
   {
     key: 'dashboard-simplet',
-    label: t('dashboard.simplet.menu.templates'),
+    label: t('simplet.menu.templates'),
     path: '/dashboard/simplet',
   },
   {
     key: 'dashboard-simplet-list',
-    label: t('dashboard.simplet.menu.list'),
+    label: t('simplet.menu.list'),
     path: '/dashboard/simplet/list',
   },
   {
     key: 'dashboard-simplet-archive',
-    label: t('dashboard.simplet.menu.archive'),
+    label: t('simplet.menu.archive'),
     path: '/dashboard/simplet/archive',
   },
 ];

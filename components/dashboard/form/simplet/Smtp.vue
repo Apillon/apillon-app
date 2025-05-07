@@ -5,14 +5,14 @@
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
 
-    <Headline :title="$t('dashboard.simplet.wizard.smtp.setup')" :content="$t('dashboard.simplet.wizard.smtp.info')" />
+    <Headline :title="$t('simplet.wizard.smtp.setup')" :content="$t('simplet.wizard.smtp.info')" />
     <Notification type="warning" class="mb-8 w-full">
-      {{ $t('dashboard.simplet.wizard.smtp.warning') }}
+      {{ $t('simplet.wizard.smtp.warning') }}
     </Notification>
 
     <n-form
       ref="formRef"
-      :model="simpletsStore.form.smtp"
+      :model="simpletStore.form.smtp"
       :rules="rules"
       :disabled="isFormDisabled"
       @submit.prevent="handleSubmit"
@@ -20,7 +20,7 @@
       <n-grid class="items-end" :cols="12" :x-gap="24">
         <n-form-item-gi path="host" :span="9" :label="$t('form.label.smtp.host')" :label-props="{ for: 'host' }">
           <n-input
-            v-model:value="simpletsStore.form.smtp.host"
+            v-model:value="simpletStore.form.smtp.host"
             :input-props="{ id: 'host' }"
             :placeholder="$t('form.placeholder.smtp.host')"
             clearable
@@ -28,7 +28,7 @@
         </n-form-item-gi>
         <n-form-item-gi path="port" :span="3" :label="$t('form.label.smtp.port')" :label-props="{ for: 'port' }">
           <n-input-number
-            v-model:value="simpletsStore.form.smtp.port"
+            v-model:value="simpletStore.form.smtp.port"
             :min="0"
             :input-props="{ id: 'port' }"
             :placeholder="$t('form.placeholder.smtp.host')"
@@ -38,7 +38,7 @@
 
       <n-form-item path="username" :label="$t('form.label.smtp.username')" :label-props="{ for: 'username' }">
         <n-input
-          v-model:value="simpletsStore.form.smtp.username"
+          v-model:value="simpletStore.form.smtp.username"
           :input-props="{ id: 'username' }"
           :placeholder="$t('form.placeholder.smtp.username')"
           clearable
@@ -47,7 +47,7 @@
 
       <n-form-item path="password" :label="$t('form.label.smtp.password')" :label-props="{ for: 'password' }">
         <n-input
-          v-model:value="simpletsStore.form.smtp.password"
+          v-model:value="simpletStore.form.smtp.password"
           type="password"
           :input-props="{ id: 'password' }"
           :placeholder="$t('form.placeholder.smtp.password')"
@@ -57,7 +57,7 @@
 
       <n-form-item path="senderName" :label="$t('form.label.smtp.sender')" :label-props="{ for: 'senderName' }">
         <n-input
-          v-model:value="simpletsStore.form.smtp.senderName"
+          v-model:value="simpletStore.form.smtp.senderName"
           :input-props="{ id: 'senderName' }"
           :placeholder="$t('form.placeholder.smtp.sender')"
           clearable
@@ -65,7 +65,7 @@
       </n-form-item>
       <n-form-item path="senderEmail" :label="$t('form.label.smtp.email')" :label-props="{ for: 'senderEmail' }">
         <n-input
-          v-model:value="simpletsStore.form.smtp.senderEmail"
+          v-model:value="simpletStore.form.smtp.senderEmail"
           :input-props="{ id: 'senderEmail' }"
           :placeholder="$t('form.placeholder.smtp.email')"
           clearable
@@ -78,7 +78,7 @@
           {{ $t('general.skip') }}
         </Btn>
       </template>
-      <span>{{ $t('dashboard.simplet.wizard.smtp.skip') }}</span>
+      <span>{{ $t('simplet.wizard.smtp.skip') }}</span>
     </n-tooltip>
   </div>
 </template>
@@ -90,7 +90,7 @@ const { t } = useI18n();
 const { isMd } = useScreen();
 const message = useMessage();
 const dataStore = useDataStore();
-const simpletsStore = useSimpletsStore();
+const simpletStore = useSimpletStore();
 const formRef = ref<NFormInst | null>(null);
 
 const rules: NFormRules = {

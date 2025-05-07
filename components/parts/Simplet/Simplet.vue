@@ -20,11 +20,11 @@
         </div>
       </div>
       <div class="card relative p-6">
-        <h6>{{ $t('dashboard.simplet.deploy') }}</h6>
+        <h6>{{ $t('simplet.deploy') }}</h6>
         <div class="mt-5 flex flex-col gap-4">
           <Btn class="w-full" type="info" href="https://github.com/Apillon/nft-studio-template">
             <span class="icon-github mr-2"></span>
-            <strong> {{ $t('dashboard.simplet.viewCode') }}</strong>
+            <strong> {{ $t('simplet.viewCode') }}</strong>
           </Btn>
           <Btn>
             {{ $t('auth.onboarding.getStarted') }}

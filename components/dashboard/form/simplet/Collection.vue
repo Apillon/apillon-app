@@ -1,12 +1,8 @@
 <template>
   <div>
     <Headline
-      :title="$t('dashboard.simplet.wizard.selectType')"
-      :content="
-        collections.length
-          ? $t('dashboard.simplet.wizard.collection.info')
-          : $t('dashboard.simplet.wizard.collection.empty')
-      "
+      :title="$t('simplet.wizard.selectType')"
+      :content="collections.length ? $t('simplet.wizard.collection.info') : $t('simplet.wizard.collection.empty')"
     />
     <Spinner v-if="collectionStore.loading" />
     <template v-else-if="collections.length">
@@ -22,7 +18,7 @@
       />
     </template>
     <Notification v-else type="error" alert>
-      {{ $t('dashboard.simplet.wizard.collection.first') }}
+      {{ $t('simplet.wizard.collection.first') }}
       <NuxtLink :to="{ name: 'dashboard-service-nft' }">
         <strong class="underline">{{ $t('dashboard.createHere') }}</strong>
       </NuxtLink>
@@ -36,7 +32,7 @@ const { t } = useI18n();
 const message = useMessage();
 
 const bucketStore = useBucketStore();
-const simpletsStore = useSimpletsStore();
+const simpletStore = useSimpletStore();
 const collectionStore = useCollectionStore();
 
 const selectedCollection = ref('');
@@ -62,9 +58,9 @@ const logoImg = (uuid: string) => {
 
 function nextStep() {
   if (selectedCollection.value) {
-    simpletsStore.form.collection = selectedCollection.value;
+    simpletStore.form.collection = selectedCollection.value;
   } else {
-    message.warning(t('dashboard.simplet.wizard.selectCollection'));
+    message.warning(t('simplet.wizard.selectCollection'));
   }
 }
 </script>

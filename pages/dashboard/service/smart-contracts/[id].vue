@@ -18,7 +18,7 @@
           <Demo
             :image="NftTemplateJPG"
             link="https://github.com/Apillon/apillon-evm-contracts"
-            :title="$t('dashboard.simplet.viewCode')"
+            :title="$t('simplet.viewCode')"
           />
         </div>
       </div>

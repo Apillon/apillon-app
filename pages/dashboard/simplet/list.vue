@@ -6,7 +6,7 @@
     <slot>
       <n-space class="pb-8" :size="32" vertical>
         <ActionsSimplets />
-        <TableSimplets :search="simpletsStore.search" />
+        <TableSimplets :search="simpletStore.search" />
       </n-space>
     </slot>
   </Dashboard>
@@ -16,7 +16,7 @@
 const { t } = useI18n();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
-const simpletsStore = useSimpletsStore();
+const simpletStore = useSimpletStore();
 
 const pageLoading = ref<boolean>(true);
 
@@ -26,7 +26,7 @@ useHead({
 
 onMounted(async () => {
   await dataStore.waitOnPromises();
-  await simpletsStore.getSimplets();
+  await simpletStore.getSimplets();
   paymentStore.getPriceList();
 
   pageLoading.value = false;

@@ -4,9 +4,9 @@
       <HeaderSimplets />
     </template>
     <slot>
-      <n-space v-if="simpletsStore.hasSimpletsArchive" class="pb-8" :size="32" vertical>
+      <n-space v-if="simpletStore.hasSimpletsArchive" class="pb-8" :size="32" vertical>
         <ActionsSimplets archive />
-        <TableSimplets :search="simpletsStore.archive.search" archive />
+        <TableSimplets :search="simpletStore.archive.search" archive />
       </n-space>
       <Empty
         v-else
@@ -15,7 +15,7 @@
         icon="nft/illustration"
       >
         <Btn type="primary" :to="{ name: 'dashboard-simplet-list' }">
-          {{ $t('dashboard.simplet.menu.list') }}
+          {{ $t('simplet.menu.list') }}
         </Btn>
       </Empty>
     </slot>
@@ -26,7 +26,7 @@
 const { t } = useI18n();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
-const simpletsStore = useSimpletsStore();
+const simpletStore = useSimpletStore();
 
 const pageLoading = ref<boolean>(true);
 
@@ -36,7 +36,7 @@ useHead({
 
 onMounted(async () => {
   await dataStore.waitOnPromises();
-  await simpletsStore.getSimpletsArchive();
+  await simpletStore.getSimpletsArchive();
   paymentStore.getPriceList();
 
   pageLoading.value = false;

@@ -3,52 +3,52 @@
     :progress="progress"
     :steps="SimpletCreateStep"
     :active-step="
-      simpletsStore.stepSimpletCreate === SimpletCreateStep.SMTP
+      simpletStore.stepSimpletCreate === SimpletCreateStep.SMTP
         ? SimpletCreateStep.FORM
-        : simpletsStore.stepSimpletCreate
+        : simpletStore.stepSimpletCreate
     "
-    trans-key="dashboard.simplet.wizard.createStep"
-    :title="$t('dashboard.simplet.wizard.create')"
+    trans-key="simplet.wizard.createStep"
+    :title="$t('simplet.wizard.create')"
   >
     <slot>
       <FormSimpletTypeSelect
-        v-if="simpletsStore.stepSimpletCreate === SimpletCreateStep.TYPE"
+        v-if="simpletStore.stepSimpletCreate === SimpletCreateStep.TYPE"
         ref="simpletTypeRef"
         class="mx-auto max-w-lg"
       />
       <FormSimpletCollection
-        v-if="simpletsStore.stepSimpletCreate === SimpletCreateStep.COLLECTION"
+        v-if="simpletStore.stepSimpletCreate === SimpletCreateStep.COLLECTION"
         ref="simpletCollectionRef"
         class="mx-auto max-w-lg"
       />
       <FormSimplet
-        v-else-if="simpletsStore.stepSimpletCreate === SimpletCreateStep.FORM"
+        v-else-if="simpletStore.stepSimpletCreate === SimpletCreateStep.FORM"
         ref="simpletFormRef"
         class="mx-auto max-w-lg"
       />
       <FormSimpletSmtp
-        v-else-if="simpletsStore.stepSimpletCreate === SimpletCreateStep.SMTP"
+        v-else-if="simpletStore.stepSimpletCreate === SimpletCreateStep.SMTP"
         ref="simpletFormSmtpRef"
         class="mx-auto max-w-lg"
         @skip="skipSmtp()"
       />
       <SimpletPreview
-        v-else-if="simpletsStore.stepSimpletCreate === SimpletCreateStep.REVIEW"
-        @back="simpletsStore.stepSimpletCreate = SimpletCreateStep.FORM"
+        v-else-if="simpletStore.stepSimpletCreate === SimpletCreateStep.REVIEW"
+        @back="simpletStore.stepSimpletCreate = SimpletCreateStep.FORM"
         @deploy="deploy()"
       />
       <AnimationDeploy
-        v-else-if="simpletsStore.stepSimpletCreate === SimpletCreateStep.DEPLOYING"
+        v-else-if="simpletStore.stepSimpletCreate === SimpletCreateStep.DEPLOYING"
         class="min-h-full"
-        :title="$t('dashboard.simplet.wizard.deploying')"
-        :content="$t('dashboard.simplet.wizard.deployingInfo')"
+        :title="$t('simplet.wizard.deploying')"
+        :content="$t('simplet.wizard.deployingInfo')"
       />
       <SimpletDeployed
-        v-else-if="simpletsStore.stepSimpletCreate === SimpletCreateStep.DEPLOYED"
+        v-else-if="simpletStore.stepSimpletCreate === SimpletCreateStep.DEPLOYED"
         class="mx-auto max-w-5xl"
       />
     </slot>
-    <template v-if="simpletsStore.stepSimpletCreate < SimpletCreateStep.REVIEW" #footer>
+    <template v-if="simpletStore.stepSimpletCreate < SimpletCreateStep.REVIEW" #footer>
       <div class="flex w-full items-center justify-between gap-4 px-10 py-3">
         <p>
           <strong>{{ $t('nft.collection.review.totalCosts') }}: </strong>
@@ -56,7 +56,7 @@
         </p>
         <div class="flex items-center gap-2">
           <Btn
-            v-if="simpletsStore.stepSimpletCreate !== SimpletCreateStep.TYPE"
+            v-if="simpletStore.stepSimpletCreate !== SimpletCreateStep.TYPE"
             class="min-w-40"
             type="secondary"
             @click="back"
@@ -78,7 +78,7 @@ const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
-const simpletsStore = useSimpletsStore();
+const simpletStore = useSimpletStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
 
 const simpletTypeRef = useTemplateRef('simpletTypeRef');
@@ -87,62 +87,62 @@ const simpletFormRef = useTemplateRef('simpletFormRef');
 const simpletFormSmtpRef = useTemplateRef('simpletFormSmtpRef');
 
 const totalCredits = 150;
-const progress = computed(() => Math.min(100, 20 * (simpletsStore.stepSimpletCreate - 1)));
+const progress = computed(() => Math.min(100, 20 * (simpletStore.stepSimpletCreate - 1)));
 
 onMounted(async () => {
   await dataStore.waitOnPromises();
   paymentStore.getPriceList();
-  simpletsStore.getSimpletTemplates();
+  simpletStore.getSimpletTemplates();
   embeddedWalletStore.getEmbeddedWallets();
-  simpletsStore.stepSimpletCreate = 7;
+  simpletStore.stepSimpletCreate = 7;
 });
 
 watch(
   () => props.type,
   newType => {
     if (newType > 0) {
-      simpletsStore.form.type = newType;
-      simpletsStore.stepSimpletCreate = SimpletCreateStep.COLLECTION;
+      simpletStore.form.type = newType;
+      simpletStore.stepSimpletCreate = SimpletCreateStep.COLLECTION;
     } else {
-      simpletsStore.stepSimpletCreate = SimpletCreateStep.TYPE;
+      simpletStore.stepSimpletCreate = SimpletCreateStep.TYPE;
     }
   }
 );
 
 async function submitForm() {
   if (await simpletFormRef.value?.handleSubmit()) {
-    simpletsStore.stepSimpletCreate =
-      simpletsStore.form.type === SimpletType.FREE_MINT ? SimpletCreateStep.REVIEW : SimpletCreateStep.SMTP;
+    simpletStore.stepSimpletCreate =
+      simpletStore.form.type === SimpletType.FREE_MINT ? SimpletCreateStep.REVIEW : SimpletCreateStep.SMTP;
   }
 }
 async function submitFormSmtp() {
   if (await simpletFormSmtpRef.value?.handleSubmit()) {
-    simpletsStore.stepSimpletCreate = SimpletCreateStep.REVIEW;
+    simpletStore.stepSimpletCreate = SimpletCreateStep.REVIEW;
   }
 }
 
 function back() {
-  switch (simpletsStore.stepSimpletCreate) {
+  switch (simpletStore.stepSimpletCreate) {
     case SimpletCreateStep.FORM:
-      simpletsStore.stepSimpletCreate -= 1;
+      simpletStore.stepSimpletCreate -= 1;
 
       break;
     default:
-      simpletsStore.stepSimpletCreate -= 1;
+      simpletStore.stepSimpletCreate -= 1;
   }
 }
 function nextStep() {
-  switch (simpletsStore.stepSimpletCreate) {
+  switch (simpletStore.stepSimpletCreate) {
     case SimpletCreateStep.TYPE:
       simpletTypeRef.value?.nextStep();
-      if (simpletsStore.form.type) {
-        simpletsStore.stepSimpletCreate += 1;
+      if (simpletStore.form.type) {
+        simpletStore.stepSimpletCreate += 1;
       }
       break;
     case SimpletCreateStep.COLLECTION:
       simpletCollectionRef.value?.nextStep();
-      if (simpletsStore.form.collection) {
-        simpletsStore.stepSimpletCreate += 1;
+      if (simpletStore.form.collection) {
+        simpletStore.stepSimpletCreate += 1;
       }
       break;
     case SimpletCreateStep.FORM:
@@ -152,54 +152,54 @@ function nextStep() {
       submitFormSmtp();
       break;
     default:
-      simpletsStore.stepSimpletCreate += 1;
+      simpletStore.stepSimpletCreate += 1;
       break;
   }
 }
 
 async function skipSmtp() {
-  simpletsStore.form.smtp.host = '';
-  simpletsStore.form.smtp.username = '';
-  simpletsStore.form.smtp.password = '';
-  simpletsStore.form.smtp.senderName = '';
-  simpletsStore.form.smtp.senderEmail = '';
-  simpletsStore.stepSimpletCreate = SimpletCreateStep.REVIEW;
+  simpletStore.form.smtp.host = '';
+  simpletStore.form.smtp.username = '';
+  simpletStore.form.smtp.password = '';
+  simpletStore.form.smtp.senderName = '';
+  simpletStore.form.smtp.senderEmail = '';
+  simpletStore.stepSimpletCreate = SimpletCreateStep.REVIEW;
 }
 
 async function deploy() {
-  simpletsStore.stepSimpletCreate = SimpletCreateStep.DEPLOYING;
+  simpletStore.stepSimpletCreate = SimpletCreateStep.DEPLOYING;
 
   const simpletUuid =
-    simpletsStore.templates.find(t => t.id === simpletsStore.form.type)?.simplet_uuid ||
-    simpletsStore.templates[0].simplet_uuid;
+    simpletStore.templates.find(t => t.id === simpletStore.form.type)?.simplet_uuid ||
+    simpletStore.templates[0].simplet_uuid;
   const simplet = await createSimplet(simpletUuid);
 
-  simpletsStore.stepSimpletCreate = simplet ? SimpletCreateStep.DEPLOYED : SimpletCreateStep.FORM;
+  simpletStore.stepSimpletCreate = simplet ? SimpletCreateStep.DEPLOYED : SimpletCreateStep.FORM;
 }
 
 const prepareVariablesBE = (): KeyValue[] => [
-  { key: 'CLAIM_TYPE', value: simpletsStore.form.type || SimpletType.AIRDROP },
-  { key: 'ADMIN_WALLET', value: simpletsStore.form.walletAddress || '' },
-  ...(simpletsStore.form.smtp.host
+  { key: 'CLAIM_TYPE', value: simpletStore.form.type || SimpletType.AIRDROP },
+  { key: 'ADMIN_WALLET', value: simpletStore.form.walletAddress || '' },
+  ...(simpletStore.form.smtp.host
     ? [
-        { key: 'SMTP_HOST', value: simpletsStore.form.smtp.host },
-        { key: 'SMTP_PORT', value: simpletsStore.form.smtp.port },
-        { key: 'SMTP_USERNAME', value: simpletsStore.form.smtp.username },
-        { key: 'SMTP_PASSWORD', value: simpletsStore.form.smtp.password },
-        { key: 'SMTP_NAME_FROM', value: simpletsStore.form.smtp.senderName },
-        { key: 'SMTP_EMAIL_FROM', value: simpletsStore.form.smtp.senderEmail },
+        { key: 'SMTP_HOST', value: simpletStore.form.smtp.host },
+        { key: 'SMTP_PORT', value: simpletStore.form.smtp.port },
+        { key: 'SMTP_USERNAME', value: simpletStore.form.smtp.username },
+        { key: 'SMTP_PASSWORD', value: simpletStore.form.smtp.password },
+        { key: 'SMTP_NAME_FROM', value: simpletStore.form.smtp.senderName },
+        { key: 'SMTP_EMAIL_FROM', value: simpletStore.form.smtp.senderEmail },
       ]
     : []),
 ];
 const prepareVariablesFE = (embeddedWallet: string): KeyValue[] => {
   const frontendVariables: KeyValue[] = [
-    { key: 'NUXT_PUBLIC_CLAIM_TYPE', value: simpletsStore.form.type || SimpletType.AIRDROP },
+    { key: 'NUXT_PUBLIC_CLAIM_TYPE', value: simpletStore.form.type || SimpletType.AIRDROP },
     { key: 'NUXT_PUBLIC_EMBEDDED_WALLET_CLIENT', value: embeddedWallet },
-    ...(simpletsStore.form.type === SimpletType.POAP && simpletsStore.form.startTime
-      ? [{ key: 'NUXT_PUBLIC_CLAIM_START', value: simpletsStore.form.startTime }]
+    ...(simpletStore.form.type === SimpletType.POAP && simpletStore.form.startTime
+      ? [{ key: 'NUXT_PUBLIC_CLAIM_START', value: simpletStore.form.startTime }]
       : []),
-    ...(simpletsStore.form.type === SimpletType.POAP && simpletsStore.form.endTime
-      ? [{ key: 'NUXT_PUBLIC_CLAIM_END', value: simpletsStore.form.endTime }]
+    ...(simpletStore.form.type === SimpletType.POAP && simpletStore.form.endTime
+      ? [{ key: 'NUXT_PUBLIC_CLAIM_END', value: simpletStore.form.endTime }]
       : []),
   ];
   return frontendVariables;
@@ -207,21 +207,21 @@ const prepareVariablesFE = (embeddedWallet: string): KeyValue[] => {
 
 async function createSimplet(simpletUuid: string) {
   try {
-    const embeddedWallet = await getEmbeddedWallet(simpletsStore.form.embeddedWallet);
+    const embeddedWallet = await getEmbeddedWallet(simpletStore.form.embeddedWallet);
 
     const bodyData = {
       project_uuid: dataStore.projectUuid,
-      name: simpletsStore.form.name,
-      description: simpletsStore.form.description,
-      apillonApiKey: simpletsStore.form.apiKey || null,
-      apillonApiSecret: simpletsStore.form.apiSecret || null,
-      nftCollection_uuid: simpletsStore.form.collection,
+      name: simpletStore.form.name,
+      description: simpletStore.form.description,
+      apillonApiKey: simpletStore.form.apiKey || null,
+      apillonApiSecret: simpletStore.form.apiSecret || null,
+      nftCollection_uuid: simpletStore.form.collection,
       backendVariables: prepareVariablesBE(),
       frontendVariables: prepareVariablesFE(embeddedWallet),
     };
 
     const { data } = await $api.post<SimpletResponse>(endpoints.simpletDeploy(simpletUuid), bodyData);
-    simpletsStore.active = data;
+    simpletStore.active = data;
     message.success(t('nft.collection.websiteDeploy.success'));
 
     return data;
@@ -241,8 +241,8 @@ async function getEmbeddedWallet(integrationUuid?: string | null): Promise<strin
 async function createEmbeddedWallet() {
   try {
     const bodyData = {
-      title: `Embedded wallet: ${simpletsStore.form.name}`,
-      description: `Embedded wallet: ${simpletsStore.form.description}`,
+      title: `Embedded wallet: ${simpletStore.form.name}`,
+      description: `Embedded wallet: ${simpletStore.form.description}`,
       project_uuid: dataStore.projectUuid,
     };
     const { data } = await $api.post<EmbeddedWalletResponse>(endpoints.embeddedWalletIntegration, bodyData);

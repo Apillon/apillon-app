@@ -18,17 +18,17 @@
 defineExpose({ nextStep });
 const { t } = useI18n();
 const message = useMessage();
-const simpletsStore = useSimpletsStore();
+const simpletStore = useSimpletStore();
 const { simpletsContent } = useSimplet();
 
-const selectedType = ref(simpletsStore.form.type);
+const selectedType = ref(simpletStore.form.type);
 
 function nextStep() {
   if (selectedType.value) {
-    simpletsStore.resetForm();
-    simpletsStore.form.type = selectedType.value;
+    simpletStore.resetForm();
+    simpletStore.form.type = selectedType.value;
   } else {
-    message.warning(t('dashboard.simplet.wizard.selectType'));
+    message.warning(t('simplet.wizard.selectType'));
   }
 }
 </script>

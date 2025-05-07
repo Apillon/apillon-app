@@ -21,26 +21,23 @@
           </n-layout-sider>
           <n-layout>
             <Header @toggle-sidebar="toggleSidebar" />
-            <n-scrollbar class="lg:max-h[100dvh]" y-scrollable>
-              <div ref="messageRef" class="relative flex items-center justify-center px-4 pt-8 lg:h-screen">
-                <div>
-                  <!-- customise 404 message from template section -->
-                  <n-h4>{{ $t('error.404') }}</n-h4>
+            <div ref="messageRef" class="relative flex items-center justify-center px-4 pt-8 lg:min-h-[80dvh]">
+              <div>
+                <!-- customise 404 message from template section -->
+                <n-h4>{{ $t('error.404') }}</n-h4>
 
-                  <!-- Redirect to home page -->
-                  <Btn type="secondary" @click="handleError">
-                    {{ $t('general.goHome') }}
-                  </Btn>
-                </div>
+                <!-- Redirect to home page -->
+                <Btn type="secondary" @click="handleError">
+                  {{ $t('general.goHome') }}
+                </Btn>
               </div>
-              <!-- <CookieConsent /> -->
-            </n-scrollbar>
+            </div>
           </n-layout>
         </n-layout>
       </n-message-provider>
     </n-config-provider>
   </div>
-  <div v-else class="relative flex h-full min-h-screen flex-col justify-center bg-bg-dark align-middle">
+  <div v-else class="relative flex h-full flex-col justify-center bg-bg-dark align-middle">
     <n-config-provider :theme-overrides="themeOverrides">
       <div class="card container relative max-w-lg py-16 sm:px-8 md:px-12 lg:px-16">
         <AuthHeader />
@@ -60,6 +57,8 @@
 </template>
 
 <script lang="ts" setup>
+import { themeOverrides } from '~/lib/config/naive-ui';
+
 const authStore = useAuthStore();
 const { isLg } = useScreen();
 const messageRef = ref<HTMLDivElement>();
