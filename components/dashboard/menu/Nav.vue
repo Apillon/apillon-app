@@ -178,7 +178,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       key: 'dashboard-simplet-poap',
       label: t('simplet.poap.name'),
       iconName: 'icon-poap',
-      to: 'dashboard-simplet-proof-of-attendance',
+      to: 'dashboard-simplet-poap',
     },
     {
       key: 'dashboard-simplet-free-mint',
@@ -245,6 +245,10 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
           type: 'divider',
         },
         ...simplets,
+        {
+          key: 'divider-5',
+          type: 'divider',
+        },
         ...configurationChildren,
       ]
     : [

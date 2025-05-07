@@ -36,10 +36,13 @@
       <HostingDomainConfiguration />
     </modal>
   </div>
-  <FormHostingDomain v-else :website-uuid="websiteUuid" :domain="domain" />
+  <FormHostingDomain v-else :website-uuid="uuid" :domain="domain" />
 </template>
 
 <script lang="ts" setup>
+const props = defineProps({
+  frontendUuid: { type: String, default: null },
+});
 const { isLg } = useScreen();
 const websiteStore = useWebsiteStore();
 const { websiteUuid } = useHosting();
@@ -55,9 +58,8 @@ onMounted(() => {
   domainStatus.value = websiteStore.active.domainStatus;
 });
 
-const domain = computed<string>(() => {
-  return websiteStore.active.domain || '';
-});
+const uuid = computed<string>(() => props.frontendUuid || websiteUuid.value);
+const domain = computed<string>(() => websiteStore.active.domain || '');
 
 const domainStatusType = computed<TagType>(() => {
   switch (domainStatus.value) {
@@ -77,7 +79,7 @@ async function refreshDomainStatus() {
     loadingDomain.value = true;
     btnDomainDisabled.value = true;
 
-    const websiteDomain = await websiteStore.fetchDomainStatus(websiteUuid.value);
+    const websiteDomain = await websiteStore.fetchDomainStatus(uuid.value);
     if (websiteDomain) {
       domainStatus.value = websiteDomain.domainStatus;
     }
@@ -88,7 +90,7 @@ async function refreshDomainStatus() {
 
 async function deleteDomain() {
   loadingDelete.value = true;
-  if (await deleteItem(ItemDeleteKey.DOMAIN, websiteUuid.value)) {
+  if (await deleteItem(ItemDeleteKey.DOMAIN, uuid.value)) {
     websiteStore.active.domain = null;
   }
   loadingDelete.value = false;

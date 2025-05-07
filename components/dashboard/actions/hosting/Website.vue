@@ -33,26 +33,7 @@
       </template>
 
       <template v-if="websiteStore.active.w3ProductionLink">
-        <Btn
-          v-if="editDomainEnabled"
-          class="locked w-full"
-          :type="!websiteStore.active.domain ? 'primary' : 'secondary'"
-          :disabled="authStore.isAdmin()"
-          @click="modalWebsiteDomainVisible = true"
-        >
-          <span v-if="websiteStore.active.domain"> {{ $t('hosting.domain.update') }}</span>
-          <span v-else> {{ $t('hosting.domain.add') }}</span>
-        </Btn>
-        <n-tooltip v-else placement="top" :trigger="isMd ? 'hover' : 'click'">
-          <template #trigger>
-            <Btn class="locked w-full cursor-default !bg-primary/50" type="primary">
-              <span v-if="websiteStore.active.domain"> {{ $t('hosting.domain.update') }}</span>
-              <span v-else> {{ $t('hosting.domain.add') }}</span>
-            </Btn>
-          </template>
-          <span>{{ $t('hosting.domain.editDisabled') }}</span>
-        </n-tooltip>
-        <!-- Generate short URL -->
+        <BtnDomain />
         <FormStorageShortUrl :target-url="websiteStore.active.w3ProductionLink" class="w-full" />
       </template>
 
@@ -84,11 +65,6 @@
       </div>
     </Modal>
 
-    <!-- Modal -  Domain preview -->
-    <Modal v-model:show="modalWebsiteDomainVisible" :title="$t('hosting.domain.edit')">
-      <HostingDomain />
-    </Modal>
-
     <!-- Modal - Github configuration -->
     <modal
       v-model:show="modalGithubConfigVisible"
@@ -117,7 +93,6 @@
 </template>
 
 <script lang="ts" setup>
-const { isMd } = useScreen();
 const { activeTab, tabs, checkUnfinishedBuilds, onWebsiteDeleted, refreshWebpage } = useHosting();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.HOSTING_DEPLOY);
 const { subscriptionMessage } = usePayment();
@@ -133,7 +108,6 @@ const websiteStore = useWebsiteStore();
 const deploymentStore = useDeploymentStore();
 
 const modalWebsiteReviewVisible = ref<boolean>(false);
-const modalWebsiteDomainVisible = ref<boolean>(false);
 const modalGithubConfigVisible = ref<boolean>(false);
 const modalVariablesVisible = ref<boolean>(false);
 const showModalDeleteWebsite = ref<boolean>(false);
@@ -143,10 +117,6 @@ const deployEnv = ref<number>(DeploymentEnvironment.STAGING);
 
 const hasActiveDeployments = computed<boolean>(() => {
   return deploymentStore.staging.some(deployment => deployment.deploymentStatus < DeploymentStatus.SUCCESSFUL);
-});
-const editDomainEnabled = computed<boolean>(() => {
-  const time = websiteStore.active.domainChangeDate;
-  return !time || new Date(time).getTime() + 15 * 60 * 1000 < Date.now();
 });
 
 /** Show payment messages if user create subscription */

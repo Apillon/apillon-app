@@ -24,8 +24,9 @@ const { t } = useI18n();
 const router = useRouter();
 const { params } = useRoute();
 const simpletStore = useSimpletStore();
+const { initWebsite } = useHosting();
 
-const pageLoading = ref<boolean>(false);
+const pageLoading = ref<boolean>(true);
 
 /** Simplet UUID from route */
 const simpletUuid = ref<string>(`${params?.id}`);
@@ -37,9 +38,11 @@ useHead({
 onMounted(async () => {
   if (!params?.id) router.push({ name: 'dashboard-service-nft' });
 
-  const currentSimplet = await simpletStore.getSimplet(simpletUuid.value);
-  if (!currentSimplet?.simplet_uuid) {
+  await simpletStore.getSimplet(simpletUuid.value);
+  if (!simpletStore.active?.simplet_uuid) {
     router.push({ name: 'dashboard-simplet' });
   }
+  pageLoading.value = false;
+  initWebsite(-1, simpletStore.active.frontend_uuid);
 });
 </script>

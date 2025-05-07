@@ -8,24 +8,7 @@
         <span class="text-xs capitalize">{{ websiteStore.active.name.replaceAll('-', ' ') }}</span>
       </div>
     </div>
-    <n-table class="plain" :bordered="false" single-line>
-      <tbody>
-        <tr v-for="(item, key) in data" :key="key">
-          <td :class="{ '!border-b-0': key + 1 === data.length }">
-            <span class="flex items-center gap-1">
-              <span class="text-white lg:whitespace-nowrap">{{ item.label }}</span>
-              <IconInfo v-if="item.info" :tooltip="item.info" size="sm" />
-            </span>
-          </td>
-          <td :class="{ '!border-b-0': key + 1 === data.length }">
-            <component :is="item.component" v-if="item.component" v-bind="item.data" />
-            <TableLink v-else-if="item.link && item.value" class="w-full" :link="item.link" :text="item.value" />
-            <TableEllipsis v-else-if="item.copy" class="w-full justify-between" :text="item.value || ''" />
-            <p v-else class="w-full">{{ item.value }}</p>
-          </td>
-        </tr>
-      </tbody>
-    </n-table>
+    <TableInfo :data="data" />
   </div>
 </template>
 
@@ -81,6 +64,7 @@ const data = computed(() => {
     },
     {
       label: t('hosting.deploymentStatus'),
+      value: '',
       show: websiteStore.active?.lastDeploymentStatus !== null,
       component: resolveComponent('HostingDeploymentStatus'),
       data: {
@@ -89,6 +73,7 @@ const data = computed(() => {
     },
     {
       label: t('dashboard.created'),
+      value: '',
       component: resolveComponent('HostingWebsiteOwner'),
       show: !!deploymentStore.deploymentConfig?.repoOwnerName,
       data: {

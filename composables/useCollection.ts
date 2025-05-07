@@ -304,31 +304,6 @@ export default function useCollection() {
     router.push({ name: 'dashboard-service-nft-slug-add', params: { slug: collectionUuid } });
   }
 
-  function onChainChange(chain: number) {
-    // if (chain === EvmChainMainnet.ASTAR_SHIBUYA) {
-    //   metadataStore.form.smartContract.chainType = ChainType.SUBSTRATE;
-    // }
-    if (chain !== EvmChainMainnet.ASTAR) {
-      metadataStore.form.smartContract.chainType = ChainType.EVM;
-    }
-  }
-
-  function onNetworkSelected(chainId: number) {
-    if (chainId === SubstrateChain.UNIQUE) {
-      collectionStore.loading = true;
-      router.push({ name: 'dashboard-service-nft-new' });
-
-      setTimeout(() => {
-        metadataStore.form.smartContract.chain = chainId;
-        onChainChange(chainId);
-        collectionStore.loading = false;
-      }, 300);
-    } else {
-      metadataStore.form.smartContract.chain = chainId;
-      onChainChange(chainId);
-    }
-  }
-
   function resetAll() {
     bucketStore.resetFolder();
     bucketStore.resetUpload();
@@ -358,8 +333,6 @@ export default function useCollection() {
     disablePastDate,
     disablePastTime,
     isChainAvailable,
-    onChainChange,
-    onNetworkSelected,
     openAddNft,
     prepareFormData,
     resetAll,

@@ -1,6 +1,6 @@
 <template>
   <span v-if="owner" class="flex items-center gap-1 text-sm text-white">
-    <img :src="avatar" alt="" class="h-6 w-6 rounded-lg" />
+    <img v-if="avatar" :src="avatar" alt="" class="h-6 w-6 rounded-lg" />
     <span>{{ owner }}</span>
     <span>/</span>
     <small>{{ dateTimeToMonthDay(date) }}</small>

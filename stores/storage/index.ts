@@ -12,6 +12,7 @@ export const apillonRepos: GithubRepo[] = [
     name: 'nft-template',
     owner: apillonOwner,
     updated_at: '2024-02-15T08:56:38Z',
+    html_url: '',
   },
   {
     clone_url: 'https://github.com/Apillon/nft-template-vue.git',
@@ -21,6 +22,7 @@ export const apillonRepos: GithubRepo[] = [
     name: 'nft-template-vue',
     owner: apillonOwner,
     updated_at: '2024-02-15T08:56:38Z',
+    html_url: '',
   },
   {
     clone_url: 'https://github.com/Apillon/nft-template-react.git',
@@ -30,6 +32,7 @@ export const apillonRepos: GithubRepo[] = [
     name: 'nft-template-react',
     owner: apillonOwner,
     updated_at: '2024-02-15T08:56:38Z',
+    html_url: '',
   },
 ];
 
@@ -124,6 +127,9 @@ export const useStorageStore = defineStore('storage', {
     async fetchRepos() {
       const dataStore = useDataStore();
       const projectUuid = await dataStore.getProjectUuid();
+
+      if (this.projectConfig === undefined) await this.getGithubProjectConfig();
+      if (!this.hasProjectConfigLoaded) return;
 
       this.loading = true;
       try {

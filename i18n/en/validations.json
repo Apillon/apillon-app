@@ -28,6 +28,7 @@
     "ipfsTypeRequired": "Please select type",
     "ipnsNameRequired": "Please enter IPNS name",
     "ipnsRequired": "Please select IPNS",
+    "mysqlRequired": "Please fill in MySQL connection details",
     "naturalNumber": "Please enter a positive number",
     "notEnoughSpaceInStorage": "File \"{name}\" is too big. To proceed, please upgrade your subscription plan.",
     "notImage": "{name} is not an image",

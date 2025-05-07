@@ -21,15 +21,14 @@
         v-if="simpletStore.hasSimplets"
         size="medium"
         :disabled="authStore.isAdmin()"
-        @click="modalCreateCollectionVisible = true"
+        @click="modalCreateVisible = true"
       >
-        <span class="icon-create-folder mr-2 text-xl text-primary"></span>
-        <span class="text-primary">{{ $t('nft.collection.new') }}</span>
+        <span class="text-primary">{{ $t('simplet.create') }}</span>
       </n-button>
     </n-space>
   </n-space>
 
-  <ModalNft v-model:show="modalCreateCollectionVisible" />
+  <SimpletModal v-model:show="modalCreateVisible" />
 </template>
 
 <script lang="ts" setup>
@@ -39,5 +38,10 @@ defineProps({
 
 const authStore = useAuthStore();
 const simpletStore = useSimpletStore();
-const modalCreateCollectionVisible = ref<boolean>(false);
+const modalCreateVisible = ref<boolean>(false);
+
+onMounted(() => {
+  simpletStore.resetForm();
+  simpletStore.stepSimpletCreate = SimpletCreateStep.TYPE;
+});
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <Headline
-      :title="$t('simplet.wizard.selectType')"
+      :title="$t('simplet.wizard.collection.select')"
       :content="collections.length ? $t('simplet.wizard.collection.info') : $t('simplet.wizard.collection.empty')"
     />
     <Spinner v-if="collectionStore.loading" />

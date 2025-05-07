@@ -70,5 +70,12 @@ onMounted(() => {
     data.value.push({ label: t('form.label.smtp.sender'), value: simpletStore.form.smtp.senderName });
     data.value.push({ label: t('form.label.smtp.email'), value: simpletStore.form.smtp.senderEmail });
   }
+  if (simpletStore.form.mysql.host) {
+    data.value.push({ label: t('form.label.mysql.host'), value: simpletStore.form.mysql.host });
+    data.value.push({ label: t('form.label.mysql.port'), value: `${simpletStore.form.mysql.port}` });
+    data.value.push({ label: t('form.label.mysql.database'), value: simpletStore.form.mysql.database });
+    data.value.push({ label: t('form.label.mysql.user'), value: simpletStore.form.mysql.user });
+    data.value.push({ label: t('form.label.mysql.password'), value: simpletStore.form.mysql.password });
+  }
 });
 </script>

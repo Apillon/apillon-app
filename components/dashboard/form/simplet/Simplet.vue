@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pb-8">
     <!-- Permissions Error Notification -->
     <Notification v-if="isFormDisabled" type="error" class="mb-8 w-full">
       {{ $t('dashboard.permissions.insufficient') }}
@@ -89,7 +89,16 @@
         :api-secret="simpletStore.form.apiSecret"
         @update:api-key="apiKey => (simpletStore.form.apiKey = apiKey)"
         @update:api-secret="apiSecret => (simpletStore.form.apiSecret = apiSecret)"
-      />
+      >
+        <n-checkbox
+          v-model:checked="useDifferentDB"
+          class="mb-8"
+          size="medium"
+          :label="labelInfo('useDifferentDB', 'simplet.mysql')"
+        />
+
+        <FormFieldMySql v-if="useDifferentDB" :form="simpletStore.form.mysql" />
+      </FormFieldApiKey>
     </n-form>
   </div>
 </template>
@@ -97,16 +106,19 @@
 <script lang="ts" setup>
 defineExpose({ handleSubmit });
 
-const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const simpletStore = useSimpletStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
 
+const { t } = useI18n();
+const { labelInfo } = useComputing();
 const { ruleApiKey, ruleApiSecret } = useHosting();
-const formRef = ref<NFormInst | null>(null);
 
-const rules: NFormRules = {
+const formRef = ref<NFormInst | null>(null);
+const useDifferentDB = ref<boolean>(false);
+
+const rules = computed(() => ({
   name: [ruleRequired(t('validation.simplet.nameRequired'))],
   description: [ruleDescription(t('validation.descriptionTooLong'))],
   walletAddress: [ruleRequired(t('validation.simplet.walletAddressRequired'))],
@@ -116,7 +128,11 @@ const rules: NFormRules = {
     required: embeddedWalletStore.hasEmbeddedWallets,
     message: t('validation.embeddedWallet.integrationRequired'),
   },
-};
+  ['mysql.host']: { required: useDifferentDB.value, message: t('validation.mysqlRequired') },
+  ['mysql.database']: { required: useDifferentDB.value, message: t('validation.mysqlRequired') },
+  ['mysql.user']: { required: useDifferentDB.value, message: t('validation.mysqlRequired') },
+  ['mysql.password']: { required: useDifferentDB.value, message: t('validation.mysqlRequired') },
+}));
 
 const isFormDisabled = computed<boolean>(() => {
   return dataStore.isProjectUser;
@@ -125,6 +141,8 @@ const isFormDisabled = computed<boolean>(() => {
 // Submit
 async function handleSubmit(e?: Event | MouseEvent): Promise<boolean> {
   e?.preventDefault();
+
+  if (!useDifferentDB.value) simpletStore.resetFormMySql();
 
   const validation = await formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     errors?.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));

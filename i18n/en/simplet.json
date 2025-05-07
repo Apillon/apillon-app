@@ -101,6 +101,12 @@
       "list": "Active Simplets",
       "templates": "Templates"
     },
+    "mysql": {
+      "useDifferentDB": "Use a different database",
+      "labelInfo": {
+        "useDifferentDB": "Provide the MySQL connection details, including host, port, username, password, and database name."
+      }
+    },
     "poap": {
       "name": "NFT Event Experience",
       "description": "<b>Easy to claim, fun to keep.</b> Create digital badges for your event attendees. Drop NFTs at the event or online and let people collect proof they attented.",
@@ -186,10 +192,12 @@
       "deploying": "Creating Simplet",
       "deployingInfo": "Deploying NFT Studio...",
       "info": "You’re about to deploy a Simplet that sets up your NFT distribution dashboard. Here, you’ll manage everything—email drops, wallet airdrops, public minting, and more.",
+      "selectCollection": "Select NFT collection",
       "selectType": "Select simplet type",
       "setData": "Set your Simplet data"
     },
     "backendStatus": "Backend status",
+    "create": "Create simplet",
     "delete": "Delete Simplet",
     "deploy": "Deploy simplet",
     "edit": "Edit Simplet",

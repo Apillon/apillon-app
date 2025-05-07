@@ -35,6 +35,8 @@
           @update:value="$emit('update:apiSecret', $event)"
         />
       </n-form-item>
+
+      <slot />
     </n-collapse-item>
   </n-collapse>
 </template>
@@ -45,7 +47,7 @@ import type { SelectOption } from 'naive-ui';
 defineEmits(['update:apiKey', 'update:apiSecret']);
 defineProps({
   apiKey: { type: [String, null], default: null },
-  apiSecret: { type: String, default: '' },
+  apiSecret: { type: [String, null], default: null },
   configId: { type: Number, default: 0 },
 });
 

@@ -57,7 +57,7 @@ useHead({
 });
 
 onMounted(async () => {
-  initWebsite(DeploymentEnvironment.STAGING, true, false, true);
+  initWebsite(DeploymentEnvironment.STAGING);
   storageStore.getGithubProjectConfig();
   checkAndStartAutoRefresh();
 });

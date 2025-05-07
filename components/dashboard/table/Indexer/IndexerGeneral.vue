@@ -1,104 +1,65 @@
 <template>
   <div class="card-light mb-6 max-w-3xl px-6 py-4">
-    <n-table class="plain" :bordered="false" single-line>
-      <tbody>
-        <tr>
-          <td>
-            <span class="text-white lg:whitespace-nowrap">{{ $t('indexer.name') }}</span>
-          </td>
-          <td>
-            {{ indexerStore.active.name }}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <span class="text-white lg:whitespace-nowrap">
-              {{ $t('indexer.description') }}
-            </span>
-          </td>
-          <td>
-            {{ indexerStore.active.description }}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <span class="text-white lg:whitespace-nowrap">
-              {{ $t('dashboard.createTime') }}
-            </span>
-          </td>
-          <td>
-            {{ dateTimeToDateAndTime(indexerStore.active.createTime || '') }}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <span class="text-white lg:whitespace-nowrap">
-              {{ $t('indexer.lastDeployed') }}
-            </span>
-          </td>
-          <td>
-            {{ dateTimeToDateAndTime(indexerStore.active.squid?.deployedAt || '') }}
-          </td>
-        </tr>
-        <!--Squid Status-->
-        <tr>
-          <td>
-            <span class="text-white lg:whitespace-nowrap">
-              {{ $t('indexer.squidStatus') }}
-            </span>
-          </td>
-          <td>
-            <IndexerStatus :status="indexerStore.active.squid?.status == 'DEPLOYED' ? 'success' : 'error'">
-              {{ indexerStore.active.squid?.status }}
-            </IndexerStatus>
-          </td>
-        </tr>
-        <!--API Status-->
-        <tr>
-          <td class="!border-bg-light">
-            <span class="text-white lg:whitespace-nowrap">{{ $t('indexer.apiStatus') }}</span>
-          </td>
-          <td class="!border-bg-light">
-            <IndexerStatus :status="indexerStore.active.squid?.api?.status == 'AVAILABLE' ? 'success' : 'error'">
-              {{ indexerStore.active.squid?.api?.status }}
-            </IndexerStatus>
-          </td>
-        </tr>
-        <tr>
-          <td class="!border-bg-light !pl-0">
-            <h6 class="py-3 text-white">{{ $t('indexer.processors') }}</h6>
-          </td>
-        </tr>
-        <!--Processor Status-->
-        <tr>
-          <td>
-            <span class="text-white lg:whitespace-nowrap">
-              {{ $t('indexer.processorStatus') }}
-            </span>
-          </td>
-          <td>
-            <IndexerStatus :status="indexerStore.active.squid?.processors[0].status == 'SYNCED' ? 'success' : 'error'">
-              {{ indexerStore.active.squid?.processors[0].status }}
-            </IndexerStatus>
-          </td>
-        </tr>
-        <tr>
-          <td class="!border-bg-light">
-            <span class="text-white lg:whitespace-nowrap">
-              {{ $t('indexer.processedBlocks') }}
-            </span>
-          </td>
-          <td class="!border-bg-light">
-            {{
-              `${indexerStore.active.squid?.processors[0].syncState.currentBlock}/${indexerStore.active.squid?.processors[0].syncState.totalBlocks} `
-            }}
-          </td>
-        </tr>
-      </tbody>
-    </n-table>
+    <TableInfo :data="data" />
   </div>
 </template>
 
 <script lang="ts" setup>
+const { t } = useI18n();
 const indexerStore = useIndexerStore();
+
+const data = computed(() => {
+  return [
+    {
+      label: t('indexer.name'),
+      value: indexerStore.active.name,
+    },
+    {
+      label: t('indexer.description'),
+      value: indexerStore.active.description,
+    },
+    {
+      label: t('dashboard.createTime'),
+      value: dateTimeToDateAndTime(indexerStore.active.createTime || ''),
+    },
+    {
+      label: t('indexer.lastDeployed'),
+      value: dateTimeToDateAndTime(indexerStore.active.squid?.deployedAt || ''),
+    },
+    {
+      label: t('indexer.squidStatus'),
+      value: indexerStore.active.squid?.status,
+      component: resolveComponent('IndexerStatus'),
+      data: {
+        status: indexerStore.active.squid?.status == 'DEPLOYED' ? 'success' : 'error',
+      },
+    },
+    {
+      label: t('indexer.apiStatus'),
+      value: indexerStore.active.squid?.api?.status,
+      component: resolveComponent('IndexerStatus'),
+      data: {
+        status: indexerStore.active.squid?.api?.status == 'AVAILABLE' ? 'success' : 'error',
+      },
+    },
+    {
+      label: t('indexer.processors'),
+      value: '',
+      classLabel: '!h-6 !border-bg-light !pl-0 !pt-5 font-semibold text-white',
+      classValue: '!border-bg-light',
+    },
+    {
+      label: t('indexer.processorStatus'),
+      value: indexerStore.active.squid?.processors[0].status,
+      component: resolveComponent('IndexerStatus'),
+      data: {
+        status: indexerStore.active.squid?.processors[0].status == 'SYNCED' ? 'success' : 'error',
+      },
+    },
+    {
+      label: t('indexer.processedBlocks'),
+      value: `${indexerStore.active.squid?.processors[0].syncState.currentBlock}/${indexerStore.active.squid?.processors[0].syncState.totalBlocks}`,
+    },
+  ];
+});
 </script>

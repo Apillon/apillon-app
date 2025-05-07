@@ -56,8 +56,8 @@ export default function useHosting() {
     clearInterval(websiteInterval);
   });
 
-  async function initWebsite(env: number = 0) {
-    websiteUuid.value = params.id ? `${params?.id}` : `${params?.slug}`;
+  async function initWebsite(env: number = 0, uuid?: string) {
+    websiteUuid.value = uuid ? uuid : params.id ? `${params?.id}` : `${params?.slug}`;
     if (websiteStore.active.website_uuid !== websiteUuid.value) {
       deploymentStore.resetData();
     }
@@ -95,6 +95,8 @@ export default function useHosting() {
   }
 
   async function changeEnv(env: number = 0) {
+    if (env < 0) return;
+
     /** Get deployments for this website */
     if (env > 0) {
       await deploymentStore.getDeployments(websiteUuid.value, env);

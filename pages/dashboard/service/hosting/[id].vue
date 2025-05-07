@@ -34,10 +34,10 @@
         </template>
         <n-tab-pane v-else :name="tabs.DEPLOYMENTS">
           <h4 class="mb-6">{{ $t('hosting.website.branchDeployments') }}</h4>
-          <TableHostingDeploymentBuilds v-if="storageStore.projectConfig" :deployments="deploymentStore.builds" />
+          <TableHostingDeploymentBuilds :deployments="deploymentStore.builds" />
         </n-tab-pane>
         <n-tab-pane v-if="websiteStore.isActiveWebsiteGithubSource" :name="tabs.VARIABLES">
-          <TableHostingDeploymentVariables :variables="deploymentStore.variables" />
+          <TableHostingDeploymentVariables v-if="configId" :config-id="configId" />
         </n-tab-pane>
       </n-tabs>
     </n-space>
@@ -60,5 +60,9 @@ onMounted(async () => {
   initWebsite();
   storageStore.getStorageInfo();
   storageStore.getGithubProjectConfig();
+});
+
+const configId = computed(() => {
+  return storageStore.projectConfig?.id || deploymentStore.deploymentConfig?.id;
 });
 </script>

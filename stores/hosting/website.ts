@@ -116,6 +116,7 @@ export const useWebsiteStore = defineStore('website', {
       if (!dataStore.projectUuid) return [];
 
       this.loading = true;
+      const key = archive ? 'archive' : 'items';
       try {
         const params = parseArguments(PARAMS_ALL_ITEMS);
         params.project_uuid = dataStore.projectUuid;
@@ -127,11 +128,7 @@ export const useWebsiteStore = defineStore('website', {
         dataStore.promises.websites = req;
         const res = await req;
 
-        if (archive) {
-          this.archive = res.data.items;
-        } else {
-          this.items = res.data.items;
-        }
+        this[key] = res.data.items;
         this.search = '';
 
         /** Save timestamp to SS */
@@ -140,12 +137,7 @@ export const useWebsiteStore = defineStore('website', {
       } catch (error: any) {
         /** Clear promise */
         dataStore.promises.websites = null;
-
-        if (archive) {
-          this.archive = [] as Array<WebsiteBaseInterface>;
-        } else {
-          this.items = [] as Array<WebsiteBaseInterface>;
-        }
+        this[key] = [] as Array<WebsiteBaseInterface>;
 
         /** Show error message  */
         window.$message.error(userFriendlyMsg(error));
@@ -156,7 +148,6 @@ export const useWebsiteStore = defineStore('website', {
     async fetchWebsite(uuid: string): Promise<WebsiteInterface> {
       try {
         const { data } = await $api.get<WebsiteResponse>(endpoints.websites(uuid));
-
         this.active = data;
 
         /** Save timestamp to SS */

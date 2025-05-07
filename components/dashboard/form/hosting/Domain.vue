@@ -99,14 +99,17 @@ onMounted(async () => {
     if (props.domain) {
       formData.value.ipns = !!website.value?.ipnsProduction;
     }
+    deploymentStore.getDeployments(props.websiteUuid);
   }
 });
 
-const lastDeployment = computed(() => {
-  return deploymentStore.production.reduce((latest, current) => {
-    return new Date(current.createTime) > new Date(latest.createTime) ? current : latest;
-  });
-});
+const lastDeployment = computed(() =>
+  deploymentStore.hasProductionDeployments
+    ? deploymentStore.production.reduce((latest, current) => {
+        return new Date(current.createTime) > new Date(latest.createTime) ? current : latest;
+      })
+    : null
+);
 
 // Custom validations
 function validateDomain(_: FormItemRule, value: string): boolean {
@@ -136,7 +139,7 @@ function handleSubmit(e: Event | MouseEvent) {
 
 async function createWebsiteDomain() {
   loading.value = true;
-
+  console.log('createWebsiteDomain', formData.value.domain, formData.value.ipns, props.websiteUuid);
   /** Create IPNS first if user check it */
   if (formData.value.ipns && !(await createIpns())) {
     loading.value = false;

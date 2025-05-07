@@ -94,7 +94,6 @@ onMounted(async () => {
   paymentStore.getPriceList();
   simpletStore.getSimpletTemplates();
   embeddedWalletStore.getEmbeddedWallets();
-  simpletStore.stepSimpletCreate = 7;
 });
 
 watch(
@@ -170,7 +169,7 @@ async function deploy() {
   simpletStore.stepSimpletCreate = SimpletCreateStep.DEPLOYING;
 
   const simpletUuid =
-    simpletStore.templates.find(t => t.id === simpletStore.form.type)?.simplet_uuid ||
+    simpletStore.templates.find(t => t.name === 'nft-studio-simplet' || t.id === SimpletType.FREE_MINT)?.simplet_uuid ||
     simpletStore.templates[0].simplet_uuid;
   const simplet = await createSimplet(simpletUuid);
 
@@ -180,6 +179,15 @@ async function deploy() {
 const prepareVariablesBE = (): KeyValue[] => [
   { key: 'CLAIM_TYPE', value: simpletStore.form.type || SimpletType.AIRDROP },
   { key: 'ADMIN_WALLET', value: simpletStore.form.walletAddress || '' },
+  ...(simpletStore.form.mysql.host
+    ? [
+        { key: 'MYSQL_HOST', value: simpletStore.form.mysql.host },
+        { key: 'MYSQL_PORT', value: simpletStore.form.mysql.port },
+        { key: 'MYSQL_DATABASE', value: simpletStore.form.mysql.database },
+        { key: 'MYSQL_USER', value: simpletStore.form.mysql.user },
+        { key: 'MYSQL_PASSWORD', value: simpletStore.form.mysql.password },
+      ]
+    : []),
   ...(simpletStore.form.smtp.host
     ? [
         { key: 'SMTP_HOST', value: simpletStore.form.smtp.host },

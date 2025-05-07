@@ -55,6 +55,7 @@ declare global {
     contractStatus: number;
     contract_uuid: string;
     frontendStatus: number;
+    frontend_uuid: string;
     project_uuid: string;
     simpletDeploy_uuid: string;
     simplet_uuid: string;

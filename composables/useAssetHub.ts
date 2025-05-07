@@ -130,7 +130,6 @@ export default function assetHub() {
     loadingWallet,
     modalWalletSelectVisible,
     pageLoading,
-    selectedColumns,
     supply,
     initAssetHub,
     initClient,

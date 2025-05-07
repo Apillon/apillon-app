@@ -86,7 +86,7 @@ async function deployFinished() {
 
   loading.value = false;
   if (!indexer) {
-    router.push({ name: 'dashboard-service-indexer' });
+    router.push({ name: 'dashboard-service-indexing' });
     return;
   }
 

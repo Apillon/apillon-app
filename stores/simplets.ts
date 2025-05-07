@@ -26,6 +26,13 @@ export const useSimpletStore = defineStore('simplets', {
       endTime: null as Optional<number>,
       apiKey: null as Optional<string>,
       apiSecret: null as Optional<string>,
+      mysql: {
+        host: '',
+        port: 3306,
+        database: '',
+        user: '',
+        password: '',
+      },
       smtp: {
         host: '',
         port: 465,
@@ -73,6 +80,17 @@ export const useSimpletStore = defineStore('simplets', {
       this.form.endTime = null;
       this.form.apiKey = null;
       this.form.apiSecret = '';
+      this.resetFormMySql();
+      this.resetFormSmtp();
+    },
+    resetFormMySql() {
+      this.form.mysql.host = '';
+      this.form.mysql.port = 3306;
+      this.form.mysql.database = '';
+      this.form.mysql.user = '';
+      this.form.mysql.password = '';
+    },
+    resetFormSmtp() {
       this.form.smtp.host = '';
       this.form.smtp.port = 465;
       this.form.smtp.username = '';

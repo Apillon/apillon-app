@@ -14,7 +14,7 @@
       </a>
     </div>
 
-    <button class="ml-2" @click="copyToClipboard(textOrLink)">
+    <button class="ml-2" @click="copyToClipboard(link)">
       <span class="icon-copy" :class="color"></span>
     </button>
   </div>

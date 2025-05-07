@@ -14,14 +14,14 @@
     @update:page-size="(pz: number) => (pagination.pageSize = pz)"
   />
 
-  <!-- Modal - Edit simplet -->
+  <!-- Modal - Edit simplet
   <modal v-model:show="showModalEditSimplet" :title="$t('simplet.edit')">
-    <FormHostingSimplet
+    <FormSimplet
       v-if="currentRow?.simpletDeploy_uuid"
       :simplet-uuid="currentRow.simpletDeploy_uuid"
       @submit-success="showModalEditSimplet = false"
     />
-  </modal>
+  </modal> -->
 
   <!-- Modal - Delete Simplet -->
   <ModalDelete v-model:show="showModalDeleteSimplet" :title="$t('simplet.delete')">
