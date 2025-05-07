@@ -70,7 +70,7 @@ const data = computed(() => {
     },
     {
       label: t('general.website'),
-      value: simpletStore.active.uu,
+      value: simpletStore.active.frontendStatus,
       tag: t('general.hosting'),
     },
     {
