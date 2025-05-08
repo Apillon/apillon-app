@@ -230,7 +230,7 @@ async function createSimplet(simpletUuid: string) {
 
     const { data } = await $api.post<SimpletResponse>(endpoints.simpletDeploy(simpletUuid), bodyData);
     simpletStore.active = data;
-    message.success(t('nft.collection.websiteDeploy.success'));
+    message.success(t('simplet.wizard.deployingInfo'));
 
     return data;
   } catch (e) {

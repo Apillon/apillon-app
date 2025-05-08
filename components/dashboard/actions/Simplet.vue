@@ -35,11 +35,39 @@
 
       <!-- Domain -->
       <BtnDomain :frontend-uuid="simpletStore.active.frontend_uuid" />
+
+      <!-- Redeploy -->
+      <Btn
+        v-if="
+          simpletStore.active.backendStatus === ResourceStatus.FAILED ||
+          simpletStore.active.frontendStatus === ResourceStatus.FAILED
+        "
+        class="locked w-full"
+        size="medium"
+        type="error"
+        @click="redeploy(simpletStore.active.simpletDeploy_uuid)"
+      >
+        {{ $t('simplet.redeploy') }}
+      </Btn>
     </n-space>
   </div>
 </template>
 
 <script lang="ts" setup>
+const { t } = useI18n();
+const message = useMessage();
 const simpletStore = useSimpletStore();
 const websiteStore = useWebsiteStore();
+
+async function redeploy(uuid: string) {
+  try {
+    const { data } = await $api.post<SimpletResponse>(endpoints.simpletRedeploy(uuid));
+    simpletStore.active = data;
+    message.success(t('simplet.wizard.redeployingInfo'));
+
+    return data;
+  } catch (e) {
+    message.error(userFriendlyMsg(e));
+  }
+}
 </script>

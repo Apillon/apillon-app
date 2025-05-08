@@ -37,7 +37,7 @@
       </n-message-provider>
     </n-config-provider>
   </div>
-  <div v-else class="relative flex h-full flex-col justify-center bg-bg-dark align-middle">
+  <div v-else class="relative flex h-full min-h-screen flex-col justify-center bg-bg-dark align-middle">
     <n-config-provider :theme-overrides="themeOverrides">
       <div class="card container relative max-w-lg py-16 sm:px-8 md:px-12 lg:px-16">
         <AuthHeader />
