@@ -1,5 +1,6 @@
 {
   "storage": {
+    "add-fixed-url": "Add fixed URL to directory",
     "bucket": {
       "addNew": "Add new bucket",
       "attachService": "Create a new bucket and get immediate access to Web3 storage.",
@@ -100,13 +101,17 @@
     "ipns": {
       "create": "Create new IPNS",
       "createFirst": "Create your first IPNS",
+      "create-description": "Each time you upload a file to IPFS, a new CID and URL are created. To change the file’s content without changing the URL, you can utilize a fixed URL directory (an IPNS record).",
+      "create-title": "Add fixed URL to directory",
       "delete": "Are you sure that you want to delete IPNS?",
       "description": "Description",
       "disabled": "IPNS is disabled. This item needs a CID.",
       "edit": "Edit IPNS",
+      "how-to": "How to add a fixed URL to directory:\n1. Create a folder within your storage bucket to store the mutable content.\n2. Create an IPNS record pointing to the folder.\n3. Upload mutable content to the folder.\n4. Share the fixed IPNS URL",
       "infoNew": "Create new IPNS record",
       "infoEdit": "Update IPNS record",
       "ipnsName": "IPNS name",
+      "learn-more": "Learn more about IPNS here:",
       "link": "IPNS link",
       "name": "Name",
       "new": "New IPNS",
@@ -114,6 +119,7 @@
       "orCreateNew": "or create new IPNS",
       "publish": "Publish to IPNS",
       "selectIpns": "Select IPNS",
+      "subtitle": "Create a new IPNS record",
       "title": "IPNS",
       "update": "Update IPNS",
       "uuid": "IPNS UUID"
