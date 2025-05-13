@@ -26,11 +26,7 @@
     </n-space>
   </Dashboard>
   <!-- Modal - Subscription -->
-  <modal
-    v-model:show="modalSubscriptionVisible"
-    class="max-w-3xl"
-    :title="$t('rpc.apiKey.headline')"
-  >
+  <modal v-model:show="modalSubscriptionVisible" class="max-w-3xl" :title="$t('rpc.apiKey.headline')">
     <RpcSubscriptions @close="modalSubscriptionVisible = false" />
   </modal>
 </template>
@@ -53,8 +49,7 @@ useHead({
 });
 
 onMounted(async () => {
-  await sleep(100);
-  await Promise.all(Object.values(dataStore.promises));
+  await dataStore.waitOnPromises();
   await dataStore.getServices();
 
   await initRpc();

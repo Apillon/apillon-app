@@ -39,12 +39,8 @@ useHead({
 const loading = ref<boolean>(true);
 
 onMounted(async () => {
-  await sleep(100);
-  await Promise.all(Object.values(dataStore.promises));
-
-  const promises = [paymentStore.getInvoices(), paymentStore.fetchCreditTransactions()];
-
-  await Promise.all(promises);
+  await dataStore.waitOnPromises();
+  await Promise.all([paymentStore.getInvoices(), paymentStore.fetchCreditTransactions()]);
   loading.value = false;
 });
 </script>

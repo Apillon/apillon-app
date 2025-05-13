@@ -6,8 +6,7 @@ import VLazyImage from 'v-lazy-image';
   <VLazyImage
     v-bind="$attrs"
     :src-placeholder="
-      $attrs['src-placeholder'] ||
-      'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
+      $attrs['src-placeholder'] || 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
     "
   />
 </template>

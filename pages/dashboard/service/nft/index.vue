@@ -1,47 +1,46 @@
 <template>
-  <Dashboard :loading="pageLoading">
+  <ServiceEmpty
+    v-if="!dataStore.project.selected"
+    :name="ServiceTypeName.NFT.toLowerCase()"
+    :service="ServiceTypeName.NFT"
+    docs="https://wiki.apillon.io/web3-services/4-nfts.html"
+    video-id="qQJnuvUo-xo"
+    :video-chapters="[
+      { time: '00:00', title: 'Intro' },
+      { time: '00:35', title: 'Dashboard' },
+      { time: '02:53', title: 'NFT Collection' },
+      { time: '05:20', title: 'Minting' },
+      { time: '07:15', title: 'Website' },
+    ]"
+  >
+    <template #actions>
+      <Btn @click="modalCreateCollectionVisible = true">{{ $t('dashboard.startBuilding') }}</Btn>
+    </template>
+  </ServiceEmpty>
+  <Dashboard v-else :loading="pageLoading">
     <template #heading>
       <HeaderNft />
     </template>
     <slot>
-      <n-space v-if="collectionStore.hasCollections" class="pb-8" :size="32" vertical>
+      <n-space class="pb-8" :size="32" vertical>
         <ActionsNft />
-        <TableNftCollection :collections="collectionStore.items" />
+        <TableNftCollection :collections="collectionStore.items" :search="collectionStore.search" />
       </n-space>
-      <Empty v-else :title="t('nft.collection.empty')" :info="t('nft.collection.emptyInfo')" icon="nft/illustration">
-        <Btn type="primary" @click="modalCreateCollectionVisible = true">
-          {{ t('nft.collection.createFirst') }}
-        </Btn>
-      </Empty>
-
-      <!-- Modal - Collection Transfer -->
-      <modal
-        v-model:show="modalCreateCollectionVisible"
-        class="max-w-4xl text-center"
-        :class="{
-          'xl:max-w-5xl xxl:max-w-7xl':
-            collectionStore.metadataStored !== undefined && collectionStore.form.behavior.chain === undefined,
-        }"
-      >
-        <FormNftCollectionMetadataType v-if="collectionStore.metadataStored === undefined" />
-        <FormNftCollectionNetworkSelect
-          v-else-if="collectionStore.form.behavior.chain === undefined"
-          @submit="onNetworkSelected"
-        />
-        <FormNftCollectionIpnsType v-else @submit="router.push({ name: 'dashboard-service-nft-new' })" />
-      </modal>
     </slot>
   </Dashboard>
+
+  <!-- Modal - Collection Transfer -->
+  <ModalNft v-model:show="modalCreateCollectionVisible" />
 </template>
 
 <script lang="ts" setup>
+import { ServiceTypeName } from '~/lib/types/service';
+
 const { t } = useI18n();
-const router = useRouter();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const storageStore = useStorageStore();
 const collectionStore = useCollectionStore();
-const { onNetworkSelected, resetAll } = useCollection();
 
 const pageLoading = ref<boolean>(true);
 const modalCreateCollectionVisible = ref<boolean>(false);
@@ -53,20 +52,17 @@ useHead({
 });
 
 onMounted(async () => {
-  resetAll();
-  await sleep(100);
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    await collectionStore.getCollections();
+  await dataStore.waitOnPromises();
+  await collectionStore.getCollections();
 
-    storageStore.getStorageInfo();
-    paymentStore.getPriceList();
+  storageStore.getStorageInfo();
+  paymentStore.getPriceList();
 
-    setTimeout(() => {
-      checkUnfinishedCollections();
-    }, 3000);
+  setTimeout(() => {
+    checkUnfinishedCollections();
+  }, 3000);
 
-    pageLoading.value = false;
-  });
+  pageLoading.value = false;
 });
 onUnmounted(() => {
   clearInterval(collectionInterval);

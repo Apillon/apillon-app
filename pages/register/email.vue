@@ -1,24 +1,25 @@
 <template>
-  <div class="w-full">
+  <div class="w-full text-center">
     <!-- Heading -->
-    <h2 class="mb-2">{{ $t('auth.signup.checkEmail') }}</h2>
-    <p class="mb-7 whitespace-pre-line">
-      {{ $t('auth.signup.emailSent', { email: authStore.email }) }}
+    <h4 class="mb-2">{{ $t('auth.signup.checkEmail') }}</h4>
+    <p class="my-4 whitespace-pre-line">
+      {{ $t('auth.signup.emailSent') }}
     </p>
 
+    <span class="text-sm">{{ authStore.email }}</span>
+    <SeparatorText />
+
     <!-- Form -->
-    <strong class="inline-block mb-2">{{ $t('auth.signup.checkInbox') }}</strong>
-    <AuthFormSignup :send-again="hasEmail" />
+    <strong class="my-2 inline-block text-sm">{{ $t('auth.signup.checkInbox') }}</strong>
+    <AuthFormSignup class="w-full" :send-again="hasEmail" />
 
     <!-- Links -->
-    <n-space vertical>
-      <div>
-        <span class="text-sm text-body">{{ $t('auth.signup.madeMistake') }} </span>&nbsp;
-        <Btn type="builders" size="tiny" inner-class="text-sm" :to="{ name: 'register' }">
-          {{ $t('general.tryAgain') }}
-        </Btn>
-      </div>
-    </n-space>
+    <div class="mt-10">
+      <span class="text-sm text-body">{{ $t('auth.signup.madeMistake') }} </span>&nbsp;
+      <Btn type="builders" size="tiny" inner-class="text-sm" :to="{ name: 'register' }">
+        {{ $t('auth.signup.fix') }}
+      </Btn>
+    </div>
   </div>
 </template>
 

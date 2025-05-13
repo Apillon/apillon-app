@@ -2,9 +2,9 @@
   <Spinner v-if="loading" />
   <template v-else>
     <div v-if="!service || (servicePrices && servicePrices.length)">
-      <n-space :size="32">
+      <div v-if="filterByChain || filterByService" class="mb-4 flex gap-6">
         <!-- Filter by service -->
-        <div v-if="filterByService && !service" class="mb-4">
+        <div v-if="filterByService && !service">
           <strong class="mb-1 inline-block">{{ $t('dashboard.credits.filterByService') }}:</strong>
           <select-options
             v-model:value="selectedService"
@@ -17,19 +17,27 @@
           />
         </div>
         <!-- Filter by chain -->
-        <div v-if="filterByChain" class="mb-4">
-          <strong class="mb-1 inline-block">{{ $t('dashboard.credits.filterByChain') }}:</strong>
-          <select-options
-            v-model:value="selectedChain"
-            :options="chainsByService"
-            class="min-w-[13rem] max-w-xs"
-            size="small"
-            :placeholder="$t('form.placeholder.chain')"
-            filterable
-            clearable
+        <div v-if="filterByChain" class="flex justify-between" :class="{ 'w-full': service === ServiceTypeName.NFT }">
+          <div>
+            <strong class="mb-1 inline-block text-sm">{{ $t('dashboard.credits.filterByChain') }}:</strong>
+            <select-options
+              v-model:value="selectedChain"
+              :options="chainsByService"
+              class="min-w-[13rem] max-w-xs"
+              size="small"
+              :placeholder="$t('form.placeholder.chain')"
+              filterable
+              clearable
+            />
+          </div>
+          <FormFieldSwitch
+            v-if="service === ServiceTypeName.NFT"
+            v-model:value="isMainnet"
+            :text-active="$t('nft.mainnet')"
+            :text-inactive="$t('nft.testnet')"
           />
         </div>
-      </n-space>
+      </div>
 
       <n-table class="plain" :bordered="false" :single-line="true">
         <thead>
@@ -46,17 +54,11 @@
         <tbody>
           <tr v-for="(price, key) in shownPrices" :key="key">
             <td>
-              <NuxtIcon
-                :name="getIconName(price)"
-                class="float-left text-white text-2xl mr-3"
-                filled
-              />
+              <NuxtIcon :name="getIconName(price)" class="float-left mr-3 text-2xl text-white" filled />
               <span>{{ price.description }} </span>
             </td>
             <td class="text-right">
-              <strong class="text-white">
-                {{ price.currentPrice }} {{ $t('dashboard.credits.credits') }}
-              </strong>
+              <strong class="text-white"> {{ price.currentPrice }} {{ $t('dashboard.credits.credits') }} </strong>
             </td>
           </tr>
         </tbody>
@@ -74,22 +76,39 @@ const props = defineProps({
   service: { type: String, default: null },
   filterByChain: { type: Boolean, default: false },
   filterByService: { type: Boolean, default: false },
+  showCreateCollection: { type: Boolean, default: false },
 });
 
 const paymentStore = usePaymentStore();
-const collectionStore = useCollectionStore();
-const { chains, enterpriseChainIDs, nftChains, evmChains, substrateChains } = useCollection();
+const metadataStore = useMetadataStore();
+const {
+  availableNftChains,
+  availableNftTestChains,
+  chains,
+  enterpriseChainIDs,
+  chainsTestnet,
+  substrateChains,
+  isChainAvailable,
+} = useCollection();
 
 const identityChains = enumKeyValues(IdentityChains);
 const services = enumKeyValues(ServiceTypeName);
 const selectedService = ref<string | undefined>(props.service);
 const servicePrices = ref<ProductPriceInterface[]>([]);
-const selectedChain = ref<number | undefined>();
+const selectedChain = ref<number | null | undefined>();
 const loading = ref<boolean>(true);
+const isMainnet = ref<boolean>(false);
+
+const availableNftChainsCategories = availableNftChains.value.map(
+  c => getChainName(c.value) + `_${ServiceTypeName.NFT}`
+);
+const availableNftTestChainsCategories = availableNftTestChains.value.map(
+  c => getChainName(c.value) + `_${ServiceTypeName.NFT}`
+);
 
 onMounted(async () => {
   if (props.filterByChain && props.service === ServiceTypeName.NFT) {
-    selectedChain.value = props.chain || collectionStore.form.behavior.chain;
+    selectedChain.value = props.chain || metadataStore.form.smartContract.chain;
   }
   await paymentStore.getActiveSubscription();
 
@@ -114,9 +133,6 @@ onMounted(async () => {
   loading.value = false;
 });
 
-const hiddenChain = (chainId: number) =>
-  !paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY) && enterpriseChainIDs.includes(chainId);
-
 const chainsByService = computed(() => {
   switch (selectedService.value) {
     case ServiceTypeName.AUTHENTICATION:
@@ -124,33 +140,51 @@ const chainsByService = computed(() => {
     case ServiceTypeName.HOSTING:
       return [];
     case ServiceTypeName.NFT:
-      return nftChains.filter(c => !hiddenChain(c.value));
+      return props.service === ServiceTypeName.NFT
+        ? isMainnet.value
+          ? availableNftChains.value
+          : availableNftTestChains.value
+        : [...availableNftChains.value, ...availableNftTestChains.value];
     case ServiceTypeName.STORAGE:
       return [];
     case ServiceTypeName.SMART_CONTRACTS:
-      return [...evmChains, ...chains].filter(c => !hiddenChain(c.value));
+      return [...chains, ...chainsTestnet].filter(c => isChainAvailable(c.value));
     default:
-      return [...identityChains, ...chains, ...substrateChains].filter(c => !hiddenChain(c.value));
+      return [...identityChains, ...chains, ...chainsTestnet, ...substrateChains].filter(c =>
+        isChainAvailable(c.value)
+      );
   }
 });
 
 const shownPrices = computed(() => {
   const chainName = selectedChain.value ? getChainName(selectedChain.value, selectedService.value) : '';
+
+  /** Show only create collection */
+  const filteredServices = props.showCreateCollection
+    ? servicePrices.value.filter(
+        item => item.name.endsWith('_COLLECTION') && !item.name.endsWith('_TRANSFER_COLLECTION')
+      )
+    : props.service === ServiceTypeName.NFT
+      ? isMainnet.value
+        ? servicePrices.value.filter(item => availableNftChainsCategories.includes(item.category))
+        : servicePrices.value.filter(item => availableNftTestChainsCategories.includes(item.category))
+      : servicePrices.value;
+
   /** Filter by chain and service */
   if (props.filterByChain && selectedChain.value && props.filterByService && selectedService.value) {
-    return servicePrices.value.filter(item => item.category === chainName + '_' + selectedService.value);
+    return filteredServices.filter(item => item.category === chainName + '_' + selectedService.value);
   } else if (props.filterByChain && selectedChain.value && props.service) {
     /** Filter by chain */
     const service = props.service === ServiceTypeName.SMART_CONTRACTS ? 'CONTRACT' : props.service;
-    return servicePrices.value.filter(item => item.name.startsWith(service + '_' + chainName));
+    return filteredServices.filter(item => item.name.startsWith(service + '_' + chainName));
   } else if (props.filterByChain && selectedChain.value) {
     /** Filter by chain */
-    return servicePrices.value.filter(item => item.name.includes(chainName));
+    return filteredServices.filter(item => item.name.includes(chainName));
   } else if (props.filterByService && selectedService.value) {
     /** Filter by service */
-    return servicePrices.value.filter(item => item.service === selectedService.value);
+    return filteredServices.filter(item => item.service === selectedService.value);
   } else {
-    return servicePrices.value;
+    return filteredServices;
   }
 });
 
@@ -159,13 +193,23 @@ watch(
   () => selectedService.value,
   service => {
     if (service) {
-      selectedChain.value = undefined;
+      selectedChain.value = null;
+    }
+  }
+);
+watch(
+  () => isMainnet.value,
+  _ => {
+    if (props.service === ServiceTypeName.NFT) {
+      selectedChain.value = null;
     }
   }
 );
 
-function getChainName(chain: string | number, service?: string): string {
-  if (service === ServiceTypeName.SMART_CONTRACTS && Number.isInteger(chain)) {
+function getChainName(chain?: string | number, service?: string): string {
+  if (!chain) {
+    return '';
+  } else if (service === ServiceTypeName.SMART_CONTRACTS && Number.isInteger(chain)) {
     return chain in EvmChain ? EvmChain[chain] : SubstrateChain[chain];
   } else if (service === ServiceTypeName.NFT || Number.isInteger(chain)) {
     return chain in EvmChain

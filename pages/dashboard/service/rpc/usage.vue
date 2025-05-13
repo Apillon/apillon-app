@@ -6,7 +6,7 @@
 
     <n-space v-if="rpcApiKeyStore.hasRpcApiKeys" class="pb-8" :size="32" vertical>
       <ActionsRpc :show-usage-refresh="true" />
-      <n-tag closable size="small" v-if="network" @close="handleRemoveNetwork">{{ network }}</n-tag>
+      <n-tag v-if="network" closable size="small" @close="handleRemoveNetwork">{{ network }}</n-tag>
       <ChartLine v-if="chartData?.labels.length" :data="chartData" />
       <div v-else class="flex-cc min-h-40">
         <h2>No RPC usage has been detected yet.</h2>
@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-import colors from '~/tailwind.colors';
+import { colors } from '~/tailwind.config';
 
 const { t } = useI18n();
 const dataStore = useDataStore();
@@ -34,9 +34,7 @@ useHead({
 });
 
 onMounted(async () => {
-  await sleep(100);
-  await Promise.all(Object.values(dataStore.promises));
-
+  await dataStore.waitOnPromises();
   await rpcApiKeyStore.getApiKeys();
 
   if (!rpcApiKeyStore.selectedId && rpcApiKeyStore.items.length > 0) {
@@ -64,14 +62,12 @@ function getSortedUniqueDatesDesc(data: RpcApiKeyUsagePerChainInterface): string
   const dateSet = new Set<string>();
 
   // Iterate over each key in the data object.
-  for (const key in data) {
-    if (data.hasOwnProperty(key)) {
-      const entries = data[key];
+  Object.keys(data).forEach(key => {
+    const entries = data[key];
 
-      // Add each date to the Set to ensure uniqueness.
-      entries.forEach(entry => dateSet.add(entry.date));
-    }
-  }
+    // Add each date to the Set to ensure uniqueness.
+    entries.forEach(entry => dateSet.add(entry.date));
+  });
 
   // Convert the Set to an array, then sort it in descending order.
   return Array.from(dateSet).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
@@ -84,20 +80,16 @@ function getRequestsPerChainPerDate(
   const requestsPerChain: { name: string; requests: number[] }[] = [];
 
   // Iterate over each chain in the data object.
-  for (const chain in data) {
-    if (data.hasOwnProperty(chain)) {
-      // Create a map of dates to requests for easy lookup.
-      const dateToRequests = new Map<string, number>(
-        data[chain].map(entry => [entry.date, entry.requests])
-      );
+  Object.keys(data).forEach(chain => {
+    // Create a map of dates to requests for easy lookup.
+    const dateToRequests = new Map<string, number>(data[chain].map(entry => [entry.date, entry.requests]));
 
-      // Populate requests array for each date in sortedDates.
-      const requestsArray = sortedDates.map(date => dateToRequests.get(date) ?? 0);
+    // Populate requests array for each date in sortedDates.
+    const requestsArray = sortedDates.map(date => dateToRequests.get(date) ?? 0);
 
-      // Add the result to the output array.
-      requestsPerChain.push({ name: chain, requests: requestsArray });
-    }
-  }
+    // Add the result to the output array.
+    requestsPerChain.push({ name: chain, requests: requestsArray });
+  });
 
   return requestsPerChain;
 }
@@ -122,7 +114,7 @@ const prepareData = (usage: RpcApiKeyUsagePerChainInterface, network?: string) =
     colors.green,
     colors.blue,
     colors.yellow,
-    colors.white,
+    colors.white.DEFAULT,
     colors.pink,
     colors.orange,
     colors.discord,

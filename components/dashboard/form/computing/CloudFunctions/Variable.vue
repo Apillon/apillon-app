@@ -1,13 +1,7 @@
 <template>
-  <n-form
-    ref="formRef"
-    :model="formData"
-    :rules="rules"
-    autocomplete="off"
-    @submit.prevent="handleSubmit"
-  >
+  <n-form ref="formRef" :model="formData" :rules="rules" autocomplete="off" @submit.prevent="handleSubmit">
     <n-grid class="items-end" :span="24" :x-gap="24" :y-gap="16">
-      <template v-for="(item, key) in formData">
+      <template v-for="(item, key) in formData" :key="key">
         <!--  Variable key -->
         <n-form-item-gi
           :class="{ 'hide-feedback': item.key || !formErrors }"
@@ -31,28 +25,17 @@
         </n-form-item-gi>
 
         <!--  Variable value -->
-        <n-form-item-gi
-          :class="{ 'hide-feedback': item.key || !formErrors }"
-          :show-label="key === 0"
-          :span="2"
-        >
-          <n-button
-            v-if="key > 0"
-            class="w-10"
-            size="small"
-            type="error"
-            ghost
-            @click="formData.splice(key, 1)"
-          >
+        <n-form-item-gi :class="{ 'hide-feedback': item.key || !formErrors }" :show-label="key === 0" :span="2">
+          <n-button v-if="key > 0" class="w-10" type="error" ghost @click="formData.splice(key, 1)">
             <span class="icon-delete text-xl"></span>
           </n-button>
         </n-form-item-gi>
       </template>
     </n-grid>
 
-    <div class="text-right mt-4 mb-8">
-      <n-button size="small" @click="formData.push({ key: '', value: '' })">
-        <span class="icon-add text-xl mr-2 text-primary"></span>
+    <div class="mb-8 mt-4 text-right">
+      <n-button @click="formData.push({ key: '', value: '' })">
+        <span class="icon-add mr-2 text-xl text-primary"></span>
         <span class="text-primary">{{ $t('computing.cloudFunctions.variable.addRow') }}</span>
       </n-button>
     </div>
@@ -60,7 +43,7 @@
     <!--  Form submit -->
     <n-form-item :show-feedback="false" :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.continue')" />
-      <Btn type="primary" class="w-full mt-2" :loading="envLoading" @click="handleSubmit">
+      <Btn type="primary" class="mt-2 w-full" :loading="envLoading" @click="handleSubmit">
         {{ $t('form.continue') }}
       </Btn>
     </n-form-item>
@@ -109,9 +92,7 @@ function handleSubmit(e: Event | MouseEvent) {
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     formErrors.value = !!errors;
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
       cloudFunctionStore.variablesNew = [...cloudFunctionStore.variablesNew, ...formData.value];
       emit('submitSuccess');

@@ -14,11 +14,7 @@
       @submit.prevent="handleSubmit"
     >
       <!--  Project name -->
-      <n-form-item
-        path="name"
-        :label="$t('form.label.projectName')"
-        :label-props="{ for: 'projectName' }"
-      >
+      <n-form-item path="name" :label="$t('form.label.projectName')" :label-props="{ for: 'projectName' }">
         <n-input
           v-model:value="formData.name"
           :input-props="{ id: 'projectName' }"
@@ -41,22 +37,19 @@
         />
       </n-form-item>
 
+      <slot />
+
       <!--  Project submit -->
-      <n-form-item>
-        <input type="submit" class="hidden" :value="$t('form.login')" />
+      <n-form-item :show-feedback="false">
+        <input type="submit" class="hidden" :value="$t('form.createNewProject')" />
         <Btn
           type="primary"
-          class="w-full mt-2"
+          class="mt-2 w-full"
           :loading="loading"
           :disabled="dataStore.project.quotaReached === true"
           @click="handleSubmit"
         >
-          <template v-if="dataStore.hasProjects">
-            {{ $t('form.createNewProject') }}
-          </template>
-          <template v-else>
-            {{ $t('form.startFirstProject') }}
-          </template>
+          {{ $t('form.createNewProject') }}
         </Btn>
       </n-form-item>
     </n-form>
@@ -69,7 +62,7 @@ type FormProject = {
   description: string | null;
 };
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const { clearAll } = useStore();
@@ -94,7 +87,7 @@ const rules: NFormRules = {
   name: [
     {
       required: true,
-      message: $i18n.t('validation.projectNameRequired'),
+      message: t('validation.projectNameRequired'),
       trigger: 'input',
     },
   ],
@@ -106,9 +99,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
       await createProject();
     }

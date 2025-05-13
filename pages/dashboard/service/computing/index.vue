@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t, te } = useI18n();
 const dataStore = useDataStore();
 const contractStore = useContractStore();
 const { onContractCreated } = useComputing();
@@ -46,25 +46,22 @@ const pageLoading = ref<boolean>(true);
 const modalCreateContractVisible = ref<boolean | null>(false);
 
 useHead({
-  title: $i18n.t('dashboard.nav.computing'),
+  title: t('dashboard.nav.computing'),
 });
 
-onMounted(() => {
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  await contractStore.getContracts();
+
   setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await contractStore.getContracts();
+    checkUnfinishedContracts();
+  }, 3000);
 
-      setTimeout(() => {
-        checkUnfinishedContracts();
-      }, 3000);
-
-      pageLoading.value = false;
-    });
-  }, 100);
+  pageLoading.value = false;
 });
 
 function showModalCreateContract() {
-  if (localStorage.getItem(LsW3WarnKeys.CONTRACT_NEW) || !$i18n.te('w3Warn.contract.new')) {
+  if (localStorage.getItem(LsW3WarnKeys.CONTRACT_NEW) || !te('w3Warn.contract.new')) {
     modalCreateContractVisible.value = true;
   } else {
     modalW3WarnVisible.value = true;

@@ -1,12 +1,7 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
     <div class="flex gap-8">
-      <n-form-item
-        class="w-full"
-        path="name"
-        :label="$t('referral.connectTwitter')"
-        :label-props="{ for: 'email' }"
-      >
+      <n-form-item class="w-full" path="name" :label="$t('referral.connectTwitter')" :label-props="{ for: 'email' }">
         <n-input
           v-model:value="formData.email"
           disabled
@@ -39,7 +34,7 @@ const referralStore = useReferralStore();
 const $route = useRoute();
 const $router = useRouter();
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const formRef = ref<NFormInst | null>(null);
 
 const formData = ref({ email: null });
@@ -74,11 +69,11 @@ const rules: NFormRules = {
   email: [
     {
       type: 'email',
-      message: $i18n.t('validation.email'),
+      message: t('validation.email'),
     },
     {
       required: true,
-      message: $i18n.t('validation.emailRequired'),
+      message: t('validation.emailRequired'),
     },
   ],
 };
@@ -89,9 +84,7 @@ function handleSubmit(e: Event | MouseEvent) {
   const message = useMessage();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
       // window.open(
       //   'https://github.com/login/oauth/authorize?client_id=d0482598d8adbd8adffa&redirect_uri=http://localhost:3000/dashboard/referral',

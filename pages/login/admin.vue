@@ -8,7 +8,6 @@ type LoginData = {
   projectUuid: string;
   path?: string;
 };
-const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
 const dataStore = useDataStore();

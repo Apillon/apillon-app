@@ -1,32 +1,22 @@
 <template>
   <Spinner v-if="bucketUuid && !bucket" />
   <div v-else>
-    <Notification v-if="isFormDisabled" type="error" class="w-full mb-8">
+    <Notification v-if="isFormDisabled" type="error" class="mb-8 w-full">
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
     <template v-else>
       <!-- Info text -->
-      <p v-if="!bucketUuid && $i18n.te('storage.bucket.infoNew')" class="text-body mb-8">
+      <p v-if="!bucketUuid && $te('storage.bucket.infoNew')" class="mb-8 text-body">
         {{ $t('storage.bucket.infoNew') }}
       </p>
-      <p v-else-if="!!bucketUuid && $i18n.te('storage.bucket.infoEdit')" class="text-body mb-8">
+      <p v-else-if="!!bucketUuid && $te('storage.bucket.infoEdit')" class="mb-8 text-body">
         {{ $t('storage.bucket.infoEdit') }}
       </p>
     </template>
 
-    <n-form
-      ref="formRef"
-      :model="formData"
-      :rules="rules"
-      :disabled="isFormDisabled"
-      @submit.prevent="handleSubmit"
-    >
+    <n-form ref="formRef" :model="formData" :rules="rules" :disabled="isFormDisabled" @submit.prevent="handleSubmit">
       <!--  Bucket name -->
-      <n-form-item
-        path="bucketName"
-        :label="$t('form.label.bucketName')"
-        :label-props="{ for: 'bucketName' }"
-      >
+      <n-form-item path="bucketName" :label="$t('form.label.bucketName')" :label-props="{ for: 'bucketName' }">
         <n-input
           v-model:value="formData.bucketName"
           :input-props="{ id: 'bucketName' }"
@@ -53,13 +43,7 @@
       <!--  Form submit -->
       <n-form-item :show-feedback="false">
         <input type="submit" class="hidden" :value="$t('form.createBucketAndContinue')" />
-        <Btn
-          type="primary"
-          class="w-full mt-2"
-          :loading="loading"
-          :disabled="isFormDisabled"
-          @click="handleSubmit"
-        >
+        <Btn type="primary" class="mt-2 w-full" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
           <template v-if="submitText">
             {{ submitText }}
           </template>
@@ -92,7 +76,7 @@ const props = defineProps({
 const emit = defineEmits(['submit', 'submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const message = useMessage();
-const $i18n = useI18n();
+const { t } = useI18n();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 
@@ -106,8 +90,8 @@ const formData = ref<FormNewBucket>({
 });
 
 const rules: NFormRules = {
-  bucketName: [ruleRequired($i18n.t('validation.bucketNameRequired'))],
-  bucketDescription: [ruleDescription($i18n.t('validation.descriptionTooLong'))],
+  bucketName: [ruleRequired(t('validation.bucketNameRequired'))],
+  bucketDescription: [ruleDescription(t('validation.descriptionTooLong'))],
 };
 
 onMounted(async () => {
@@ -127,9 +111,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else if (props.bucketUuid) {
       await updateBucket();
     } else {
@@ -139,15 +121,13 @@ function handleSubmit(e: Event | MouseEvent) {
 }
 
 async function createBucket() {
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-  }
+  const projectUuid = await dataStore.getProjectUuid();
 
   loading.value = true;
   emit('submit');
 
   const bodyData = {
-    project_uuid: dataStore.projectUuid,
+    project_uuid: projectUuid,
     bucketType: props.bucketType,
     name: formData.value.bucketName,
     description: formData.value.bucketDescription,
@@ -156,7 +136,7 @@ async function createBucket() {
   try {
     const res = await $api.post<BucketResponse>(endpoints.buckets, bodyData);
 
-    message.success($i18n.t('form.success.created.bucket'));
+    message.success(t('form.success.created.bucket'));
 
     /** On new bucket created push data to list */
     bucketStore.items.push(res.data);
@@ -182,7 +162,7 @@ async function updateBucket() {
   try {
     const res = await $api.patch<BucketResponse>(endpoints.bucket(props.bucketUuid), bodyData);
 
-    message.success($i18n.t('form.success.updated.bucket'));
+    message.success(t('form.success.updated.bucket'));
 
     /** On bucket updated refresh bucket data */
     bucketStore.items.forEach((item: BucketInterface) => {

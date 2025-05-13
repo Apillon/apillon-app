@@ -1,22 +1,13 @@
 <template>
-  <div class="card-light px-6 py-4 mb-8">
+  <div class="card-light mb-8 px-6 py-4">
     <Line ref="chartRef" class="min-h-80" :data="data" :options="options" :plugins="[plugin]" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { Line } from 'vue-chartjs';
-import {
-  Chart,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-import colors from '~~/tailwind.colors';
+import { colors } from '~/tailwind.config';
+import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 type ChartDataset = {
@@ -28,7 +19,7 @@ type ChartDataset = {
   borderWidth: number;
 };
 type ChartData = {
-  labels: String[];
+  labels: string[];
   datasets: ChartDataset[];
 };
 

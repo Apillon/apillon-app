@@ -1,7 +1,7 @@
 <template>
   <h4 class="mb-8">{{ $t('dashboard.projectResources') }}</h4>
 
-  <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+  <div class="grid grid-cols-billing gap-4">
     <div v-for="(service, key) in web3Services" :key="key" class="card-light p-8">
       <div class="mb-6 flex items-center gap-2">
         <span
@@ -165,11 +165,11 @@ const web3Services = computed(() => [
     icon: 'icon-file',
     data: [
       {
-        name: t('dashboard.service.smartContracts.deployedContractsCount'),
+        name: t('smartContracts.deployedContractsCount'),
         value: dataStore.project.overview.smartContractDeploymentCount,
       },
       {
-        name: t('dashboard.service.smartContracts.transactionCount'),
+        name: t('smartContracts.transactionCount'),
         value: dataStore.project.overview.smartContractTransactionCount,
       },
     ],
@@ -218,14 +218,13 @@ const web3Services = computed(() => [
 ]);
 
 onMounted(async () => {
-  await sleep(500);
+  await sleep(300);
+  await dataStore.waitOnPromises();
 
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    storageStore.getStorageInfo();
-    await dataStore.getProjectOverview(dataStore.projectUuid);
+  storageStore.getStorageInfo();
+  await dataStore.getProjectOverview(dataStore.projectUuid);
 
-    loading.value = false;
-  });
+  loading.value = false;
 });
 
 watch(

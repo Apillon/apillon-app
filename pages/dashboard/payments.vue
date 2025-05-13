@@ -66,19 +66,16 @@ useHead({
 const loading = ref<boolean>(true);
 
 onMounted(async () => {
-  await sleep(100);
-  await Promise.all(Object.values(dataStore.promises));
+  await dataStore.waitOnPromises();
 
-  const promises = [
+  await Promise.all([
     paymentStore.getActiveSubscription(),
     paymentStore.getSubscriptionPackages(),
     paymentStore.getCreditPackages(),
     storageStore.getStorageInfo(),
-  ];
+  ]);
 
-  await Promise.all(promises);
   loading.value = false;
-
   creditsMessage();
   subscriptionMessage();
 });

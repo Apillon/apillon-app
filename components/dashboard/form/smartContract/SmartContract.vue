@@ -238,19 +238,17 @@ async function deployContract() {
   const accumulatedKeys = ['royaltyRecipient', 'royaltyPercentageBps', 'maxSupply', 'pricePerMint'];
   const accumulatedArray: Array<any> = [];
 
-  for (const key in form.value) {
-    if (form.value.hasOwnProperty(key)) {
-      if (key !== 'Name' && key !== 'Description' && key !== 'chain') {
-        if (key === '_settings') {
-          constructorArguments.push(settings.value);
-        } else if (accumulatedKeys.includes(key)) {
-          accumulatedArray.push(form.value[key]);
-        } else {
-          constructorArguments.push(form.value[key]);
-        }
+  Object.keys(form.value).forEach(key => {
+    if (key !== 'Name' && key !== 'Description' && key !== 'chain') {
+      if (key === '_settings') {
+        constructorArguments.push(settings.value);
+      } else if (accumulatedKeys.includes(key)) {
+        accumulatedArray.push(form.value[key]);
+      } else {
+        constructorArguments.push(form.value[key]);
       }
     }
-  }
+  });
 
   // After the loop, push the accumulated array if it has values
   if (accumulatedArray.length > 0) {

@@ -8,7 +8,7 @@
     </slot>
     <template #info>
       <n-space align="center">
-        <BtnDocumentation size="small" href="https://wiki.apillon.io/web3-services/12-web3-smart-contracts.html" />
+        <BtnDocumentation href="https://wiki.apillon.io/web3-services/12-web3-smart-contracts.html" />
         <ModalCreditCosts :service="ServiceTypeName.SMART_CONTRACTS" filter-by-chain />
       </n-space>
     </template>

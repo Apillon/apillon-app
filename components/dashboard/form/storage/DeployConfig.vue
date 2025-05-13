@@ -2,34 +2,18 @@
   <n-form
     v-bind="$attrs"
     ref="formRef"
-    :model="storageStore.deployConfigForm"
+    :model="websiteStore.form"
     :disabled="isFormDisabled"
-    :rules="rules"
+    :rules="rulesWebsite"
     autocomplete="off"
     @submit.prevent="handleSubmit"
   >
-    <n-form-item
-      v-if="storageStore.deployConfigForm.repoId || !$props.config_id"
-      path="repoId"
-      :label="$t('hosting.deploy.form.repository')"
-      :label-props="{ for: 'repo' }"
-    >
-      <n-skeleton v-if="!repoOptions.length" height="40px" width="100%" />
-      <n-select
-        v-else
-        v-model:value="storageStore.deployConfigForm.repoId"
-        :disabled="!!config_id"
-        :placeholder="$t('hosting.deploy.form.repository-placeholder')"
-        :options="repoOptions"
-        filterable
-        @update:value="handleUpdateValue"
-      />
-    </n-form-item>
-    <n-form-item path="branchName" :label="$t('hosting.deploy.form.branch-name')" :label-props="{ for: 'branchName' }">
+    <FormFieldRepo v-model:value="websiteStore.form.repoId" :disabled="!!configId" />
+    <n-form-item path="branchName" :label="$t('form.label.website.branchName')" :label-props="{ for: 'branchName' }">
       <n-input
-        v-model:value="storageStore.deployConfigForm.branchName"
+        v-model:value="websiteStore.form.branchName"
         :input-props="{ id: 'branchName' }"
-        :placeholder="$t('hosting.deploy.form.branch-name-placeholder')"
+        :placeholder="$t('form.placeholder.website.branchName')"
         clearable
       />
     </n-form-item>
@@ -40,7 +24,7 @@
       :label-props="{ for: 'installCommand' }"
     >
       <n-input
-        v-model:value="storageStore.deployConfigForm.installCommand"
+        v-model:value="websiteStore.form.installCommand"
         :input-props="{ id: 'installCommand' }"
         :placeholder="$t('hosting.deploy.form.install-command-placeholder')"
         clearable
@@ -49,70 +33,62 @@
 
     <n-form-item
       path="buildCommand"
-      :label="$t('hosting.deploy.form.build-command')"
+      :label="$t('form.label.website.buildCommand')"
       :label-props="{ for: 'buildCommand' }"
     >
       <n-input
-        v-model:value="storageStore.deployConfigForm.buildCommand"
+        v-model:value="websiteStore.form.buildCommand"
         :input-props="{ id: 'buildCommand' }"
-        :placeholder="$t('hosting.deploy.form.build-command-placeholder')"
+        :placeholder="$t('form.placeholder.website.buildCommand')"
         clearable
       />
     </n-form-item>
 
     <n-form-item
       path="buildDirectory"
-      :label="$t('hosting.deploy.form.build-directory')"
+      :label="$t('form.label.website.buildDirectory')"
       :label-props="{ for: 'buildDirectory' }"
     >
       <n-input
-        v-model:value="storageStore.deployConfigForm.buildDirectory"
+        v-model:value="websiteStore.form.buildDirectory"
         :input-props="{ id: 'buildDirectory' }"
-        :placeholder="$t('hosting.deploy.form.build-directory-placeholder')"
+        :placeholder="$t('form.placeholder.website.buildDirectory')"
         clearable
       />
     </n-form-item>
 
-    <n-collapse accordion>
-      <n-collapse-item>
-        <template #header>
-          {{ $t('nft.collection.website-deploy.form.advanced-settings') }}
-        </template>
-        <n-form-item path="apiKey" :label="$t('hosting.deploy.form.api-key')" :label-props="{ for: 'apiKey' }">
-          <n-select
-            v-model:value="storageStore.deployConfigForm.apiKey"
-            :placeholder="$t('hosting.deploy.form.api-key-placeholder')"
-            :options="apiKeyOptions"
-          >
-          </n-select>
-        </n-form-item>
+    <n-form-item
+      path="installCommand"
+      :label="$t('form.label.website.installCommand')"
+      :label-props="{ for: 'installCommand' }"
+    >
+      <n-input
+        v-model:value="websiteStore.form.installCommand"
+        :input-props="{ id: 'installCommand' }"
+        :placeholder="$t('form.placeholder.website.installCommand')"
+        clearable
+      />
+    </n-form-item>
 
-        <n-form-item path="apiSecret" :label="$t('hosting.deploy.form.api-secret')" :label-props="{ for: 'apiSecret' }">
-          <div v-if="props.config_id && !showApiSecretInput" class="flex flex-row gap-4">
-            <n-input :disabled="true" :placeholder="$t('hosting.deploy.form.api-secret-set')"> </n-input>
-            <Btn type="primary" class="mt-2" @click="onChangeSecretPress">
-              {{ $t('hosting.deploy.form.api-secret-change') }}
-            </Btn>
-          </div>
+    <FormFieldApiKey
+      :config-id="configId"
+      :api-key="websiteStore.form.apiKey"
+      :api-secret="websiteStore.form.apiSecret"
+      @update:api-key="apiKey => (websiteStore.form.apiKey = apiKey)"
+      @update:api-secret="apiSecret => (websiteStore.form.apiSecret = apiSecret)"
+    />
 
-          <n-input
-            v-else
-            v-model:value="storageStore.deployConfigForm.apiSecret"
-            :input-props="{ id: 'apiSecret', autocomplete: 'off' }"
-            show-password-on="click"
-            type="password"
-            :placeholder="$t('hosting.deploy.form.api-secret-placeholder')"
-            clearable
-          />
-        </n-form-item>
-      </n-collapse-item>
-    </n-collapse>
-    <n-form-item :show-feedback="false" v-if="!$props.on_create_website">
+    <n-form-item :show-feedback="false">
       <input type="submit" class="hidden" :value="'Save'" />
 
       <div class="flex w-full gap-2">
+        <!-- Unlink is disabled
+        <Btn v-if="configId" type="secondary" :loading="deleteLoading" :disabled="isFormDisabled" @click="handleRemove">
+          {{ $t('hosting.deploy.unlink') }}
+        </Btn>
+        -->
         <Btn type="primary" class="flex-1" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
-          {{ $t('hosting.deploy.form.save') }}
+          {{ $t('hosting.deploy.save') }}
         </Btn>
       </div>
     </n-form-item>
@@ -120,29 +96,20 @@
 </template>
 
 <script lang="ts" setup>
-import type { SelectOption } from 'naive-ui';
-import { WebsiteSource } from '~/lib/types/hosting';
-
+const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess', 'close']);
 const props = defineProps({
-  config_id: { type: Number, default: 0 },
-  on_create_website: { type: Boolean, default: false },
+  configId: { type: Number, default: 0 },
 });
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
-const storageStore = useStorageStore();
-const websiteStore = useWebsiteStore();
-
-const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess', 'close']);
-
 const dataStore = useDataStore();
-const formRef = ref<NFormInst | null>(null);
-const settingsStore = useSettingsStore();
+const websiteStore = useWebsiteStore();
+const { rulesWebsite } = useHosting();
 const deploymentStore = useDeploymentStore();
-const apiKeyOptions = ref<SelectOption[]>([]);
-const repoOptions = ref<SelectOption[]>([]);
 
 const loading = ref<boolean>(false);
+const formRef = ref<NFormInst | null>(null);
 
 const deleteLoading = ref<boolean>(false);
 
@@ -150,138 +117,63 @@ const isFormDisabled = computed<boolean>(() => {
   return dataStore.isProjectUser;
 });
 
-const showApiSecretInput = ref(false);
-
-const onChangeSecretPress = () => {
-  showApiSecretInput.value = true;
-};
-
-const rules: NFormRules = {
-  repoId: [ruleRequired($i18n.t('hosting.deploy.form.validation.repo-required'))],
-  branchName: [ruleRequired($i18n.t('hosting.deploy.form.validation.branch-name-required'))],
-  buildDirectory: [ruleRequired($i18n.t('hosting.deploy.form.validation.build-directory-required'))],
-  apiKey: [
-    {
-      validator(_, value) {
-        const apiSecret = storageStore.deployConfigForm.apiSecret;
-        if (!value && apiSecret) {
-          return new Error($i18n.t('nft.collection.website-deploy.form.api-key-equired'));
-        }
-        return true;
-      },
-      trigger: 'blur',
-    },
-  ],
-  apiSecret: [
-    {
-      validator(_, value) {
-        if (!showApiSecretInput.value) {
-          return true;
-        }
-        const apiKey = storageStore.deployConfigForm.apiKey;
-        if (!value && apiKey) {
-          return new Error($i18n.t('nft.collection.website-deploy.form.api-secret-required'));
-        }
-        return true;
-      },
-      trigger: 'blur',
-    },
-  ],
-};
-
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
+
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
-    } else if (props.config_id) {
-      updateDeployConfig();
-    } else {
-      createDeployConfig();
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || t('general.error'))));
+    } else if (dataStore.projectUuid && websiteStore.active) {
+      const bodyData = {
+        projectUuid: dataStore.projectUuid,
+        websiteUuid: websiteStore.active.website_uuid,
+        ...websiteStore.form,
+      };
+      return props.configId ? updateDeployConfig(bodyData) : createDeployConfig(bodyData);
     }
   });
 }
 
-async function createDeployConfig() {
-  if (!websiteStore.active) return;
-
-  loading.value = true;
-  const projectUuid = await dataStore.getProjectUuid();
-
+async function handleRemove() {
+  deleteLoading.value = true;
   try {
-    const bodyData = {
-      websiteUuid: websiteStore.active.website_uuid,
-      projectUuid,
-      ...storageStore.deployConfigForm,
-    };
+    await $api.delete(endpoints.deployConfig(websiteStore.active.website_uuid));
+    websiteStore.active.source = WebsiteSource.APILLON;
+    deploymentStore.deploymentConfig = {} as DeploymentConfigInterface;
+    emit('submitSuccess');
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
+  deleteLoading.value = false;
+}
+
+async function createDeployConfig(bodyData: Record<string, any>) {
+  loading.value = true;
+  try {
     await $api.post<DeploymentConfigResponse>(endpoints.deployConfig(), bodyData);
-    message.success($i18n.t('hosting.deploy.form.success'));
+
+    message.success(t('hosting.deploy.success'));
     websiteStore.active.source = WebsiteSource.GITHUB;
     emit('submitSuccess');
-  } catch (error: any) {
-    if (error.message === 'DEPLOYMENT_CONFIG_ALREADY_EXISTS') {
-      message.error('Repository is already connected to Apillon. Remove the connection or use a different repository.');
-    } else {
-      message.error(userFriendlyMsg(error));
-    }
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  } finally {
+    loading.value = false;
   }
-
-  loading.value = false;
 }
 
-async function updateDeployConfig() {
-  if (!websiteStore.active) return;
-
+async function updateDeployConfig(bodyData: Record<string, any>) {
   loading.value = true;
-  const projectUuid = await dataStore.getProjectUuid();
-
   try {
-    const bodyData = {
-      websiteUuid: websiteStore.active.website_uuid,
-      projectUuid,
-      ...storageStore.deployConfigForm,
-    };
-    await $api.patch<DeploymentConfigResponse>(endpoints.deployConfig(props.config_id), bodyData);
-    message.success($i18n.t('hosting.deploy.form.updated'));
+    await $api.patch<DeploymentConfigResponse>(endpoints.deployConfig(props.configId), bodyData);
+
+    message.success(t('hosting.deploy.updated'));
     websiteStore.active.source = WebsiteSource.GITHUB;
     emit('submitSuccess');
   } catch (error: any) {
-    if (error.message === 'DEPLOYMENT_CONFIG_ALREADY_EXISTS') {
-      message.error('Repository is already connected to Apillon. Remove the connection or use a different repository.');
-    } else {
-      message.error(userFriendlyMsg(error));
-    }
-  }
-
-  loading.value = false;
-}
-
-function handleUpdateValue(value: number) {
-  const repo = storageStore.repos.find((item: GithubRepo) => item.id === value);
-  if (repo) {
-    storageStore.deployConfigForm.repoName = repo.name;
-    storageStore.deployConfigForm.repoOwnerName = repo.owner.login;
-    storageStore.deployConfigForm.branchName = repo.default_branch;
-    storageStore.deployConfigForm.repoUrl = repo.clone_url;
+    message.error(userFriendlyMsg(error));
+  } finally {
+    loading.value = false;
   }
 }
-
-onMounted(async () => {
-  await settingsStore.getApiKeys();
-  await storageStore.getRepos();
-  apiKeyOptions.value = settingsStore.apiKeys.map((item: ApiKeyInterface) => {
-    return {
-      label: item.name,
-      value: item.apiKey,
-    };
-  });
-  repoOptions.value = storageStore.repos.map((item: GithubRepo) => ({
-    value: item.id,
-    label: item.name,
-  }));
-
-  if (storageStore.deployConfigForm.repoId) {
-    handleUpdateValue(storageStore.deployConfigForm.repoId);
-  }
-});
 </script>

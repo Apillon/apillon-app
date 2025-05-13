@@ -17,7 +17,7 @@
     <!--  Form submit -->
     <n-form-item :show-feedback="false">
       <input type="submit" class="hidden" :value="$t('computing.contract.transfer')" />
-      <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
+      <Btn type="primary" class="mt-2 w-full" :loading="loading" @click="handleSubmit">
         {{ $t('computing.contract.transfer') }}
       </Btn>
     </n-form-item>
@@ -34,7 +34,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['submitSuccess']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const warningStore = useWarningStore();
 
@@ -45,7 +45,7 @@ const formData = ref<FormContractTransfer>({
 });
 
 const rules: NFormRules = {
-  accountAddress: [ruleRequired($i18n.t('validation.contract.addressRequired'))],
+  accountAddress: [ruleRequired(t('validation.contract.addressRequired'))],
 };
 
 // Submit
@@ -53,14 +53,9 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
-      warningStore.showSpendingWarning(
-        PriceServiceName.COMPUTING_SCHRODINGER_TRANSFER_OWNERSHIP,
-        () => transfer()
-      );
+      warningStore.showSpendingWarning(PriceServiceName.COMPUTING_SCHRODINGER_TRANSFER_OWNERSHIP, () => transfer());
     }
   });
 }
@@ -71,7 +66,7 @@ async function transfer() {
   try {
     await $api.post<any>(endpoints.contractTransferOwnership(props.contractUuid), formData.value);
 
-    message.success($i18n.t('form.success.contract.transferred'));
+    message.success(t('form.success.contract.transferred'));
 
     /** Emit events */
     emit('submitSuccess');

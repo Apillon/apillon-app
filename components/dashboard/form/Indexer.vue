@@ -1,17 +1,11 @@
 <template>
   <Spinner v-if="indexerUuid && !indexer" />
   <div v-else>
-    <Notification v-if="isFormDisabled" type="error" class="w-full mb-8">
+    <Notification v-if="isFormDisabled" type="error" class="mb-8 w-full">
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
 
-    <n-form
-      ref="formRef"
-      :model="formData"
-      :rules="rules"
-      :disabled="isFormDisabled"
-      @submit.prevent="handleSubmit"
-    >
+    <n-form ref="formRef" :model="formData" :rules="rules" :disabled="isFormDisabled" @submit.prevent="handleSubmit">
       <!--  Indexer name -->
       <n-form-item path="name" :label="$t('form.label.indexerName')" :label-props="{ for: 'name' }">
         <n-input
@@ -40,13 +34,7 @@
       <!--  Form submit -->
       <n-form-item :show-feedback="false">
         <input type="submit" class="hidden" :value="$t('indexer.create')" />
-        <Btn
-          type="primary"
-          class="w-full mt-2"
-          :loading="loading"
-          :disabled="isFormDisabled"
-          @click="handleSubmit"
-        >
+        <Btn type="primary" class="mt-2 w-full" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
           <template v-if="props.indexerUuid">
             {{ $t('indexer.update') }}
           </template>
@@ -109,9 +97,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else if (props.indexerUuid) {
       await updateIndexer();
     } else {
@@ -121,12 +107,9 @@ function handleSubmit(e: Event | MouseEvent) {
 }
 
 async function createIndexer() {
+  if (!dataStore.projectUuid) return;
+
   loading.value = true;
-
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-  }
-
   try {
     const bodyData = {
       ...formData.value,
@@ -155,10 +138,7 @@ async function updateIndexer() {
   loading.value = true;
 
   try {
-    const res = await $api.patch<IndexerBaseResponse>(
-      endpoints.indexers(props.indexerUuid),
-      formData.value
-    );
+    const res = await $api.patch<IndexerBaseResponse>(endpoints.indexers(props.indexerUuid), formData.value);
     message.success(t('form.success.updated.indexer'));
     /** On indexer updated refresh indexer data */
     indexerStore.items.forEach((item: IndexerBaseInterface) => {

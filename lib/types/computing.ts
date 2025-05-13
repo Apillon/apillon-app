@@ -96,8 +96,7 @@ declare global {
     transactionHash: string | null;
   }
 
-  interface ComputingTransactionResponse
-    extends GeneralItemsResponse<ComputingTransactionInterface> {}
+  interface ComputingTransactionResponse extends GeneralItemsResponse<ComputingTransactionInterface> {}
 
   /**
    * Cloud Functions

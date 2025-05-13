@@ -1,11 +1,5 @@
 <template>
-  <n-form
-    ref="formRef"
-    class="w-full max-w-lg"
-    :model="formData"
-    :rules="rules"
-    @submit.prevent="handleSubmit"
-  >
+  <n-form ref="formRef" class="w-full max-w-lg" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
     <!--  Username -->
     <n-form-item path="name" :label="$t('form.label.username')" :label-props="{ for: 'username' }">
       <n-input
@@ -31,13 +25,7 @@
     <!--  Submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.save')" />
-      <Btn
-        class="mt-2"
-        size="large"
-        type="secondary"
-        :loading="loading || loadingForm"
-        @click="handleSubmit"
-      >
+      <Btn class="mt-2" size="large" type="secondary" :loading="loading || loadingForm" @click="handleSubmit">
         {{ $t('form.save') }}
       </Btn>
     </n-form-item>
@@ -52,7 +40,7 @@ type FormUserProfile = {
 };
 
 const message = useMessage();
-const $i18n = useI18n();
+const { t } = useI18n();
 const authStore = useAuthStore();
 
 const loading = ref<boolean>(false);
@@ -69,26 +57,25 @@ const rules: NFormRules = {
   email: [
     {
       type: 'email',
-      message: $i18n.t('validation.email'),
+      message: t('validation.email'),
     },
     {
       required: true,
-      message: $i18n.t('validation.emailRequired'),
+      message: t('validation.emailRequired'),
     },
   ],
 };
 
-onMounted(() => {
+onMounted(async () => {
   /** If page was reloaded, populate form data after page has been loaded */
-  setTimeout(() => {
-    Promise.all(Object.values(authStore.promises)).then(_ => {
-      if (!formData.value.name || !formData.value.email) {
-        formData.value.name = authStore.username;
-        formData.value.email = authStore.email;
-      }
-      loadingForm.value = false;
-    });
-  }, 500);
+  await sleep(300);
+  await Promise.all(Object.values(authStore.promises));
+
+  if (!formData.value.name || !formData.value.email) {
+    formData.value.name = authStore.username;
+    formData.value.email = authStore.email;
+  }
+  loadingForm.value = false;
 });
 
 // Submit
@@ -96,9 +83,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
       await updateUserProfile();
     }
@@ -112,7 +97,7 @@ async function updateUserProfile() {
 
     if (res.data) {
       authStore.saveUser(res.data);
-      message.success($i18n.t('form.success.profile'));
+      message.success(t('form.success.profile'));
     }
   } catch (error) {
     message.error(userFriendlyMsg(error));

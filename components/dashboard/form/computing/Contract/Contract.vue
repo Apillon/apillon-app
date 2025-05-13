@@ -162,18 +162,6 @@
 <script lang="ts" setup>
 import type { SelectOption } from 'naive-ui';
 
-type FormContract = {
-  name: string;
-  description?: string;
-  bucket_uuid: string | null;
-  contractType: number | null;
-  contractData: {
-    nftContractAddress: string | null;
-    nftChainRpcUrl: string | null;
-    restrictToOwner: boolean;
-  };
-};
-
 const emit = defineEmits(['submitSuccess', 'createSuccess']);
 
 const { t } = useI18n();
@@ -258,14 +246,9 @@ function handleSubmit(e: Event | MouseEvent) {
 }
 
 async function createContract() {
+  if (!dataStore.projectUuid) return;
+
   loading.value = true;
-
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-
-    if (!dataStore.projectUuid) return;
-  }
-
   try {
     const bodyData = {
       ...contractStore.form,

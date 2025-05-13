@@ -166,11 +166,9 @@ export const useBucketStore = defineStore('bucket', {
      */
     async fetchBuckets(statusDeleted = false) {
       const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
-      this.loading = true;
+      if (!dataStore.projectUuid) return null;
 
+      this.loading = true;
       try {
         const params = parseArguments(PARAMS_ALL_ITEMS);
         params.project_uuid = dataStore.projectUuid;
@@ -306,8 +304,7 @@ export const useBucketStore = defineStore('bucket', {
   },
   persist: {
     key: SessionKeys.BUCKET_STORE,
-    storage: persistedState.localStorage,
-    paths: ['calculatedCids', 'itemsMainnet', 'itemsTestnet'],
-    // debug: true,
-  } as any,
+    storage: piniaPluginPersistedstate.localStorage(),
+    pick: ['calculatedCids', 'itemsMainnet', 'itemsTestnet'],
+  },
 });

@@ -1,15 +1,12 @@
 <template>
   <div v-if="loading">
     <transition name="fade" appear>
-      <div
-        v-if="loadingAnimation"
-        class="w-full flex flex-col gap-8"
-        style="height: calc(100dvh - 88px)"
-      >
+      <div v-if="loadingAnimation" class="flex w-full flex-col gap-8" style="height: calc(100dvh - 56px)">
+        <div class="-mx-4 h-24 bg-bg-light/65 px-4 text-sm sm:-mx-8 sm:px-8"></div>
         <!-- Loading skeleton - on long page load show skeleton -->
         <n-skeleton height="40px" width="100%" />
         <n-skeleton height="40px" width="100%" />
-        <div class="flex gap-8 h-full">
+        <div class="flex h-full gap-8">
           <div style="width: 100%">
             <n-skeleton height="80%" width="100%" />
           </div>
@@ -25,91 +22,37 @@
       <slot name="heading"> </slot>
     </div>
 
-    <div class="flex flex-auto w-full flex-col md:flex-row" :class="{ [$style.mainnet]: mainnet }">
+    <div class="flex w-full flex-auto flex-col md:flex-row" :class="{ [$style.mainnet]: mainnet }">
       <div v-if="mainnet" class="absolute top-0 w-full">
-        <Tag
-          class="absolute top-0 left-1/2 -translate-y-full -translate-x-1/2 text-[10px] px-1"
-          color="violet"
-        >
+        <Tag class="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-full px-1 text-[10px]" color="violet">
           MAINNET
         </Tag>
       </div>
-      <n-layout
-        class="has-scrollbar"
-        sider-placement="right"
-        :has-sider="instructionsAvailable && isMd"
-      >
+      <n-layout class="has-scrollbar" sider-placement="right" :has-sider="sidebarVisible && isMd">
         <n-layout-content>
-          <n-scrollbar y-scrollable :style="instructionsAvailable || fullHeight ? {} : scrollStyle">
+          <n-scrollbar y-scrollable :style="sidebarVisible || fullHeight ? {} : scrollStyle">
             <div class="pt-8" :style="fullHeight ? heightScreen : {}">
               <slot />
             </div>
 
-            <slot v-if="instructionsAvailable && !isMd" name="learn" class="mt-8">
-              <learn-section />
-            </slot>
+            <slot v-if="sidebarVisible && !isMd" name="learn" class="mt-8"> </slot>
 
             <!-- Global component: File upload list -->
             <FormStorageUploadFiles
-              v-if="
-                (bucketStore.uploadActive && bucketStore.bucketUuid) ||
-                bucketStore.uploadFileList.length > 0
-              "
+              v-if="(bucketStore.uploadActive && bucketStore.bucketUuid) || bucketStore.uploadFileList.length > 0"
               :bucket-uuid="bucketStore.bucketUuid"
             />
 
             <!-- Global component: Spending warning -->
-            <ModalSpendingWarning
-              v-model:show="warningStore.isSpendingWarningOpen"
-              @close="onSpendingWaningClose"
-            />
+            <ModalSpendingWarning v-model:show="warningStore.isSpendingWarningOpen" @close="onSpendingWaningClose" />
 
             <!-- Global component: deployment progress -->
             <StatusCard v-if="activeDeployments.length > 0" />
           </n-scrollbar>
         </n-layout-content>
-        <n-layout-sider
-          v-if="instructionsAvailable && isMd"
-          :collapsed="learnCollapsed"
-          collapse-mode="width"
-          :collapsed-width="48"
-          :width="isXl ? 455 : 356"
-          :content-style="isMd ? 'padding-left: 20px;' : ''"
-          @after-enter="handleOnUpdateCollapse(false)"
-          @after-leave="handleOnUpdateCollapse(true)"
-        >
-          <div v-if="learnCollapsible" class="my-8">
-            <div class="mb-2">
-              <h6 v-if="!learnCollapsed" class="inline-block">
-                {{ $t('general.learn') }}
-              </h6>
-              <button
-                class="btn-collapse flex justify-center items-center w-8 h-7 float-right border-[1px] text-[10px]"
-                @click="learnCollapsed = !learnCollapsed"
-              >
-                <svg viewBox="0 0 24 24" width="24" height="24">
-                  <path
-                    d="M3.27273 5.45453V18.5454L12 12L3.27273 5.45453Z"
-                    fill="#F0F2DA"
-                    :class="learnCollapsed ? 'translate-x-[9px]' : 'translate-x-0'"
-                  />
-                  <path
-                    d="M20.7271 18.5454V5.45453L11.9998 12L20.7271 18.5454Z"
-                    fill="#F0F2DA"
-                    :class="learnCollapsed ? '-translate-x-[9px]' : 'translate-x-0'"
-                  />
-                </svg>
-              </button>
-            </div>
-
-            <slot v-if="!learnCollapsed" name="learn">
-              <learn-section />
-            </slot>
-          </div>
-          <div v-else class="py-8 h-full">
-            <slot v-if="!learnCollapsed" name="learn">
-              <learn-section />
-            </slot>
+        <n-layout-sider v-if="sidebarVisible && isMd" :width="isXl ? 455 : 356" content-style="padding-left: 20px;">
+          <div class="h-full py-8">
+            <slot name="learn" />
           </div>
         </n-layout-sider>
       </n-layout>
@@ -118,7 +61,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useGtm } from '@gtm-support/vue-gtm';
 const props = defineProps({
   fullHeight: { type: Boolean, default: false },
   loading: { type: Boolean, default: false },
@@ -129,19 +71,16 @@ const props = defineProps({
 /** Check if instructions are available (page has content and feature is enabled) */
 const $slots = useSlots();
 const authStore = useAuthStore();
-const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const warningStore = useWarningStore();
 const { activeDeployments } = useRefreshStatus();
 
-const gtm = useGtm();
-const { isMd, isLg, isXl } = useScreen();
-const { name } = useRoute();
+const { isMd, isXl } = useScreen();
 
 /** Heading height */
 const headingRef = ref<HTMLElement>();
 
-const calcHeaderHeight = () => (headingRef.value?.clientHeight || 0) + (isLg.value ? 120 : 124);
+const calcHeaderHeight = () => (headingRef.value?.clientHeight || 96) + 56;
 const headingHeight = ref<number>(calcHeaderHeight());
 
 const scrollStyle = computed(() => ({
@@ -177,28 +116,9 @@ function setLoadingAnimation(isLoading: boolean) {
   }, delay);
 }
 
-/** Instructions load */
-const key = computed(() => {
-  return name?.toString() || '';
+const sidebarVisible = computed<boolean>(() => {
+  return !!$slots.learn;
 });
-
-const instructionsAvailable = computed<boolean>(() => {
-  return (
-    (dataStore.hasInstructions(key.value) &&
-      isFeatureEnabled(Feature.INSTRUCTIONS, authStore.getUserRoles()) &&
-      isLg.value) ||
-    !!$slots.learn
-  );
-});
-
-// Keep info about collapsible section learn in local storage
-const learnCollapsed = ref<boolean>(
-  props.learnCollapsible && localStorage.getItem('learnCollapsed') === '1'
-);
-
-function handleOnUpdateCollapse(value: boolean) {
-  localStorage.setItem('learnCollapsed', value ? '1' : '0');
-}
 
 /** Warnings */
 function onSpendingWaningClose() {
@@ -214,11 +134,11 @@ function onSpendingWaningClose() {
 </style>
 <style lang="postcss" module>
 .mainnet {
-  @apply relative py-[1px] -mt-[2px];
+  @apply relative -mt-[2px] py-[1px];
 
   &:before {
     content: '';
-    @apply absolute top-0 -left-8 -right-8 bottom-0 border border-violet;
+    @apply absolute -left-8 -right-8 bottom-0 top-0 border border-violet;
   }
 }
 </style>

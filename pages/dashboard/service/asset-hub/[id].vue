@@ -1,41 +1,17 @@
 <template>
   <Dashboard :loading="pageLoading" :mainnet="assetHubStore.mainnet">
     <template #heading>
-      <HeaderAssetHub
-        back-link="/dashboard/service/asset-hub/"
-        :title="`Asset: ${assetHubStore.active.name}`"
-      />
+      <HeaderAssetHub back-link="/dashboard/service/asset-hub/" :title="`Asset: ${assetHubStore.active.name}`" />
     </template>
 
     <div class="pb-8">
-      <div class="card-light px-6 py-4 mb-6">
-        <n-table class="plain" :bordered="false" :single-line="true">
-          <tbody>
-            <tr v-for="(data, key) in assetData">
-              <td :class="{ '!border-bg-light': key + 1 === assetData.length }">
-                <span class="text-white">
-                  {{ data.label }}
-                </span>
-              </td>
-              <td :class="{ '!border-bg-light': key + 1 === assetData.length }">
-                <Btn v-if="data.link" :href="data.link" type="link">
-                  {{ data.value }}
-                </Btn>
-                <TableEllipsis
-                  v-else-if="data.copy"
-                  class="w-full justify-between"
-                  :text="`${data.value}`"
-                />
-                <span v-else>{{ data.value }}</span>
-              </td>
-            </tr>
-          </tbody>
-        </n-table>
+      <div class="card-light mb-6 px-6 py-4">
+        <TableInfo :data="assetData" />
       </div>
 
       <div class="card-light px-6 py-4">
         <h4>
-          {{ $t('dashboard.service.assetHub.walletStats') }}
+          {{ $t('assetHub.walletStats') }}
         </h4>
         <n-table class="plain my-4" :bordered="false" :single-line="true">
           <tbody>
@@ -47,8 +23,8 @@
             </tr>
           </tbody>
         </n-table>
-        <a :href="transactionsList" class="text-blue font-bold text-sm" target="_blank">
-          {{ $t('dashboard.service.assetHub.transactionHistory') }}
+        <a :href="transactionsList" class="text-sm font-bold text-blue" target="_blank">
+          {{ $t('assetHub.transactionHistory') }}
         </a>
       </div>
     </div>

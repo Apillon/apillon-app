@@ -16,23 +16,20 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t } = useI18n();
 const dataStore = useDataStore();
 const rpcApiKeyStore = useRpcApiKeyStore();
 
 const pageLoading = ref<boolean>(true);
 
 useHead({
-  title: $i18n.t('dashboard.nav.rpc'),
+  title: t('dashboard.nav.rpc'),
 });
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await rpcApiKeyStore.getApiKeys();
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  await rpcApiKeyStore.getApiKeys();
 
-      pageLoading.value = false;
-    });
-  }, 100);
+  pageLoading.value = false;
 });
 </script>

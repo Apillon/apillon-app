@@ -21,12 +21,7 @@
     <n-form-item path="authType" :label="$t('form.label.authType')">
       <n-radio-group v-model:value="formData.authType" name="radiogroup">
         <n-space>
-          <n-radio
-            v-for="(type, key) in authTypes"
-            :key="key"
-            :value="type.value"
-            :label="`${type.label}`"
-          />
+          <n-radio v-for="(type, key) in authTypes" :key="key" :value="type.value" :label="`${type.label}`" />
         </n-space>
       </n-radio-group>
     </n-form-item>
@@ -64,12 +59,7 @@
 
     <!-- Token auth: bearer token -->
     <n-grid v-else-if="formData.authType === BucketWebhookAuthMethod.TOKEN" :cols="1" :x-gap="32">
-      <n-form-item-gi
-        :span="1"
-        path="param1"
-        :label="$t('form.label.bearerToken')"
-        :label-props="{ for: 'param1' }"
-      >
+      <n-form-item-gi :span="1" path="param1" :label="$t('form.label.bearerToken')" :label-props="{ for: 'param1' }">
         <n-input
           v-model:value="formData.param1"
           type="textarea"
@@ -86,7 +76,7 @@
         <input type="submit" class="hidden" :value="$t('form.save')" />
         <Btn
           type="primary"
-          class="w-full mt-2"
+          class="mt-2 w-full"
           :loading="loadingForm"
           :disabled="authStore.isAdmin()"
           @click="handleSubmit"
@@ -100,7 +90,7 @@
       <n-form-item-gi v-if="webhook" :span="1">
         <Btn
           type="secondary"
-          class="w-full mt-2"
+          class="mt-2 w-full"
           :loading="loadingReset"
           :disabled="authStore.isAdmin()"
           @click="resetWebhook"
@@ -127,7 +117,7 @@ const props = defineProps({
   bucketUuid: { type: String, required: true },
 });
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
 
@@ -150,14 +140,14 @@ const rules = computed<NFormRules>(() => {
     url: [
       {
         required: true,
-        message: $i18n.t('validation.webhookRequired'),
+        message: t('validation.webhookRequired'),
         trigger: 'input',
       },
     ],
     authType: [
       {
         required: true,
-        message: $i18n.t('validation.webhookAuthTypeRequired'),
+        message: t('validation.webhookAuthTypeRequired'),
         trigger: 'input',
       },
     ],
@@ -168,15 +158,15 @@ const rules = computed<NFormRules>(() => {
           formData.value.authType === BucketWebhookAuthMethod.TOKEN,
         message:
           formData.value.authType === BucketWebhookAuthMethod.BASIC
-            ? $i18n.t('validation.webhookUsernameRequired')
-            : $i18n.t('validation.webhookTokenRequired'),
+            ? t('validation.webhookUsernameRequired')
+            : t('validation.webhookTokenRequired'),
         trigger: 'input',
       },
     ],
     param2: [
       {
         required: formData.value.authType === BucketWebhookAuthMethod.BASIC,
-        message: $i18n.t('validation.webhookPasswordRequired'),
+        message: t('validation.webhookPasswordRequired'),
         trigger: 'input',
       },
     ],
@@ -186,15 +176,15 @@ const rules = computed<NFormRules>(() => {
 const authTypes = ref<Array<SelectOption>>([
   {
     value: BucketWebhookAuthMethod.NONE,
-    label: $i18n.t(`form.authTypes.${BucketWebhookAuthMethod.NONE}`),
+    label: t(`form.authTypes.${BucketWebhookAuthMethod.NONE}`),
   },
   {
     value: BucketWebhookAuthMethod.BASIC,
-    label: $i18n.t(`form.authTypes.${BucketWebhookAuthMethod.BASIC}`),
+    label: t(`form.authTypes.${BucketWebhookAuthMethod.BASIC}`),
   },
   {
     value: BucketWebhookAuthMethod.TOKEN,
-    label: $i18n.t(`form.authTypes.${BucketWebhookAuthMethod.TOKEN}`),
+    label: t(`form.authTypes.${BucketWebhookAuthMethod.TOKEN}`),
   },
 ]);
 
@@ -218,9 +208,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else if (webhook.value) {
       await updateWebhook();
     } else {
@@ -237,7 +225,8 @@ async function getWebhook() {
 
     webhook.value = res.data;
     updateFormData(res.data);
-  } catch (error) {
+  } catch (e: ApiError | unknown) {
+    console.error(e);
     webhook.value = null;
   }
   loadingPage.value = false;
@@ -246,15 +235,12 @@ async function createWebhook() {
   loadingForm.value = true;
 
   try {
-    const res = await $api.post<WebhookResponse>(
-      endpoints.bucketWebhook(props.bucketUuid),
-      formData.value
-    );
+    const res = await $api.post<WebhookResponse>(endpoints.bucketWebhook(props.bucketUuid), formData.value);
 
     webhook.value = res.data;
     updateFormData(res.data);
 
-    message.success($i18n.t('form.success.created.webhook'));
+    message.success(t('form.success.created.webhook'));
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
@@ -271,7 +257,7 @@ async function updateWebhook() {
     webhook.value = res.data;
     updateFormData(res.data);
 
-    message.success($i18n.t('form.success.updated.webhook'));
+    message.success(t('form.success.updated.webhook'));
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
@@ -286,7 +272,7 @@ async function resetWebhook() {
     webhook.value = null;
     updateFormData({} as WebhookInterface);
 
-    message.success($i18n.t('form.success.deleted.webhook'));
+    message.success(t('form.success.deleted.webhook'));
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
@@ -305,8 +291,8 @@ function updateFormData(webhook: WebhookInterface) {
     (webhook.param2
       ? BucketWebhookAuthMethod.BASIC
       : webhook.param1
-      ? BucketWebhookAuthMethod.TOKEN
-      : BucketWebhookAuthMethod.NONE);
+        ? BucketWebhookAuthMethod.TOKEN
+        : BucketWebhookAuthMethod.NONE);
 
   setTimeout(() => (disabledParamReset.value = false), 1);
 }

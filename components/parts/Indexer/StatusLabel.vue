@@ -1,11 +1,5 @@
 <template>
-  <n-tag
-    v-bind="$attrs"
-    :type="getIndexerStatus(indexerStatus)"
-    :bordered="false"
-    size="tiny"
-    round
-  >
+  <n-tag v-bind="$attrs" :type="getIndexerStatus(indexerStatus)" :bordered="false" size="tiny" round>
     <n-space :class="'text-bg-dark'" :size="0" align="center" :wrap="false">
       <span class="mx-1 uppercase">{{ $t(`indexer.statuses.${indexerStatus}`) }}</span>
     </n-space>

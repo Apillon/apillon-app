@@ -24,10 +24,10 @@
 
 <script lang="ts" setup>
 const emit = defineEmits(['submit']);
-const collectionStore = useCollectionStore();
+const metadataStore = useMetadataStore();
 
 function onSelect(value: boolean) {
-  collectionStore.form.behavior.useIpns = value;
+  metadataStore.form.smartContract.useIpns = value;
   emit('submit');
 }
 </script>

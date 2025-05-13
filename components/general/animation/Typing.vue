@@ -1,7 +1,7 @@
 <template>
-  <div class="relative w-5 h-3">
+  <div class="relative h-3 w-5">
     <div
-      class="absolute top-1/2 left-1/2 w-11 h-7 flex justify-center items-center overflow-hidden -translate-x-1/2 -translate-y-1/2 scale-40"
+      class="absolute left-1/2 top-1/2 flex h-7 w-11 -translate-x-1/2 -translate-y-1/2 scale-40 items-center justify-center overflow-hidden"
     >
       <div :class="$style.dotTyping"></div>
     </div>
@@ -25,31 +25,55 @@ defineProps({
   height: 10px;
   border-radius: 5px;
   background-color: currentColor;
-  box-shadow: 84px 0 0 0 currentColor, 99px 0 0 0 currentColor, 114px 0 0 0 currentColor;
+  box-shadow:
+    84px 0 0 0 currentColor,
+    99px 0 0 0 currentColor,
+    114px 0 0 0 currentColor;
   animation: dot-typing 1.5s infinite linear;
 }
 
 @keyframes dot-typing {
   0% {
-    box-shadow: 84px 0 0 0 currentColor, 99px 0 0 0 currentColor, 114px 0 0 0 currentColor;
+    box-shadow:
+      84px 0 0 0 currentColor,
+      99px 0 0 0 currentColor,
+      114px 0 0 0 currentColor;
   }
   16.667% {
-    box-shadow: 84px -10px 0 0 currentColor, 99px 0 0 0 currentColor, 114px 0 0 0 currentColor;
+    box-shadow:
+      84px -10px 0 0 currentColor,
+      99px 0 0 0 currentColor,
+      114px 0 0 0 currentColor;
   }
   33.333% {
-    box-shadow: 84px 0 0 0 currentColor, 99px 0 0 0 currentColor, 114px 0 0 0 currentColor;
+    box-shadow:
+      84px 0 0 0 currentColor,
+      99px 0 0 0 currentColor,
+      114px 0 0 0 currentColor;
   }
   50% {
-    box-shadow: 84px 0 0 0 currentColor, 99px -10px 0 0 currentColor, 114px 0 0 0 currentColor;
+    box-shadow:
+      84px 0 0 0 currentColor,
+      99px -10px 0 0 currentColor,
+      114px 0 0 0 currentColor;
   }
   66.667% {
-    box-shadow: 84px 0 0 0 currentColor, 99px 0 0 0 currentColor, 114px 0 0 0 currentColor;
+    box-shadow:
+      84px 0 0 0 currentColor,
+      99px 0 0 0 currentColor,
+      114px 0 0 0 currentColor;
   }
   83.333% {
-    box-shadow: 84px 0 0 0 currentColor, 99px 0 0 0 currentColor, 114px -10px 0 0 currentColor;
+    box-shadow:
+      84px 0 0 0 currentColor,
+      99px 0 0 0 currentColor,
+      114px -10px 0 0 currentColor;
   }
   100% {
-    box-shadow: 84px 0 0 0 currentColor, 99px 0 0 0 currentColor, 114px 0 0 0 currentColor;
+    box-shadow:
+      84px 0 0 0 currentColor,
+      99px 0 0 0 currentColor,
+      114px 0 0 0 currentColor;
   }
 }
 </style>

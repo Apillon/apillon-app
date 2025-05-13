@@ -1,0 +1,90 @@
+{
+  "rpc": {
+    "apiKey": {
+      "new": "New key",
+      "save": "Save",
+      "keys": "API key management",
+      "turnOnService": "Turn on RPC service",
+      "mustBeOwner": "You must be the project owner to turn on the RPC service.",
+      "headline": "Before proceeding, select a plan.",
+      "management": "Key management",
+      "description": "Apillon’s RPC service, powered by Dwellir, provides developers with reliable, low-latency access to over 100 blockchain networks. This scalable solution ensures seamless communication between decentralized applications and blockchains, backed by 99% uptime and top-tier performance. With easy API key management, you can quickly integrate multiple chains, eliminating the complexity of running your own nodes. The intuitive dashboard allows you to browse and favorite endpoints, simplifying Web3 project management from start to scale.",
+      "uuid": "UUID",
+      "usage": "RPC Usage monitoring",
+      "yourNetworks": "Your networks",
+      "curious": "Curious about what we offer before enabling the service?",
+      "explore": "Explore the supported chains and pick the one that fits your needs.",
+      "start": "Start by browsing the list of available endpoints, and don't forget to mark the chains you're using as favorites for quick access and efficient management.",
+      "continue": "Continue",
+      "quotaReached": "Quota has been reached. To create more API keys",
+      "empty": "You currently have no API keys for the selected project.",
+      "emptyInfo": "Create your first API key to start using the RPC service.",
+      "createFirst": "Create first API key",
+      "monthlyUsage": "{used} of {max} monthly calls used",
+      "pleaseUpgrade": "You've already used all 5 million API requests included in Free plan. Please upgrade."
+    },
+    "endpoint": {
+      "chainName": "Chain name",
+      "empty": "No networks are currently available.",
+      "emptyInfo": "Please check later",
+      "network": "Network",
+      "httpsEndpoint": "HTTPS endpoint",
+      "wssEndpoint": "WSS endpoint",
+      "viewAll": "View all networks",
+      "allEndpoints": "All networks",
+      "add": "Add",
+      "added": "Added",
+      "delete": "Are you sure you want to remove this network from favorites?",
+      "noFavoriteEndpointTitle": "You currently have no favorite networks.",
+      "noFavoriteEndpointDescription": "Browse our available networks and click \"Add\" for quick access. Once you add a network you plan to use, it will appear in \"Your networks\" table.",
+      "browse": "Browse networks",
+      "requestNew": "Request new RPC"
+    },
+    "initial": {
+      "benefits": [
+        {
+          "text": "Free Tier to start"
+        },
+        {
+          "bolded": "Multi-Chain Access:",
+          "text": "Connect to over 100 blockchain networks for versatile Web3 integration."
+        },
+        {
+          "bolded": "99% Uptime:",
+          "text": "Ensure high reliability and fast response times for smooth project execution."
+        },
+        {
+          "bolded": "Scalable Infrastructure:",
+          "text": "Access robust RPC nodes to scale with your project's demands"
+        },
+        {
+          "bolded": "API Key Management:",
+          "text": "Generate and manage API keys for multiple chains with ease."
+        },
+        {
+          "bolded": "User-Friendly Dashboard:",
+          "text": "Browse, manage and favorite your blockchain endpoints effortlessly."
+        }
+      ],
+      "planSelection": "If you choose the free plan, we’ll notify you when you're approaching the limits. At that point, you'll need to upgrade to keep the RPC service active.",
+      "subscriptionBenefits": [
+        {
+          "text": "Only one free plan is available per registered user, regardless of how many projects you have."
+        },
+        {
+          "bolded": "If you have an active subscription, the paid plan covers all the projects you own."
+        },
+        {
+          "bolded": "Any additional team members you add to a project can use the RPC API under your existing subscription."
+        }
+      ],
+      "subscriptionLimits": "Limits"
+    },
+    "subscription": {
+      "mustBeOwner": "You must be the project owner to change the plan."
+    },
+    "usage": {
+      "requestsNumber": "Number of requests"
+    }
+  }
+}

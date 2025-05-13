@@ -1,12 +1,12 @@
 <template>
-  <div class="flex justify-between items-center gap-y-2" :class="{ 'flex-wrap': wrap }">
-    <span class="inline-block mr-2">
-      <span class="text-body whitespace-nowrap" :class="wrap ? 'text-xs' : 'text-sm'">
+  <div class="flex items-center justify-between gap-y-2" :class="{ 'flex-wrap': wrap }">
+    <span class="mr-2 inline-block">
+      <span class="whitespace-nowrap text-body" :class="wrap ? 'text-xs' : 'text-sm'">
         {{ $t('storage.usage', { used: formatBytes(size), max: formatBytes(maxSize) }) }}
       </span>
     </span>
     <n-progress
-      :class="{ 'xl:min-w-[400px] lg:min-w-[300px] md:min-w-[200px] min-w-[100px]': !wrap }"
+      :class="{ 'min-w-[100px] md:min-w-[200px] lg:min-w-[300px] xl:min-w-[400px]': !wrap }"
       type="line"
       border-radius="3px"
       :height="4"
@@ -19,6 +19,8 @@
 </template>
 
 <script lang="ts" setup>
+import { storagePercentage, formatBytes } from '~/lib/utils/storage';
+
 defineProps({
   size: { type: Number, default: 0 },
   maxSize: { type: Number, default: 0 },

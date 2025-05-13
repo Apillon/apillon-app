@@ -6,10 +6,10 @@
         v-for="(input, key) in fn.inputs"
         :key="key"
         :path="input.name"
-        :label="labelInfoText(input.name, input?.description)"
+        :label="labelInfoText(input.name, input?.description) as string"
       >
         <n-input v-if="input.name === 'data'" v-model:value="formData[input.name]" :maxlength="256" required>
-          <template #prefix v-if="!formData[input.name]?.startsWith('0x')">
+          <template v-if="!formData[input.name]?.startsWith('0x')" #prefix>
             <span class="text-bodyDark">0x</span>
           </template>
         </n-input>
@@ -44,8 +44,8 @@
 <script lang="ts" setup>
 import { useAccount } from '@wagmi/vue';
 import { createPublicClient, createWalletClient, custom, http } from 'viem';
+import { SmartContractStatus } from '~/lib/types/smartContracts';
 
-const emit = defineEmits(['submitSuccess', 'transferred']);
 const props = defineProps({
   args: { type: Array<string | null>, default: null },
   btnText: { type: String, default: null },
@@ -142,7 +142,7 @@ async function execRead(methodName: string) {
       args: prepareData(),
     });
     result.value = `${res}`;
-    message.success(t('dashboard.service.smartContracts.functions.executed'));
+    message.success(t('smartContracts.functions.executed'));
   } catch (e: any) {
     console.error(e);
     message.error(contractError(e));
@@ -175,7 +175,7 @@ async function execWalletWrite(methodName: string) {
       account: address.value,
     });
     result.value = `${res}`;
-    message.success(t('dashboard.service.smartContracts.functions.executed'));
+    message.success(t('smartContracts.functions.executed'));
   } catch (e: any) {
     console.error(e);
     message.error(contractError(e));
@@ -195,7 +195,7 @@ async function execOwnerWrite(methodName: string) {
         methodArguments: prepareData(),
       }
     );
-    message.success(t('dashboard.service.smartContracts.functions.executed'));
+    message.success(t('smartContracts.functions.executed'));
 
     if (methodName === 'transferOwnership') {
       deployedContractStore.active.contractStatus = SmartContractStatus.TRANSFERRING;

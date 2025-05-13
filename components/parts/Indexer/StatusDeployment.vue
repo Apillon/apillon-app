@@ -20,7 +20,7 @@ import type { PropType } from 'vue';
 defineProps({
   deployment: {
     type: Object as PropType<IndexerDeploymentInterface>,
-    default: {},
+    default: null,
   },
 });
 

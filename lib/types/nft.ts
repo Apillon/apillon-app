@@ -96,34 +96,73 @@ export enum TransactionType {
   NEST_MINT_NFT = 6,
 }
 
-/** NFT create steps */
-export enum NftAmount {
-  SINGLE = 1,
-  MULTIPLE = 2,
+/** NFT create collection step */
+export enum CollectionCreateStep {
+  METADATA = 1,
+  SMART_CONTRACT = 2,
+  VISUAL = 3,
+  REVIEW = 4,
+  DEPLOYING = 5,
+  DEPLOYED = 6,
 }
-/** NFT create steps */
-export enum NftCreateStep {
-  AMOUNT = 1,
-  SINGLE = 2,
-  MULTIPLE = 3,
-  PREVIEW = 4,
-  DEPLOY = 5,
+/** NFT Metadata steps */
+export enum NftMetadataStep {
+  CHAIN = 1,
+  METADATA = 2,
+  NEW = 3,
+  SINGLE = 4,
+  SINGLE_PREVIEW = 5,
+  CSV = 6,
+  CSV_PREVIEW = 7,
+  ENDPOINT = 8,
+  ENDPOINT_PREVIEW = 9,
+  JSON = 10,
+  JSON_PREVIEW = 11,
 }
-/** Multiple NFTs upload steps */
-export enum NftUploadStep {
-  FILE = 1,
-  IMAGES = 2,
-  PREVIEW = 3,
-  ATTRIBUTES = 4,
+/** NFTs metadata field */
+export enum MetadataFieldRequired {
+  NAME = 'name',
+  DESCRIPTION = 'description',
+  IMAGE = 'image',
+}
+export enum MetadataProperties {
+  ID = 'id',
+  NAME = 'name',
+  DESCRIPTION = 'description',
+  EXTERNAL_URL = 'external_url',
+  IMAGE = 'image',
+  IMAGE_DATA = 'image_data',
+  ATTRIBUTES = 'attributes',
+  BACKGROUND_COLOR = 'background_color',
+  ANIMATION_URL = 'animation_url',
+  YOUTUBE_URL = 'youtube_url',
 }
 
-export enum PrepareCollectionMetadataStep {
+export enum TraitTypes {
+  STRING = 'string',
+  DATE = 'date',
+  NUMBER = 'number',
+  BOOST_NUMBER = 'boost_number',
+  BOOST_PERCENTAGE = 'boost_percentage',
+}
+
+export enum MetadataDeployStatus {
   UPLOAD_IMAGES_TO_IPFS = 1,
   UPDATE_JSONS_ON_S3 = 2,
   UPLOAD_METADATA_TO_IPFS = 3,
   PUBLISH_TO_IPNS = 4,
   METADATA_SUCCESSFULLY_PREPARED = 10,
 }
+
+export type FormSingleNft = {
+  image: string;
+  id: number;
+  collectionUuid: string;
+  name: string;
+  description: string;
+  copies: number;
+  attributes: AttributeInterface[];
+};
 
 declare global {
   /** Papa parser */
@@ -178,12 +217,6 @@ declare global {
   interface CollectionUpdateResponse extends GeneralResponse<CollectionInterface> {}
   interface CollectionsResponse extends GeneralItemsResponse<CollectionInterface> {}
 
-  interface WebsiteDeployForm {
-    apiKey: string;
-    apiSecret: string;
-    type: NftWebsiteType;
-  }
-
   /**
    * Transaction
    */
@@ -226,8 +259,10 @@ declare global {
   interface AttributeInterface {
     trait_type: string;
     value: string;
-    display_type: string;
+    display_type: string | null;
   }
 
   interface AttributesInterface extends Array<AttributeInterface> {}
+
+  type MetadataItem = Record<string | MetadataProperties, string | number> & { attributes?: AttributeInterface[] };
 }

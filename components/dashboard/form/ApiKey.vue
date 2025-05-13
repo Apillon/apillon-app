@@ -368,9 +368,8 @@ async function updateApiKey() {
   loadingForm.value = true;
 
   try {
-    const projectUuid = dataStore.projectUuid;
     const bodyData = {
-      project_uuid: projectUuid,
+      project_uuid: dataStore.projectUuid,
       name: formData.value.name,
       testNetwork: false,
     };
@@ -401,9 +400,8 @@ function isPermissionEnabled(serviceUuid: string, roleId: number) {
     }
   }
 
-  const projectUuid = dataStore.projectUuid;
   return apiKeyRoles.value.some(
-    role => role.project_uuid === projectUuid && role.service_uuid === serviceUuid && role.role_id === roleId
+    role => role.project_uuid === dataStore.projectUuid && role.service_uuid === serviceUuid && role.role_id === roleId
   );
 }
 function isAnyPermissionEnabled(service: ServiceInterface) {
@@ -433,10 +431,9 @@ async function addAllPermissions(serviceUuid: string) {
 }
 
 async function addPermission(serviceUuid: string, roleId: number, showMsg = true) {
-  const projectUuid = dataStore.projectUuid;
   try {
     await $api.post<ApiKeyRoleUpdateResponse>(endpoints.apiKeyRole(props.id), {
-      project_uuid: projectUuid,
+      project_uuid: dataStore.projectUuid,
       service_uuid: serviceUuid,
       role_id: roleId,
     });
@@ -450,10 +447,9 @@ async function addPermission(serviceUuid: string, roleId: number, showMsg = true
 }
 
 async function removePermission(serviceUuid: string, roleId: number) {
-  const projectUuid = dataStore.projectUuid || '';
   try {
     await $api.delete<DeleteResponse>(endpoints.apiKeyRole(props.id), {
-      project_uuid: projectUuid,
+      project_uuid: dataStore.projectUuid,
       service_uuid: serviceUuid,
       role_id: roleId,
     });
@@ -465,13 +461,12 @@ async function removePermission(serviceUuid: string, roleId: number) {
 }
 
 async function removeServicePermissions(service: ApiKeyRoleForm) {
-  const projectUuid = dataStore.projectUuid || '';
   if (props.id === 0) return;
 
   // If toggle off, remove all active roles for this service type
   try {
     await $api.delete<DeleteResponse>(endpoints.apiKeyServiceRoles(props.id), {
-      project_uuid: projectUuid,
+      project_uuid: dataStore.projectUuid,
       service_uuid: service.service_uuid,
       role_id: 50, // Validation placeholder
     });

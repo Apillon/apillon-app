@@ -22,22 +22,16 @@
     <!-- Included Service -->
     <div class="match-services mb-12">
       <p class="font-bold text-white">{{ $t('dashboard.credits.included') }}</p>
-      <ul class="inline-flex flex-col list-disc pl-4 mb-4 text-left">
+      <ul class="mb-4 inline-flex list-disc flex-col pl-4 text-left">
         <li v-for="(item, key) in translateItems('dashboard.credits.includedServices')" :key="key">
           {{ item }}
         </li>
       </ul>
     </div>
 
-    <n-tooltip v-if="!dataStore.isUserOwner" trigger="hover">
+    <n-tooltip v-if="!dataStore.isUserOwner" :trigger="isMd ? 'hover' : 'click'">
       <template #trigger>
-        <Btn
-          class="opacity-60 cursor-default"
-          type="primary"
-          size="large"
-          :color="colors.blue"
-          round
-        >
+        <Btn class="cursor-default opacity-60" type="primary" size="large" :color="colors.blue" round>
           {{ $t('dashboard.credits.buy') }}
         </Btn>
       </template>
@@ -55,9 +49,9 @@
         {{ $t('dashboard.credits.buyWithCreditCard') }}
       </Btn>
 
-      <n-tooltip v-if="creditPackage.creditAmount === 10000" trigger="hover">
+      <n-tooltip v-if="creditPackage.creditAmount === 10000" :trigger="isMd ? 'hover' : 'click'">
         <template #trigger>
-          <Btn class="opacity-60 cursor-default" type="primary" size="large" round>
+          <Btn class="cursor-default opacity-60" type="primary" size="large" round>
             {{ $t('dashboard.credits.buyWithDot') }}
           </Btn>
         </template>
@@ -78,16 +72,20 @@
 </template>
 
 <script lang="ts" setup>
-import colors from '~/tailwind.colors';
+import { colors } from '~/tailwind.config';
+import { translateItems } from '~/lib/utils';
+import { formatPrice, formatNumber } from '~/lib/utils/helpers';
 
 defineProps({
   creditPackage: { type: Object as PropType<CreditPackageInterface>, required: true },
 });
 
-const loading = ref<boolean>(false);
-const loadingCrypto = ref<boolean>(false);
+const { isMd } = useScreen();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
+
+const loading = ref<boolean>(false);
+const loadingCrypto = ref<boolean>(false);
 
 async function getCreditSessionUrl(packageId: number) {
   loading.value = true;

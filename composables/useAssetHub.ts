@@ -1,6 +1,8 @@
 import { BN } from '@polkadot/util';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
+import { getWallets } from '~/lib/wallet/wallets';
 import type { AssetHubClient as AssetHubClientType } from '~/lib/asset-hub/client';
+import { AssetHubClient } from '~/lib/asset-hub/client';
 
 export const assetHubNetworks = {
   assetHub: {
@@ -18,21 +20,6 @@ export const assetHubNetworks = {
 export const getAssetHubRpc = (mainnet = false) =>
   mainnet ? assetHubNetworks.assetHub.rpc : assetHubNetworks.westend.rpc;
 
-/** Available columns - show/hide column */
-const selectedColumns = ref([
-  'id',
-  'name',
-  'symbol',
-  'decimals',
-  'supply',
-  'minBalance',
-  'deposit',
-  'owner',
-  'admin',
-  'issuer',
-  'freezer',
-  'status',
-]);
 const assetHubClient = ref<AssetHubClientType | null | undefined>();
 
 export const toNum = (text: string) => Number(text?.replaceAll(',', ''));
@@ -50,9 +37,6 @@ export default function assetHub() {
   const modalWalletSelectVisible = ref<boolean>(false);
 
   const supply = computed(() => {
-    // new Intl.NumberFormat('de-DE').format(
-    //   toNum(assetHubStore.active.supply) / Math.pow(10, Number(assetHubStore.active.decimals))
-    // )
     const factor = new BN(10).pow(new BN(assetHubStore.active.decimals));
     const supplyBN = new BN(assetHubStore.active?.supply?.replaceAll(',', ''));
     return supplyBN.div(factor).toString();
@@ -60,10 +44,9 @@ export default function assetHub() {
 
   async function initAssetHub() {
     await sleep(10);
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await assetHubStore.getAssets();
-      pageLoading.value = false;
-    });
+    await dataStore.waitOnPromises(false);
+    await assetHubStore.getAssets();
+    pageLoading.value = false;
   }
 
   async function initClient(rpc = assetHubNetworks.westend.rpc) {
@@ -113,9 +96,7 @@ export default function assetHub() {
         await sleep(200);
         authStore.setWallet(wallet);
 
-        assetHubStore.account = authStore.wallet.accounts.find(
-          acc => acc.address === assetHubStore.account?.address
-        );
+        assetHubStore.account = authStore.wallet.accounts.find(acc => acc.address === assetHubStore.account?.address);
       } else {
         assetHubStore.account = null;
       }
@@ -130,7 +111,7 @@ export default function assetHub() {
     loadingWallet.value = true;
 
     try {
-      const { message, timestamp } = await authStore.getAuthMsg();
+      const { message } = await authStore.getAuthMsg();
       await getMessageSignature(account.address, message);
       assetHubStore.account = account;
 
@@ -149,7 +130,6 @@ export default function assetHub() {
     loadingWallet,
     modalWalletSelectVisible,
     pageLoading,
-    selectedColumns,
     supply,
     initAssetHub,
     initClient,

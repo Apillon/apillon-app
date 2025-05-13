@@ -1,38 +1,30 @@
 <template>
-  <n-tooltip v-if="tooltip" v-bind="$attrs" trigger="hover">
+  <n-tooltip v-if="tooltip" v-bind="$attrs" :trigger="isMd ? 'hover' : 'click'">
     <template #trigger>
       <n-button
-        class="align-sub"
-        :class="size === 'sm' ? 'px-1' : 'px-2'"
+        class="px-1 align-sub"
         :size="size === 'sm' ? 'tiny' : size === 'md' ? 'small' : 'large'"
         type="tertiary"
         tabindex="-1"
         quaternary
         round
       >
-        <span
-          class="icon-info"
-          :class="size === 'sm' ? 'text-base' : size === 'md' ? 'text-2xl' : 'text-3xl'"
-        ></span>
+        <span class="icon-info" :class="size === 'sm' ? 'text-base' : size === 'md' ? 'text-xl' : 'text-2xl'"></span>
       </n-button>
     </template>
-    {{ tooltip }}
+    <slot>{{ tooltip }}</slot>
   </n-tooltip>
   <n-button
     v-else
     v-bind="$attrs"
-    class="align-sub"
-    :class="size === 'sm' ? 'px-1' : 'px-2'"
+    class="px-1 align-sub"
     :size="size === 'sm' ? 'tiny' : size === 'md' ? 'small' : 'large'"
     type="tertiary"
     tabindex="-1"
     quaternary
     round
   >
-    <span
-      class="icon-info"
-      :class="size === 'sm' ? 'text-base' : size === 'md' ? 'text-2xl' : 'text-3xl'"
-    ></span>
+    <span class="icon-info" :class="size === 'sm' ? 'text-base' : size === 'md' ? 'text-xl' : 'text-2xl'"></span>
   </n-button>
 </template>
 
@@ -48,4 +40,5 @@ defineProps({
     default: '',
   },
 });
+const { isMd } = useScreen();
 </script>

@@ -183,6 +183,7 @@ async function onFileChange({ file, onError, onFinish }: UploadCustomRequestOpti
 
   formData.value.file = {
     ...file,
+    path: file.fullPath,
     percentage: 0,
     size,
     timestamp: Date.now(),

@@ -7,7 +7,7 @@
     </template>
 
     <slot>
-      <div class="pb-8 mb-6">
+      <div class="mb-6 pb-8">
         <h4>
           {{ $t('rpc.apiKey.headline') }}
         </h4>

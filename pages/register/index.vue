@@ -2,9 +2,7 @@
   <div>
     <!-- Heading -->
     <h1 class="mb-2 text-center sm:text-left">
-      {{
-        route.query.REF === 'ZIGGI' ? $t('auth.signup.titleReferalZiggi') : $t('auth.signup.signup')
-      }}
+      {{ route.query.REF === 'ZIGGI' ? $t('auth.signup.titleReferalZiggi') : $t('auth.signup.signup') }}
     </h1>
 
     <!-- Separator -->
@@ -33,12 +31,15 @@
     </SeparatorText>
 
     <!-- Wallet -->
-    <AuthWalletLogin
-      v-if="allowWalletRegister && !walletRegister"
-      class="w-full"
-      register
-      @register="onWalletRegister"
-    />
+    <n-space size="large" vertical>
+      <AuthLoginGoogle register />
+      <AuthWalletLogin
+        v-if="allowWalletRegister && !walletRegister"
+        class="w-full"
+        register
+        @register="onWalletRegister"
+      />
+    </n-space>
   </div>
 </template>
 

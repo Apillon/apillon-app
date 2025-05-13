@@ -72,42 +72,42 @@ const createColumns = (): NDataTableColumns<CreditTransactionInterface> => {
     {
       title: t('dashboard.credits.service'),
       key: 'service',
-      render(row) {
+      render(row: CreditTransactionInterface) {
         return h('span', { class: 'text-body' }, row.service);
       },
     },
     {
       title: t('dashboard.credits.category'),
       key: 'category',
-      render(row) {
+      render(row: CreditTransactionInterface) {
         return h('span', { class: 'text-body' }, row.category);
       },
     },
     {
       title: t('dashboard.credits.description'),
       key: 'description',
-      render(row) {
+      render(row: CreditTransactionInterface) {
         return h('span', { class: 'text-body' }, row.description || '');
       },
     },
     {
       title: t('dashboard.credits.direction'),
       key: 'direction',
-      render(row) {
+      render(row: CreditTransactionInterface) {
         return h('span', { class: 'text-body' }, CreditDirection[row.direction]);
       },
     },
     {
       title: t('dashboard.credits.amount'),
       key: 'amount',
-      render(row) {
+      render(row: CreditTransactionInterface) {
         return h('span', { class: 'text-body' }, `${formatNumber(row.amount)}`);
       },
     },
     {
       title: t('dashboard.credits.date'),
       key: 'createTime',
-      render(row) {
+      render(row: CreditTransactionInterface) {
         return h('span', { class: 'text-body' }, dateTimeToDateAndTime(row?.createTime || ''));
       },
     },

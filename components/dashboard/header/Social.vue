@@ -5,7 +5,7 @@
     </slot>
     <template #info>
       <n-space :size="32" align="center">
-        <n-button size="small" @click="$router.push({ name: 'dashboard-service-social-hub' })">
+        <n-button @click="$router.push({ name: 'dashboard-service-social-hub' })">
           <span class="text-primary"> {{ $t('social.post.manageHubs') }}</span>
         </n-button>
         <IconInfo
@@ -29,6 +29,5 @@
 </template>
 
 <script lang="ts" setup>
-const postStore = usePostStore();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.SOCIAL_NEW);
 </script>

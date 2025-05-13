@@ -35,7 +35,7 @@
     </Btn>
   </n-form>
 
-  <ModalTransaction v-if="txHash" :transactionHash="txHash" @close="$emit('close')" />
+  <ModalTransaction v-if="txHash" :transaction-hash="txHash" @close="$emit('close')" />
   <AssetHubLoader v-if="loading && assetHubClient?.txApproved" class="z-3000" />
 </template>
 
@@ -83,7 +83,7 @@ function handleSubmit(e: Event | MouseEvent) {
 
 async function mintTokens() {
   if (!assetHubStore.account) {
-    message.warning(t('dashboard.service.assetHub.connect'));
+    message.warning(t('assetHub.connect'));
     return;
   }
   if (!formData.value.address || !formData.value.amount) {

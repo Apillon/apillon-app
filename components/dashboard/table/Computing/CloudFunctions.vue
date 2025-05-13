@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NEllipsis } from 'naive-ui';
+import { NDropdown, NEllipsis } from 'naive-ui';
 
 const props = defineProps({
   functions: { type: Array<CloudFunctionInterface>, default: [] },
@@ -83,8 +83,8 @@ const createColumns = (): NDataTableColumns<CloudFunctionInterface> => {
       render(row) {
         return h(
           resolveComponent('Pill'),
-          { type: !!row.activeJob_id ? 'success' : 'warning', class: 'min-w-16 justify-center' },
-          { default: () => (!!row.activeJob_id ? t('general.active') : t('general.inactive')) }
+          { type: row.activeJob_id ? 'success' : 'warning', class: 'min-w-16 justify-center' },
+          { default: () => (row.activeJob_id ? t('general.active') : t('general.inactive')) }
         );
       },
     },
@@ -101,12 +101,7 @@ const createColumns = (): NDataTableColumns<CloudFunctionInterface> => {
             options: props.archive ? dropdownOptionsArchive : dropdownOptions.value,
           },
           {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
+            default: () => h(resolveComponent('BtnActions')),
           }
         );
       },
@@ -120,9 +115,7 @@ const currentRow = ref<CloudFunctionInterface>();
 /** Data: filtered cloudFunctions */
 const data = computed<CloudFunctionInterface[]>(() => {
   return (
-    props.functions.filter(item =>
-      item.name.toLowerCase().includes(cloudFunctionStore.search.toLowerCase())
-    ) || []
+    props.functions.filter(item => item.name.toLowerCase().includes(cloudFunctionStore.search.toLowerCase())) || []
   );
 });
 
@@ -198,10 +191,7 @@ const rowProps = (row: CloudFunctionInterface) => {
  * cloudFunction delete
  * */
 async function deleteCloudFunction() {
-  if (
-    currentRow.value &&
-    (await deleteItem(ItemDeleteKey.CLOUD_FUNCTION, currentRow.value.function_uuid))
-  ) {
+  if (currentRow.value && (await deleteItem(ItemDeleteKey.CLOUD_FUNCTION, currentRow.value.function_uuid))) {
     cloudFunctionStore.items = cloudFunctionStore.items.filter(
       item => item.function_uuid !== currentRow.value?.function_uuid
     );
@@ -220,9 +210,7 @@ async function restoreCloudFunction() {
   cloudFunctionStore.loading = true;
 
   try {
-    await $api.patch<CloudFunctionResponse>(
-      endpoints.cloudFunctionActivate(currentRow.value.function_uuid)
-    );
+    await $api.patch<CloudFunctionResponse>(endpoints.cloudFunctionActivate(currentRow.value.function_uuid));
     cloudFunctionStore.archive = cloudFunctionStore.archive.filter(
       item => item.function_uuid !== currentRow.value?.function_uuid
     );

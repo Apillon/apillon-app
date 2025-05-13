@@ -2,17 +2,15 @@
   /* Headline 1 */
   h1,
   .h1 {
-    @apply font-bold;
-    font-size: 1.75rem;
-    line-height: 1.43;
+    @apply font-bold leading-tight;
+    font-size: 2.25rem;
   }
 
   /* Headline 2 */
   h2,
   .h2 {
-    @apply font-bold;
-    font-size: 1.5rem;
-    line-height: 1.5;
+    @apply font-bold leading-tight;
+    font-size: 2rem;
 
     + p {
       @apply mt-2;
@@ -22,9 +20,8 @@
   /* Headline 3 */
   h3,
   .h3 {
-    @apply font-bold;
-    font-size: 1.25rem;
-    line-height: 1.6;
+    @apply font-bold leading-tight;
+    font-size: 1.75rem;
 
     + h4,
     + .h4,
@@ -37,8 +34,8 @@
   /* Headline 4 */
   h4,
   .h4 {
-    @apply font-bold;
-    font-size: 1.125rem;
+    @apply font-semibold;
+    font-size: 1.25rem;
     line-height: 1.55;
 
     + p,
@@ -50,20 +47,31 @@
   /* Headline 5 */
   h5,
   .h5 {
-    @apply font-bold;
-    font-size: 1rem;
+    @apply font-semibold;
+    font-size: 1.125rem;
     line-height: 1.6;
+
+    + p,
+    + ul {
+      @apply mt-2;
+    }
   }
 
   /* Headline 6 */
-  h6 {
+  h6,
+  .h6 {
     @apply font-bold;
     font-size: 0.875rem;
     line-height: 1.6;
+
+    + p,
+    + ul {
+      @apply mt-2;
+    }
   }
 
   p {
-    @apply body-md text-body;
+    @apply body-md whitespace-break-spaces text-white-secondary;
 
     + h2,
     + .h2,
@@ -75,6 +83,19 @@
     + ul {
       @apply mt-4;
     }
+
+    strong,
+    b {
+      @apply font-semibold;
+    }
+  }
+
+  b {
+    @apply font-semibold;
+  }
+
+  small {
+    @apply text-xs text-placeholder;
   }
 
   ul {
@@ -82,7 +103,7 @@
   }
 
   label {
-    @apply font-bold cursor-pointer;
+    @apply cursor-pointer font-bold;
 
     > a {
       @apply text-primary;
@@ -98,18 +119,39 @@
     line-height: 1.715;
   }
 
+  .body-xl {
+    @apply text-lg;
+
+    strong,
+    b {
+      @apply font-semibold;
+    }
+  }
+
   .body-lg {
-    font-size: 1rem;
-    line-height: 1.625;
+    @apply text-base;
+
+    strong,
+    b {
+      @apply font-semibold;
+    }
   }
 
   .body-md {
-    font-size: 0.875rem;
-    line-height: 1.715;
+    @apply text-sm;
+
+    strong,
+    b {
+      @apply font-semibold;
+    }
   }
 
   .body-sm {
-    font-size: 0.75rem;
-    line-height: 1.666666;
+    @apply text-xs;
+
+    strong,
+    b {
+      @apply font-semibold;
+    }
   }
 }

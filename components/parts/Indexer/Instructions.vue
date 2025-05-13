@@ -5,15 +5,15 @@
         {{ $t('indexer.instructions.title') }}
       </h4>
       <p>
-        {{ $t('indexer.instructions.content') }}
+        {{ $t('indexer.instructions.info') }}
       </p>
     </div>
 
-    <div class="text-body flex flex-row items-center gap-2 mt-2">
-      {{ $t('rpc.apiKey.powered') }}
-      <NuxtIcon name="logo/sqd" class="h-6 w-16 icon-auto text-white" alt="sqd" />
+    <div class="mt-2 flex flex-row items-center gap-2 text-body">
+      {{ $t('general.poweredBy') }}
+      <NuxtIcon name="logo/sqd" class="icon-auto h-6 w-16 text-white" alt="sqd" />
     </div>
-    <SolutionContent :content="content" />
+    <SimpletContent :content="content" />
 
     <h6 class="my-4">{{ $t('indexer.startNew') }}</h6>
 
@@ -21,9 +21,7 @@
       <Btn @click="showModalNewIndexer = true">
         {{ $t('indexer.new') }}
       </Btn>
-      <BtnDocumentation
-        href="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html#indexing-service"
-      />
+      <BtnDocumentation href="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html#indexing-service" />
     </n-space>
   </div>
   <!-- Modal - Create Indexer -->
@@ -33,8 +31,8 @@
 </template>
 
 <script lang="ts" setup>
-const { generateContent } = useSolution();
-const content = generateContent(SolutionKey.INDEXING);
+const { generateContent } = useSimplet();
+const content = generateContent('content', 'indexer');
 
 const showModalNewIndexer = ref<boolean | null>(false);
 </script>

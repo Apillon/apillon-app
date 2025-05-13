@@ -1,16 +1,13 @@
 <template>
   <Heading>
     <slot>
-      <div class="flex gap-4 items-center">
+      <div class="flex items-center gap-4">
         <NuxtLink :to="{ name: 'dashboard-service-storage' }">
-          <span class="icon-back text-2xl align-sub"></span>
+          <span class="icon-back align-sub text-2xl"></span>
         </NuxtLink>
         <div>
           <h2>{{ bucketStore.active.name }}</h2>
-          <TableEllipsis
-            :prefix="$t('storage.bucket.uuid')"
-            :text="bucketStore.active.bucket_uuid"
-          />
+          <TableEllipsis :prefix="$t('storage.bucket.uuid')" :text="bucketStore.active.bucket_uuid" />
         </div>
       </div>
     </slot>

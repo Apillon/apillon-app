@@ -30,7 +30,7 @@ export function validateRequiredCheckbox(_: FormItemRule, value: boolean | null)
 }
 
 /** Validate dropdown if it is selected */
-export function validateRequiredDropdown(_: FormItemRule, value: String | null): boolean {
+export function validateRequiredDropdown(_: FormItemRule, value: string | null): boolean {
   if (value) {
     return value.length !== 0;
   } else {
@@ -52,6 +52,7 @@ export function substrateAddressValidate(
 
     return isValid;
   } catch (e: any) {
+    console.error(e);
     return false;
   }
 }
@@ -69,4 +70,12 @@ export function validatePercent(_: FormItemRule, value: number | string | null):
 }
 export function validateBoolean(_: FormItemRule, value: number | string | null): boolean {
   return value !== null && value !== undefined;
+}
+
+// API key
+export function validateApiKey(value: number | string | null, apiSecret: string | null | undefined): boolean {
+  return !apiSecret || !!value;
+}
+export function validateApiSecret(value: number | string | null, apiKey: string | null | undefined): boolean {
+  return !apiKey || !!value;
 }

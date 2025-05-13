@@ -33,12 +33,10 @@
         <AuthWalletConnectEvm />
 
         <!-- 2FA -->
-        <template
-          v-if="isFeatureEnabled(Feature.TWO_FACTOR_AUTHENTICATION, authStore.getUserRoles())"
-        >
+        <template v-if="isFeatureEnabled(Feature.TWO_FACTOR_AUTHENTICATION, authStore.getUserRoles())">
           <n-h5>{{ $t('profile.2fa') }}</n-h5>
           <p>{{ $t('profile.2faText') }}</p>
-          <Btn class="w-full my-8" type="secondary">{{ $t('profile.setup2fa') }}</Btn>
+          <Btn class="my-8 w-full" type="secondary">{{ $t('profile.setup2fa') }}</Btn>
         </template>
       </FormWrapper>
 
@@ -50,12 +48,7 @@
       >
         <div class="mb-4">
           <p>{{ $t('profile.marketing.info') }}</p>
-          <Btn
-            class="inline-block text-sm"
-            type="link"
-            href="https://apillon.io/privacy-policy/"
-            target="_blank"
-          >
+          <Btn class="inline-block text-sm" type="link" href="https://apillon.io/privacy-policy/" target="_blank">
             {{ $t('profile.marketing.privacy') }}
           </Btn>
         </div>
@@ -71,12 +64,12 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t } = useI18n();
 const authStore = useAuthStore();
 const settingsStore = useSettingsStore();
 
 useHead({
-  title: $i18n.t('profile.mySettings'),
+  title: t('profile.mySettings'),
 });
 
 onMounted(async () => {

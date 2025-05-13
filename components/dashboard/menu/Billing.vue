@@ -25,13 +25,10 @@ const menuOptions: NMenuOption[] = [
   },
 ];
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(_ => {
-      if (!dataStore.hasProjects || dataStore.isProjectUser) {
-        router.push({ name: 'dashboard' });
-      }
-    });
-  }, 100);
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  if (!dataStore.hasProjects || dataStore.isProjectUser) {
+    router.push({ name: 'dashboard' });
+  }
 });
 </script>

@@ -11,12 +11,7 @@
         <ActionsSocialPost @create-success="checkUnfinishedPost" />
         <TableSocialPost />
       </n-space>
-      <Empty
-        v-else
-        :title="$t('social.post.empty')"
-        :info="$t('social.post.emptyInfo')"
-        icon="logo/grill-chat"
-      >
+      <Empty v-else :title="$t('social.post.empty')" :info="$t('social.post.emptyInfo')" icon="logo/grill-chat">
         <Btn type="primary" @click="modalCreatePostVisible = true">
           {{ $t('social.post.createFirst') }}
         </Btn>
@@ -24,10 +19,7 @@
 
       <!-- Modal - Create Post -->
       <modal v-model:show="modalCreatePostVisible" :title="$t('social.post.new')">
-        <FormSocialPost
-          @submit-success="modalCreatePostVisible = false"
-          @create-success="checkUnfinishedPost"
-        />
+        <FormSocialPost @submit-success="modalCreatePostVisible = false" @create-success="checkUnfinishedPost" />
       </modal>
     </slot>
     <template v-if="postStore.hasPosts" #learn>
@@ -37,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t } = useI18n();
 const dataStore = useDataStore();
 const postStore = usePostStore();
 
@@ -47,7 +39,7 @@ const headingRef = ref<HTMLElement>();
 const modalCreatePostVisible = ref<boolean | null>(false);
 
 useHead({
-  title: $i18n.t('dashboard.nav.social'),
+  title: t('dashboard.nav.social'),
 });
 
 const scrollStyle = computed(() => {
@@ -56,20 +48,17 @@ const scrollStyle = computed(() => {
   };
 });
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await postStore.getPosts();
-      checkUnfinishedPost();
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  await postStore.getPosts();
+  checkUnfinishedPost();
 
-      /** Set first chat as default */
-      if (!postStore.active?.postId && postStore.items.length) {
-        postStore.active = postStore.items[0];
-      }
+  /** Set first chat as default */
+  if (!postStore.active?.postId && postStore.items.length) {
+    postStore.active = postStore.items[0];
+  }
 
-      pageLoading.value = false;
-    });
-  }, 100);
+  pageLoading.value = false;
 });
 
 onUnmounted(() => {
@@ -86,11 +75,7 @@ function checkUnfinishedPost() {
   }
 
   postInterval = setInterval(async () => {
-    const posts = await postStore.fetchPosts(
-      postStore.pagination.page,
-      postStore.pagination.pageSize,
-      false
-    );
+    const posts = await postStore.fetchPosts(postStore.pagination.page, postStore.pagination.pageSize, false);
     const post = posts.find(item => item.post_uuid === unfinishedPost.post_uuid);
     if (!post || post.status >= SocialStatus.ACTIVE) {
       clearInterval(postInterval);

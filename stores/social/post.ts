@@ -97,10 +97,11 @@ export const usePostStore = defineStore('post', {
       limit: number = PAGINATION_LIMIT,
       showLoader: boolean = true
     ): Promise<PostInterface[]> {
-      this.loading = showLoader;
+      const dataStore = useDataStore();
+      if (!dataStore.projectUuid) return [];
 
+      this.loading = showLoader;
       try {
-        const dataStore = useDataStore();
         const params = parseArguments({
           limit,
           page,
@@ -135,10 +136,11 @@ export const usePostStore = defineStore('post', {
       limit: number = PAGINATION_LIMIT,
       showLoader: boolean = true
     ): Promise<PostInterface[]> {
-      this.archive.loading = showLoader;
+      const dataStore = useDataStore();
+      if (!dataStore.projectUuid) return [];
 
+      this.archive.loading = showLoader;
       try {
-        const dataStore = useDataStore();
         const params = parseArguments({
           limit,
           page,
@@ -177,7 +179,8 @@ export const usePostStore = defineStore('post', {
         sessionStorage.setItem(LsCacheKeys.POST, Date.now().toString());
 
         return res.data;
-      } catch (error: any) {
+      } catch (e: ApiError | any) {
+        console.log(e);
         this.active = {} as PostInterface;
       }
       return {} as PostInterface;

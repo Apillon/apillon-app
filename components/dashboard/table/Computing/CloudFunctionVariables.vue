@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NInput } from 'naive-ui';
+import { NDropdown, NInput } from 'naive-ui';
 
 const { t } = useI18n();
 const cloudFunctionStore = useCloudFunctionStore();
@@ -88,12 +88,7 @@ const createColumns = (): NDataTableColumns<EnvVariable> => {
           NDropdown,
           { options: dropdownOptions.value, trigger: 'click' },
           {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
+            default: () => h(resolveComponent('BtnActions')),
           }
         );
       },
@@ -147,7 +142,7 @@ const dropdownOptions = computed(() => {
 /** On row click */
 const rowProps = (row: EnvVariable) => {
   return {
-    onClick: (e: Event) => {
+    onClick: (_: Event) => {
       currentRow.value = row;
     },
   };

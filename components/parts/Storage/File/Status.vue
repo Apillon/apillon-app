@@ -1,11 +1,6 @@
 <template>
   <n-tag v-bind="$attrs" :type="getFileStatus(fileStatus)" :bordered="isPending" size="tiny" round>
-    <n-space
-      :class="isPending ? 'text-body' : 'text-bg-dark'"
-      :size="0"
-      align="center"
-      :wrap="false"
-    >
+    <n-space :class="isPending ? 'text-body' : 'text-bg-dark'" :size="0" align="center" :wrap="false">
       <span v-if="isPending" class="mx-1 uppercase">{{ $t('general.pending') }}</span>
       <span v-else class="mx-1 uppercase">{{ $t(`storage.file.status.${fileStatus}`) }}</span>
       <AnimationTyping v-if="isPending" />

@@ -1,6 +1,7 @@
-import { useAccount, useChains, useClient, useSwitchChain, useConnectorClient, useAccountEffect } from '@wagmi/vue';
+import { useAccount, useClient, useSwitchChain, useConnectorClient, useAccountEffect } from '@wagmi/vue';
 import { getContract } from 'viem';
-import { moonbeam, moonbaseAlpha } from '@wagmi/vue/chains';
+import { moonbeam } from '@wagmi/vue/chains';
+import { abi } from '~/lib/config/abi';
 const nuxtConfig = useRuntimeConfig();
 
 const contractAddress = nuxtConfig.public.nctrContract as `0x${string}`;
@@ -13,8 +14,7 @@ const loading = ref(false);
 const transactionHash = ref<`0x${string}` | undefined>(undefined);
 
 export default function useContract() {
-  const { chains } = useChains();
-  const { address, isConnected } = useAccount();
+  const { address } = useAccount();
   const { switchChain } = useSwitchChain();
   const publicClient = useClient();
   const { data: walletClient, refetch } = useConnectorClient();
@@ -40,21 +40,24 @@ export default function useContract() {
   }
 
   // Contract Interaction
-  async function getClaimStatus() {
+  async function getClaimStatus(): Promise<boolean> {
     try {
       return (await contract.value.read.walletClaimed([savedWallet.value])) as boolean;
     } catch (e) {
-      return e;
+      console.error(e);
     }
+    return false;
   }
   // amount timestamp signature
   async function claimTokens(amount, timestamp, signature) {
+    if (!publicClient.value) return null;
     claimError.value = false;
     claimSuccess.value = false;
+
     try {
       const gas = await publicClient.value.estimateContractGas({
         address: contractAddress,
-        abi,
+        abi: abi,
         functionName: 'claim',
         args: [amount, timestamp, signature],
         account: address.value,
@@ -72,6 +75,7 @@ export default function useContract() {
   }
 
   async function pollTransactionStatus(tx: `0x${string}`) {
+    if (!publicClient.value) return null;
     loading.value = true;
     try {
       await publicClient.value.waitForTransactionReceipt({ hash: tx });
@@ -104,7 +108,6 @@ export default function useContract() {
     loading,
     transactionHash,
     usedChain,
-    chain,
     address,
   };
 }

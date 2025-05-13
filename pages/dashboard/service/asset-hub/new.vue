@@ -1,15 +1,12 @@
 <template>
   <Dashboard :loading="pageLoading" :mainnet="assetHubStore.mainnet">
     <template #heading>
-      <HeaderAssetHub
-        back-link="/dashboard/service/asset-hub/"
-        :title="$t('dashboard.service.assetHub.createAsset')"
-      />
+      <HeaderAssetHub back-link="/dashboard/service/asset-hub/" :title="$t('assetHub.createAsset')" />
     </template>
 
-    <div class="grid grid-cols-assetHub justify-center gap-4 lg:gap-8 pb-8 mx-auto">
+    <div class="mx-auto grid grid-cols-assetHub justify-center gap-4 pb-8 lg:gap-8">
       <FormAssetHub
-        class="flex-auto w-full min-w-40 max-w-xl"
+        class="w-full min-w-40 max-w-xl flex-auto"
         @create-success="(id, network) => refreshAssets(id, network)"
         @close="router.push({ name: 'dashboard-service-asset-hub' })"
       />

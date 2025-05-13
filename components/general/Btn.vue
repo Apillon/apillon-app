@@ -7,7 +7,7 @@
     :href="href || undefined"
     :target="href ? '_blank' : undefined"
     :class="btnClass"
-    :type="!href && !to ? (type === 'secondary' ? 'primary' : type) : ''"
+    :type="!href && !to ? (type === 'secondary' ? 'tertiary' : type) : ''"
     :size="size"
     :disabled="disabled"
     :bordered="type === 'secondary' || type === 'error' ? true : false"
@@ -16,7 +16,7 @@
     @click="onClick"
   >
     <span v-if="loading" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-      <Spinner />
+      <Spinner :size="size === 'large' ? 36 : 24" />
     </span>
     <span :class="[innerClass, { 'opacity-0': loading }]">
       <slot />
@@ -37,16 +37,16 @@
     <n-button
       v-bind="$attrs"
       :class="btnClass"
-      :type="type === 'secondary' ? 'primary' : (type as NButtonType)"
+      :type="type === 'secondary' ? 'tertiary' : (type as NButtonType)"
       :size="size"
       :disabled="disabled"
-      :bordered="type === 'secondary' || type === 'error' ? true : false"
-      :ghost="type === 'secondary' || type === 'error' ? true : false"
-      :quaternary="quaternary || type === 'builders' ? true : false"
+      :bordered="type === 'secondary' || type === 'error'"
+      :ghost="type === 'secondary' || type === 'error'"
+      :quaternary="quaternary || type === 'builders'"
       @click="onClick"
     >
       <span v-if="loading" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-        <Spinner />
+        <Spinner :size="size === 'large' ? 36 : 24" />
       </span>
       <span :class="[innerClass, { 'opacity-0': loading }]">
         <slot />
@@ -57,9 +57,9 @@
 
 <script lang="ts" setup>
 import { NButton } from 'naive-ui';
-import { type Type as NButtonType, type Size as ButtonSize } from 'naive-ui/es/button/src/interface';
+import type { Type as NButtonType, Size as ButtonSize } from 'naive-ui/es/button/src/interface';
 
-export type ButtonType = NButtonType | 'secondary' | 'builders' | 'link';
+export type ButtonType = NButtonType | 'secondary' | 'builders' | 'link' | 'text';
 
 const props = defineProps({
   href: { type: String, default: null },
@@ -86,12 +86,14 @@ const btnClass = computed(() => {
   return [
     {
       'w-full': props.type !== 'link' && props.size === 'large',
-      'text-primary underline': props.type === 'link',
+      'min-w-40': ['primary', 'secondary'].includes(props.type) && props.size === 'small',
+      underline: props.type === 'link',
       'font-bold': props.type !== 'link',
       'pointer-events-none pointer-default': props.disabled || props.loading,
-      'opacity-60': props.disabled,
-      'border-dark': props.type == 'secondary',
-      'hover-bounce': props.type !== 'link' && props.type !== 'builders',
+      'opacity-60 !text-disabled hover:!text-disabled': props.disabled,
+      'border-lighter': props.type == 'secondary',
+      'text-yellow hover:!text-yellow hover:underline': props.type == 'text',
+      'hover-bounce': !['link', 'builders', 'text'].includes(props.type),
       quaternary: props.quaternary || props.type === 'builders',
       locked: isBtnLocked.value,
     },

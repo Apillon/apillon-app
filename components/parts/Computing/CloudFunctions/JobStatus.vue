@@ -1,9 +1,7 @@
 <template>
   <pill v-bind="$attrs" :type="jobStatusType(jobStatus)">
     <n-space :size="0" align="center" :wrap="false">
-      <span class="mx-1 uppercase">{{
-        $t(`computing.cloudFunctions.job.status.${jobStatus}`)
-      }}</span>
+      <span class="mx-1 uppercase">{{ $t(`computing.cloudFunctions.job.status.${jobStatus}`) }}</span>
       <AnimationTyping v-if="jobStatus < AcurastJobStatus.MATCHED" />
     </n-space>
   </pill>

@@ -17,7 +17,7 @@
 
 <script lang="ts" setup>
 import { useDebounceFn } from '@vueuse/core';
-import { NButton, NDropdown } from 'naive-ui';
+import { NDropdown } from 'naive-ui';
 
 const props = defineProps({
   archive: { type: Boolean, default: false },
@@ -28,19 +28,9 @@ const message = useMessage();
 const authStore = useAuthStore();
 const postStore = usePostStore();
 const { deleteItem } = useDelete();
-
-/** Available columns - show/hide column */
-const selectedColumns = ref(['postId', 'title', 'body', 'hubName', 'tags', 'post_uuid', 'status']);
-const availableColumns = ref([
-  { value: 'postId', label: t('social.post.postId') },
-  { value: 'title', label: t('social.post.title') },
-  { value: 'body', label: t('social.post.body') },
-  { value: 'hubName', label: t('social.chat.name') },
-  { value: 'tags', label: t('social.post.tags') },
-  { value: 'post_uuid', label: t('social.post.uuid') },
-  { value: 'createTime', label: t('social.post.date') },
-  { value: 'status', label: t('general.status') },
-]);
+const { availableColumns, selectedColumns, initTableColumns, handleColumnChange } = useTable(
+  LsTableColumnsKeys.SOCIAL_POST
+);
 
 const columns = computed<NDataTableColumns<PostInterface>>(() => {
   return [
@@ -157,12 +147,7 @@ const columns = computed<NDataTableColumns<PostInterface>>(() => {
             trigger: 'click',
           },
           {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
+            default: () => h(resolveComponent('BtnActions')),
           }
         );
       },
@@ -237,10 +222,7 @@ onMounted(() => {
     postStore.updateSettings(`${spaceId}`, `${postId}`);
   }
 
-  /** Check if selected columns are stored in LS */
-  if (localStorage.getItem(LsTableColumnsKeys.SOCIAL_POST)) {
-    selectedColumns.value = JSON.parse(localStorage.getItem(LsTableColumnsKeys.SOCIAL_POST) || '');
-  }
+  initTableColumns(columns.value);
 });
 
 /** Search posts */
@@ -286,11 +268,6 @@ async function selectPost() {
     /** Expand selected row */
     expandedRows.value = expandedRows.value.includes(postId) ? [] : [postId];
   }
-}
-
-function handleColumnChange(selectedValues: Array<string>) {
-  selectedColumns.value = selectedValues;
-  localStorage.setItem(LsTableColumnsKeys.SOCIAL_POST, JSON.stringify(selectedColumns.value));
 }
 
 async function deletePost() {

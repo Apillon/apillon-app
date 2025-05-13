@@ -13,16 +13,16 @@ export default function useIndexer() {
 
     const indexerUuid = params?.id ? params?.id : params?.slug;
     if (!indexerUuid) {
-      router.push({ name: 'dashboard-service-indexer' });
+      router.push({ name: 'dashboard-service-indexing' });
     }
 
-    await sleep(10);
-    await Promise.all(Object.values(dataStore.promises));
+    await dataStore.waitOnPromises();
 
-    const indexer = await indexerStore.getIndexer(`${indexerUuid}`);
+    const indexer = await indexerStore.items.find(i => i.indexer_uuid === indexerUuid);
+    // const indexer = await indexerStore.getIndexer(`${indexerUuid}`);
 
     if (!indexer) {
-      router.push({ name: 'dashboard-service-indexer' });
+      router.push({ name: 'dashboard-service-indexing' });
       return;
     }
 

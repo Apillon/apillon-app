@@ -8,7 +8,7 @@ type Deployment = {
   interval: Interval;
   progress: number;
   service: FileListItemType | JobInterface | ContractInterface | null;
-  title: String | null;
+  title: string | null;
 };
 type Deployments = Record<IntervalType, Deployment>;
 

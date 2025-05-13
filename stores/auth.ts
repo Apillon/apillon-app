@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
+import { getWalletBySource } from '~/lib/wallet/wallets';
 
 export const AuthLsKeys = {
   AUTH: 'al_auth',
   EMAIL: 'al_email',
   WALLET: 'al_wallet',
   CAPTCHA: 'al_captcha',
-  PROSOPO: 'al_prosopo',
 };
 
 export const useAuthStore = defineStore('auth', {
@@ -72,7 +72,6 @@ export const useAuthStore = defineStore('auth', {
       this.wallet.name = '';
       localStorage.removeItem(AuthLsKeys.AUTH);
       localStorage.removeItem(AuthLsKeys.WALLET);
-      localStorage.removeItem(DataLsKeys.CURRENT_PROJECT_ID);
     },
 
     saveEmail(email: string) {
@@ -110,9 +109,9 @@ export const useAuthStore = defineStore('auth', {
 
     getCaptchaLS(): Record<string, any> {
       try {
-        const data = JSON.parse(localStorage.getItem(AuthLsKeys.PROSOPO) || '{}');
+        const data = JSON.parse(localStorage.getItem(AuthLsKeys.CAPTCHA) || '{}');
         return typeof data === 'object' ? data : {};
-      } catch (error) {
+      } catch (error: ApiError | any) {
         console.warn(error);
       }
       return {};
@@ -134,7 +133,7 @@ export const useAuthStore = defineStore('auth', {
         ts: Date.now().toString(),
         jwt: captchaJwt,
       };
-      localStorage.setItem(AuthLsKeys.PROSOPO, JSON.stringify(data));
+      localStorage.setItem(AuthLsKeys.CAPTCHA, JSON.stringify(data));
     },
 
     removeCaptchaJwt(email?: string) {
@@ -142,11 +141,11 @@ export const useAuthStore = defineStore('auth', {
         const data = this.getCaptchaLS();
         const emails = Object.keys(data);
         if (emails.includes(email)) {
-          delete data[email];
-          localStorage.setItem(AuthLsKeys.PROSOPO, JSON.stringify(data));
+          const { [email]: _, ...newData } = data;
+          localStorage.setItem(AuthLsKeys.CAPTCHA, JSON.stringify(newData));
         }
       } else {
-        localStorage.removeItem(AuthLsKeys.PROSOPO);
+        localStorage.removeItem(AuthLsKeys.CAPTCHA);
       }
     },
 
@@ -180,10 +179,11 @@ export const useAuthStore = defineStore('auth', {
         }, 10);
 
         return res;
-      } catch (error) {
+      } catch (e) {
+        console.error(e);
+
         /** On error - logout */
         this.logout();
-
         const router = useRouter();
         router.push('/login');
 
@@ -200,7 +200,7 @@ export const useAuthStore = defineStore('auth', {
         const res = await $api.get<WalletMsgResponse>(endpoints.walletMsg);
 
         return res.data;
-      } catch (error) {
+      } catch (error: ApiError | any) {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }

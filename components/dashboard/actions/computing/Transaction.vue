@@ -2,24 +2,14 @@
   <n-space v-bind="$attrs" justify="space-between">
     <div class="w-[20vw] min-w-[11rem] max-w-xs">
       <!-- Search transactions
-      <n-input
-        v-model:value="transactionStore.search"
-        type="text"
-        name="search"
-        size="small"
-        :placeholder="$t('general.search')"
-        clearable
-      >
-        <template #prefix>
-          <span class="icon-search text-2xl"></span>
-        </template>
-      </n-input>    -->
+      <FormFieldSearch v-model:value="transactionStore.search"/>    
+      -->
     </div>
 
     <n-space size="large">
       <!-- Encrypt file -->
       <n-button
-        size="small"
+        size="medium"
         :color="uploadActive ? colors.primary : ''"
         :disabled="authStore.isAdmin()"
         @click="uploadActive = !uploadActive"
@@ -31,7 +21,7 @@
       <!-- Open Bucket -->
       <n-button
         v-if="contractStore.active.bucket_uuid"
-        size="small"
+        size="medium"
         :loading="loadingBucket"
         @click="openBucket(contractStore.active.bucket_uuid)"
       >
@@ -40,7 +30,7 @@
       </n-button>
 
       <!-- Transfer contract -->
-      <n-button size="small" :disabled="actionsDisabled" @click="emit('transfer')">
+      <n-button size="medium" :disabled="actionsDisabled" @click="emit('transfer')">
         {{ $t('computing.contract.transfer') }}
       </n-button>
 
@@ -48,7 +38,7 @@
 
       <!-- Refresh contracts -->
       <n-button
-        size="small"
+        size="medium"
         :loading="transactionStore.loading"
         @click="
           transactionStore.fetchTransactions(contractStore.active.contract_uuid, {
@@ -69,7 +59,7 @@
 
 <script lang="ts" setup>
 import { ServiceTypeName } from '~/lib/types/service';
-import colors from '~/tailwind.colors';
+import { colors } from '~/tailwind.config';
 
 const props = defineProps({
   showUpload: { type: Boolean, default: false },

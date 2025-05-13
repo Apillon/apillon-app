@@ -6,6 +6,7 @@
       :bordered="false"
       role="dialog"
       aria-modal="true"
+      size="large"
     >
       <template #header-extra>
         <button type="button" class="n-base-close n-card__close" @click="closeModal">

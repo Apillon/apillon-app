@@ -39,9 +39,7 @@ export const useComputingTransactionStore = defineStore('computingTransaction', 
       showLoader = true
     ): Promise<ComputingTransactionInterface[]> {
       const dataStore = useDataStore();
-      if (!dataStore.projectUuid) {
-        return [];
-      }
+      if (!dataStore.projectUuid) return [];
 
       this.loading = showLoader;
 
@@ -50,10 +48,7 @@ export const useComputingTransactionStore = defineStore('computingTransaction', 
         params.project_uuid = dataStore.projectUuid;
         params.contract_uuid = contractUuid;
 
-        const res = await $api.get<ComputingTransactionResponse>(
-          endpoints.contractTransactions(contractUuid),
-          params
-        );
+        const res = await $api.get<ComputingTransactionResponse>(endpoints.contractTransactions(contractUuid), params);
         this.items = res.data.items;
         this.pagination.itemCount = res.data.total;
         this.pagination.page = args?.page || this.pagination.page;

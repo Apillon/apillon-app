@@ -46,6 +46,19 @@ export enum WebsiteDomainStatus {
   INVALID = 10,
 }
 
+/** Hosintg Create Website step */
+export enum WebsiteCreateStep {
+  TYPE = 1,
+  FORM = 2,
+  REVIEW = 3,
+  DEPLOYING = 4,
+  DEPLOYED = 5,
+}
+export enum WebsiteType {
+  BASIC = 'basic',
+  GITHUB = 'github',
+}
+
 declare global {
   /**
    * Webhook
@@ -72,6 +85,7 @@ declare global {
     domainChangeDate: string | null;
     domainStatus: number;
     ipnsProduction: string | null;
+    lastDeploymentStatus: number | null;
     nftCollectionUuid: string | null;
     source: WebsiteSource;
     website_uuid: string;

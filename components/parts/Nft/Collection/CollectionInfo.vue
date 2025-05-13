@@ -16,20 +16,7 @@
         <div v-else class="absolute left-6 top-10 h-28 w-28 rounded-full bg-bg-dark" />
       </template>
     </div>
-    <n-table class="plain" :bordered="false" single-line>
-      <tbody>
-        <tr v-for="(item, key) in data" :key="key">
-          <td :class="{ '!border-b-0': key + 1 === data.length }">
-            <span class="text-white lg:whitespace-nowrap">{{ item.label }}</span>
-          </td>
-          <td :class="{ '!border-b-0': key + 1 === data.length }">
-            <TableLink v-if="item.link && item.value" class="w-full" :link="item.link" :text="item.value" />
-            <TableEllipsis v-else-if="item.copy" class="w-full justify-between" :text="item.value" />
-            <p v-else class="w-full">{{ item.value }}</p>
-          </td>
-        </tr>
-      </tbody>
-    </n-table>
+    <TableInfo :data="data" />
   </div>
 </template>
 

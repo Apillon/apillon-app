@@ -19,14 +19,10 @@
       </Heading>
     </template>
     <slot>
-      <n-card
-        size="small"
-        class="card mt-8 !border-bg-lighter max-w-2xl"
-        :title="$t('storage.shortUrl.generateShortLink')"
-      >
+      <n-card class="mt-8 max-w-2xl" :title="$t('storage.shortUrl.generateShortLink')">
         <template #header-extra
           ><Btn
-            class="inline-block mb-[-2px]"
+            class="mb-[-2px] inline-block"
             type="link"
             href="https://wiki.apillon.io/build/3-hosting-api.html#generate-short-url"
             target="_blank"

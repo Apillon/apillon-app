@@ -5,10 +5,7 @@
         <slot>
           <div>
             <h2 class="whitespace-nowrap">{{ $t('dashboard.nav.projectSettings') }}</h2>
-            <TableEllipsis
-              :prefix="$t('project.uuid')"
-              :text="dataStore.project.active.project_uuid"
-            />
+            <TableEllipsis :prefix="$t('project.uuid')" :text="dataStore.project.active.project_uuid" />
           </div>
         </slot>
 
@@ -35,12 +32,7 @@
         </div>
 
         <!-- Delete project -->
-        <template
-          v-if="
-            dataStore.isUserOwner &&
-            isFeatureEnabled(Feature.PROJECT_DELETE, authStore.getUserRoles())
-          "
-        >
+        <template v-if="dataStore.isUserOwner && isFeatureEnabled(Feature.PROJECT_DELETE, authStore.getUserRoles())">
           <n-h5 class="mb-0" prefix="bar">{{ $t('project.delete') }}</n-h5>
           <p class="mb-6">{{ $t('project.deleteText') }}</p>
           <Btn type="primary">{{ $t('project.deleteRequest') }}</Btn>
@@ -51,11 +43,11 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t } = useI18n();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 
 useHead({
-  title: $i18n.t('dashboard.nav.projectSettings'),
+  title: t('dashboard.nav.projectSettings'),
 });
 </script>

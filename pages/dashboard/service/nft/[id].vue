@@ -12,7 +12,7 @@
           </div>
 
           <div class="card max-w-64 px-6 py-4">
-            <h6 class="mb-2">{{ t('general.actions') }}</h6>
+            <h6 class="mb-2">{{ $t('general.actions') }}</h6>
             <ActionsNftCollection
               @add-nfts="openModalAddNfts"
               @mint="modalMintCollectionVisible = true"
@@ -30,7 +30,7 @@
           >
             <template #tab>
               <span class="ml-2 text-sm text-white">
-                {{ t('nft.transaction.title') }}
+                {{ $t('nft.transaction.title') }}
               </span>
             </template>
             <slot>
@@ -43,7 +43,7 @@
           >
             <template #tab>
               <span class="ml-2 text-sm text-white">
-                {{ t('nft.metadata.deployTitle') }}
+                {{ $t('nft.metadata.deployTitle') }}
               </span>
             </template>
             <slot>
@@ -56,16 +56,16 @@
           <n-tab-pane :name="Tabs.NFTs">
             <template #tab>
               <span class="ml-2 text-sm text-white">
-                {{ t('dashboard.nav.nft') }}
+                {{ $t('dashboard.nav.nft') }}
               </span>
             </template>
             <slot>
               <div v-if="collectionStore.active.collectionStatus === CollectionStatus.CREATED">
-                <p class="my-4">{{ t('nft.transaction.empty') }}</p>
+                <p class="my-4">{{ $t('nft.transaction.empty') }}</p>
                 <!-- Add NFT -->
                 <n-button @click="openModalAddNfts">
                   <span class="icon-add mr-2 text-xl text-primary"></span>
-                  <span class="text-primary">{{ t('nft.add') }}</span>
+                  <span class="text-primary">{{ $t('nft.add') }}</span>
                 </n-button>
               </div>
               <!-- Links to NFT templates -->
@@ -75,14 +75,12 @@
               />
               <div v-else-if="collectionStore.active.websiteUuid">
                 <p class="my-4">
-                  {{ t('nft.collection.website-connected') }}
+                  {{ $t('nft.collection.websiteConnected') }}
                 </p>
 
-                <NuxtLink :to="`/dashboard/service/hosting/${collectionStore.active.websiteUuid}/deployments`">
-                  <Btn type="primary">
-                    {{ t('nft.collection.show-website') }}
-                  </Btn>
-                </NuxtLink>
+                <Btn type="primary" :to="`/dashboard/service/hosting/${collectionStore.active.websiteUuid}`">
+                  {{ $t('nft.collection.showWebsite') }}
+                </Btn>
               </div>
             </slot>
           </n-tab-pane>
@@ -126,15 +124,15 @@
         />
       </modal>
 
-      <!-- Modal - Add NFT -->
+      <!-- Modal - Add NFT
       <modal v-model:show="modalAddNftVisible" class="hide-header">
         <FormNftAmountOption v-if="collectionStore.nftStep === NftCreateStep.AMOUNT" @submit="onAmountSelected" />
         <FormNftUpload v-else-if="collectionStore.nftStep === NftCreateStep.MULTIPLE" modal />
-      </modal>
+      </modal> -->
 
       <ModalTransaction
         v-if="transactionHash"
-        :transactionHash="transactionHash"
+        :transaction-hash="transactionHash"
         :chain-id="collectionStore.active.chain"
         @close="transactionHash = ''"
       />
@@ -143,8 +141,6 @@
 </template>
 
 <script lang="ts" setup>
-import { CollectionStatus, ChainType, NftCreateStep } from '~/lib/types/nft';
-
 enum Tabs {
   TRANSACTIONS = 'transactions',
   DEPLOYS = 'deploys',
@@ -156,8 +152,8 @@ const router = useRouter();
 const { params } = useRoute();
 const storageStore = useStorageStore();
 const paymentStore = usePaymentStore();
+const metadataStore = useMetadataStore();
 const collectionStore = useCollectionStore();
-const { openAddNft } = useCollection();
 
 const pageLoading = ref<boolean>(true);
 const modalMintCollectionVisible = ref<boolean | null>(false);
@@ -187,7 +183,7 @@ onMounted(async () => {
 
   /** Reset state if user opens different collection */
   if (collectionUuid.value !== collectionStore.active?.collection_uuid) {
-    collectionStore.resetMetadata();
+    metadataStore.resetMetadata();
   }
 
   if (!currentCollection?.collection_uuid) {
@@ -327,12 +323,6 @@ function checkUnfinishedTransactions() {
 }
 
 function openModalAddNfts() {
-  collectionStore.nftStep = NftCreateStep.AMOUNT;
   modalAddNftVisible.value = true;
-}
-function onAmountSelected(amount: number) {
-  if (amount === NftAmount.SINGLE) {
-    openAddNft(collectionStore.active.collection_uuid);
-  }
 }
 </script>

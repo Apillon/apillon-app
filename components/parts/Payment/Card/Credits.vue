@@ -1,13 +1,8 @@
 <template>
-  <n-card
-    class="card-dark"
-    size="small"
-    :bordered="false"
-    :title="$t('dashboard.credits.currentCredits')"
-  >
-    <div class="h-full flex flex-col justify-between">
-      <div class="flex gap-4 items-center mb-6">
-        <span class="inline-block icon-credits text-blue text-xl align-text-top"></span>
+  <n-card class="card-dark" :bordered="false" :title="$t('dashboard.credits.currentCredits')">
+    <div class="flex h-full flex-col justify-between">
+      <div class="mb-6 flex items-center gap-4">
+        <span class="icon-credits inline-block align-text-top text-xl text-blue"></span>
         <h3>
           {{ formatNumber(paymentStore.credit.balance || 0) }}
           {{ $t('dashboard.credits.credits') }}
@@ -28,7 +23,7 @@
   <modal v-model:show="modalCreditPackagesVisible" size="large">
     <div
       v-drag-scroll.options="{ direction: 'x' }"
-      class="tablet:scrollable tablet:overflow-x-auto lg:!cursor-default pb-1"
+      class="tablet:scrollable pb-1 tablet:overflow-x-auto lg:!cursor-default"
     >
       <div class="flex gap-12">
         <PaymentCreditPackage
@@ -43,6 +38,8 @@
 </template>
 
 <script lang="ts" setup>
+import { formatNumber } from '~/lib/utils/helpers';
+
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();

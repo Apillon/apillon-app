@@ -69,14 +69,14 @@ export const useChatStore = defineStore('chat', {
       this.loading = showLoader;
 
       const dataStore = useDataStore();
-      const projectUuid = await dataStore.getProjectUuid();
+      const project_uuid = await dataStore.getProjectUuid();
 
       try {
         const params = parseArguments({
           limit,
           page,
           search: this.search,
-          project_uuid: dataStore.projectUuid,
+          project_uuid,
         });
 
         const res = await $api.get<ChatsResponse>(endpoints.spaces(), params);
@@ -109,14 +109,14 @@ export const useChatStore = defineStore('chat', {
       this.archive.loading = showLoader;
 
       const dataStore = useDataStore();
-      const projectUuid = await dataStore.getProjectUuid();
+      const project_uuid = await dataStore.getProjectUuid();
 
       try {
         const params = parseArguments({
           limit,
           page,
+          project_uuid,
           search: this.archive.search,
-          project_uuid: dataStore.projectUuid,
           status: SqlModelStatus.ARCHIVED,
         });
 
@@ -154,7 +154,8 @@ export const useChatStore = defineStore('chat', {
         sessionStorage.setItem(LsCacheKeys.CHAT, Date.now().toString());
 
         return res.data;
-      } catch (error: any) {
+      } catch (e: ApiError | any) {
+        console.error(e);
         this.active = {} as ChatInterface;
       }
       return {} as ChatInterface;

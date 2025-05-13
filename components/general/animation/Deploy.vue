@@ -3,10 +3,10 @@
     <div class="text-center">
       <AnimationLoader :size="128" />
       <h2 v-if="title">{{ title }}</h2>
-      <h2>{{ t('nft.deploy.deploying') }}</h2>
+      <h2 v-else>{{ $t('nft.deploy.deploying') }}</h2>
       <p class="mb-8 whitespace-pre-line text-body">
         <span v-if="content"> {{ content }} </span>
-        <span v-else> {{ t('nft.deploy.metadata') }} </span>
+        <span v-else> {{ $t('nft.deploy.metadata') }} </span>
       </p>
     </div>
   </div>
@@ -17,6 +17,4 @@ defineProps({
   title: { type: String, default: '' },
   content: { type: String, default: '' },
 });
-
-const { t } = useI18n();
 </script>

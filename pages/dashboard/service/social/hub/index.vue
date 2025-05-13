@@ -58,19 +58,16 @@ const scrollStyle = computed(() => {
   };
 });
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await chatStore.getChats();
-      checkUnfinishedChat();
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  await chatStore.getChats();
+  checkUnfinishedChat();
 
-      /** Set first Hub as default */
-      if (!chatStore.active?.spaceId && chatStore.items.length) {
-        chatStore.active = chatStore.items[0];
-      }
-      pageLoading.value = false;
-    });
-  }, 100);
+  /** Set first Hub as default */
+  if (!chatStore.active?.spaceId && chatStore.items.length) {
+    chatStore.active = chatStore.items[0];
+  }
+  pageLoading.value = false;
 });
 
 onUnmounted(() => {

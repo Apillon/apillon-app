@@ -1,17 +1,6 @@
 <template>
-  <n-tag
-    v-bind="$attrs"
-    :type="getUploadSessionStatus(status)"
-    :bordered="isCreated"
-    size="tiny"
-    round
-  >
-    <n-space
-      :class="isCreated ? 'text-body' : 'text-bg-dark'"
-      :size="0"
-      align="center"
-      :wrap="false"
-    >
+  <n-tag v-bind="$attrs" :type="getUploadSessionStatus(status)" :bordered="isCreated" size="tiny" round>
+    <n-space :class="isCreated ? 'text-body' : 'text-bg-dark'" :size="0" align="center" :wrap="false">
       <span class="mx-1 uppercase">{{ $t(`storage.session.status.${status}`) }}</span>
       <AnimationTyping v-if="status < FileUploadSessionStatus.FINISHED" />
     </n-space>

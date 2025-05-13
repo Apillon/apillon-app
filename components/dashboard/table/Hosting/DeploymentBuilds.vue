@@ -18,9 +18,8 @@ defineProps({
   deployments: { type: Array<DeploymentBuildInterface>, default: [] },
 });
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const deploymentStore = useDeploymentStore();
-const DeploymentBuildStatus = resolveComponent('HostingDeploymentBuildStatus');
 
 const pagination = reactive(createPagination(false));
 
@@ -34,22 +33,22 @@ const createColumns = (): NDataTableColumns<DeploymentBuildInterface> => {
       },
     },
     {
-      title: $i18n.t('hosting.deploy.build-table.build-status'),
+      title: t('hosting.deploy.build-table.build-status'),
       key: 'buildStatus',
       render(row) {
-        return h(DeploymentBuildStatus, { buildStatus: row.buildStatus }, '');
+        return h(resolveComponent('HostingDeploymentBuildStatus'), { buildStatus: row.buildStatus }, '');
       },
     },
     {
       key: 'createTime',
-      title: $i18n.t('dashboard.createTime'),
+      title: t('dashboard.createTime'),
       render(row: DeploymentBuildInterface) {
         return h('span', {}, { default: () => dateTimeToDateAndTime(row.createTime || '') });
       },
     },
     {
       key: 'finishedTime',
-      title: $i18n.t('hosting.deploy.build-table.finished-time'),
+      title: t('hosting.deploy.build-table.finished-time'),
       render(row: DeploymentBuildInterface) {
         return h('span', {}, { default: () => dateTimeToDateAndTime(row.finishedTime || '') });
       },

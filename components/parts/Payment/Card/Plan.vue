@@ -28,7 +28,7 @@
           }}
         </span>
       </div>
-      <div class="grid-cols-fit200 grid gap-4">
+      <div class="grid grid-cols-fit200 gap-4">
         <Btn
           :class="btnClass"
           :type="btnType"
@@ -89,9 +89,10 @@
 </template>
 
 <script lang="ts" setup>
-import type { Type as NButtonType } from 'naive-ui/es/button/src/interface';
 import type { ButtonType } from '~/components/general/Btn.vue';
-import colors from '~/tailwind.colors';
+import { formatPrice } from '~/lib/utils/helpers';
+import { dateTimeToDate } from '~/lib/utils/dates';
+import { colors } from '~/tailwind.config';
 
 defineProps({
   showCard: { type: Boolean, default: true },

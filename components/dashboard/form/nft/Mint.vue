@@ -88,7 +88,7 @@ const { addressLabel } = useCollection();
 const { getAllTokens } = useNftContract();
 
 const loading = ref<boolean>(false);
-const mintedTokens = ref<Number[]>([]);
+const mintedTokens = ref<number[]>([]);
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormNftMint>({
   receivingAddress: '',
@@ -109,10 +109,6 @@ const rules: NFormRules = {
     { validator: validateIdsLength, message: t('validation.nft.idsToMintMax') },
   ],
 };
-
-const isSubstrate = computed(
-  () => props.collection.chainType === ChainType.SUBSTRATE || props.collection.chain === SubstrateChain.UNIQUE
-);
 
 function validateQuantity(_: FormItemRule, value: number): boolean {
   return (

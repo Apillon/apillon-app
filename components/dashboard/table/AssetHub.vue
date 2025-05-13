@@ -11,7 +11,7 @@
   />
 
   <!-- Modal - Edit asst -->
-  <modal v-model:show="modalEditVisible" :title="$t('dashboard.service.assetHub.edit')">
+  <modal v-model:show="modalEditVisible" :title="$t('assetHub.edit')">
     <FormAssetHub
       v-if="currentRow?.id"
       :asset-id="currentRow.id"
@@ -23,7 +23,7 @@
 
 <script lang="ts" setup>
 import { useDebounceFn } from '@vueuse/core';
-import { NButton, NDropdown } from 'naive-ui';
+import { NDropdown } from 'naive-ui';
 
 const props = defineProps({
   owned: { type: Boolean, default: false },
@@ -31,55 +31,53 @@ const props = defineProps({
 const { t } = useI18n();
 const router = useRouter();
 const assetHubStore = useAssetHubStore();
-const { selectedColumns, refreshAsset } = useAssetHub();
+const { refreshAsset } = useAssetHub();
+const { availableColumns, selectedColumns, initTableColumns, handleColumnChange } = useTable(
+  LsTableColumnsKeys.ASSET_HUB
+);
 
 const modalEditVisible = ref<boolean>(false);
 const currentRow = ref<AssetInterface | null>(null);
 const rowKey = (row: AssetInterface) => row.id;
 const pagination = reactive(createPagination(false));
 
-const availableColumns = ref([
-  { value: 'id', label: t('form.label.assetHub.id') },
-  { value: 'name', label: t('form.label.assetHub.name') },
-  { value: 'symbol', label: t('form.label.assetHub.symbol') },
-  { value: 'decimals', label: t('form.label.assetHub.decimals') },
-  { value: 'supply', label: t('form.label.assetHub.supply') },
-  { value: 'minBalance', label: t('form.label.assetHub.minBalance') },
-  { value: 'deposit', label: t('form.label.assetHub.deposit') },
-  { value: 'owner', label: t('form.label.assetHub.owner') },
-  { value: 'admin', label: t('form.label.assetHub.admin') },
-  { value: 'issuer', label: t('form.label.assetHub.issuer') },
-  { value: 'freezer', label: t('form.label.assetHub.freezer') },
-  { value: 'status', label: t('general.status') },
-]);
+const allColumns = [
+  'id',
+  'name',
+  'symbol',
+  'decimals',
+  'supply',
+  'minBalance',
+  'deposit',
+  'owner',
+  'admin',
+  'issuer',
+  'freezer',
+  'status',
+];
+
+const isOnlyOwnerColumn = (key: string) => ['owner', 'admin', 'issuer', 'freezer'].includes(key);
 
 /** */
 const columns = computed<NDataTableColumns<AssetInterface>>(() => {
   const cols: NDataTableColumns<AssetInterface> = [];
 
-  availableColumns.value.forEach(col => {
-    if (selectedColumns.value.includes(col.value)) {
-      if (['owner', 'admin', 'issuer', 'freezer'].includes(col.value)) {
-        if (props.owned) {
-          cols.push({
-            key: col.value,
-            sorter: 'default',
-            title: t(`form.label.assetHub.${col.value}`),
-            className: props.owned ? ON_COLUMN_CLICK_OPEN_CLASS : '',
-            render(row: AssetInterface) {
-              return h(resolveComponent('TableEllipsis'), { text: row[col.value] }, '');
-            },
-          });
+  allColumns.forEach(key => {
+    if (!selectedColumns.value.includes(key)) return;
+    if (isOnlyOwnerColumn(key) && !props.owned) return;
+
+    cols.push({
+      key,
+      sorter: 'default',
+      title: t(`form.label.assetHub.${key}`),
+      className: props.owned ? ON_COLUMN_CLICK_OPEN_CLASS : '',
+      render(row: AssetInterface) {
+        if (isOnlyOwnerColumn(key)) {
+          return h(resolveComponent('TableEllipsis'), { text: row[key] }, '');
         }
-      } else {
-        cols.push({
-          key: col.value,
-          sorter: 'default',
-          title: t(`form.label.assetHub.${col.value}`),
-          className: props.owned ? ON_COLUMN_CLICK_OPEN_CLASS : '',
-        });
-      }
-    }
+        return row[key];
+      },
+    });
   });
 
   if (props.owned) {
@@ -113,12 +111,7 @@ const columns = computed<NDataTableColumns<AssetInterface>>(() => {
               trigger: 'click',
             },
             {
-              default: () =>
-                h(
-                  NButton,
-                  { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                  { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-                ),
+              default: () => h(resolveComponent('BtnActions')),
             }
           );
         }
@@ -147,7 +140,7 @@ const rowProps = (row: AssetInterface) => {
 const dropdownOptions = [
   {
     key: 'view',
-    label: t('dashboard.service.assetHub.select'),
+    label: t('assetHub.select'),
     props: {
       onClick: () => {
         if (props.owned) {
@@ -158,7 +151,7 @@ const dropdownOptions = [
   },
   {
     key: 'edit',
-    label: t('dashboard.service.assetHub.edit'),
+    label: t('assetHub.edit'),
     props: {
       onClick: () => {
         if (props.owned) {
@@ -171,24 +164,17 @@ const dropdownOptions = [
 
 const data = ref<AssetInterface[]>([]);
 const otherAssets = ref<AssetInterface[]>([]);
-const getOwnedAssets = () =>
-  assetHubStore.items.filter(item => item.owner === assetHubStore.account?.address);
-const getOtherAssets = () =>
-  assetHubStore.items.filter(item => item.owner !== assetHubStore.account?.address);
+const getOwnedAssets = () => assetHubStore.items.filter(item => item.owner === assetHubStore.account?.address);
+const getOtherAssets = () => assetHubStore.items.filter(item => item.owner !== assetHubStore.account?.address);
 const searchAssets = () => {
   data.value = otherAssets.value.filter(item =>
-    (item.id + '' + item.name + '' + item.symbol)
-      .toLowerCase()
-      .includes(assetHubStore.search.toLowerCase())
+    (item.id + '' + item.name + '' + item.symbol).toLowerCase().includes(assetHubStore.search.toLowerCase())
   );
   assetHubStore.loading = false;
 };
 
 onMounted(() => {
-  /** Check if selected columns are stored in LS */
-  if (localStorage.getItem(LsTableColumnsKeys.ASSET_HUB)) {
-    selectedColumns.value = JSON.parse(localStorage.getItem(LsTableColumnsKeys.ASSET_HUB) || '');
-  }
+  initTableColumns(columns.value);
   initAsset();
 });
 
@@ -218,10 +204,5 @@ function initAsset() {
   assetHubStore.search = '';
   otherAssets.value = getOtherAssets();
   data.value = props.owned ? getOwnedAssets() : otherAssets.value;
-}
-
-function handleColumnChange(selectedValues: Array<string>) {
-  selectedColumns.value = selectedValues;
-  localStorage.setItem(LsTableColumnsKeys.ASSET_HUB, JSON.stringify(selectedColumns.value));
 }
 </script>

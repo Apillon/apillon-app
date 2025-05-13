@@ -33,13 +33,10 @@ useHead({
   title: t('dashboard.nav.cloudFunctions'),
 });
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await cloudFunctionStore.getCloudFunctions();
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  await cloudFunctionStore.getCloudFunctions();
 
-      pageLoading.value = false;
-    });
-  }, 100);
+  pageLoading.value = false;
 });
 </script>

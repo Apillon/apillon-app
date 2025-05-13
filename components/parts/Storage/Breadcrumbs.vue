@@ -1,8 +1,8 @@
 <template>
   <n-scrollbar v-if="bucketStore.folder.path.length > 0" x-scrollable style="max-width: 100%">
-    <div class="flex flex-nowrap items-center card-dark p-2 rounded-lg whitespace-nowrap">
-      <button class="px-1 mr-2" @click="goToParentFolder()">
-        <span class="icon-back text-2xl align-sub"></span>
+    <div class="card-dark flex flex-nowrap items-center whitespace-nowrap rounded-lg p-2">
+      <button class="mr-2 px-1" @click="goToParentFolder()">
+        <span class="icon-back align-sub text-2xl"></span>
       </button>
       <button class="font-bold" @click="goToFolder()">{{ bucketStore.active.name }}:&nbsp;</button>
       <span v-for="(folderPath, key) in bucketStore.folder.path" :key="key">
@@ -11,7 +11,7 @@
         </span>
         <span v-else class="cursor-pointer" @click="goToFolder(folderPath.uuid)">
           <span>{{ folderPath.name }}</span>
-          <span class="inline-block mx-[1px]">/</span>
+          <span class="mx-[1px] inline-block">/</span>
         </span>
       </span>
     </div>

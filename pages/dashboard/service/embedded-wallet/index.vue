@@ -54,12 +54,10 @@ useHead({
 });
 
 onMounted(async () => {
-  await sleep(10);
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    await embeddedWalletStore.getEmbeddedWallets();
+  await dataStore.waitOnPromises();
+  await embeddedWalletStore.getEmbeddedWallets();
 
-    pageLoading.value = false;
-  });
+  pageLoading.value = false;
 });
 
 function onUpdateAccordion(expandedNames: Array<string | number>) {

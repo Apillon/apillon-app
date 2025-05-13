@@ -17,22 +17,10 @@
     <!-- Service -->
     <div v-if="plan.services" class="match-services mb-12">
       <h4>{{ $t('dashboard.subscription.web3Services') }}</h4>
-      <PaymentPricingService
-        :name="$t('dashboard.subscription.storage')"
-        :value="plan.services.storage"
-      />
-      <PaymentPricingService
-        :name="$t('dashboard.subscription.bandwidth')"
-        :value="plan.services.bandwith"
-      />
-      <PaymentPricingService
-        :name="$t('dashboard.subscription.wallets')"
-        :value="plan.services.wallets"
-      />
-      <PaymentPricingService
-        :name="$t('dashboard.subscription.otherServices')"
-        :value="plan.services.credits"
-      />
+      <PaymentPricingService :name="$t('dashboard.subscription.storage')" :value="plan.services.storage" />
+      <PaymentPricingService :name="$t('dashboard.subscription.bandwidth')" :value="plan.services.bandwith" />
+      <PaymentPricingService :name="$t('dashboard.subscription.wallets')" :value="plan.services.wallets" />
+      <PaymentPricingService :name="$t('dashboard.subscription.otherServices')" :value="plan.services.credits" />
     </div>
 
     <Btn
@@ -44,15 +32,9 @@
     >
       {{ $t('dashboard.payment.currentPlan') }}
     </Btn>
-    <n-tooltip v-else-if="!dataStore.isUserOwner" trigger="hover">
+    <n-tooltip v-else-if="!dataStore.isUserOwner" :trigger="isMd ? 'hover' : 'click'">
       <template #trigger>
-        <Btn
-          class="opacity-60 cursor-default"
-          type="primary"
-          size="large"
-          :color="colors.blue"
-          round
-        >
+        <Btn class="cursor-default opacity-60" type="primary" size="large" :color="colors.blue" round>
           {{ $t('dashboard.payment.selectPlan') }}
         </Btn>
       </template>
@@ -85,7 +67,9 @@
 </template>
 
 <script lang="ts" setup>
-import colors from '~/tailwind.colors';
+import { dateTimeToDate } from '~/lib/utils/dates';
+import { formatPrice } from '~/lib/utils/helpers';
+import { colors } from '~/tailwind.config';
 
 defineProps({
   subscriptionPackage: {
@@ -95,6 +79,7 @@ defineProps({
   plan: { type: Object as PropType<PricingPlan>, default: {} as PricingPlan },
 });
 
+const { isMd } = useScreen();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const { loading, getSubscriptionSessionUrl } = usePayment();

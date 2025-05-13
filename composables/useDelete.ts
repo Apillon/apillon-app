@@ -44,7 +44,7 @@ export default function useDelete() {
   const loading = ref<boolean>(false);
 
   /** Delete item */
-  async function deleteItem(type: ItemDeleteType, id: string | number): Promise<Boolean> {
+  async function deleteItem(type: ItemDeleteType, id: string | number): Promise<boolean> {
     loading.value = true;
 
     try {

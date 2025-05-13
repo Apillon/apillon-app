@@ -71,13 +71,10 @@ export const useContractStore = defineStore('contract', {
      * API calls
      */
     async fetchContracts(archive: boolean = false, showLoader: boolean = true): Promise<ContractInterface[]> {
-      this.loading = showLoader;
-
       const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
+      if (!dataStore.projectUuid) return [];
 
+      this.loading = showLoader;
       try {
         const params = parseArguments(PARAMS_ALL_ITEMS);
         params.project_uuid = dataStore.projectUuid;
@@ -132,7 +129,8 @@ export const useContractStore = defineStore('contract', {
         sessionStorage.setItem(LsCacheKeys.CONTRACT, Date.now().toString());
 
         return res.data;
-      } catch (error: any) {
+      } catch (e: ApiError | any) {
+        console.error(e);
         this.active = {} as ContractInterface;
       }
       return {} as ContractInterface;

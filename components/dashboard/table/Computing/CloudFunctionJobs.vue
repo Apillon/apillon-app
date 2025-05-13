@@ -24,10 +24,7 @@
   </modal>
 
   <!-- Modal - Delete Job -->
-  <ModalDelete
-    v-model:show="modalDeleteJobsVisible"
-    :title="$t('computing.cloudFunctions.job.delete')"
-  >
+  <ModalDelete v-model:show="modalDeleteJobsVisible" :title="$t('computing.cloudFunctions.job.delete')">
     <template #content>
       <p>
         {{ $t(`storage.delete.deleteConfirm`, { num: 1 }) }}
@@ -38,7 +35,7 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown } from 'naive-ui';
+import { NDropdown } from 'naive-ui';
 
 const { t } = useI18n();
 const message = useMessage();
@@ -121,12 +118,7 @@ const createColumns = (): NDataTableColumns<JobInterface> => {
           NDropdown,
           { options: dropdownOptions.value, trigger: 'click' },
           {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
+            default: () => h(resolveComponent('BtnActions')),
           }
         );
       },
@@ -172,9 +164,7 @@ const dropdownOptions = computed(() => {
       props: {
         onClick: () => {
           if (actionsEnabled.value && currentRow.value) {
-            warningStore.showSpendingWarning(PriceServiceName.COMPUTING_JOB_CREATE, () =>
-              redeploy(currentRow.value)
-            );
+            warningStore.showSpendingWarning(PriceServiceName.COMPUTING_JOB_CREATE, () => redeploy(currentRow.value));
           }
         },
       },
@@ -198,21 +188,16 @@ const dropdownOptions = computed(() => {
 /** On row click */
 const rowProps = (row: JobInterface) => {
   return {
-    onClick: (e: Event) => {
+    onClick: (_: Event) => {
       currentRow.value = row;
     },
   };
 };
 
 async function redeploy(job?: JobInterface) {
-  if (!job) return;
+  if (!dataStore.projectUuid || !job) return;
 
   loadingRedeploy.value = true;
-
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-    if (!dataStore.projectUuid) return;
-  }
 
   try {
     const bodyData = {
@@ -222,10 +207,7 @@ async function redeploy(job?: JobInterface) {
       slots: job.slots,
       scriptCid: job.scriptCid,
     };
-    const res = await $api.post<JobResponse>(
-      endpoints.cloudFunctionJobs(job.function_uuid),
-      bodyData
-    );
+    const res = await $api.post<JobResponse>(endpoints.cloudFunctionJobs(job.function_uuid), bodyData);
     cloudFunctionStore.addJob(res.data);
     setTimeout(() => checkUnfinishedJobs(), 500);
 

@@ -53,7 +53,7 @@ export default function useUpload() {
   }
 
   /** Check if file is too big (out of space) */
-  function isEnoughSpaceInStorage(uploadFileList: FileListItemType[], file: FileListItemType) {
+  function isEnoughSpaceInStorage(uploadFileList: FileListItemType[], file: FileListItemType | File) {
     const availableSize = storageStore.info.availableStorage - storageStore.info.usedStorage;
     totalFilesSize.value = uploadFileList.reduce((acc, item) => {
       return acc + item.size;
@@ -78,7 +78,7 @@ export default function useUpload() {
 
     /** Files data for upload params */
     const filesUpload: Array<UploadFileType> = fileList.value.map(file => {
-      file.path = fileFolderPath(file?.fullPath || '', wrapFilesToDirectory);
+      file.path = fileFolderPath(file?.path || '', wrapFilesToDirectory);
 
       return {
         fileName: file.name,
@@ -118,6 +118,9 @@ export default function useUpload() {
           if (fileRequests.data) {
             if (!wrapFilesToDirectory) {
               const cids = {} as Record<string, UploadedFileInfo>;
+
+              console.log(fileRequests.data.files);
+              console.log(fileList.value);
 
               await Promise.all(
                 fileRequests.data.files.map(async uploadFileRequest => {
@@ -170,6 +173,8 @@ export default function useUpload() {
   }
 
   function uploadFilesToS3(uploadFilesRequests: S3FileUploadRequestInterface[]) {
+    console.log(uploadFilesRequests);
+    console.log(fileList.value);
     uploadFilesRequests.forEach(uploadFileRequest => {
       const file = fileList.value.find(
         file => file.name === uploadFileRequest.fileName && file.path === uploadFileRequest.path
@@ -239,7 +244,7 @@ export default function useUpload() {
       if (clearFileList.value) {
         fileList.value.forEach(item => {
           if (item.status !== FileUploadStatusValue.FINISHED) {
-            item.onError();
+            item?.onError();
           }
         });
         while (fileList.value.length > 0) {

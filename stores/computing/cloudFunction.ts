@@ -1,4 +1,3 @@
-import { load } from '@fingerprintjs/fingerprintjs';
 import { defineStore } from 'pinia';
 
 export const useCloudFunctionStore = defineStore('cloudFunction', {
@@ -145,13 +144,10 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
      * API calls
      */
     async fetchCloudFunctions(archive = false, showLoader: boolean = true): Promise<CloudFunctionInterface[]> {
-      this.loading = showLoader;
-
       const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
+      if (!dataStore.projectUuid) return [];
 
+      this.loading = showLoader;
       try {
         const params = parseArguments(PARAMS_ALL_ITEMS);
         params.project_uuid = dataStore.projectUuid;

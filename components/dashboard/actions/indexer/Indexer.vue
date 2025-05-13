@@ -1,30 +1,19 @@
 <template>
   <n-space v-bind="$attrs" justify="space-between">
-    <div class="min-w-[11rem] w-[20vw] max-w-xs">
-      <n-input
-        v-model:value="indexerStore.search"
-        type="text"
-        name="search"
-        size="small"
-        :placeholder="$t('general.search')"
-        clearable
-      >
-        <template #prefix>
-          <span class="icon-search text-2xl"></span>
-        </template>
-      </n-input>
+    <div class="w-[20vw] min-w-[11rem] max-w-xs">
+      <FormFieldSearch v-model:value="indexerStore.search" />
     </div>
 
     <n-space size="large">
       <!-- Refresh -->
-      <n-button size="small" :loading="indexerStore.loading" @click="indexerStore.fetchIndexers()">
-        <span class="icon-refresh text-xl mr-2"></span>
+      <n-button size="medium" :loading="indexerStore.loading" @click="indexerStore.fetchIndexers()">
+        <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('general.refresh') }}
       </n-button>
 
       <!-- Create new indexer -->
-      <n-button size="small" :disabled="authStore.isAdmin()" @click="showModalNewIndexer = true">
-        <span class="icon-file text-xl text-primary mr-2"></span>
+      <n-button size="medium" :disabled="authStore.isAdmin()" @click="showModalNewIndexer = true">
+        <span class="icon-file mr-2 text-xl text-primary"></span>
         <span class="text-primary">{{ $t('indexer.new') }}</span>
       </n-button>
     </n-space>

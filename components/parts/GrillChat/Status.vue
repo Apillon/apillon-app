@@ -1,11 +1,5 @@
 <template>
-  <n-tag
-    v-bind="$attrs"
-    :type="getStatus(status)"
-    :bordered="status < SocialStatus.INACTIVE"
-    size="tiny"
-    round
-  >
+  <n-tag v-bind="$attrs" :type="getStatus(status)" :bordered="status < SocialStatus.INACTIVE" size="tiny" round>
     <n-space
       :class="status < SocialStatus.INACTIVE ? 'text-body' : 'text-bg-dark'"
       :size="0"
