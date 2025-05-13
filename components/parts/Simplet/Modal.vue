@@ -2,51 +2,36 @@
   <ModalFullScreen
     :progress="progress"
     :steps="SimpletCreateStep"
-    :active-step="
-      simpletStore.stepSimpletCreate === SimpletCreateStep.SMTP
-        ? SimpletCreateStep.FORM
-        : simpletStore.stepSimpletCreate
-    "
+    :active-step="isStep(SimpletCreateStep.SMTP) ? SimpletCreateStep.FORM : simpletStore.stepSimpletCreate"
     trans-key="simplet.wizard.createStep"
     :title="$t('simplet.wizard.create')"
   >
     <slot>
-      <FormSimpletTypeSelect
-        v-if="simpletStore.stepSimpletCreate === SimpletCreateStep.TYPE"
-        ref="simpletTypeRef"
-        class="mx-auto max-w-lg"
-      />
+      <FormSimpletTypeSelect v-if="isStep(SimpletCreateStep.TYPE)" ref="simpletTypeRef" class="mx-auto max-w-lg" />
       <FormSimpletCollection
-        v-if="simpletStore.stepSimpletCreate === SimpletCreateStep.COLLECTION"
+        v-if="isStep(SimpletCreateStep.COLLECTION)"
         ref="simpletCollectionRef"
         class="mx-auto max-w-lg"
       />
-      <FormSimplet
-        v-else-if="simpletStore.stepSimpletCreate === SimpletCreateStep.FORM"
-        ref="simpletFormRef"
-        class="mx-auto max-w-lg"
-      />
+      <FormSimplet v-else-if="isStep(SimpletCreateStep.FORM)" ref="simpletFormRef" class="mx-auto max-w-lg" />
       <FormSimpletSmtp
-        v-else-if="simpletStore.stepSimpletCreate === SimpletCreateStep.SMTP"
+        v-else-if="isStep(SimpletCreateStep.SMTP)"
         ref="simpletFormSmtpRef"
         class="mx-auto max-w-lg"
         @skip="skipSmtp()"
       />
       <SimpletPreview
-        v-else-if="simpletStore.stepSimpletCreate === SimpletCreateStep.REVIEW"
+        v-else-if="isStep(SimpletCreateStep.REVIEW)"
         @back="simpletStore.stepSimpletCreate = SimpletCreateStep.FORM"
         @deploy="deploy()"
       />
       <AnimationDeploy
-        v-else-if="simpletStore.stepSimpletCreate === SimpletCreateStep.DEPLOYING"
+        v-else-if="isStep(SimpletCreateStep.DEPLOYING)"
         class="min-h-full"
         :title="$t('simplet.wizard.deploying')"
         :content="$t('simplet.wizard.deployingInfo')"
       />
-      <SimpletDeployed
-        v-else-if="simpletStore.stepSimpletCreate === SimpletCreateStep.DEPLOYED"
-        class="mx-auto max-w-5xl"
-      />
+      <SimpletDeployed v-else-if="isStep(SimpletCreateStep.DEPLOYED)" class="mx-auto max-w-5xl" />
     </slot>
     <template v-if="simpletStore.stepSimpletCreate < SimpletCreateStep.REVIEW" #footer>
       <div class="flex w-full items-center justify-between gap-4 px-10 py-3">
@@ -55,14 +40,17 @@
           <span>{{ totalCredits }} {{ $t('dashboard.credits.credits') }}</span>
         </p>
         <div class="flex items-center gap-2">
-          <Btn
-            v-if="simpletStore.stepSimpletCreate !== SimpletCreateStep.TYPE"
-            class="min-w-40"
-            type="secondary"
-            @click="back"
-          >
+          <Btn v-if="!isStep(SimpletCreateStep.TYPE)" class="min-w-40" type="secondary" @click="back">
             {{ $t('general.back') }}
           </Btn>
+          <n-tooltip v-if="isStep(SimpletCreateStep.SMTP)" placement="top" :trigger="isMd ? 'hover' : 'click'">
+            <template #trigger>
+              <Btn class="min-w-40" type="secondary" @click="simpletStore.stepSimpletCreate += 1">
+                {{ $t('general.skip') }}
+              </Btn>
+            </template>
+            <span>{{ $t('simplet.wizard.smtp.skip') }}</span>
+          </n-tooltip>
           <Btn class="min-w-40" @click="nextStep()">{{ $t('form.continue') }} </Btn>
         </div>
       </div>
@@ -75,6 +63,7 @@ const props = defineProps({
   type: { type: Number, default: 0 },
 });
 const { t } = useI18n();
+const { isMd } = useScreen();
 const message = useMessage();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
@@ -107,6 +96,8 @@ watch(
     }
   }
 );
+
+const isStep = (step: SimpletCreateStep) => simpletStore.stepSimpletCreate === step;
 
 async function submitForm() {
   if (await simpletFormRef.value?.handleSubmit()) {
@@ -169,7 +160,7 @@ async function deploy() {
   simpletStore.stepSimpletCreate = SimpletCreateStep.DEPLOYING;
 
   const simpletUuid =
-    simpletStore.templates.find(t => t.name === 'nft-studio-simplet' || t.id === SimpletType.FREE_MINT)?.simplet_uuid ||
+    simpletStore.templates.find(t => t.name === 'nft-studio-simplet')?.simplet_uuid ||
     simpletStore.templates[0].simplet_uuid;
   const simplet = await createSimplet(simpletUuid);
 
@@ -203,6 +194,9 @@ const prepareVariablesFE = (embeddedWallet: string): KeyValue[] => {
   const frontendVariables: KeyValue[] = [
     { key: 'NUXT_PUBLIC_CLAIM_TYPE', value: simpletStore.form.type || SimpletType.AIRDROP },
     { key: 'NUXT_PUBLIC_EMBEDDED_WALLET_CLIENT', value: embeddedWallet },
+    ...(simpletStore.form.collectionLogo
+      ? [{ key: 'NUXT_PUBLIC_COLLECTION_LOGO', value: simpletStore.form.collectionLogo }]
+      : []),
     ...(simpletStore.form.type === SimpletType.POAP && simpletStore.form.startTime
       ? [{ key: 'NUXT_PUBLIC_CLAIM_START', value: simpletStore.form.startTime }]
       : []),

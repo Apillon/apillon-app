@@ -36,7 +36,7 @@ export default function useHosting() {
   });
   const ruleApiSecret = (form: Record<string, any>) => ({
     validator: (_, value) => validateApiSecret(value, form?.apiKey),
-    message: t('validation.apiKeyRequired'),
+    message: t('validation.apiSecretRequired'),
     trigger: 'blur',
   });
 

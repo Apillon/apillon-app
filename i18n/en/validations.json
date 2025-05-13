@@ -163,10 +163,10 @@
       "fieldRequired": "Please fill all fields"
     },
     "smtp": {
-      "host": "Please enter SMTP Host",
-      "port": "Please enter SMTP Port",
-      "username": "Please enter SMTP Username",
-      "password": "Please enter SMTP Password",
+      "hostRequired": "Please enter SMTP Host",
+      "portRequired": "Please enter SMTP Port",
+      "usernameRequired": "Please enter SMTP Username",
+      "passwordRequired": "Please enter SMTP Password",
       "senderNameRequired": "Please enter sender name",
       "senderEmailRequired": "Please enter sender email"
     },

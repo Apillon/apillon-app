@@ -3,9 +3,9 @@
  */
 export function chainIdToName(id: number) {
   if (id in EvmChain) {
-    return EvmChain[id].toLowerCase();
+    return EvmChain[id].toLowerCase().replaceAll('_', ' ');
   } else if (id in SubstrateChain) {
-    return SubstrateChain[id].toLowerCase();
+    return SubstrateChain[id].toLowerCase().replaceAll('_', ' ');
   }
   return '';
 }

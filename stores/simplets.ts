@@ -18,6 +18,7 @@ export const useSimpletStore = defineStore('simplets', {
     form: {
       type: null as Optional<SimpletType>,
       collection: '',
+      collectionLogo: '',
       name: '',
       description: '',
       embeddedWallet: null as Optional<string>,

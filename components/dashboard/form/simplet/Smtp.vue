@@ -40,7 +40,7 @@
         <n-input
           v-model:value="simpletStore.form.smtp.username"
           :input-props="{ id: 'username' }"
-          :placeholder="$t('form.placeholder.smtp.username')"
+          :placeholder="$t('form.placeholder.smtp.username', { afna: '@' })"
           clearable
         />
       </n-form-item>
@@ -49,7 +49,7 @@
         <n-input
           v-model:value="simpletStore.form.smtp.password"
           type="password"
-          :input-props="{ id: 'password' }"
+          :input-props="{ id: 'password', autocomplete: 'smtp-password' }"
           :placeholder="$t('form.placeholder.smtp.password')"
           clearable
         />
@@ -67,19 +67,11 @@
         <n-input
           v-model:value="simpletStore.form.smtp.senderEmail"
           :input-props="{ id: 'senderEmail' }"
-          :placeholder="$t('form.placeholder.smtp.email')"
+          :placeholder="$t('form.placeholder.smtp.email', { afna: '@' })"
           clearable
         />
       </n-form-item>
     </n-form>
-    <n-tooltip placement="top" :trigger="isMd ? 'hover' : 'click'">
-      <template #trigger>
-        <Btn class="float-right" type="secondary" @click="$emit('skip')">
-          {{ $t('general.skip') }}
-        </Btn>
-      </template>
-      <span>{{ $t('simplet.wizard.smtp.skip') }}</span>
-    </n-tooltip>
   </div>
 </template>
 
@@ -87,19 +79,18 @@
 defineEmits(['skip']);
 defineExpose({ handleSubmit });
 const { t } = useI18n();
-const { isMd } = useScreen();
 const message = useMessage();
 const dataStore = useDataStore();
 const simpletStore = useSimpletStore();
 const formRef = ref<NFormInst | null>(null);
 
 const rules: NFormRules = {
-  host: [ruleRequired(t('validation.smtp.nameRequired'))],
-  port: [ruleRequired(t('validation.simplet.nameRequired'))],
-  username: [ruleRequired(t('validation.simplet.nameRequired'))],
-  password: [ruleRequired(t('validation.simplet.nameRequired'))],
-  senderName: [ruleRequired(t('validation.simplet.senderNameRequired'))],
-  senderEmail: [ruleRequired(t('validation.simplet.senderEmailRequired'))],
+  host: ruleRequired(t('validation.smtp.hostRequired')),
+  port: ruleRequired(t('validation.smtp.portRequired')),
+  username: ruleRequired(t('validation.smtp.usernameRequired')),
+  password: ruleRequired(t('validation.smtp.passwordRequired')),
+  senderName: ruleRequired(t('validation.smtp.senderNameRequired')),
+  senderEmail: ruleRequired(t('validation.smtp.senderEmailRequired')),
 };
 
 const isFormDisabled = computed<boolean>(() => {

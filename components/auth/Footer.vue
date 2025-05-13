@@ -1,6 +1,6 @@
 <template>
   <div class="body-sm mt-8 text-body md:mt-12 lg:mt-16">
-    <n-space justify="space-between">
+    <n-space justify="space-between" :size="32">
       <span class="text-white">{{ $t('general.copyrights') }}</span>
 
       <n-space :size="32">

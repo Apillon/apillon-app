@@ -7,12 +7,12 @@
         </NuxtLink>
         <h2 v-if="metadataStore.form.smartContract.chain">
           {{ $t('nft.collection.title') }}:
-          <span class="capitalize">{{ chainIdToName(metadataStore.form.smartContract.chain).replace('_', ' ') }}</span>
+          <span class="capitalize">{{ chainIdToName(metadataStore.form.smartContract.chain) }}</span>
         </h2>
         <h2 v-else-if="collectionStore.active.chain && collectionStore.active.name">
           {{ collectionStore.active.name }}
           <small
-            >(<span class="capitalize">{{ chainIdToName(collectionStore.active.chain).replace('_', ' ') }}</span
+            >(<span class="capitalize">{{ chainIdToName(collectionStore.active.chain) }}</span
             >)</small
           >
         </h2>
@@ -33,9 +33,6 @@
 </template>
 
 <script lang="ts" setup>
-import { chainIdToName } from '~/lib/utils/chain';
-import { ServiceTypeName } from '~/lib/types/service';
-
 const { te } = useI18n();
 const paymentStore = usePaymentStore();
 const metadataStore = useMetadataStore();
