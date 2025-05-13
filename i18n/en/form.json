@@ -348,10 +348,10 @@
       "smtp": {
         "host": "Your mail server host (e.g. smtp.yourdomain.com)",
         "port": "465",
-        "username": "e.g. user'@'gmail.com",
+        "username": "e.g. user'{afna}'gmail.com",
         "password": "***",
         "sender": "Who the emails will be from (e.g. NFT Airdrop)",
-        "email": "e.g. user/@gmail.com"
+        "email": "e.g. user/{afna}gmail.com"
       },
       "website": {
         "description": "Website description",

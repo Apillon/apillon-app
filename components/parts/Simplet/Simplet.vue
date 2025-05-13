@@ -26,12 +26,15 @@
             <span class="icon-github mr-2"></span>
             <strong> {{ $t('simplet.viewCode') }}</strong>
           </Btn>
-          <Btn>
+          <Btn @click="showModalNewSimplet = true">
             {{ $t('auth.onboarding.getStarted') }}
           </Btn>
         </div>
       </div>
     </div>
+
+    <!-- Modal - New Simplet -->
+    <SimpletModal v-model:show="showModalNewSimplet" :type="simpletId" :title="$t('simplet.wizard.create')" />
   </div>
 </template>
 
@@ -41,5 +44,6 @@ const props = defineProps({
 });
 const { simplets, generateContent } = useSimplet();
 
+const showModalNewSimplet = ref<boolean>(false);
 const content = generateContent(simplets[props.simpletId]);
 </script>
