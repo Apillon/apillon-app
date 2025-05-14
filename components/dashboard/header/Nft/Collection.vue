@@ -5,7 +5,17 @@
         <NuxtLink :to="{ name: 'dashboard-service-nft' }">
           <span class="icon-back align-sub text-2xl"></span>
         </NuxtLink>
-        <h2>{{ t('dashboard.solution.nftCollection.name') }}</h2>
+        <h2 v-if="metadataStore.form.smartContract.chain">
+          {{ $t('nft.collection.title') }}:
+          <span class="capitalize">{{ chainIdToName(metadataStore.form.smartContract.chain) }}</span>
+        </h2>
+        <h2 v-else-if="collectionStore.active.chain && collectionStore.active.name">
+          {{ collectionStore.active.name }}
+          <small
+            >(<span class="capitalize">{{ chainIdToName(collectionStore.active.chain) }}</span
+            >)</small
+          >
+        </h2>
       </n-space>
     </slot>
     <template #info>
@@ -18,15 +28,14 @@
   </Heading>
 
   <W3Warn v-model:show="modalW3WarnVisible">
-    {{ t('w3Warn.nft.new') }}
+    {{ $t('w3Warn.nft.new') }}
   </W3Warn>
 </template>
 
 <script lang="ts" setup>
-import { ServiceTypeName } from '~/lib/types/service';
-
-const { t, te } = useI18n();
+const { te } = useI18n();
 const paymentStore = usePaymentStore();
+const metadataStore = useMetadataStore();
 const collectionStore = useCollectionStore();
 
 const modalW3WarnVisible = ref<boolean>(false);

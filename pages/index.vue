@@ -1,4 +1,6 @@
-<template></template>
+<template>
+  <span></span>
+</template>
 
 <script lang="ts" setup>
 const authStore = useAuthStore();

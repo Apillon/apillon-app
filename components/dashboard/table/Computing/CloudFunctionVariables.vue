@@ -6,28 +6,26 @@
     :columns="columns"
     :data="data"
     :loading="cloudFunctionStore.loadingVariables"
-    :pagination="{
-      pageSize: PAGINATION_LIMIT,
-      prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
-    }"
+    :pagination="pagination"
     :row-key="rowKey"
     :row-props="rowProps"
     @update:page="p => (page = p)"
+    @update:page-size="(pz: number) => (pagination.pageSize = pz)"
   />
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NInput } from 'naive-ui';
+import { NDropdown, NInput } from 'naive-ui';
 
 const { t } = useI18n();
 const cloudFunctionStore = useCloudFunctionStore();
 
+const pagination = reactive(createPagination(false));
+
 const data = computed(
   () =>
     [...cloudFunctionStore.variables, ...cloudFunctionStore.variablesNew].filter(item =>
-      `${item.key} ${item.value}`
-        .toLowerCase()
-        .includes(cloudFunctionStore.searchVariables.toLowerCase())
+      `${item.key} ${item.value}`.toLowerCase().includes(cloudFunctionStore.searchVariables.toLowerCase())
     ) || []
 );
 
@@ -90,12 +88,7 @@ const createColumns = (): NDataTableColumns<EnvVariable> => {
           NDropdown,
           { options: dropdownOptions.value, trigger: 'click' },
           {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
+            default: () => h(resolveComponent('BtnActions')),
           }
         );
       },
@@ -149,7 +142,7 @@ const dropdownOptions = computed(() => {
 /** On row click */
 const rowProps = (row: EnvVariable) => {
   return {
-    onClick: (e: Event) => {
+    onClick: (_: Event) => {
       currentRow.value = row;
     },
   };

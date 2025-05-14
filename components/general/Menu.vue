@@ -32,16 +32,15 @@ function routeNameToKey(name: string) {
   return props.sliceName ? removeIdOrSlug(name) : name;
 }
 
-function removeIdOrSlug(text) {
-  return text.replace(/(-id|-slug|-archive|-deployed|-new).*/g, '');
+function removeIdOrSlug(text: string) {
+  return text.replace(/(-id|-slug|-archive|-deployed|-new|-airdrop).*/g, '');
 }
 
 /**
  * Render functions
  */
 function renderMenuLabel(option: NMenuOption) {
-  const colorClass =
-    option?.color === 'yellow' ? '!text-yellow' : option?.color === 'blue' ? '!text-blue' : '';
+  const colorClass = option?.color === 'yellow' ? '!text-yellow' : option?.color === 'blue' ? '!text-blue' : '';
 
   if ('disabled' in option && option.disabled) {
     return h('span', { class: 'text-body' }, { default: () => option.label as string });

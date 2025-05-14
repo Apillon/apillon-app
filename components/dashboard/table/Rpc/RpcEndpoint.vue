@@ -6,21 +6,14 @@
     :columns="columns"
     :data="data"
     :loading="rpcEndpointStore.loading"
-    :pagination="{
-      pageSize: PAGINATION_LIMIT,
-      prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
-    }"
+    :pagination="pagination"
     :row-key="rowKey"
     :row-props="rowProps"
   />
 
   <!-- Modal - Delete API key -->
   <ModalDelete v-model:show="modalDeleteEndpointVisible" :title="$t('rpc.endpoint.delete')">
-    <FormDelete
-      :id="currentRow?.favoriteData?.id"
-      type="rpcEndpoint"
-      @submit-success="onRpcEndpointDeleted"
-    />
+    <FormDelete :id="currentRow?.favoriteData?.id" type="rpcEndpoint" @submit-success="onRpcEndpointDeleted" />
   </ModalDelete>
 </template>
 
@@ -32,18 +25,18 @@ const props = defineProps({
   allowFavoriteCheck: { type: Boolean, default: false },
 });
 
-const $i18n = useI18n();
 const { t } = useI18n();
 const rpcEndpointStore = useRpcEndpointStore();
 const rpcApiKeyStore = useRpcApiKeyStore();
 const router = useRouter();
 const loadedId = ref<number | null>(null);
+const pagination = reactive(createPagination(false));
 
 const extractDomain = (url?: string) => {
   if (!url) {
     return '';
   }
-  const domain = url.replace('https://', '').replace('http://', '').split(/[/?#]/)[0];
+  const domain = url.replace('https://', '').replace('http://', '').replace('wss://', '').split(/[/?#]/)[0];
   return domain;
 };
 
@@ -55,7 +48,7 @@ function rowProps(row: RpcEndpointInterface) {
         router.push({
           name: 'dashboard-service-rpc-usage',
           query: {
-            network: extractDomain(row.favoriteData?.httpsUrl),
+            network: extractDomain(row.favoriteData?.httpsUrl || ''),
           },
         });
       }
@@ -103,7 +96,7 @@ const createColumns = (): NDataTableColumns<RpcEndpointInterface> => {
       key: 'httpsUrl',
       title: t('rpc.endpoint.httpsEndpoint'),
       render(row) {
-        if (!row.isFavorite && props.allowFavoriteCheck) {
+        if ((!row.isFavorite && props.allowFavoriteCheck) || !row.favoriteData?.httpsUrl) {
           return;
         }
 
@@ -122,7 +115,7 @@ const createColumns = (): NDataTableColumns<RpcEndpointInterface> => {
       key: 'wssUrl',
       title: t('rpc.endpoint.wssEndpoint'),
       render(row) {
-        if (!row.isFavorite && props.allowFavoriteCheck) {
+        if ((!row.isFavorite && props.allowFavoriteCheck) || !row.favoriteData?.wssUrl) {
           return;
         }
 
@@ -238,11 +231,9 @@ async function addRpcEndpoint(chainName: string, networkName: string, networkId:
 
     const res = await $api.post<RpcFavoriteEndpointResponse>(endpoints.rpcUrl(), bodyData);
 
-    message.success($i18n.t('form.success.created.rpcEndpoint'));
+    message.success(t('form.success.created.rpcEndpoint'));
 
-    const endpoint = rpcEndpointStore.items.find(
-      item => item.name === chainName && item.networkName === networkName
-    );
+    const endpoint = rpcEndpointStore.items.find(item => item.name === chainName && item.networkName === networkName);
     if (endpoint) {
       endpoint.isFavorite = true;
       endpoint.favoriteData = res.data;
@@ -256,7 +247,7 @@ async function addRpcEndpoint(chainName: string, networkName: string, networkId:
 const dropdownOptions = [
   {
     key: 'delete',
-    label: $i18n.t('general.delete'),
+    label: t('general.delete'),
     props: {
       class: '!text-pink',
       onClick: () => {

@@ -28,10 +28,7 @@ class Api {
     const q = !query ? '' : '?' + queryString.stringify(query, { arrayFormat: 'bracket' });
     const requestData = { method: 'GET', query: q };
 
-    const response = await fetch(
-      APISettings.basePath + path + q,
-      this.onRequest(requestData, requestOptions)
-    );
+    const response = await fetch(APISettings.basePath + path + q, this.onRequest(requestData, requestOptions));
     return this.onResponse<T>(response);
   }
 

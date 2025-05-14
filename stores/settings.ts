@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import type { VideoChapter } from '~/components/parts/Modal/YouTube.vue';
 
 export const useSettingsStore = defineStore('settings', {
   state: () => ({
@@ -140,7 +139,7 @@ export const useSettingsStore = defineStore('settings', {
       try {
         const res = await $api.get<ProjectUsersResponse>(endpoints.projectUsers(dataStore.project.selected));
         this.users = res.data.items;
-      } catch (error) {
+      } catch (error: ApiError | any) {
         this.users = [];
 
         /** Show error message */
@@ -156,7 +155,7 @@ export const useSettingsStore = defineStore('settings', {
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.OAUTH_LINKS, Date.now().toString());
-      } catch (error) {
+      } catch (error: ApiError | any) {
         this.oauthLinks = [];
 
         /** Show error message */
@@ -173,7 +172,7 @@ export const useSettingsStore = defineStore('settings', {
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.DISCORD_LINK, Date.now().toString());
-      } catch (error) {
+      } catch (error: ApiError | any) {
         this.discordLink = '';
 
         /** Show error message */
@@ -204,7 +203,7 @@ export const useSettingsStore = defineStore('settings', {
   },
   persist: {
     key: SessionKeys.SETTINGS_STORE,
-    storage: persistedState.localStorage,
+    storage: piniaPluginPersistedstate.localStorage(),
     pick: ['notifications', 'youtubeChapters'],
-  } as any,
+  },
 });

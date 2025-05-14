@@ -4,9 +4,10 @@
     :columns="columns"
     :data="items"
     :loading="embeddedWalletStore.loading"
-    :pagination="createPagination(false)"
+    :pagination="pagination"
     :row-key="rowKey"
     :row-props="rowProps"
+    @update:page-size="(pz: number) => (pagination.pageSize = pz)"
   />
   <!-- Modal - Edit embedded wallet -->
   <modal v-model:show="modalEditEmbeddedWalletVisible" :title="$t('embeddedWallet.edit')">
@@ -18,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown } from 'naive-ui';
+import { NDropdown } from 'naive-ui';
 
 defineProps({
   archive: { type: Boolean, default: false },
@@ -30,6 +31,7 @@ const dataStore = useDataStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
 const modalEditEmbeddedWalletVisible = ref<boolean>(false);
 
+const pagination = reactive(createPagination(false));
 const items = computed(() => {
   return embeddedWalletStore.items.filter(item =>
     item.title.toLowerCase().includes(embeddedWalletStore.search.toLowerCase())
@@ -114,12 +116,7 @@ const createColumns = (): NDataTableColumns<EmbeddedWalletInterface> => {
             trigger: 'click',
           },
           {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
+            default: () => h(resolveComponent('BtnActions')),
           }
         );
       },

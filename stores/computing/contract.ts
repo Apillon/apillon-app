@@ -76,12 +76,8 @@ export const useContractStore = defineStore('contract', {
 
       this.loading = showLoader;
       try {
-        const params: Record<string, string | number> = {
-          project_uuid: dataStore.projectUuid,
-          orderBy: 'createTime',
-          desc: 'true',
-          ...PARAMS_ALL_ITEMS,
-        };
+        const params = parseArguments(PARAMS_ALL_ITEMS);
+        params.project_uuid = dataStore.projectUuid;
         if (archive) {
           params.status = SqlModelStatus.ARCHIVED;
         }
@@ -133,7 +129,8 @@ export const useContractStore = defineStore('contract', {
         sessionStorage.setItem(LsCacheKeys.CONTRACT, Date.now().toString());
 
         return res.data;
-      } catch (error: any) {
+      } catch (e: ApiError | any) {
+        console.error(e);
         this.active = {} as ContractInterface;
       }
       return {} as ContractInterface;

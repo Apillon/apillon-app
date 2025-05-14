@@ -6,21 +6,19 @@
     :columns="columns"
     :data="data"
     :loading="indexerStore.loading"
-    :pagination="createPagination(false)"
+    :pagination="pagination"
     :row-key="rowKey"
     :row-props="rowProps"
+    @update:page-size="(pz: number) => (pagination.pageSize = pz)"
   />
   <!-- Modal - Update Indexer -->
   <modal v-model:show="showModalEditIndexer" :title="$t('indexer.update')">
-    <FormIndexer
-      :indexer-uuid="currentRow.indexer_uuid"
-      @submit-success="showModalEditIndexer = false"
-    />
+    <FormIndexer :indexer-uuid="currentRow.indexer_uuid" @submit-success="showModalEditIndexer = false" />
   </modal>
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown } from 'naive-ui';
+import { NDropdown } from 'naive-ui';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -32,13 +30,10 @@ const message = useMessage();
 
 const rowKey = (row: IndexerBaseInterface) => row.indexer_uuid;
 const currentRow = ref<IndexerBaseInterface>(indexerStore.items[0]);
+const pagination = reactive(createPagination(false));
 
 const data = computed<IndexerBaseInterface[]>(() => {
-  return (
-    indexerStore.items.filter(item =>
-      item.name.toLowerCase().includes(indexerStore.search.toLowerCase())
-    ) || []
-  );
+  return indexerStore.items.filter(item => item.name.toLowerCase().includes(indexerStore.search.toLowerCase())) || [];
 });
 
 const columns = computed(() => [
@@ -92,12 +87,7 @@ const columns = computed(() => [
           trigger: 'click',
         },
         {
-          default: () =>
-            h(
-              NButton,
-              { type: 'tertiary', size: 'small', quaternary: true, round: true },
-              { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-            ),
+          default: () => h(resolveComponent('BtnActions')),
         }
       );
     },

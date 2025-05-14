@@ -8,7 +8,7 @@
       <div>
         <div class="mb-8 grid gap-8 border-b border-bg-lighter pb-8 md:grid-cols-2">
           <div>
-            <SolutionContent :content="content" :icons="true" />
+            <SimpletContent :content="content" :icons="true" />
             <Btn type="primary" :to="`/dashboard/service/smart-contracts/${params?.id}/deploy`">
               {{ $t('smartContracts.customizeAndDeploy') }}
             </Btn>
@@ -18,7 +18,7 @@
           <Demo
             :image="NftTemplateJPG"
             link="https://github.com/Apillon/apillon-evm-contracts"
-            :title="$t('dashboard.solution.viewCode')"
+            :title="$t('simplet.viewCode')"
           />
         </div>
       </div>
@@ -39,11 +39,11 @@ const { params } = useRoute();
 const smartContractStore = useSmartContractStore();
 const { pageLoading, init } = useSmartContracts();
 
-const { generateContent } = useSolution();
-const content = generateContent(SolutionKey.SMART_CONTRACT);
+const { generateContent } = useSimplet();
+const content = generateContent('infoSection', 'smartContracts');
 
 useHead({
-  title: t('dashboard.solution.nftEmailSignupAirdrop.name'),
+  title: t('dashboard.nav.smartContracts'),
 });
 
 onMounted(() => {

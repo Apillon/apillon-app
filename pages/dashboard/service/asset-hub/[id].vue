@@ -6,24 +6,7 @@
 
     <div class="pb-8">
       <div class="card-light mb-6 px-6 py-4">
-        <n-table class="plain" :bordered="false" :single-line="true">
-          <tbody>
-            <tr v-for="(data, key) in assetData">
-              <td :class="{ '!border-bg-light': key + 1 === assetData.length }">
-                <span class="text-white">
-                  {{ data.label }}
-                </span>
-              </td>
-              <td :class="{ '!border-bg-light': key + 1 === assetData.length }">
-                <Btn v-if="data.link" :href="data.link" type="link">
-                  {{ data.value }}
-                </Btn>
-                <TableEllipsis v-else-if="data.copy" class="w-full justify-between" :text="`${data.value}`" />
-                <span v-else>{{ data.value }}</span>
-              </td>
-            </tr>
-          </tbody>
-        </n-table>
+        <TableInfo :data="assetData" />
       </div>
 
       <div class="card-light px-6 py-4">

@@ -16,18 +16,21 @@ export const usePaymentStore = defineStore('payment', {
     creditPackages: [] as CreditPackageInterface[],
     creditTransactions: {
       items: [] as CreditTransactionInterface[],
-      total: 0,
+      loading: false,
+      pagination: createPagination(),
     },
     activeSubscription: {} as SubscriptionInterface,
     subscriptions: [] as SubscriptionInterface[],
     subscriptionPackages: [] as SubscriptionPackageInterface[],
     invoices: {
       items: [] as InvoiceInterface[],
-      total: 0,
+      loading: false,
+      pagination: createPagination(),
     },
     loading: false,
     priceList: [] as ProductPriceInterface[],
     promises: {
+      activeSubscription: null as any,
       priceList: null as any,
     },
     rpcPlan: undefined as RpcPlanType | undefined,
@@ -74,11 +77,16 @@ export const usePaymentStore = defineStore('payment', {
     resetData() {
       this.credit = {} as CreditInterface;
       this.creditTransactions.items = [] as CreditTransactionInterface[];
-      this.creditTransactions.total = 0;
+      this.creditTransactions.pagination.itemCount = 0;
+      this.creditTransactions.pagination.page = 1;
+
       this.activeSubscription = {} as SubscriptionInterface;
       this.subscriptions = [] as SubscriptionInterface[];
+
       this.invoices.items = [] as InvoiceInterface[];
-      this.invoices.total = 0;
+      this.invoices.pagination.itemCount = 0;
+      this.invoices.pagination.page = 1;
+
       this.priceList = [] as ProductPriceInterface[];
     },
 
@@ -86,7 +94,7 @@ export const usePaymentStore = defineStore('payment', {
       const activePackage =
         this.subscriptionPackages.find(item => item.id === this.activeSubscription.package_id) ||
         this.subscriptionPackages[0];
-      return activePackage.name === planName;
+      return activePackage?.name === planName;
     },
 
     /**
@@ -115,7 +123,9 @@ export const usePaymentStore = defineStore('payment', {
 
     /** GET Active Subscription */
     async getActiveSubscription() {
-      if (!this.hasActiveSubscription || isCacheExpired(LsCacheKeys.SUBSCRIPTION_ACTIVE)) {
+      if (!this.hasActiveSubscription || this.promises.activeSubscription) {
+        await this.promises.activeSubscription;
+      } else if (!this.hasActiveSubscription || isCacheExpired(LsCacheKeys.SUBSCRIPTION_ACTIVE)) {
         await this.fetchActiveSubscription();
       }
     },
@@ -142,10 +152,10 @@ export const usePaymentStore = defineStore('payment', {
 
         if (invoiceData?.data) {
           this.invoices.items = invoiceData.data.items;
-          this.invoices.total = invoiceData.data.total;
+          this.invoices.pagination.itemCount = invoiceData.data.total;
         } else {
           this.invoices.items = [] as InvoiceInterface[];
-          this.invoices.total = 0;
+          this.invoices.pagination.itemCount = 0;
         }
       }
     },
@@ -165,9 +175,6 @@ export const usePaymentStore = defineStore('payment', {
       await this.getPriceList();
       return this.priceList.filter(item => item.service === service);
     },
-    async getServicePricesByName(serviceName: string): Promise<ProductPriceInterface[]> {
-      return this.priceList.filter(item => item.name === serviceName);
-    },
     async getServicePricesByCategory(category: string): Promise<ProductPriceInterface[]> {
       return this.priceList.filter(item => item.category === category);
     },
@@ -179,7 +186,7 @@ export const usePaymentStore = defineStore('payment', {
     },
 
     /** Price for service */
-    async findServicePrice(serviceName: string): Promise<ProductPriceInterface | undefined> {
+    findServicePrice(serviceName: string): ProductPriceInterface | undefined {
       return this.priceList.find(item => item.name === serviceName);
     },
     async filterServicePrice(serviceNames: string[]): Promise<ProductPriceInterface[]> {
@@ -251,6 +258,7 @@ export const usePaymentStore = defineStore('payment', {
       const projectUuid = await dataStore.getProjectUuid();
       if (!projectUuid) return;
 
+      this.creditTransactions.loading = true;
       try {
         const params = parseArguments(args);
         if (args.category) params.category = args.category;
@@ -260,12 +268,14 @@ export const usePaymentStore = defineStore('payment', {
         const res = await $api.get<CreditTransactionsResponse>(endpoints.creditTransactions(projectUuid), params);
 
         this.creditTransactions.items = res.data.items;
-        this.creditTransactions.total = res.data.total;
+        this.creditTransactions.pagination.itemCount = res.data.total;
       } catch (error: any) {
         this.creditTransactions.items = [] as CreditTransactionInterface[];
-        this.creditTransactions.total = 0;
+        this.creditTransactions.pagination.itemCount = 0;
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
+      } finally {
+        this.creditTransactions.loading = false;
       }
     },
 
@@ -277,7 +287,10 @@ export const usePaymentStore = defineStore('payment', {
       if (!projectUuid) return;
 
       try {
-        const res = await $api.get<ActiveSubscriptionResponse>(endpoints.activeSubscription(projectUuid));
+        this.promises.activeSubscription = await $api.get<ActiveSubscriptionResponse>(
+          endpoints.activeSubscription(projectUuid)
+        );
+        const res = await this.promises.activeSubscription;
 
         this.activeSubscription = res.data;
 
@@ -289,6 +302,7 @@ export const usePaymentStore = defineStore('payment', {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
+      this.promises.activeSubscription = null;
       this.loading = false;
     },
 
@@ -335,16 +349,13 @@ export const usePaymentStore = defineStore('payment', {
         return null;
       }
 
+      this.invoices.loading = true;
       try {
-        const params: Record<string, string | number> = {
-          orderBy: 'createTime',
-          desc: 'true',
-          reference: 'creditPackage',
-          page,
-          limit,
-        };
+        const params = parseArguments({ page, limit });
+        params.reference = 'creditPackage';
 
         const res = await $api.get<InvoiceResponse>(endpoints.invoices(projectUuid), params);
+        this.invoices.loading = false;
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.INVOICES, Date.now().toString());
@@ -353,6 +364,7 @@ export const usePaymentStore = defineStore('payment', {
       } catch (error: any) {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
+        this.invoices.loading = false;
       }
       return null;
     },

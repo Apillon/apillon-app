@@ -4,34 +4,16 @@
     :bordered="false"
     :columns="columns"
     :data="paymentStore.invoices.items"
-    :loading="loading"
-    :pagination="pagination"
+    :loading="paymentStore.invoices.loading"
+    :pagination="paymentStore.invoices.pagination"
+    @update:page="(page: number) => handlePageChange(page, paymentStore.invoices.pagination.pageSize)"
+    @update:page-size="(pageSize: number) => handlePageChange(1, pageSize)"
   />
 </template>
 
 <script lang="ts" setup>
 const { t } = useI18n();
 const paymentStore = usePaymentStore();
-
-const loading = ref<boolean>(false);
-
-/** Pagination data */
-const pagination = reactive({
-  itemCount: paymentStore.invoices.total,
-  page: 1,
-  pageSize: PAGINATION_LIMIT,
-  showSizePicker: paymentStore.invoices.total > 0,
-  pageSizes: enumValues(PageSize) as number[],
-  prefix({ itemCount }) {
-    return t('general.total', { total: itemCount });
-  },
-  onChange: (page: number) => {
-    handlePageChange(page, pagination.pageSize);
-  },
-  onUpdatePageSize: (pageSize: number) => {
-    handlePageChange(1, pageSize);
-  },
-});
 
 const createColumns = (): NDataTableColumns<InvoiceInterface> => {
   return [
@@ -49,11 +31,7 @@ const createColumns = (): NDataTableColumns<InvoiceInterface> => {
       key: 'subtotalAmount',
       title: t('dashboard.invoice.subtotalAmount'),
       render(row) {
-        return h(
-          'span',
-          { class: 'text-body' },
-          `${formatPrice(row.subtotalAmount, row.currency)}`
-        );
+        return h('span', { class: 'text-body' }, `${formatPrice(row.subtotalAmount, row.currency)}`);
       },
     },
     {
@@ -84,14 +62,14 @@ const columns = createColumns();
 
 /** On page change, load data */
 async function handlePageChange(page: number, limit: number) {
-  if (!loading.value) {
-    loading.value = true;
+  if (!paymentStore.invoices.loading) {
+    paymentStore.invoices.loading = true;
 
     await paymentStore.getInvoices(page, limit);
 
-    loading.value = false;
-    pagination.page = page;
-    pagination.pageSize = limit;
+    paymentStore.invoices.loading = false;
+    paymentStore.invoices.pagination.page = page;
+    paymentStore.invoices.pagination.pageSize = limit;
   }
 }
 </script>

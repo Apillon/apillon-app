@@ -1,16 +1,12 @@
 <template>
-  <component
-    :is="btnType === 'naive' ? NButton : btnType === 'btn' ? Btn : 'button'"
-    v-bind="$attrs"
-    @click="onClick"
-  >
+  <component :is="btnType === 'naive' ? NButton : btnType === 'btn' ? Btn : 'button'" v-bind="$attrs" @click="onClick">
     <slot />
   </component>
 </template>
 
 <script lang="ts" setup>
 import { NButton } from 'naive-ui';
-import { PriceServiceName } from '#imports';
+import type { PriceServiceName } from '#imports';
 
 const emit = defineEmits(['click']);
 const props = defineProps({

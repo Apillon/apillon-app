@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-import { PriceServiceName } from '#imports';
+import type { PriceServiceName } from '#imports';
 import type { Size } from 'naive-ui/es/select/src/interface';
 
 const attrs = useAttrs();

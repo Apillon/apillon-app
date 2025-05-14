@@ -1,25 +1,21 @@
 <template>
-  <div class="px-10 mt-4">
+  <div class="mt-4 px-10">
     <swiper
-      class="max-w-sm xl:max-w-md mx-auto"
+      class="mx-auto max-w-sm xl:max-w-md"
       effect="cards"
       :grab-cursor="true"
       :pagination="pagination"
       :modules="[EffectCards, Pagination]"
       @swiper="onSwiper"
-      @slideChange="onSlideChange"
+      @slide-change="onSlideChange"
     >
-      <swiper-slide v-for="(slide, key) in slides" :key="key" class="justify-center flex mx-auto">
-        <NftCard
-          :id="key + 1"
-          :data="slide"
-          class="min-h-[16rem] md:min-h-[18rem] lg:min-h-[20rem]"
-        />
+      <swiper-slide v-for="(slide, key) in slides" :key="key" class="mx-auto flex justify-center">
+        <NftCard :id="key + 1" v-bind="slide" class="min-h-[16rem] md:min-h-[18rem] lg:min-h-[20rem]" />
       </swiper-slide>
     </swiper>
   </div>
 
-  <n-space class="w-auto mx-auto mt-8" justify="center">
+  <n-space class="mx-auto mt-8 w-auto" justify="center">
     <slot />
   </n-space>
 </template>
@@ -27,7 +23,7 @@
 <script lang="ts" setup>
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { EffectCards, Pagination } from 'swiper/modules';
-import { type Swiper as SwiperClass } from 'swiper/types';
+import type { Swiper as SwiperClass } from 'swiper/types';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -35,7 +31,7 @@ import 'swiper/css/effect-cards';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-const collectionStore = useCollectionStore();
+const metadataStore = useMetadataStore();
 
 const SLIDES_TO_SHOW = 10;
 const swiperRef = ref<SwiperClass>();
@@ -44,12 +40,12 @@ const slides = ref<Array<any>>([]);
 const pagination = reactive({
   type: 'fraction',
   formatFractionTotal: () => {
-    return collectionStore.csvData.length;
+    return metadataStore.metadata.length;
   },
 });
 
 onMounted(() => {
-  slides.value = collectionStore.csvData.slice(0, SLIDES_TO_SHOW);
+  slides.value = metadataStore.metadata.slice(0, SLIDES_TO_SHOW);
 });
 onUnmounted(() => {
   if (swiperRef.value) {
@@ -80,9 +76,9 @@ function onSlideChange(swiper: SwiperClass) {
   if (
     swiper.previousIndex < swiper.realIndex &&
     swiper.realIndex + SLIDES_TO_SHOW > slides.value.length &&
-    slides.value.length < collectionStore.csvData.length
+    slides.value.length < metadataStore.metadata.length
   ) {
-    slides.value.push(collectionStore.csvData[swiper.previousIndex + SLIDES_TO_SHOW]);
+    slides.value.push(metadataStore.metadata[swiper.previousIndex + SLIDES_TO_SHOW]);
   }
 }
 </script>
@@ -92,7 +88,7 @@ function onSlideChange(swiper: SwiperClass) {
   @apply relative;
 
   &.swiper-pagination-fraction {
-    @apply mt-2 bottom-0;
+    @apply bottom-0 mt-2;
   }
 }
 </style>

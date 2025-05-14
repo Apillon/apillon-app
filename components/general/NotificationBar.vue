@@ -1,8 +1,8 @@
 <template>
-  <div class="px-4 overflow-hidden flex font-bold">
+  <div class="flex overflow-hidden px-4 font-bold">
     <div :class="$style.cornerTopLeft"></div>
     <div
-      class="relative inline-block py-1 px-8 border-1 border-t-0 rounded-b-2xl w-auto bg-bg-dark text-sm"
+      class="relative inline-block w-auto rounded-b-2xl border-1 border-t-0 bg-bg-dark px-8 py-1 text-sm"
       :class="notificationClass"
     >
       <slot />
@@ -38,10 +38,10 @@ const notificationClass = computed(() => {
 <style lang="postcss" module>
 .cornerTopLeft,
 .cornerTopRight {
-  @apply w-4 h-4 relative overflow-hidden z-1;
+  @apply relative z-1 h-4 w-4 overflow-hidden;
 
   &:before {
-    @apply block absolute border-1 border-yellow;
+    @apply absolute block border-1 border-yellow;
     content: '';
     display: block;
     width: 200%;
@@ -53,7 +53,7 @@ const notificationClass = computed(() => {
   @apply left-[1.5px];
 
   &:before {
-    @apply top-0 right-0;
+    @apply right-0 top-0;
     box-shadow: 1rem -1rem 0 0 theme(colors.bg.dark);
   }
 }
@@ -62,7 +62,7 @@ const notificationClass = computed(() => {
   @apply right-[1.3px];
 
   &:before {
-    @apply top-0 left-0;
+    @apply left-0 top-0;
     box-shadow: -1rem -1rem 0 0 theme(colors.bg.dark);
   }
 }

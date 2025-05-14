@@ -2,25 +2,14 @@
   <n-space v-bind="$attrs" justify="space-between">
     <n-space size="large">
       <div class="w-[20vw] min-w-[11rem] max-w-xs">
-        <n-input
-          v-model:value="bucketStore.filter.search"
-          type="text"
-          name="search"
-          size="small"
-          :placeholder="$t('storage.file.search')"
-          clearable
-        >
-          <template #prefix>
-            <span class="icon-search text-2xl"></span>
-          </template>
-        </n-input>
+        <n-input v-model:value="bucketStore.filter.search" :placeholder="$t('storage.file.search')" />
       </div>
       <!-- Filter type -->
       <select-options
         v-model:value="bucketStore.filter.bucketType"
         :options="bucketTypes"
         class="w-[20vw] min-w-[11rem] max-w-xs"
-        size="small"
+        size="medium"
         :placeholder="$t('form.placeholder.bucketType')"
         filterable
         clearable
@@ -35,7 +24,7 @@
           <template #trigger>
             <n-button
               class="w-10"
-              size="small"
+              size="medium"
               type="error"
               :disabled="authStore.isAdmin()"
               ghost
@@ -54,7 +43,7 @@
       <ModalCreditCosts :service="ServiceTypeName.STORAGE" />
 
       <!-- Refresh storage content -->
-      <n-button size="small" :loading="bucketStore.loading" @click="bucketStore.fetchBuckets()">
+      <n-button size="medium" :loading="bucketStore.loading" @click="bucketStore.fetchBuckets()">
         <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('storage.refresh') }}
       </n-button>
@@ -62,7 +51,7 @@
       <!-- Create new bucket -->
       <n-button
         v-if="bucketStore.hasBuckets"
-        size="small"
+        size="medium"
         :disabled="authStore.isAdmin()"
         @click="showModalNewBucket = true"
       >
@@ -84,7 +73,7 @@ import { ServiceTypeName } from '~/lib/types/service';
 
 const emit = defineEmits(['onBucketDelete']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const router = useRouter();
 const authStore = useAuthStore();
 const bucketStore = useBucketStore();
@@ -94,11 +83,11 @@ const showModalNewBucket = ref<boolean | null>(false);
 const bucketTypes = ref<SelectOption[]>([
   {
     value: BucketType.STORAGE,
-    label: $i18n.t(`storage.type.${BucketType.STORAGE}`),
+    label: t(`storage.type.${BucketType.STORAGE}`),
   },
   {
     value: BucketType.NFT_METADATA,
-    label: $i18n.t(`storage.type.${BucketType.NFT_METADATA}`),
+    label: t(`storage.type.${BucketType.NFT_METADATA}`),
   },
 ]);
 

@@ -3,7 +3,7 @@
     <n-tab-pane :name="EncryptTab.BUCKET">
       <template #tab>
         <IconNumber v-if="contractStore.encryptTab === EncryptTab.BUCKET" :number="1" :active="true" />
-        <IconSuccess v-else />
+        <IconSuccessful v-else />
         <span class="ml-2">{{ $t('computing.contract.encrypt.step1') }}</span>
       </template>
       <slot>
@@ -12,7 +12,7 @@
     </n-tab-pane>
     <n-tab-pane :name="EncryptTab.ASSIGN" :disabled="!contractStore.bucketUuid">
       <template #tab>
-        <IconSuccess v-if="contractStore.encryptTab === EncryptTab.FINISHED" />
+        <IconSuccessful v-if="contractStore.encryptTab === EncryptTab.FINISHED" />
         <IconNumber v-else :number="2" :active="contractStore.encryptTab === EncryptTab.ASSIGN" />
         <span class="ml-2">{{ $t('computing.contract.encrypt.step2') }}</span>
       </template>

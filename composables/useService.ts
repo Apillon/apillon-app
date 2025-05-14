@@ -1,5 +1,5 @@
 export type ServiceTypeItem = {
-  id: ServiceType | SolutionKey;
+  id: ServiceType | SimpletType | number | string;
   key: string;
   name: string;
   description: string;
@@ -7,14 +7,14 @@ export type ServiceTypeItem = {
   iconSvg?: string;
   link?: string;
   disabled?: boolean | null;
-  usage?: String[];
+  usage?: string[];
 };
 export type OnboardingService = {
   key: string;
   name: string;
   description: string;
   link?: string;
-  tags?: String[];
+  tags?: string[];
   codingRequired?: boolean;
 };
 type OnboardingServiceTrans = {
@@ -27,7 +27,6 @@ export default function useService() {
   const { t, rt, tm } = useI18n();
   const authStore = useAuthStore();
   const config = useRuntimeConfig();
-  const { translate } = useSolution();
 
   const services = {
     storage: ServiceType.STORAGE,

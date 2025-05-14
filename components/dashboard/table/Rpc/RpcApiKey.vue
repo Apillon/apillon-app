@@ -6,10 +6,7 @@
     :columns="columns"
     :data="tableData"
     :loading="rpcApiKeyStore.loading"
-    :pagination="{
-      pageSize: PAGINATION_LIMIT,
-      prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
-    }"
+    :pagination="pagination"
     :row-key="rowKey"
     :row-props="rowProps"
   />
@@ -25,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NEllipsis, type DropdownOption } from 'naive-ui';
+import { NDropdown, NEllipsis, type DropdownOption } from 'naive-ui';
 
 const props = defineProps({
   isOwner: { type: Boolean, default: false },
@@ -34,10 +31,10 @@ const props = defineProps({
 const { t } = useI18n();
 const rpcApiKeyStore = useRpcApiKeyStore();
 
+const pagination = reactive(createPagination(false));
+
 const tableData = computed(() => {
-  return rpcApiKeyStore.items.filter(item =>
-    item.name.toLowerCase().includes(rpcApiKeyStore.search.toLowerCase())
-  );
+  return rpcApiKeyStore.items.filter(item => item.name.toLowerCase().includes(rpcApiKeyStore.search.toLowerCase()));
 });
 
 const createColumns = (): NDataTableColumns<RpcApiKeyInterface> => {
@@ -86,12 +83,7 @@ const createColumns = (): NDataTableColumns<RpcApiKeyInterface> => {
             trigger: 'click',
           },
           {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
+            default: () => h(resolveComponent('BtnActions')),
           }
         );
       },
@@ -148,7 +140,9 @@ const dropdownOptions = computed(() => {
 
 function onRpcApiKeyDeleted() {
   modalDeleteRpcKey.value = false;
-  currentRow.value && rpcApiKeyStore.deleteItem(currentRow.value.id);
+  if (currentRow.value) {
+    rpcApiKeyStore.deleteItem(currentRow.value.id);
+  }
 }
 
 watch(modalEditRpcKeyVisible, newValue => {

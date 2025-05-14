@@ -3,7 +3,7 @@
     <slot>
       <n-space align="center" size="large">
         <NuxtLink :to="{ name: 'dashboard-service-computing' }">
-          <span class="icon-back text-2xl align-sub"></span>
+          <span class="icon-back align-sub text-2xl"></span>
         </NuxtLink>
         <h2>{{ contractStore.active.name }}</h2>
       </n-space>

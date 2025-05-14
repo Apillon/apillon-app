@@ -1,6 +1,6 @@
 <template>
   <swiper
-    class="max-w-sm xl:max-w-md mx-auto"
+    class="mx-auto max-w-sm xl:max-w-md"
     :grab-cursor="true"
     :effect="'fade'"
     :navigation="true"
@@ -13,7 +13,7 @@
 
     <div
       v-if="swiperRef"
-      class="pointer-events-none absolute left-1/2 bottom-0 z-1 flex w-full -translate-x-1/2 flex-wrap justify-center"
+      class="pointer-events-none absolute bottom-0 left-1/2 z-1 flex w-full -translate-x-1/2 flex-wrap justify-center"
     >
       <div>
         <button
@@ -50,7 +50,7 @@
 <script lang="ts" setup>
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Navigation, EffectFade } from 'swiper/modules';
-import { type Swiper as SwiperClass } from 'swiper/types';
+import type { Swiper as SwiperClass } from 'swiper/types';
 
 // Import Swiper styles
 import 'swiper/css';

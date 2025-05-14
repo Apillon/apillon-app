@@ -38,8 +38,10 @@
       :bordered="false"
       :columns="columns"
       :data="paymentStore.creditTransactions.items"
-      :loading="loading"
-      :pagination="pagination"
+      :loading="paymentStore.creditTransactions.loading"
+      :pagination="paymentStore.creditTransactions.pagination"
+      @update:page="(page: number) => handlePageChange(page, paymentStore.creditTransactions.pagination.pageSize)"
+      @update:page-size="(pageSize: number) => handlePageChange(1, pageSize)"
     />
   </n-space>
 </template>
@@ -51,7 +53,6 @@ import { ServiceTypeName } from '~/lib/types/service';
 const { t } = useI18n();
 const paymentStore = usePaymentStore();
 
-const loading = ref<boolean>(false);
 const category = ref<string | null>(null);
 const direction = ref<string | null>(null);
 const service = ref<string | null>(null);
@@ -64,24 +65,6 @@ const directions = enumKeyValues(CreditDirection).map((item: KeyValue) => {
 });
 const services = enumKeyValues(ServiceTypeName).map((item: KeyValue) => {
   return { label: item.key, value: item.value };
-});
-
-/** Pagination data */
-const pagination = reactive({
-  itemCount: paymentStore.creditTransactions.total,
-  page: 1,
-  pageSize: PAGINATION_LIMIT,
-  showSizePicker: paymentStore.creditTransactions.total > 0,
-  pageSizes: enumValues(PageSize) as number[],
-  prefix({ itemCount }) {
-    return t('general.total', { total: itemCount });
-  },
-  onChange: (page: number) => {
-    handlePageChange(page, pagination.pageSize);
-  },
-  onUpdatePageSize: (pageSize: number) => {
-    handlePageChange(1, pageSize);
-  },
 });
 
 const createColumns = (): NDataTableColumns<CreditTransactionInterface> => {
@@ -155,9 +138,7 @@ watch(
 
 /** On page change, load data */
 async function handlePageChange(page = 1, limit = PAGINATION_LIMIT) {
-  if (!loading.value) {
-    loading.value = true;
-
+  if (!paymentStore.creditTransactions.loading) {
     await paymentStore.fetchCreditTransactions({
       category: category.value,
       direction: direction.value,
@@ -166,9 +147,8 @@ async function handlePageChange(page = 1, limit = PAGINATION_LIMIT) {
       limit,
     });
 
-    loading.value = false;
-    pagination.page = page;
-    pagination.pageSize = limit;
+    paymentStore.creditTransactions.pagination.page = page;
+    paymentStore.creditTransactions.pagination.pageSize = limit;
   }
 }
 </script>

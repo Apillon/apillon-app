@@ -51,7 +51,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
     {
       key: 'dashboard-simplets',
       label: t('dashboard.nav.simplets'),
-      to: 'dashboard-solution',
+      to: 'dashboard-simplet',
       color: 'blue',
       svgIcon: 'menu/tools',
     },
@@ -84,15 +84,6 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       disabled: isMenuItemDisabled(Feature.EMBEDDED_WALLET) || !authStore.isUserAllowed(Permission.EMBEDDED_WALLET),
     },
     {
-      key: 'dashboard-service-cloud-functions',
-      label: t('dashboard.nav.cloudFunctions'),
-      to: 'dashboard-service-cloud-functions',
-      iconName: 'icon-cloud-functions',
-      soon: isMenuItemDisabled(Feature.CLOUD_FUNCTIONS),
-      beta: isBetaFeature(Feature.CLOUD_FUNCTIONS),
-      disabled: isMenuItemDisabled(Feature.CLOUD_FUNCTIONS) || !authStore.isUserAllowed(Permission.COMPUTING),
-    },
-    {
       key: 'dashboard-service-rpc',
       label: t('dashboard.nav.rpc'),
       to: 'dashboard-service-rpc',
@@ -109,6 +100,15 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       soon: isMenuItemDisabled(Feature.INDEXING),
       beta: isBetaFeature(Feature.INDEXING),
       disabled: isMenuItemDisabled(Feature.INDEXING) || !authStore.isUserAllowed(Permission.INDEXING),
+    },
+    {
+      key: 'dashboard-service-cloud-functions',
+      label: t('dashboard.nav.cloudFunctions'),
+      to: 'dashboard-service-cloud-functions',
+      iconName: 'icon-cloud-functions',
+      soon: isMenuItemDisabled(Feature.CLOUD_FUNCTIONS),
+      beta: isBetaFeature(Feature.CLOUD_FUNCTIONS),
+      disabled: isMenuItemDisabled(Feature.CLOUD_FUNCTIONS) || !authStore.isUserAllowed(Permission.COMPUTING),
     },
   ];
 
@@ -169,34 +169,22 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
 
   const simplets = [
     {
-      key: 'dashboard-solution-proof-of-attendance',
-      label: t('dashboard.solution.nftPoap.name'),
-      iconName: 'icon-poap',
-      to: 'dashboard-solution-proof-of-attendance',
-    },
-    {
-      key: 'dashboard-solution-airdrop',
-      label: t('dashboard.solution.nftAirdrop.name'),
+      key: 'dashboard-simplet-airdrop',
+      label: t('simplet.airdrop.name'),
       iconName: 'icon-nft-mint-airdrop',
-      to: 'dashboard-solution-airdrop',
+      to: 'dashboard-simplet-airdrop',
     },
     {
-      key: 'dashboard-solution-email-signup-airdrop',
-      label: t('dashboard.solution.nftEmailSignupAirdrop.name'),
-      iconName: 'icon-nft-drop',
-      to: 'dashboard-solution-email-signup-airdrop',
+      key: 'dashboard-simplet-poap',
+      label: t('simplet.poap.name'),
+      iconName: 'icon-poap',
+      to: 'dashboard-simplet-poap',
     },
     {
-      key: 'dashboard-solution-whitelist-claim',
-      label: t('dashboard.solution.nftWhitelistClaim.name'),
-      iconName: 'icon-gift',
-      to: 'dashboard-solution-whitelist-claim',
-    },
-    {
-      key: 'dashboard-solution-openGov',
-      label: t('dashboard.solution.openGov.name'),
-      iconName: 'icon-brand-membership',
-      to: 'dashboard-solution-openGov',
+      key: 'dashboard-simplet-free-mint',
+      label: t('simplet.free-mint.name'),
+      iconName: 'icon-poap',
+      to: 'dashboard-simplet-free-mint',
     },
   ];
 
@@ -257,6 +245,10 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
           type: 'divider',
         },
         ...simplets,
+        {
+          key: 'divider-5',
+          type: 'divider',
+        },
         ...configurationChildren,
       ]
     : [

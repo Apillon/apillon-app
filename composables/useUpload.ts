@@ -53,7 +53,7 @@ export default function useUpload() {
   }
 
   /** Check if file is too big (out of space) */
-  function isEnoughSpaceInStorage(uploadFileList: FileListItemType[], file: FileListItemType) {
+  function isEnoughSpaceInStorage(uploadFileList: FileListItemType[], file: FileListItemType | File) {
     const availableSize = storageStore.info.availableStorage - storageStore.info.usedStorage;
     totalFilesSize.value = uploadFileList.reduce((acc, item) => {
       return acc + item.size;
@@ -78,7 +78,7 @@ export default function useUpload() {
 
     /** Files data for upload params */
     const filesUpload: Array<UploadFileType> = fileList.value.map(file => {
-      file.path = fileFolderPath(file?.fullPath || '', wrapFilesToDirectory);
+      file.path = fileFolderPath(file?.path || '', wrapFilesToDirectory);
 
       return {
         fileName: file.name,
@@ -119,6 +119,9 @@ export default function useUpload() {
             if (!wrapFilesToDirectory) {
               const cids = {} as Record<string, UploadedFileInfo>;
 
+              console.log(fileRequests.data.files);
+              console.log(fileList.value);
+
               await Promise.all(
                 fileRequests.data.files.map(async uploadFileRequest => {
                   const content = fileList.value.find(
@@ -138,18 +141,7 @@ export default function useUpload() {
                   }
                 })
               );
-
-              const { data } = await $api.post<IpfsLinksResponse>(endpoints.ipfsLinks, {
-                cids: Object.values(cids).map(item => item.CID),
-                project_uuid: dataStore.projectUuid,
-              });
-
-              data.links.forEach((link: string, index: number) => {
-                const fileUuid = Object.keys(cids)[index];
-                cids[fileUuid].link = link;
-              });
-
-              bucketStore.addCids(cids);
+              generateIpfsLinks(cids);
             }
             await uploadFilesToS3(fileRequests.data.files);
           } else {
@@ -166,7 +158,23 @@ export default function useUpload() {
     return sessionUuid.value;
   }
 
+  async function generateIpfsLinks(cids: Record<string, UploadedFileInfo>) {
+    const { data } = await $api.post<IpfsLinksResponse>(endpoints.ipfsLinks, {
+      cids: Object.values(cids).map(item => item.CID),
+      project_uuid: dataStore.projectUuid,
+    });
+
+    data.links.forEach((link: string, index: number) => {
+      const fileUuid = Object.keys(cids)[index];
+      cids[fileUuid].link = link;
+    });
+
+    bucketStore.addCids(cids);
+  }
+
   function uploadFilesToS3(uploadFilesRequests: S3FileUploadRequestInterface[]) {
+    console.log(uploadFilesRequests);
+    console.log(fileList.value);
     uploadFilesRequests.forEach(uploadFileRequest => {
       const file = fileList.value.find(
         file => file.name === uploadFileRequest.fileName && file.path === uploadFileRequest.path
@@ -236,7 +244,7 @@ export default function useUpload() {
       if (clearFileList.value) {
         fileList.value.forEach(item => {
           if (item.status !== FileUploadStatusValue.FINISHED) {
-            item.onError();
+            item?.onError();
           }
         });
         while (fileList.value.length > 0) {
@@ -322,6 +330,7 @@ export default function useUpload() {
     fileAlreadyOnFileList,
     fileTypeValid,
     isEnoughSpaceInStorage,
+    generateIpfsLinks,
     onUploadError,
     updateFileStatus,
     uploadFiles,

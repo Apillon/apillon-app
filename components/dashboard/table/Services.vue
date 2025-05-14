@@ -7,11 +7,9 @@
       :columns="columns"
       :data="data"
       :loading="dataStore.service.loading"
-      :pagination="{
-        pageSize: PAGINATION_LIMIT,
-        prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
-      }"
+      :pagination="pagination"
       :row-props="rowProps"
+      @update:page-size="(pz: number) => (pagination.pageSize = pz)"
     />
   </n-space>
 
@@ -31,9 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NTag } from 'naive-ui';
-import { ServiceType } from '~/lib/types/service';
-import { PAGINATION_LIMIT } from '~/lib/values/general.values';
+import { NDropdown, NTag } from 'naive-ui';
 
 const props = defineProps({
   serviceType: {
@@ -43,33 +39,35 @@ const props = defineProps({
   },
 });
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const dataStore = useDataStore();
-const IconStatus = resolveComponent('IconStatus');
-const TableEllipsis = resolveComponent('TableEllipsis');
 
 const modalEditAuthVisible = ref<boolean>(false);
 const modalDeleteAuthVisible = ref<boolean>(false);
+const pagination = reactive(createPagination(false));
 
 const createColumns = (): NDataTableColumns<ServiceInterface> => {
   return [
     {
       key: 'name',
-      title: $i18n.t('general.serviceName'),
+      title: t('general.serviceName'),
       render(row) {
-        return [h(IconStatus, { active: row.active === 1 }, ''), h('span', { class: 'ml-2 text-blue' }, row.name)];
+        return [
+          h(resolveComponent('IconStatus'), { active: row.active === 1 }, ''),
+          h('span', { class: 'ml-2 text-blue' }, row.name),
+        ];
       },
     },
     {
       key: 'service_uuid',
-      title: $i18n.t('general.uuid'),
+      title: t('general.uuid'),
       render(row: ServiceInterface) {
-        return h(TableEllipsis, { text: row.service_uuid }, '');
+        return h(resolveComponent('TableEllipsis'), { text: row.service_uuid }, '');
       },
     },
     {
       key: 'serviceType',
-      title: $i18n.t('general.serviceType'),
+      title: t('general.serviceType'),
       render(row) {
         return h(
           'span',
@@ -82,13 +80,13 @@ const createColumns = (): NDataTableColumns<ServiceInterface> => {
     },
     {
       key: 'status',
-      title: $i18n.t('general.status'),
+      title: t('general.status'),
       render(row: ServiceInterface) {
         return h(
           NTag,
           { type: row.active ? 'success' : 'default', round: true, bordered: false },
           {
-            default: () => (row.active ? $i18n.t('general.active') : $i18n.t('general.paused')),
+            default: () => (row.active ? t('general.active') : t('general.paused')),
           }
         );
       },
@@ -106,12 +104,7 @@ const createColumns = (): NDataTableColumns<ServiceInterface> => {
             trigger: 'click',
           },
           {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
+            default: () => h(resolveComponent('BtnActions')),
           }
         );
       },
@@ -143,7 +136,7 @@ function rowProps(row: ServiceInterface) {
 const dropdownOptions = [
   {
     key: 'edit',
-    label: $i18n.t('general.edit'),
+    label: t('general.edit'),
     props: {
       onClick: () => {
         modalEditAuthVisible.value = true;
@@ -152,7 +145,7 @@ const dropdownOptions = [
   },
   {
     key: 'delete',
-    label: $i18n.t('general.delete'),
+    label: t('general.delete'),
     props: {
       class: '!text-pink',
       onClick: () => {

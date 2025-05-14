@@ -46,7 +46,7 @@
         <div class="flex justify-between gap-4">
           <div class="flex max-w-96 flex-col justify-evenly gap-6">
             <div class="px-4 text-hover">
-              <strong>Create Collection</strong>
+              <strong>{{ $t('nft.collection.review.createCollection') }}</strong>
               <span class="mt-2 block">Import your NFT files and metadata with just few clicks.</span>
             </div>
             <div class="border-l-2 border-blue px-4">
@@ -88,7 +88,7 @@
           <span class="icon-wide-right text-xl"></span>
         </NuxtLink>
         <div class="flex gap-2">
-          <Tag v-for="(item, key) in guide.tags" :key="key" size="small" type="info">
+          <Tag v-for="(item, key2) in guide.tags" :key="key2" size="small" type="info">
             {{ item }}
           </Tag>
         </div>
@@ -102,17 +102,18 @@
       </div>
     </div>
 
-    <ModalYT v-model:show="showVideo" :video-id="videoId" :chapters="videoChapters" />
+    <Drawer v-model:show="showVideo">
+      <DemoVideo :video-id="videoId" :chapters="videoChapters" />
+    </Drawer>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { enumKeys, translateItems } from '~/lib/utils';
 import { EvmChainMainnet } from '~/lib/types/nft';
-import { ServiceTypeName } from '~/lib/types/service';
-import type { VideoChapter } from '../Modal/YT.vue';
+import type { ServiceTypeName } from '~/lib/types/service';
 
-const props = defineProps({
+defineProps({
   name: { type: String, required: true },
   service: { type: String as PropType<ServiceTypeName>, required: true },
   docs: { type: String, default: null },
@@ -120,7 +121,6 @@ const props = defineProps({
   videoChapters: { type: Array<VideoChapter>, default: null },
 });
 
-const { t } = useI18n();
 const showVideo = ref<boolean>(false);
 
 const guides = [

@@ -6,15 +6,11 @@
     :data="archive ? chatStore.archive.items : chatStore.items"
     :expanded-row-keys="expandedRows"
     :loading="archive ? chatStore.archive.loading : chatStore.loading"
-    :pagination="{
-      page: archive ? chatStore.archive.pagination.page : chatStore.pagination.page,
-      pageSize: archive ? chatStore.archive.pagination.pageSize : chatStore.pagination.pageSize,
-      itemCount: archive ? chatStore.archive.pagination.itemCount : chatStore.pagination.itemCount,
-      prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
-    }"
+    :pagination="archive ? chatStore.archive.pagination : chatStore.pagination"
     :row-key="rowKey"
     :row-props="rowProps"
-    @update:page="handlePageChange"
+    @update:page="(page: number) => handlePageChange(page)"
+    @update:page-size="(pageSize: number) => handlePageChange(1, pageSize)"
   />
   <!-- Modal - Create Service -->
   <modal v-model:show="modalInfoVisible" :title="$t('social.chat.settings')">
@@ -24,7 +20,7 @@
 
 <script lang="ts" setup>
 import { useDebounceFn } from '@vueuse/core';
-import { NButton, NDropdown } from 'naive-ui';
+import { NDropdown } from 'naive-ui';
 
 const props = defineProps({
   archive: { type: Boolean, default: false },
@@ -108,12 +104,7 @@ const createColumns = (): NDataTableColumns<ChatInterface> => {
           NDropdown,
           { options: props.archive ? dropdownOptionsArchive : dropdownOptions, trigger: 'click' },
           {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
+            default: () => h(resolveComponent('BtnActions')),
           }
         );
       },
@@ -204,19 +195,29 @@ watch(
   () => chatStore.archive.search,
   _ => {
     chatStore.archive.loading = true;
-    debouncedSearchArchiveFilter();
+    debouncedSearchArchiveFilter(1);
   }
 );
 const debouncedSearchArchiveFilter = useDebounceFn(handlePageArchiveChange, 500);
 
 /** On page change, load data */
-async function handlePageChange(page = 1) {
-  await chatStore.fetchChats(page);
-  chatStore.pagination.page = page;
+async function handlePageChange(page = 1, limit?: number) {
+  if (props.archive) {
+    handlePageArchiveChange(page, limit);
+  } else {
+    const pageSize = limit || chatStore.pagination.pageSize;
+
+    await chatStore.fetchChats(page, pageSize);
+    chatStore.pagination.page = page;
+    chatStore.pagination.pageSize = pageSize;
+  }
 }
-async function handlePageArchiveChange(page: number) {
-  await chatStore.getChatArchive(page);
+async function handlePageArchiveChange(page: number, limit?: number) {
+  const pageSize = limit || chatStore.pagination.pageSize;
+
+  await chatStore.getChatArchive(page, pageSize);
   chatStore.archive.pagination.page = page;
+  chatStore.archive.pagination.pageSize = pageSize;
 }
 
 async function selectChat() {
@@ -235,9 +236,7 @@ async function selectChat() {
 
 async function deleteChat() {
   if (currentRow.value && (await deleteItem(ItemDeleteKey.SPACE, currentRow.value.space_uuid))) {
-    chatStore.items = chatStore.items.filter(
-      item => item.space_uuid !== currentRow.value?.space_uuid
-    );
+    chatStore.items = chatStore.items.filter(item => item.space_uuid !== currentRow.value?.space_uuid);
 
     sessionStorage.removeItem(LsCacheKeys.CHATS);
     sessionStorage.removeItem(LsCacheKeys.CHAT_ARCHIVE);
@@ -255,9 +254,7 @@ async function restoreChat() {
   try {
     await $api.patch<ChatResponse>(endpoints.spaceActivate(currentRow.value?.space_uuid));
 
-    chatStore.archive.items = chatStore.archive.items.filter(
-      item => item.space_uuid !== currentRow.value?.space_uuid
-    );
+    chatStore.archive.items = chatStore.archive.items.filter(item => item.space_uuid !== currentRow.value?.space_uuid);
 
     sessionStorage.removeItem(LsCacheKeys.CHATS);
     sessionStorage.removeItem(LsCacheKeys.CHAT_ARCHIVE);

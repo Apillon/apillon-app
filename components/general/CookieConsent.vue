@@ -19,10 +19,9 @@
       <div class="text-center">
         <h3 class="mb-2">But first. Cookie policy!</h3>
         <p class="text-bg-lighter">
-          By visiting our website, you are acknowledging your consent to the utilization of cookies
-          as specified in our
-          <NuxtLink to="https://apillon.io/cookie-policy" target="_blank">Cookie Policy</NuxtLink>,
-          aimed at enhancing user experience.
+          By visiting our website, you are acknowledging your consent to the utilization of cookies as specified in our
+          <NuxtLink to="https://apillon.io/cookie-policy" target="_blank">Cookie Policy</NuxtLink>, aimed at enhancing
+          user experience.
         </p>
       </div>
 

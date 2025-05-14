@@ -1,6 +1,7 @@
-import { useAccount, useChains, useClient, useSwitchChain, useConnectorClient, useAccountEffect } from '@wagmi/vue';
+import { useAccount, useClient, useSwitchChain, useConnectorClient, useAccountEffect } from '@wagmi/vue';
 import { getContract } from 'viem';
-import { moonbeam, moonbaseAlpha } from '@wagmi/vue/chains';
+import { moonbeam } from '@wagmi/vue/chains';
+import { abi } from '~/lib/config/abi';
 const nuxtConfig = useRuntimeConfig();
 
 const contractAddress = nuxtConfig.public.nctrContract as `0x${string}`;
@@ -13,8 +14,7 @@ const loading = ref(false);
 const transactionHash = ref<`0x${string}` | undefined>(undefined);
 
 export default function useContract() {
-  const { chains } = useChains();
-  const { address, isConnected } = useAccount();
+  const { address } = useAccount();
   const { switchChain } = useSwitchChain();
   const publicClient = useClient();
   const { data: walletClient, refetch } = useConnectorClient();
@@ -40,29 +40,33 @@ export default function useContract() {
   }
 
   // Contract Interaction
-  async function getClaimStatus() {
+  async function getClaimStatus(): Promise<boolean> {
     try {
       return (await contract.value.read.walletClaimed([savedWallet.value])) as boolean;
     } catch (e) {
-      return e;
+      console.error(e);
     }
+    return false;
   }
   // amount timestamp signature
   async function claimTokens(amount, timestamp, signature) {
+    if (!publicClient.value) return null;
     claimError.value = false;
     claimSuccess.value = false;
+
     try {
-      // const gas = await publicClient.value.estimateContractGas({
-      //   address: contractAddress,
-      //   abi,
-      //   functionName: 'claim',
-      //   args: [amount, timestamp, signature],
-      //   account: address.value,
-      // });
-      // const gasLimit = (gas * 110n) / 100n;
-      // const tx = await contract.value.write.claim([amount, timestamp, signature], {}, { gasLimit });
-      // transactionHash.value = tx;
-      // pollTransactionStatus(tx);
+      const gas = await publicClient.value.estimateContractGas({
+        address: contractAddress,
+        abi: abi,
+        functionName: 'claim',
+        args: [amount, timestamp, signature],
+        account: address.value,
+      });
+
+      const gasLimit = (gas * 110n) / 100n;
+      const tx = await contract.value.write.claim([amount, timestamp, signature], {}, { gasLimit });
+      transactionHash.value = tx;
+      pollTransactionStatus(tx);
     } catch (error) {
       console.error('Transaction failed', error);
       loading.value = false;
@@ -71,9 +75,10 @@ export default function useContract() {
   }
 
   async function pollTransactionStatus(tx: `0x${string}`) {
+    if (!publicClient.value) return null;
     loading.value = true;
     try {
-      // await publicClient.value.waitForTransactionReceipt({ hash: tx });
+      await publicClient.value.waitForTransactionReceipt({ hash: tx });
       claimSuccess.value = true;
       loading.value = false;
     } catch (error) {
@@ -103,7 +108,6 @@ export default function useContract() {
     loading,
     transactionHash,
     usedChain,
-    chain,
     address,
   };
 }

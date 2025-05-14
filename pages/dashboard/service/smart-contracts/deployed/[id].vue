@@ -4,17 +4,13 @@
       <HeaderSmartContract>
         <template #title>
           <div>
-            <h1>
+            <h1 class="md:whitespace-nowrap">
               {{ deployedContractStore.active.name }}
               <small class="ml-2 text-sm text-body">
-                {{
-                  t(
-                    `dashboard.service.smartContracts.type.${deployedContractStore.active.contractVersion.contract.contractType}`
-                  )
-                }}
+                {{ t(`smartContracts.type.${deployedContractStore.active.contractVersion.contract.contractType}`) }}
               </small>
               <small class="ml-2 text-sm text-body">
-                {{ t(`nft.chain.${deployedContractStore.active.chain}`) }}
+                {{ $t(`nft.evmChain.${deployedContractStore.active.chain}`) }}
               </small>
             </h1>
             <TableLink
@@ -33,7 +29,7 @@
               {{ $t('auth.wallet.disconnect.wallet') }}
             </p>
           </div>
-          <SmartContractsBtnSubmit v-else size="small" />
+          <SmartContractsBtnSubmit v-else />
         </slot>
       </HeaderSmartContract>
     </template>
@@ -85,7 +81,7 @@
           :btn-text="$t('smartContracts.infoSection.takeOwnershipBtn') + ' renounce'"
           owner
         />
-        <SmartContractsBtnSubmit v-else-if="!isConnected" size="small" />
+        <SmartContractsBtnSubmit v-else-if="!isConnected" />
       </div>
 
       <div class="mb-4 mt-8 flex flex-wrap gap-4 border-t border-bg-lighter pt-8 sm:flex-nowrap">
@@ -133,9 +129,6 @@
 
 <script lang="ts" setup>
 import { useAccount, useAccountEffect, useDisconnect } from '@wagmi/vue';
-import { contractLink } from '~/lib/utils/helpers';
-import { truncateWallet } from '~/lib/utils/strings';
-import { SmartContractStatus } from '~/lib/types/smartContracts';
 
 const { t } = useI18n();
 const router = useRouter();

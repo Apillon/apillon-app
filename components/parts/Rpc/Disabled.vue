@@ -2,7 +2,7 @@
   <Dashboard :loading="pageLoading">
     <template #heading>
       <Heading>
-        <h1>{{ t('dashboard.nav.rpc') }}</h1>
+        <h1>{{ $t('dashboard.nav.rpc') }}</h1>
       </Heading>
     </template>
 
@@ -51,7 +51,6 @@
 </template>
 <script lang="ts" setup>
 defineEmits(['serviceCreated']);
-const { t } = useI18n();
 const dataStore = useDataStore();
 const rpcEndpointStore = useRpcEndpointStore();
 

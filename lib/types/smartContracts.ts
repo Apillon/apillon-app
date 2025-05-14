@@ -13,6 +13,13 @@ export enum SmartContractType {
   ERC_1155 = 3,
 }
 
+interface ContractEntity extends BaseObjectInterface {
+  contract_uuid: string;
+  contractType: number;
+  chainType: number;
+  contractVersion: string | null;
+}
+
 declare global {
   interface SmartContractABI {
     stateMutability?: string;
@@ -42,11 +49,12 @@ declare global {
   }
 
   interface ContractVersion {
+    abi: SmartContractABI[];
+    contract: ContractEntity;
     createTime: string;
+    methods: ContractMethod[];
     updateTime: string;
     version: number;
-    abi: SmartContractABI[];
-    methods: ContractMethod[];
   }
 
   interface SmartContractInterface extends BaseObjectInterface {

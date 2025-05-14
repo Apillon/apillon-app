@@ -19,11 +19,7 @@ export const useIpfsStore = defineStore('ipfs', {
      * Fetch wrappers
      */
     async getIpfsInfo(projectUuid: string): Promise<IpfsInterface> {
-      if (
-        !this.hasIpfs ||
-        isCacheExpired(LsCacheKeys.IPFS) ||
-        this.info.project_uuid !== projectUuid
-      ) {
+      if (!this.hasIpfs || isCacheExpired(LsCacheKeys.IPFS) || this.info.project_uuid !== projectUuid) {
         return await this.fetchIpfsInfo(projectUuid);
       }
       return this.info;

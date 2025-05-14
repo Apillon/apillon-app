@@ -84,6 +84,31 @@ declare global {
   }
   interface StorageInfoResponse extends GeneralResponse<StorageInfoInterface> {}
 
+  interface GithubProjectConfig {
+    id: number;
+    project_uuid: string;
+    access_token: string;
+    refresh_token: string;
+    username: string;
+  }
+
+  interface GithubProjectConfigResponse extends GeneralResponse<GithubProjectConfig> {}
+
+  interface GithubRepo {
+    id: number;
+    name: string;
+    clone_url: string;
+    default_branch: string;
+    html_url: string;
+    owner: {
+      avatar_url: string;
+      login: string;
+    };
+    updated_at: string;
+    image?: string;
+  }
+
+  interface GithubReposResponse extends GeneralResponse<GithubRepo[]> {}
   /**
    * Bucket
    */

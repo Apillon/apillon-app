@@ -1,11 +1,9 @@
 <template>
   <div class="flex flex-col items-center">
-    <Btn class="w-full" type="primary" event-code="add_nctr_to_metamsk" @click="addToken">
-      Add $NCTR to MetaMask
-    </Btn>
+    <Btn class="w-full" type="primary" event-code="add_nctr_to_metamsk" @click="addToken"> Add $NCTR to MetaMask </Btn>
     <Notification v-if="wasAdded" type="info">
-      You have successfully added $NCTR tokens to your wallet. You will now be able to see them on
-      your account’s token list.
+      You have successfully added $NCTR tokens to your wallet. You will now be able to see them on your account’s token
+      list.
     </Notification>
   </div>
 </template>
@@ -36,7 +34,8 @@ async function addToken() {
     setTimeout(() => {
       wasAdded.value = false;
     }, 7000);
-  } catch (error) {
+  } catch (e: ApiError | any) {
+    console.error(e);
     wasAdded.value = false;
   }
 }

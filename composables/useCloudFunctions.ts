@@ -119,18 +119,18 @@ export default function useCloudFunctions() {
   }
 
   async function createNewJob(data: FormCloudFunctions, functionUuid: string): Promise<JobInterface | null> {
-    if (!dataStore.hasProjects) {
-      await dataStore.fetchProjects();
-      if (!dataStore.projectUuid) return null;
-    }
+    const projectUuid = await dataStore.getProjectUuid();
     try {
       setJobStatus(data?.file?.name);
 
       const fileCid = await uploadFile(data.file);
-      if (!fileCid) return null;
+      if (!fileCid) {
+        clearIntervalJob();
+        return null;
+      }
 
       const bodyData = {
-        project_uuid: dataStore.projectUuid,
+        project_uuid: projectUuid,
         function_uuid: functionUuid,
         name: data.name,
         slots: data.slots,
@@ -142,7 +142,7 @@ export default function useCloudFunctions() {
       cloudFunctionStore.addJob(res.data);
 
       message.success(t('form.success.created.cloudFunctionJob'));
-      clearIntervalJob();
+      clearIntervalJob(true);
 
       return res.data;
     } catch (error) {

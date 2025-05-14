@@ -1,26 +1,13 @@
 <template>
-  <Heading>
-    <slot>
-      <n-space align="center" size="large" :wrap="false">
-        <NuxtLink :to="{ name: 'dashboard-service-hosting' }">
-          <span class="icon-back align-sub text-2xl"></span>
-        </NuxtLink>
-        <div>
-          <h2>{{ websiteStore.active.name }}</h2>
-          <TableEllipsis :prefix="$t('hosting.website.uuid')" :text="websiteStore.active.website_uuid" />
-        </div>
-      </n-space>
-    </slot>
-
-    <template #info>
-      <n-space :size="32" align="center" :wrap="false">
-        <ModalCreditCosts :service="ServiceTypeName.HOSTING" />
-        <IconInfo @click="showModalW3Warn = true" />
-      </n-space>
-    </template>
-
-    <template #submenu>
-      <MenuWebsite />
+  <Heading
+    :back="{ name: 'dashboard-service-hosting' }"
+    :service="ServiceTypeName.HOSTING"
+    :service-name="$t('dashboard.nav.hosting')"
+    :name="websiteStore.active.name"
+    :info="$t('w3Warn.hosting.upload')"
+  >
+    <template #details>
+      <TableEllipsis :prefix="$t('hosting.website.uuid')" :text="websiteStore.active.website_uuid" />
     </template>
   </Heading>
 
@@ -31,9 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ServiceTypeName } from '~/lib/types/service';
-
-const $i18n = useI18n();
+const { te } = useI18n();
 const { params } = useRoute();
 
 const bucketStore = useBucketStore();
@@ -46,11 +31,12 @@ const showModalW3Warn = ref<boolean>(false);
 
 onMounted(() => {
   storageStore.getStorageInfo();
+  storageStore.getGithubProjectConfig();
 
   if (
     websiteUuid.value &&
     !localStorage.getItem(LsW3WarnKeys.HOSTING_NEW) &&
-    $i18n.te('w3Warn.hosting.upload') &&
+    te('w3Warn.hosting.upload') &&
     bucketStore.folder.items.length === 0
   ) {
     showModalW3Warn.value = true;

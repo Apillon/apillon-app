@@ -58,7 +58,7 @@ export const useDeployedContractStore = defineStore('deployedContract', {
     async getDeployedContractsArchive(page = 1, limit = PAGINATION_LIMIT) {
       if (
         page !== this.archive.pagination.page ||
-        !this.hasPostArchive ||
+        !this.hasDeployedContractsArchive ||
         isCacheExpired(LsCacheKeys.SMART_CONTRACTS_DEPLOYED_ARCHIVED)
       ) {
         return await this.fetchDeployedContractsArchive(page, limit);
@@ -155,7 +155,8 @@ export const useDeployedContractStore = defineStore('deployedContract', {
         sessionStorage.setItem(LsCacheKeys.SMART_CONTRACT_DEPLOYED, Date.now().toString());
 
         return res.data;
-      } catch (error: any) {
+      } catch (e: ApiError | any) {
+        console.error(e);
         // this.active = {} as DeployedContractInterface;
         /** Show error message */
       }

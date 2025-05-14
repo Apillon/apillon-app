@@ -40,7 +40,7 @@ type FormUserProfile = {
 };
 
 const message = useMessage();
-const $i18n = useI18n();
+const { t } = useI18n();
 const authStore = useAuthStore();
 
 const loading = ref<boolean>(false);
@@ -57,11 +57,11 @@ const rules: NFormRules = {
   email: [
     {
       type: 'email',
-      message: $i18n.t('validation.email'),
+      message: t('validation.email'),
     },
     {
       required: true,
-      message: $i18n.t('validation.emailRequired'),
+      message: t('validation.emailRequired'),
     },
   ],
 };
@@ -97,7 +97,7 @@ async function updateUserProfile() {
 
     if (res.data) {
       authStore.saveUser(res.data);
-      message.success($i18n.t('form.success.profile'));
+      message.success(t('form.success.profile'));
     }
   } catch (error) {
     message.error(userFriendlyMsg(error));

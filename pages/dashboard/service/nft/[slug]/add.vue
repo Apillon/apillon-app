@@ -7,33 +7,28 @@
     </template>
 
     <slot>
-      <NftCreateMetadata :style="isLg ? scrollStyle : {}" />
-      <ModalLeaving v-if="collectionStore.stepCollectionDeploy < CollectionStatus.DEPLOYED" />
+      <NftMetadataWizard ref="metadataRef" />
+      <ModalLeaving v-if="metadataStore.stepCollectionCreate < CollectionCreateStep.DEPLOYING" />
+      <Btn @click="metadataRef?.nextStep()">Next</Btn>
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-import { CollectionStatus } from '~/lib/types/nft';
+import { useTemplateRef } from 'vue';
+import { CollectionCreateStep } from '~/lib/types/nft';
 
-const { isLg } = useScreen();
 const { params } = useRoute();
 const router = useRouter();
 const paymentStore = usePaymentStore();
 const storageStore = useStorageStore();
+const metadataStore = useMetadataStore();
 const collectionStore = useCollectionStore();
-
-const pageLoading = ref<boolean>(true);
-
-/** Collection UUID from route */
-const collectionUuid = ref<string>(`${params?.slug}`);
+const metadataRef = useTemplateRef('metadataRef');
 
 const headingRef = ref<HTMLElement>();
-const scrollStyle = computed(() => {
-  return {
-    minHeight: `calc(100dvh - ${184 + (headingRef.value?.clientHeight || 73)}px)`,
-  };
-});
+const pageLoading = ref<boolean>(true);
+const collectionUuid = ref<string>(`${params?.slug}`);
 
 onMounted(async () => {
   if (!params?.slug) router.push({ name: 'dashboard-service-nft' });
@@ -43,14 +38,12 @@ onMounted(async () => {
   if (!currentCollection?.collection_uuid) {
     router.push({ name: 'dashboard-service-nft' });
   } else {
-    collectionStore.stepCollectionDeploy = CollectionStatus.CREATED;
-
     paymentStore.getPriceList();
     storageStore.getStorageInfo();
 
     pageLoading.value = false;
     collectionStore.active = currentCollection;
-    collectionStore.form.single.collectionUuid = currentCollection.collection_uuid;
+    metadataStore.form.single.collectionUuid = currentCollection.collection_uuid;
   }
 });
 </script>

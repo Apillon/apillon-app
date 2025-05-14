@@ -1,11 +1,5 @@
 <template>
-  <n-form
-    ref="formRef"
-    :model="formData"
-    :rules="rules"
-    :disabled="isFormDisabled"
-    @submit.prevent="handleSubmit"
-  >
+  <n-form ref="formRef" :model="formData" :rules="rules" :disabled="isFormDisabled" @submit.prevent="handleSubmit">
     <!--  Chat title -->
     <n-form-item path="title" :label="$t('social.post.title')" :label-props="{ for: 'title' }">
       <n-input
@@ -51,13 +45,7 @@
     <!--  Form submit -->
     <n-form-item :show-feedback="false" :show-label="false">
       <input type="submit" class="hidden" :value="$t('social.post.create')" />
-      <Btn
-        type="primary"
-        class="w-full mt-2"
-        :loading="loading"
-        :disabled="isFormDisabled"
-        @click="handleSubmit"
-      >
+      <Btn type="primary" class="mt-2 w-full" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
         {{ $t('social.post.create') }}
       </Btn>
     </n-form-item>
@@ -106,10 +94,7 @@ const formData = ref<FormSpace>({
 
 const rules: NFormRules = {
   title: [ruleRequired(t('validation.postTitleRequired'))],
-  body: [
-    ruleRequired(t('validation.postBodyRequired')),
-    ruleDescription(t('validation.descriptionTooLong')),
-  ],
+  body: [ruleRequired(t('validation.postBodyRequired')), ruleDescription(t('validation.descriptionTooLong'))],
 };
 
 const chats = computed(() => {
@@ -147,8 +132,7 @@ onMounted(() => {
 });
 
 function hubInfoLabel() {
-  const tooltipKey =
-    chatStore.items.length === 0 ? 'form.label.chatInfoEmpty' : 'form.label.chatInfo';
+  const tooltipKey = chatStore.items.length === 0 ? 'form.label.chatInfoEmpty' : 'form.label.chatInfo';
   return [
     h('span', { class: 'mr-1' }, t('form.label.chat')),
     h('span', {}, '('),
@@ -197,9 +181,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
       warningStore.showSpendingWarning(PriceServiceName.SOCIAL_POST, () => createPost());
     }

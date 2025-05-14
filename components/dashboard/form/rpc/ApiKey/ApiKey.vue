@@ -12,10 +12,10 @@
         </NuxtLink>
       </Notification>
       <!-- Info text -->
-      <p v-if="$i18n.te('computing.contract.infoNew')" class="mb-8 text-body">
+      <p v-if="$te('computing.contract.infoNew')" class="mb-8 text-body">
         {{ $t('computing.contract.infoNew') }}
       </p>
-      <p v-else-if="$i18n.te('computing.contract.infoEdit')" class="mb-8 text-body">
+      <p v-else-if="$te('computing.contract.infoEdit')" class="mb-8 text-body">
         {{ $t('computing.contract.infoEdit') }}
       </p>
     </template>
@@ -74,7 +74,7 @@ const props = defineProps({
   id: { type: Number, default: 0 },
 });
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess', 'close']);
@@ -90,8 +90,8 @@ const isFormDisabled = computed<boolean>(() => {
 });
 
 const rules: NFormRules = {
-  name: [ruleRequired($i18n.t('validation.rpc.nameRequired'))],
-  description: [ruleDescription($i18n.t('validation.descriptionTooLong'))],
+  name: [ruleRequired(t('validation.rpc.nameRequired'))],
+  description: [ruleDescription(t('validation.descriptionTooLong'))],
 };
 
 function handleSubmit(e: Event | MouseEvent) {
@@ -118,7 +118,7 @@ async function createApiKey() {
     };
     const res = await $api.post<RpcApiKeyResponse>(endpoints.rpcApiKeys(), bodyData);
 
-    message.success($i18n.t('form.success.created.rpcApiKey'));
+    message.success(t('form.success.created.rpcApiKey'));
 
     rpcApiKeyStore.items.unshift(res.data as RpcApiKeyInterface);
 
@@ -143,7 +143,7 @@ async function updateApiKey() {
   try {
     const res = await $api.put<RpcApiKeyResponse>(endpoints.rpcApiKeys(props.id), bodyData);
 
-    const msg = $i18n.t('form.success.updated.rpcApiKey');
+    const msg = t('form.success.updated.rpcApiKey');
 
     message.success(msg);
 

@@ -1,5 +1,5 @@
 <template>
-  <span class="icon-status text-xl align-text-bottom" :class="statusClass"></span>
+  <span class="icon-status align-text-bottom text-xl" :class="statusClass"></span>
 </template>
 
 <script lang="ts" setup>

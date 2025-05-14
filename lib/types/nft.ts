@@ -1,8 +1,16 @@
+import type { Address } from 'viem';
+
 export type Merge<T, K> = Omit<T, keyof K> & K;
 
 export enum ChainType {
   SUBSTRATE = 1,
   EVM = 2,
+}
+
+export enum NftWebsiteType {
+  PLAIN_JS = 1,
+  REACT = 2,
+  VUE = 3,
 }
 
 /** NFT Chains */
@@ -21,7 +29,7 @@ export enum EvmChainMainnet {
 export enum EvmChainTestnet {
   SEPOLIA = 11155111,
   MOONBASE = 1287,
-  ASTAR_SHIBUYA = 81, // testnet
+  // ASTAR_SHIBUYA = 81, // testnet
   // OASIS_SAPPHIRE = 23294,
   ALFAJORES = 44787, // Celo testnet
   BASE_SEPOLIA = 84532,
@@ -72,11 +80,10 @@ export enum CollectionStatus {
 
 /** NFT Transaction status */
 export enum TransactionStatus {
-  REQUESTED = 0,
   PENDING = 1,
-  FINISHED = 2,
-  VERIFIED = 3,
-  FAILED = 4,
+  CONFIRMED = 2,
+  FAILED = 3,
+  ERROR = 4,
 }
 
 /** NFT Transaction type */
@@ -89,34 +96,73 @@ export enum TransactionType {
   NEST_MINT_NFT = 6,
 }
 
-/** NFT create steps */
-export enum NftAmount {
-  SINGLE = 1,
-  MULTIPLE = 2,
+/** NFT create collection step */
+export enum CollectionCreateStep {
+  METADATA = 1,
+  SMART_CONTRACT = 2,
+  VISUAL = 3,
+  REVIEW = 4,
+  DEPLOYING = 5,
+  DEPLOYED = 6,
 }
-/** NFT create steps */
-export enum NftCreateStep {
-  AMOUNT = 1,
-  SINGLE = 2,
-  MULTIPLE = 3,
-  PREVIEW = 4,
-  DEPLOY = 5,
+/** NFT Metadata steps */
+export enum NftMetadataStep {
+  CHAIN = 1,
+  METADATA = 2,
+  NEW = 3,
+  SINGLE = 4,
+  SINGLE_PREVIEW = 5,
+  CSV = 6,
+  CSV_PREVIEW = 7,
+  ENDPOINT = 8,
+  ENDPOINT_PREVIEW = 9,
+  JSON = 10,
+  JSON_PREVIEW = 11,
 }
-/** Multiple NFTs upload steps */
-export enum NftUploadStep {
-  FILE = 1,
-  IMAGES = 2,
-  PREVIEW = 3,
-  ATTRIBUTES = 4,
+/** NFTs metadata field */
+export enum MetadataFieldRequired {
+  NAME = 'name',
+  DESCRIPTION = 'description',
+  IMAGE = 'image',
+}
+export enum MetadataProperties {
+  ID = 'id',
+  NAME = 'name',
+  DESCRIPTION = 'description',
+  EXTERNAL_URL = 'external_url',
+  IMAGE = 'image',
+  IMAGE_DATA = 'image_data',
+  ATTRIBUTES = 'attributes',
+  BACKGROUND_COLOR = 'background_color',
+  ANIMATION_URL = 'animation_url',
+  YOUTUBE_URL = 'youtube_url',
 }
 
-export enum PrepareCollectionMetadataStep {
+export enum TraitTypes {
+  STRING = 'string',
+  DATE = 'date',
+  NUMBER = 'number',
+  BOOST_NUMBER = 'boost_number',
+  BOOST_PERCENTAGE = 'boost_percentage',
+}
+
+export enum MetadataDeployStatus {
   UPLOAD_IMAGES_TO_IPFS = 1,
   UPDATE_JSONS_ON_S3 = 2,
   UPLOAD_METADATA_TO_IPFS = 3,
   PUBLISH_TO_IPNS = 4,
   METADATA_SUCCESSFULLY_PREPARED = 10,
 }
+
+export type FormSingleNft = {
+  image: string;
+  id: number;
+  collectionUuid: string;
+  name: string;
+  description: string;
+  copies: number;
+  attributes: AttributeInterface[];
+};
 
 declare global {
   /** Papa parser */
@@ -137,6 +183,7 @@ declare global {
    * Collection
    */
   interface CollectionInterface extends BaseObjectInterface {
+    adminAddress: string | null;
     baseExtension: string;
     baseUri: string;
     bucket_uuid: string;
@@ -146,12 +193,13 @@ declare global {
     collectionType: number;
     collectionStatus: number;
     collection_uuid: string;
-    contractAddress: string | null;
+    contractAddress: Address | null;
     dropStart: number;
     drop: boolean;
     ipns_uuid: string;
     isRevokable: boolean;
     isSoulbound: boolean;
+    isAutoIncrement: boolean;
     maxSupply: number;
     dropPrice: number;
     dropReserve: number;
@@ -162,6 +210,7 @@ declare global {
     updateTime: string;
     useApillonIpfsGateway: boolean;
     useIpns: boolean;
+    websiteUuid: string | null;
   }
 
   interface CollectionResponse extends GeneralResponse<CollectionInterface> {}
@@ -180,6 +229,12 @@ declare global {
   }
 
   interface TransactionResponse extends GeneralItemsResponse<TransactionInterface> {}
+
+  interface MintInterface {
+    success: boolean;
+    transactionHash: string | null;
+  }
+  interface MintResponse extends GeneralResponse<MintInterface> {}
 
   /**
    * Metadata deploys
@@ -204,8 +259,10 @@ declare global {
   interface AttributeInterface {
     trait_type: string;
     value: string;
-    display_type: string;
+    display_type: string | null;
   }
 
   interface AttributesInterface extends Array<AttributeInterface> {}
+
+  type MetadataItem = Record<string | MetadataProperties, string | number> & { attributes?: AttributeInterface[] };
 }

@@ -1,29 +1,14 @@
 <template>
   <n-space class="pb-8" :size="12" vertical>
     <n-space justify="space-between">
-      <div class="w-[45vw] sm:w-[30vw] lg:w-[20vw] max-w-xs">
-        <n-input
-          v-model:value="fileStore.trash.search"
-          type="text"
-          name="search"
-          size="small"
-          :placeholder="$t('storage.file.search')"
-          clearable
-        >
-          <template #prefix>
-            <span class="icon-search text-2xl"></span>
-          </template>
-        </n-input>
+      <div class="w-[45vw] max-w-xs sm:w-[30vw] lg:w-[20vw]">
+        <FormFieldSearch v-model:value="fileStore.trash.search" :placeholder="$t('storage.file.search')" />
       </div>
 
       <n-space size="large">
         <!-- Refresh files -->
-        <n-button
-          size="small"
-          :loading="fileStore.trash.loading"
-          @click="fileStore.fetchDeletedFiles()"
-        >
-          <span class="icon-refresh text-xl mr-2"></span>
+        <n-button :loading="fileStore.trash.loading" @click="fileStore.fetchDeletedFiles()">
+          <span class="icon-refresh mr-2 text-xl"></span>
           {{ $t('general.refresh') }}
         </n-button>
       </n-space>
@@ -34,19 +19,11 @@
       :columns="columns"
       :data="fileStore.trash.items"
       :loading="fileStore.trash.loading"
-      :pagination="{
-        ...fileStore.trash.pagination,
-        onChange: (page: number) => {
-          handlePageChange(page, fileStore.trash.pagination.pageSize);
-        },
-        onUpdatePageSize: (pageSize: number) => {
-          handlePageChange(1, pageSize);
-        },
-      }"
+      :pagination="fileStore.trash.pagination"
       :row-props="rowProps"
-      @update:page="handlePageChange"
-      @update:sorter="handleSorterChange"
       remote
+      @update:page="(page: number) => handlePageChange(page, fileStore.trash.pagination.pageSize)"
+      @update:sorter="(pageSize: number) => handlePageChange(1, pageSize)"
     />
   </n-space>
 </template>
@@ -54,15 +31,13 @@
 <script lang="ts" setup>
 import { useDebounceFn } from '@vueuse/core';
 import type { DataTableSortState, DataTableInst } from 'naive-ui';
-import { NButton, NDropdown, NEllipsis, useMessage } from 'naive-ui';
+import { NDropdown, NEllipsis, useMessage } from 'naive-ui';
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
 const bucketStore = useBucketStore();
 const fileStore = useFileStore();
-const IconFolderFile = resolveComponent('IconFolderFile');
-const TableEllipsis = resolveComponent('TableEllipsis');
 
 const tableRef = ref<DataTableInst | null>(null);
 const currentRow = ref<BucketItemInterface>({} as BucketItemInterface);
@@ -75,22 +50,22 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
       key: 'name',
       minWidth: 200,
       sorter: 'default',
-      title: $i18n.t('storage.fileName'),
+      title: t('storage.fileName'),
       render(row) {
-        return [h(IconFolderFile, { isFile: true }, ''), h('span', { class: 'ml-2 ' }, row.name)];
+        return [h(resolveComponent('IconFolderFile'), { isFile: true }, ''), h('span', { class: 'ml-2 ' }, row.name)];
       },
     },
     {
       key: 'CID',
       sorter: 'default',
-      title: $i18n.t('storage.fileCid'),
+      title: t('storage.fileCid'),
       render(row) {
-        return h(TableEllipsis, { text: row.CID }, '');
+        return h(resolveComponent('TableEllipsis'), { text: row.CID }, '');
       },
     },
     {
       key: 'link',
-      title: $i18n.t('storage.downloadLink'),
+      title: t('storage.downloadLink'),
       render(row: BucketItemInterface) {
         if (row.CID) {
           return [
@@ -99,14 +74,10 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
               { class: 'flex' },
               {
                 default: () => [
-                  h(
-                    NEllipsis,
-                    { class: 'text-body align-bottom', 'line-clamp': 1 },
-                    { default: () => row.link }
-                  ),
+                  h(NEllipsis, { class: 'text-body align-bottom', 'line-clamp': 1 }, { default: () => row.link }),
                   h(
                     'button',
-                    { class: 'ml-2', onClick: () => copyToClipboard(row.link) },
+                    { class: 'ml-2', onClick: () => copyToClipboard(row.link || '') },
                     h('span', { class: 'icon-copy text-body' }, {})
                   ),
                 ],
@@ -120,7 +91,7 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
     {
       key: 'size',
       sorter: 'default',
-      title: $i18n.t('storage.fileSize'),
+      title: t('storage.fileSize'),
       render(row: BucketItemInterface) {
         if (row.size) {
           return h('span', {}, { default: () => formatBytes(row.size || 0) });
@@ -131,26 +102,22 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
     {
       key: 'createTime',
       sorter: 'default',
-      title: $i18n.t('dashboard.created'),
+      title: t('dashboard.created'),
       render(row: BucketItemInterface) {
         return h('span', {}, { default: () => dateTimeToDate(row.createTime || '') });
       },
     },
     {
       key: 'createTime',
-      title: $i18n.t('dashboard.deletedAt'),
+      title: t('dashboard.deletedAt'),
       render(row: BucketItemInterface) {
-        return h(
-          'span',
-          {},
-          { default: () => dateTimeToDateForDeletedFiles(row.updateTime || '') }
-        );
+        return h('span', {}, { default: () => dateTimeToDateForDeletedFiles(row.updateTime || '') });
       },
     },
     {
       key: 'contentType',
       sorter: 'default',
-      title: $i18n.t('storage.contentType'),
+      title: t('storage.contentType'),
       render(row: BucketItemInterface) {
         if (row.contentType) {
           return h('span', {}, row.contentType);
@@ -171,12 +138,7 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
             trigger: 'click',
           },
           {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
+            default: () => h(resolveComponent('BtnActions')),
           }
         );
       },
@@ -189,7 +151,7 @@ const columns = createColumns();
 const dropdownOptions = [
   {
     key: 'restore',
-    label: $i18n.t('general.restore'),
+    label: t('general.restore'),
     disabled: authStore.isAdmin(),
     props: {
       onClick: () => {
@@ -205,14 +167,6 @@ function rowProps(row: BucketItemInterface) {
       currentRow.value = row;
     },
   };
-}
-
-/** Sort column - fetch directory content with order params  */
-async function handleSorterChange(sorter?: DataTableSortState) {
-  sort.value = sorter && sorter.order !== false ? sorter : null;
-  if (sorter) {
-    await getDeletedFiles();
-  }
 }
 
 /** Reset sort if user search change directory or search directory content */
@@ -235,7 +189,7 @@ const debouncedSearchFilter = useDebounceFn(getDeletedFiles, 500);
 /** On page change, load data */
 async function handlePageChange(currentPage: number, pageSize?: number) {
   if (!fileStore.trash.loading) {
-    await getDeletedFiles(currentPage);
+    await getDeletedFiles(currentPage, pageSize);
   }
 }
 
@@ -261,14 +215,11 @@ async function restore() {
 
   try {
     const restoredFile = await $api.patch<BucketItemResponse>(
-      endpoints.storageFileRestore(
-        bucketStore.bucketUuid,
-        currentRow.value.file_uuid || currentRow.value.uuid
-      )
+      endpoints.storageFileRestore(bucketStore.bucketUuid, currentRow.value.file_uuid || currentRow.value.uuid)
     );
 
     removeTrashedFileFromList(restoredFile.data.file_uuid || restoredFile.data.uuid);
-    message.success($i18n.t('form.success.restored.file'));
+    message.success(t('form.success.restored.file'));
 
     /** Remove timestamp for items */
     sessionStorage.removeItem(LsCacheKeys.BUCKET_ITEMS);
@@ -279,8 +230,6 @@ async function restore() {
 }
 
 function removeTrashedFileFromList(uuid: string) {
-  fileStore.trash.items = fileStore.trash.items.filter(
-    item => item.file_uuid !== uuid && item.uuid !== uuid
-  );
+  fileStore.trash.items = fileStore.trash.items.filter(item => item.file_uuid !== uuid && item.uuid !== uuid);
 }
 </script>

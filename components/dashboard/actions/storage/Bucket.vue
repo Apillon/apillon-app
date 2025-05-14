@@ -1,32 +1,21 @@
 <template>
   <n-space v-bind="$attrs" justify="space-between">
     <div class="w-[20vw] min-w-[11rem] max-w-xs">
-      <n-input
-        v-model:value="bucketStore.folder.search"
-        type="text"
-        name="search"
-        size="small"
-        :placeholder="$t('storage.file.search')"
-        clearable
-      >
-        <template #prefix>
-          <span class="icon-search text-2xl"></span>
-        </template>
-      </n-input>
+      <FormFieldSearch v-model:value="bucketStore.folder.search" :placeholder="$t('storage.file.search')" />
     </div>
 
     <n-space size="large">
       <!-- Show only if user select files -->
       <template v-if="bucketStore.folder.selectedItems.length > 0">
         <!-- Download files -->
-        <n-button class="w-10" size="small" :focus="true" :loading="downloading" @click="downloadSelectedFiles">
+        <n-button class="w-10" size="medium" :focus="true" :loading="downloading" @click="downloadSelectedFiles">
           <span class="icon-download text-xl"></span>
         </n-button>
 
         <!-- Delete files -->
         <n-tooltip placement="bottom" :show="showPopoverDelete">
           <template #trigger>
-            <n-button class="w-10" size="small" type="error" ghost @click="deleteSelectedFiles">
+            <n-button class="w-10" size="medium" type="error" ghost @click="deleteSelectedFiles">
               <span class="icon-delete text-xl"></span>
             </n-button>
           </template>
@@ -38,13 +27,13 @@
       </template>
 
       <!-- Refresh directory content -->
-      <n-button size="small" @click="refreshDirectoryContent">
+      <n-button size="medium" @click="refreshDirectoryContent">
         <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('storage.refresh') }}
       </n-button>
 
       <!-- Create folder -->
-      <n-button size="small" :disabled="authStore.isAdmin()" @click="showModalNewFolder = true">
+      <n-button size="medium" :disabled="authStore.isAdmin()" @click="showModalNewFolder = true">
         <span class="icon-create-folder mr-2 text-xl"></span>
         {{ $t('storage.directory.create') }}
       </n-button>
@@ -52,7 +41,7 @@
       <!-- Upload files -->
       <n-button
         :color="bucketStore.uploadActive ? colors.primary : ''"
-        size="small"
+        size="medium"
         type="primary"
         :disabled="authStore.isAdmin()"
         ghost

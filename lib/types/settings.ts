@@ -15,6 +15,7 @@ export enum Permission {
   CONTRACTS = 8,
   RPC = 9,
   INDEXING = 10,
+  SIMPLETS = 11,
 }
 
 /* OAuth link type */

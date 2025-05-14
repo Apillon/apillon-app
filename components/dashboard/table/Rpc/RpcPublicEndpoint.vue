@@ -41,9 +41,7 @@ const createColumns = (): NDataTableColumns<RpcEndpointInterface> => {
         const children = [h('span', {}, { default: () => row.chainName })];
 
         if (row.image_url) {
-          children.unshift(
-            h('img', { src: row.image_url, alt: row.chainName, class: 'w-6 h-6 mr-2' })
-          );
+          children.unshift(h('img', { src: row.image_url, alt: row.chainName, class: 'w-6 h-6 mr-2' }));
         }
         return h('div', { class: 'flex flex-row gap-1' }, children);
       },

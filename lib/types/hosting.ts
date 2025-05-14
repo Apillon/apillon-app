@@ -23,6 +23,18 @@ export enum DeploymentStatus {
   REJECTED = 101,
 }
 
+export enum DeploymentBuildStatus {
+  PENDING = 1,
+  IN_PROGRESS = 2,
+  SUCCESS = 3,
+  FAILED = 4,
+}
+
+export enum WebsiteSource {
+  APILLON = 1,
+  GITHUB = 2,
+}
+
 export enum WebsiteDomainStatus {
   /** Not yet processed and resolved */
   PENDING = 0,
@@ -32,6 +44,19 @@ export enum WebsiteDomainStatus {
   HAS_CDN = 2,
   /** Domain is not pointing to Apillon IP */
   INVALID = 10,
+}
+
+/** Hosintg Create Website step */
+export enum WebsiteCreateStep {
+  TYPE = 1,
+  FORM = 2,
+  REVIEW = 3,
+  DEPLOYING = 4,
+  DEPLOYED = 5,
+}
+export enum WebsiteType {
+  BASIC = 'basic',
+  GITHUB = 'github',
 }
 
 declare global {
@@ -53,21 +78,25 @@ declare global {
    * Website
    */
   interface WebsiteBaseInterface extends BaseObjectInterface {
-    website_uuid: string;
-    domain: string | null;
-    domainChangeDate: string | null;
-  }
-  interface WebsiteInterface extends WebsiteBaseInterface {
     bucket_uuid: string;
-    bucket: BucketInterface;
     cidProduction: string | null;
     cidStaging: string | null;
     domain: string | null;
     domainChangeDate: string | null;
-    domainLastCheckDate: string | null;
     domainStatus: number;
     ipnsProduction: string | null;
+    lastDeploymentStatus: number | null;
+    nftCollectionUuid: string | null;
+    source: WebsiteSource;
+    website_uuid: string;
+  }
+  interface WebsiteInterface extends WebsiteBaseInterface {
+    bucket: BucketInterface;
+    domainChangeDate: string | null;
+    domainLastCheckDate: string | null;
     ipnsStaging: string | null;
+    lastDeployment_uuid: string | null;
+    lastDeploymentStatus: number | null;
     productionBucket: BucketInterface;
     stagingBucket: BucketInterface;
     w3ProductionLink: string | null;
@@ -91,6 +120,44 @@ declare global {
   interface DeploymentResponse extends GeneralResponse<DeploymentInterface> {}
   interface DeploymentsResponse extends GeneralItemsResponse<DeploymentInterface> {}
 
+  interface DeploymentBuildInterface {
+    buildStatus: number;
+    createTime: string;
+    deploymentConfigId: number;
+    finishedTime: string;
+    id: number;
+    logs: string;
+    status: number;
+    websiteUuid: string;
+  }
+
+  interface DeploymentConfigVariable {
+    key: string;
+    value: string;
+  }
+  interface DeploymentConfigVariablesResponse extends GeneralResponse<DeploymentConfigVariable[]> {}
+
+  interface DeploymentConfigInterface {
+    id: number;
+    repoId: number;
+    repoName: string;
+    repoOwnerName: string;
+    repoUrl: string;
+    hookId: number;
+    branchName: string;
+    websiteUuid: string;
+    projectConfigId: number;
+    buildCommand: string | null;
+    buildDirectory: string;
+    installCommand: string | null;
+    apiKey: string;
+    apiSecret: string;
+    encryptedVariables: string | null;
+  }
+  interface DeploymentConfigResponse extends GeneralResponse<DeploymentConfigInterface> {}
+
+  interface DeploymentBuildResponse extends GeneralResponse<DeploymentBuildInterface> {}
+  interface DeploymentBuildsResponse extends GeneralItemsResponse<DeploymentBuildInterface> {}
   /**
    * Short URL
    */

@@ -1,4 +1,5 @@
-import { ApiPromise, SubmittableResult, WsProvider } from '@polkadot/api';
+import type { SubmittableResult } from '@polkadot/api';
+import { ApiPromise, WsProvider } from '@polkadot/api';
 import { timeout } from '~/lib/asset-hub/helpers';
 import '@polkadot/api-augment';
 import '@polkadot/types-augment';
@@ -10,7 +11,7 @@ export class AssetHubClient {
 
   private api: ApiPromise;
   private readonly account: WalletAccount;
-  public txApproved: Boolean;
+  public txApproved: boolean;
 
   private constructor(api: ApiPromise, account: WalletAccount) {
     this.api = api;
@@ -61,7 +62,7 @@ export class AssetHubClient {
       return new Promise((resolve, reject) => {
         timeout(async () => {
           await transaction
-            .send((result, extra) => {
+            .send(result => {
               if (result.status.isInBlock) {
                 const error = decodeError(result);
                 if (error) {
@@ -74,12 +75,7 @@ export class AssetHubClient {
               if (result.status.isFinalized) {
                 return resolve(result);
               }
-              if (
-                result.status.isInvalid ||
-                result.status.isDropped ||
-                result.status.isUsurped ||
-                result.isError
-              ) {
+              if (result.status.isInvalid || result.status.isDropped || result.status.isUsurped || result.isError) {
                 const error = decodeError(result);
                 return error ? reject(error) : reject(result);
               }
@@ -97,13 +93,9 @@ export class AssetHubClient {
     for (let i = 0; i < 200; ++i) {
       try {
         return await submit();
-      } catch (e) {
+      } catch (e: any) {
         const msg =
-          typeof e == 'string'
-            ? e.toLowerCase()
-            : e?.message
-              ? e?.message.toString().toLowerCase()
-              : String(e);
+          typeof e == 'string' ? e.toLowerCase() : e?.message ? e?.message.toString().toLowerCase() : String(e);
         if (msg.includes('priority is too low')) {
           await sleep(50);
           continue;
@@ -219,9 +211,7 @@ export class AssetHubClient {
     return result.txHash.toHex();
   }
   async updateMetadata(id: number, name: string, symbol: string, decimals: number) {
-    const result = await this.signAndSend(
-      this.api.tx.assets.setMetadata(id, name, symbol, decimals)
-    );
+    const result = await this.signAndSend(this.api.tx.assets.setMetadata(id, name, symbol, decimals));
     return result.txHash.toHex();
   }
 
@@ -252,9 +242,7 @@ export class AssetHubClient {
   async revokeOwnership(id: number) {
     // create proxy
     const createPureProxyResult = await this.signAndSend(this.api.tx.proxy.createPure('Any', 0, 0));
-    const pureEvent = createPureProxyResult.events.find(event =>
-      this.api.events.proxy.PureCreated.is(event.event)
-    );
+    const pureEvent = createPureProxyResult.events.find(event => this.api.events.proxy.PureCreated.is(event.event));
     if (!pureEvent) {
       throw new Error('Failed to create pure proxy: PureCreated event not found.');
     }

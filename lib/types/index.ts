@@ -9,6 +9,7 @@ export enum SqlModelStatus {
   BLOCKED = 7,
   ARCHIVED = 8,
   DELETED = 9,
+  REFUNDED = 100,
 }
 
 /**
@@ -21,6 +22,8 @@ export enum ServiceStatusType {
 }
 
 declare global {
+  type Optional<T> = null | T;
+
   type KeyValue = {
     key: string | number;
     value: string | number;
@@ -44,22 +47,21 @@ declare global {
   interface Window {
     $message: MessageApiInjection;
     $i18n: i18nType;
-    _paq: Array<String[]>;
-    loadProcaptcha: Function;
-    procaptchaLoaded: boolean;
+    _paq: Array<string[]>;
   }
 
   /**
    * General Interfaces
    */
   interface GeneralInterface {
+    id: number;
     status: number;
   }
   interface BaseObjectInterface extends GeneralInterface {
     name: string;
     description: string | null;
     createTime: string;
-    updateTime: string;
+    updateTime: string | null;
   }
 
   /**

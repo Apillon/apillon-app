@@ -14,7 +14,7 @@ export const PARAMS_ALL_ITEMS = {
 
 export enum PageSize {
   SM = 10,
-  BASE = PAGINATION_LIMIT,
+  BASE = 20,
   LG = 50,
 }
 
@@ -37,8 +37,10 @@ export const SessionKeys = {
   ASSET_HUB: 'al_asset_hub',
   BUCKET_STORE: 'al_bucket_store',
   CREDITS_MSG: 'al_credits_msg',
+  METADATA_STORE: 'al_metadata_store',
   OAUTH_ACTION: 'al_oauth_action',
   SETTINGS_STORE: 'al_settings_store',
+  SIMPLETS_STORE: 'al_simplets_store',
   SUBSCRIPTION_MSG: 'al_subscription_msg',
   WEBSITE_REVIEW: 'al_website_review',
 };
@@ -50,8 +52,10 @@ export const LsAnalyticsKeys = {
 export const LsTableColumnsKeys = {
   ASSET_HUB: 'al_table_asset_hub',
   FILES: 'al_table_files_columns',
+  HOSTING: 'al_table_hosting_columns',
   IPNS: 'al_table_ipns_columns',
   NFT_COLLECTION: 'al_table_nft_collection_columns',
+  SIMPLETS: 'al_table_simplets',
   SMART_CONTRACTS: 'al_table_smart_contracts',
   SOCIAL_POST: 'al_table_social_channel',
 };
@@ -103,6 +107,9 @@ export const LsCacheKeys = {
   CREDIT_PACKAGES: 'al_cache_credit_packages',
   CUSTOMER_PORTAL_URL: 'al_cache_customer_portal',
   DEPLOYMENT: 'al_cache_deployment',
+  DEPLOYMENT_CONFIG: 'al_cache_deployment_config',
+  DEPLOYMENT_BUILD: 'al_cache_deployment_build',
+  DEPLOYMENT_VARIABLES: 'al_cache_deployment_variables',
   DEPLOYMENTS_PRODUCTION: 'al_cache_deployments_production',
   DEPLOYMENTS_STAGING: 'al_cache_deployments_staging',
   DISCORD_LINK: 'al_cache_discord_link',
@@ -112,6 +119,8 @@ export const LsCacheKeys = {
   EMBEDDED_WALLET_SIGNATURES: 'al_cache_embedded_wallet_signatures',
   FILE_ALL: 'al_cache_file_all',
   FILE_DELETED: 'al_cache_file_deleted',
+  GITHUB_PROJECT_CONFIG: 'al_cache_github_project_config',
+  GITHUB_REPOS: 'al_cache_github_repos',
   INVOICES: 'al_cache_invoices',
   IPFS: 'al_cache_ipfs',
   IPNS: 'al_cache_ipns',
@@ -147,6 +156,9 @@ export const LsCacheKeys = {
   WEBSITE: 'al_cache_website',
   WEBSITES: 'al_cache_websites',
   WEBSITE_ARCHIVE: 'al_cache_website_archive',
+  SIMPLET: 'al_cache_simplet',
+  SIMPLETS: 'al_cache_simplets',
+  SIMPLETS_ARCHIVED: 'al_cache_simplets_archived',
   SMART_CONTRACT: 'al_cache_smart_contract',
   SMART_CONTRACTS: 'al_cache_smart_contracts',
   SMART_CONTRACT_DEPLOYED: 'al_smart_contract_deployed',

@@ -51,12 +51,12 @@ export function getExtension(filename: string): string {
   return filename.split('.').pop() || '';
 }
 
-/** Format folder name (remove dissallowed characters) */
+/** Format folder name (remove disallowed characters) */
 export function stripFolderName(value: string | [string, string]) {
   return textMarshal({
     input: value,
     template: 'x',
-    disallowCharacters: [/@/, /\\/, /\//, /\|/, /\!/, /\#/, /\$/, /\%/, /\^/, /\&/, /\*/],
+    disallowCharacters: [/@/, /\\/, /\//, /\|/, /!/, /#/, /$/, /%/, /^/, /&/, /\*/],
     isRepeat: {
       value: true,
       removeStart: true,

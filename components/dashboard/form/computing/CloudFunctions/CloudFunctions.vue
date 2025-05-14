@@ -32,11 +32,7 @@
       </n-form-item>
 
       <!--  CloudFunctions description -->
-      <n-form-item
-        path="description"
-        :label="$t('form.label.cloudFunctions.description')"
-        :label-props="{ for: 'description' }"
-      >
+      <n-form-item path="description" :label="$t('form.label.description')" :label-props="{ for: 'description' }">
         <n-input
           v-model:value="formData.description"
           type="textarea"
@@ -144,7 +140,7 @@ async function updateCloudFunction() {
   loading.value = true;
 
   try {
-    const res = await $api.patch<JobResponse>(endpoints.cloudFunctions(props.functionUuid), formData.value);
+    const res = await $api.patch<CloudFunctionResponse>(endpoints.cloudFunctions(props.functionUuid), formData.value);
     cloudFunctionStore.items.forEach(item => {
       if (item.function_uuid === res.data.function_uuid) {
         Object.assign(item, res.data);

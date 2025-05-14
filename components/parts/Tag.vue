@@ -1,9 +1,10 @@
 <template>
   <strong
     v-bind="$attrs"
-    class="inline-flex-cc rounded bg-bg-lighter/70 font-semibold transition-all duration-300"
+    class="inline-flex-cc gap-1 whitespace-nowrap bg-bg-lighter/70 font-semibold transition-all duration-300"
     :class="[tagClass, sizeClass]"
   >
+    <AnimationStatus v-if="animation" />
     <slot />
   </strong>
 </template>
@@ -12,12 +13,30 @@
 import type { Size } from 'naive-ui/es/button/src/interface';
 
 const props = defineProps({
+  animation: { type: Boolean, default: false },
+  filled: { type: Boolean, default: false },
   onHover: { type: Boolean, default: false },
-  size: { type: String as PropType<Size>, default: 'medium' },
+  size: { type: String as PropType<Size>, default: 'small' },
   type: { type: String as PropType<TagType>, default: 'default' },
 });
 
 const tagClass = computed(() => {
+  if (props.filled) {
+    switch (props.type) {
+      case 'warning':
+        return 'bg-yellow text-bg-dark';
+      case 'success':
+        return 'bg-green text-bg-dark';
+      case 'error':
+        return 'bg-pink text-bg-dark';
+      case 'primary':
+        return 'bg-violet text-bg-dark';
+      case 'info':
+        return 'bg-blue text-bg-dark';
+      default:
+        return 'bg-bg-lighter/70 text-bg-dark';
+    }
+  }
   if (props.onHover) {
     switch (props.type) {
       case 'warning':
@@ -53,13 +72,13 @@ const tagClass = computed(() => {
 const sizeClass = computed(() => {
   switch (props.size) {
     case 'tiny':
-      return 'text-xs h-5';
+      return 'text-[10px] px-1 h-5 rounded';
     case 'small':
-      return 'text-xs px-1 h-5 rounded bg-bg-lighter/70';
+      return 'text-xs px-[6px] h-5 rounded-md';
     case 'large':
-      return 'text-lg px-4 h-8';
+      return 'text-lg px-4 h-8 rounded-xl';
     default:
-      return 'text-sm px-2 h-6';
+      return 'text-sm px-2 h-6 rounded-lg';
   }
 });
 </script>

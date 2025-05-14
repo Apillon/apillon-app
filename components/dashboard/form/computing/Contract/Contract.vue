@@ -162,18 +162,6 @@
 <script lang="ts" setup>
 import type { SelectOption } from 'naive-ui';
 
-type FormContract = {
-  name: string;
-  description?: string;
-  bucket_uuid: string | null;
-  contractType: number | null;
-  contractData: {
-    nftContractAddress: string | null;
-    nftChainRpcUrl: string | null;
-    restrictToOwner: boolean;
-  };
-};
-
 const emit = defineEmits(['submitSuccess', 'createSuccess']);
 
 const { t } = useI18n();

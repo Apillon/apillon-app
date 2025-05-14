@@ -105,12 +105,12 @@ const featureRoutes: Array<FeatureRouteInterface> = [
   { regex: /^\/dashboard\/payments/, redirect: '/dashboard', feature: Feature.BILLING },
 ];
 
-const ignoreRoutes: String[] = ['login-admin'];
+const ignoreRoutes: string[] = ['login-admin'];
 
 /**
  * Redirect user to landing page if not logged in and trying to access protected routes
  */
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware(to => {
   /** Ignored routes */
   if (ignoreRoutes.includes(to.name as string)) {
     return;

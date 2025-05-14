@@ -65,7 +65,7 @@
 <script lang="ts" setup>
 import { useDebounceFn } from '@vueuse/core';
 import type { DataTableInst, DataTableRowKey, DataTableSortState } from 'naive-ui';
-import { NButton, NDropdown, NEllipsis, NSpace, NTooltip } from 'naive-ui';
+import { NDropdown, NEllipsis, NSpace, NTooltip } from 'naive-ui';
 import { FileStatus, TableFilesType } from '~/lib/types/storage';
 
 const props = defineProps({
@@ -78,12 +78,7 @@ const message = useMessage();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
-
-const TableColumns = resolveComponent('TableColumns');
-const IconFolderFile = resolveComponent('IconFolderFile');
-const TableEllipsis = resolveComponent('TableEllipsis');
-const TableLink = resolveComponent('TableLink');
-const StorageFileStatus = resolveComponent('StorageFileStatus');
+const { availableColumns, selectedColumns, initTableColumns, handleColumnChange } = useTable(LsTableColumnsKeys.FILES);
 
 /** Polling */
 let fileInterval: any = null as any;
@@ -192,25 +187,8 @@ function renderOption({ node, option }: DropdownRenderOption) {
   return [node];
 }
 
-/** Available columns - show/hide column */
-const selectedColumns = ref(['name', 'CID', 'link', 'size', 'createTime', 'contentType', 'fileStatus']);
-const availableColumns = ref([
-  { value: 'name', label: t('storage.fileName') },
-  { value: 'uuid', label: t('general.uuid') },
-  { value: 'CID', label: t('storage.fileCid'), hidden: props.type !== TableFilesType.BUCKET },
-  {
-    value: 'link',
-    label: t('storage.downloadLink'),
-    hidden: props.type !== TableFilesType.BUCKET,
-  },
-  { value: 'size', label: t('storage.fileSize') },
-  { value: 'createTime', label: t('dashboard.created') },
-  { value: 'contentType', label: t('storage.contentType') },
-  { value: 'fileStatus', label: t('storage.fileStatusName') },
-]);
-
 /** Columns */
-const columns = computed(() => {
+const columns = computed<NDataTableColumns<BucketItemInterface>>(() => {
   return [
     {
       type: 'selection',
@@ -229,7 +207,7 @@ const columns = computed(() => {
             { align: 'center', wrap: false, class: cellClasses(row.type) },
             {
               default: () => [
-                h(IconFolderFile, { isFile: row.type === BucketItemType.FILE }, ''),
+                h(resolveComponent('IconFolderFile'), { isFile: row.type === BucketItemType.FILE }, ''),
                 h(
                   NEllipsis,
                   { class: 'text-blue align-bottom min-w-[120px]', 'line-clamp': 2 },
@@ -252,7 +230,7 @@ const columns = computed(() => {
       },
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
-        return h(TableEllipsis, { text: row.uuid }, '');
+        return h(resolveComponent('TableEllipsis'), { text: row.uuid }, '');
       },
     },
     {
@@ -266,7 +244,7 @@ const columns = computed(() => {
       },
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
-        return h(TableEllipsis, { text: row.CID }, '');
+        return h(resolveComponent('TableEllipsis'), { text: row.CID }, '');
       },
     },
     {
@@ -281,7 +259,7 @@ const columns = computed(() => {
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
         return h(
-          TableLink,
+          resolveComponent('TableLink'),
           {
             link: row.link,
             tooltip:
@@ -338,9 +316,9 @@ const columns = computed(() => {
         if (!row.fileStatus) {
           return '';
         } else if (props.type === TableFilesType.HOSTING && row.fileStatus === FileStatus.UPLOADED_TO_S3) {
-          return h(StorageFileStatus, { fileStatus: FileStatus.UPLOAD_COMPLETED }, '');
+          return h(resolveComponent('StorageFileStatus'), { fileStatus: FileStatus.UPLOAD_COMPLETED }, '');
         } else {
-          return h(StorageFileStatus, { fileStatus: row.fileStatus }, '');
+          return h(resolveComponent('StorageFileStatus'), { fileStatus: row.fileStatus }, '');
         }
       },
     },
@@ -359,12 +337,7 @@ const columns = computed(() => {
             trigger: 'click',
           },
           {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
+            default: () => h(resolveComponent('BtnActions')),
           }
         );
       },
@@ -373,7 +346,7 @@ const columns = computed(() => {
       },
       renderFilterMenu: () => {
         return h(
-          TableColumns,
+          resolveComponent('TableColumns'),
           {
             model: selectedColumns.value,
             columns: availableColumns.value,
@@ -392,11 +365,6 @@ const handleCheck = (rowKeys: Array<DataTableRowKey>) => {
 
   bucketStore.folder.selectedItems = bucketStore.folder.items.filter(item => rowKeys.includes(item.uuid));
 };
-
-function handleColumnChange(selectedValues: Array<string>) {
-  selectedColumns.value = selectedValues;
-  localStorage.setItem(LsTableColumnsKeys.FILES, JSON.stringify(selectedColumns.value));
-}
 
 function rowProps(row: BucketItemInterface) {
   return {
@@ -454,10 +422,7 @@ async function onFolderOpen(folder: BucketItemInterface) {
 }
 
 onMounted(async () => {
-  /** Check if selected columns are stored in LS */
-  if (localStorage.getItem(LsTableColumnsKeys.FILES)) {
-    selectedColumns.value = JSON.parse(localStorage.getItem(LsTableColumnsKeys.FILES) || '');
-  }
+  initTableColumns(columns.value);
 
   /**
    * Load data on mounted

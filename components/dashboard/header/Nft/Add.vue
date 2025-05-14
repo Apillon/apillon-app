@@ -5,14 +5,14 @@
         <NuxtLink :to="`/dashboard/service/nft/${collectionStore.active.collection_uuid}`">
           <span class="icon-back align-sub text-2xl"></span>
         </NuxtLink>
-        <h2>{{ t('nft.addNfts') }}</h2>
+        <h2>{{ $t('nft.addNfts') }}</h2>
       </n-space>
     </slot>
     <template #info>
       <n-space :size="32" align="center">
         <ModalCreditCosts
           :service="ServiceTypeName.NFT"
-          :chain="collectionStore.active.chain || collectionStore.form.behavior.chain"
+          :chain="collectionStore.active.chain || metadataStore.form.smartContract.chain"
           filter-by-chain
         />
 
@@ -27,9 +27,9 @@
 <script lang="ts" setup>
 import { ServiceTypeName } from '~/lib/types/service';
 
-const { t } = useI18n();
 const { isLg } = useScreen();
 const paymentStore = usePaymentStore();
+const metadataStore = useMetadataStore();
 const collectionStore = useCollectionStore();
 
 onMounted(() => {

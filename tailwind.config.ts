@@ -16,13 +16,15 @@ export const colors = {
 
   body: '#9D9E91',
   bodyDark: '#6A6B63',
-  hover: '#999999',
+  disabled: '#999',
+  hover: '#999',
   placeholder: '#B6B6AF',
 
   white: {
     DEFAULT: '#F5F5EE',
     primary: '#F0F2DA',
     secondary: '#D5D7C1',
+    terciary: '#B6B6AF',
   },
 
   bg: {
@@ -86,8 +88,15 @@ export default {
         nft: 'repeat(auto-fill, minmax(220px, 1fr))',
         nftSmall: 'repeat(auto-fill, minmax(120px, 1fr))',
         assetHub: 'minmax(320px, 580px) minmax(80px, 420px)',
+        fit200: 'repeat(auto-fit, minmax(200px,1fr))',
+        fill100: 'repeat(auto-fill, minmax(100px, 1fr))',
+      },
+      minHeight: {
+        17: '4.25rem',
+        18: '4.5rem',
       },
       height: {
+        17: '4.25rem',
         18: '4.5rem',
       },
       padding: {

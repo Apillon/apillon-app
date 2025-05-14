@@ -1,0 +1,44 @@
+{
+  "embeddedWallet": {
+    "title": "Embedded Wallet",
+    "checkPrice": "Check price",
+    "codeSnippets": "Code snippets:",
+    "createNew": "New Embedded wallet integration",
+    "edit": "Edit Embedded wallet integration",
+    "editIntegration": "Edit integration",
+    "howItWorks": "See how it works",
+    "readBlog": "Read our blog post",
+    "generate": {
+      "title": "Generate API key and start using Embedded Wallet service",
+      "generate": "Generate new key"
+    },
+    "instructions": {
+      "content": [
+        {
+          "subtitle": "Embedded Wallet service removes friction in user onboarding."
+        },
+        {
+          "title": "Benefits:",
+          "benefits": [
+            "Email onboard: Simplifies the onboarding process.",
+            "A seamless and secure UX: EVM wallets are auto-created and encrypted.",
+            "Autonomy and security over funds: No third-party services to store user’s private keys.",
+            "Authentication: User can add different methods of verification.",
+            "Gasless wallet creation: charged in Apillon credits per each onboarded user.",
+            "Fully trustless. Powered by Oasis."
+          ]
+        }
+      ]
+    },
+    "table": {
+      "created": "Created",
+      "contractAddress": "Contract Address",
+      "hashedUsername": "Hashed Username",
+      "integration_uuid": "Integration UUID",
+      "numberOfSignatures": "Generated wallets this month",
+      "publicAddress": "Generated Wallet Address",
+      "title": "Embedded Wallet title",
+      "usage": "Usage"
+    }
+  }
+}

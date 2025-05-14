@@ -8,7 +8,7 @@ type Deployment = {
   interval: Interval;
   progress: number;
   service: FileListItemType | JobInterface | ContractInterface | null;
-  title: String | null;
+  title: string | null;
 };
 type Deployments = Record<IntervalType, Deployment>;
 
@@ -40,9 +40,7 @@ export default function useRefreshStatus() {
 
   const setInitialRefreshInterval = () => {
     const refreshKey = localStorage.getItem(LS_KEYS.DEPLOYMENT_REFRESH_INTERVAL);
-    const selectedOption = refreshStatusOptions.value.find(
-      option => option.key === Number(refreshKey)
-    );
+    const selectedOption = refreshStatusOptions.value.find(option => option.key === Number(refreshKey));
     if (refreshKey && selectedOption) {
       refreshInterval.value = selectedOption;
     }
@@ -62,20 +60,20 @@ export default function useRefreshStatus() {
   const clearIntervals = () => {
     clearIntervalJob(false);
   };
-  const clearIntervalJob = async (finished: boolean = true) => {
-    if (deployments.job.interval) {
-      clearInterval(deployments.job?.interval);
+  const clear = async (job: Deployment, finished: boolean = true) => {
+    if (job.interval) {
+      clearInterval(job?.interval);
     }
-
-    if (deployments.job.progress >= 100 || finished) {
-      deployments.job.progress = 100;
+    if (job.progress >= 100 || finished) {
+      job.progress = 100;
       await sleep(1000);
-      deployments.job.interval = null;
-      deployments.job.progress = 0;
-      deployments.job.service = null;
-      deployments.job.title = null;
     }
+    job.interval = null;
+    job.progress = 0;
+    job.service = null;
+    job.title = null;
   };
+  const clearIntervalJob = async (finished: boolean = true) => await clear(deployments.job, finished);
 
   const calcProgress = (currentProgress: number, interval?: number) => {
     const intervalInSeconds = interval ? interval * 0.1 : refreshInterval.value.key;
@@ -88,8 +86,8 @@ export default function useRefreshStatus() {
     if (currentProgress < 95) return currentProgress + intervalInSeconds * 1;
     if (currentProgress < 97) return currentProgress + intervalInSeconds * 0.6;
     if (currentProgress < 98) return currentProgress + intervalInSeconds * 0.3;
-    if (currentProgress < 99) return currentProgress + intervalInSeconds * 0.1;
-    if (currentProgress < 100) return currentProgress + intervalInSeconds * 0.05;
+    if (currentProgress < 99) return currentProgress + intervalInSeconds * 0.2;
+    if (currentProgress < 100) return currentProgress + intervalInSeconds * 0.1;
     return currentProgress;
   };
 
@@ -103,7 +101,7 @@ export default function useRefreshStatus() {
       if (deployments[type].progress >= 100) {
         clearInterval(progressInterval);
       } else {
-        deployments[type].progress = calcProgress(deployments[type].progress, 0.1);
+        deployments[type].progress = calcProgress(deployments[type].progress, 0.5);
       }
     }, 100);
   }

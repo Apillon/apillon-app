@@ -7,11 +7,9 @@
     :pagination="transactionStore.pagination"
     :row-key="rowKey"
     :row-props="rowProps"
-    @update:page="(page: number) => handlePageChange(page, transactionStore.pagination.pageSize)"
-    @update:page-size="
-      (pageSize: number) => handlePageChange(transactionStore.pagination.page, pageSize)
-    "
     remote
+    @update:page="(page: number) => handlePageChange(page, transactionStore.pagination.pageSize)"
+    @update:page-size="(pageSize: number) => handlePageChange(transactionStore.pagination.page, pageSize)"
   />
 </template>
 
@@ -20,14 +18,14 @@ const props = defineProps({
   contractUuid: { type: String, required: true },
 });
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const transactionStore = useComputingTransactionStore();
 
 const createColumns = (): NDataTableColumns<TransactionInterface> => {
   return [
     {
       key: 'transactionHash',
-      title: $i18n.t('computing.transaction.hash'),
+      title: t('computing.transaction.hash'),
       render(row: TransactionInterface) {
         return h(
           resolveComponent('TableLink'),
@@ -41,24 +39,16 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
     },
     {
       key: 'transactionType',
-      title: $i18n.t('computing.transaction.transactionType'),
+      title: t('computing.transaction.transactionType'),
       render(row: TransactionInterface) {
-        return h(
-          resolveComponent('ComputingTransactionType'),
-          { transactionType: row.transactionType },
-          ''
-        );
+        return h(resolveComponent('ComputingTransactionType'), { transactionType: row.transactionType }, '');
       },
     },
     {
       key: 'transactionStatus',
-      title: $i18n.t('general.status'),
+      title: t('general.status'),
       render(row: TransactionInterface) {
-        return h(
-          resolveComponent('ComputingTransactionStatus'),
-          { transactionStatus: row.transactionStatus },
-          ''
-        );
+        return h(resolveComponent('ComputingTransactionStatus'), { transactionStatus: row.transactionStatus }, '');
       },
     },
   ];

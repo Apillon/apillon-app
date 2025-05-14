@@ -1,23 +1,12 @@
 <template>
   <n-space v-bind="$attrs" justify="space-between">
-    <div class="min-w-[11rem] w-[20vw] max-w-xs">
-      <n-input
-        v-model:value="rpcApiKeyStore.search"
-        type="text"
-        name="search"
-        size="small"
-        :placeholder="$t('general.search')"
-        clearable
-      >
-        <template #prefix>
-          <span class="icon-search text-2xl"></span>
-        </template>
-      </n-input>
+    <div class="w-[20vw] min-w-[11rem] max-w-xs">
+      <FormFieldSearch v-model:value="rpcApiKeyStore.search" />
     </div>
 
     <n-space size="large">
       <!-- Create new contract -->
-      <n-button size="small" :disabled="authStore.isAdmin()" @click="modalCreateKeyVisible = true">
+      <n-button size="medium" :disabled="authStore.isAdmin()" @click="modalCreateKeyVisible = true">
         <span class="text-primary">{{ $t('rpc.apiKey.new') }}</span>
       </n-button>
     </n-space>

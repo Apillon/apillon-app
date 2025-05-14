@@ -85,8 +85,7 @@ declare global {
   interface IndexersResponse extends GeneralItemsResponse<IndexerInterface> {}
   interface IndexerBaseResponse extends GeneralResponse<IndexerBaseInterface> {}
   interface IndexerResponse extends GeneralResponse<IndexerInterface> {}
-  interface IndexerLogsResponse
-    extends GeneralResponse<{ logs: IndexerLogInterface[]; nextPage: string }> {}
+  interface IndexerLogsResponse extends GeneralResponse<{ logs: IndexerLogInterface[]; nextPage: string }> {}
 
   interface IndexerDeploymentsResponse extends GeneralResponse<IndexerDeploymentInterface[]> {}
   interface IndexerUsageResponse extends GeneralResponse<IndexerUsageInterface> {}

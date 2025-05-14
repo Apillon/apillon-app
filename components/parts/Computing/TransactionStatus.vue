@@ -7,9 +7,7 @@
     round
   >
     <n-space
-      :class="
-        transactionStatus < ComputingTransactionStatus.CONFIRMED ? 'text-body' : 'text-bg-dark'
-      "
+      :class="transactionStatus < ComputingTransactionStatus.CONFIRMED ? 'text-body' : 'text-bg-dark'"
       :size="0"
       align="center"
       :wrap="false"

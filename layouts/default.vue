@@ -1,7 +1,7 @@
 <template>
   <div v-if="!authStore.loadingProfile" ref="mainContentRef" class="relative h-screen">
     <div ref="serviceStatusRef" class="z-20 w-full">
-      <ServiceStatus v-for="item in serviceStatus" :service-status="item" />
+      <ServiceStatus v-for="item in serviceStatus" :key="item.id" :service-status="item" />
     </div>
     <n-layout class="h-full" :has-sider="isLg" sider-placement="left">
       <n-layout-sider
@@ -20,12 +20,9 @@
       </n-layout-sider>
       <n-layout>
         <Header @toggle-sidebar="toggleSidebar"> </Header>
-        <n-scrollbar class="bg-bg" y-scrollable style="max-height: calc(100dvh - 72px)">
-          <div class="relative bg-bg px-4 pt-4 sm:px-8">
-            <slot />
-          </div>
-          <!-- <CookieConsent /> -->
-        </n-scrollbar>
+        <div class="relative bg-bg px-4 sm:px-8">
+          <slot />
+        </div>
       </n-layout>
     </n-layout>
 
@@ -53,7 +50,6 @@ onMounted(() => {
 });
 
 const calcServiceStatusHeight = () => serviceStatusRef.value?.clientHeight || 0;
-const serviceStatusHeight = ref<number>(calcServiceStatusHeight());
 
 /**
  * Show/hide sidebar on mobile

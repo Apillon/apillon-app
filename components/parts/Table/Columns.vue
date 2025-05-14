@@ -1,7 +1,7 @@
 <template>
   <n-checkbox-group v-bind="$attrs" v-model:value="selectedColumns">
     <n-space vertical class="p-3">
-      <strong class="text-body mr-4">{{ $t('dashboard.visibleColumns') }}:</strong>
+      <strong class="mr-4 text-body">{{ $t('dashboard.visibleColumns') }}:</strong>
       <template v-for="(column, key) in columns">
         <n-checkbox
           v-if="!column?.hidden"

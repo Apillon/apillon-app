@@ -5,8 +5,12 @@
     </template>
     <slot>
       <n-space v-if="collectionStore.hasCollectionArchive" class="pb-8" :size="32" vertical>
-        <ActionsNftCollection archive />
-        <TableNftCollection :collections="collectionStore.archive" archive />
+        <ActionsNft archive />
+        <TableNftCollection
+          :collections="collectionStore.archive.items"
+          :search="collectionStore.archive.search"
+          archive
+        />
       </n-space>
       <Empty
         v-else
@@ -15,7 +19,7 @@
         icon="nft/illustration"
       >
         <Btn type="primary" :to="{ name: 'dashboard-service-nft' }">
-          {{ t('dashboard.nav.nft') }}
+          {{ $t('dashboard.nav.nft') }}
         </Btn>
       </Empty>
     </slot>
@@ -24,7 +28,6 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
-const router = useRouter();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const collectionStore = useCollectionStore();

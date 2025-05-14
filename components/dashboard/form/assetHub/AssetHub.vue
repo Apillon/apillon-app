@@ -11,7 +11,7 @@
           v-if="!assetId && formData.network === assetHubNetworks.westend.rpc"
           class="absolute bottom-full right-0 mb-2"
         >
-          <Btn size="small" type="link" href="https://faucet.polkadot.io/westend?parachain=1000">
+          <Btn type="link" href="https://faucet.polkadot.io/westend?parachain=1000">
             <span class="text-xs">Faucet</span>
           </Btn>
         </div>
@@ -137,7 +137,7 @@
     </n-form-item>
   </n-form>
 
-  <AssetHubTransaction v-if="txHash" :transactionHash="txHash" @close="$emit('close')" />
+  <ModalTransaction v-if="txHash" :transaction-hash="txHash" @close="$emit('close')" />
   <AssetHubLoader v-if="loading && assetHubClient?.txApproved" class="z-3000" />
 </template>
 
@@ -231,7 +231,7 @@ onMounted(async () => {
 
 watch(
   () => formData.value.network,
-  async rpc => {
+  async _ => {
     if (assetHubClient.value) {
       await assetHubClient.value.destroyInstance();
       await sleep(200);
@@ -240,9 +240,6 @@ watch(
 );
 
 // Custom validations
-function validateAssetId(_: FormItemRule, value: string): boolean {
-  return !!props.assetId || !assets.value.some(i => i.id === Number(value));
-}
 function validateName(_: FormItemRule, value: string): boolean {
   return !!props.assetId || !assets.value.some(i => equalsIgnoreCase(i.name, value));
 }

@@ -20,7 +20,7 @@
     </Btn>
   </n-form>
 
-  <AssetHubTransaction v-if="txHash" :transactionHash="txHash" @close="$emit('close')" />
+  <ModalTransaction v-if="txHash" :transaction-hash="txHash" @close="$emit('close')" />
   <AssetHubLoader v-if="loading && assetHubClient?.txApproved" class="z-3000" />
 </template>
 
@@ -37,7 +37,7 @@ const props = defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const assetHubStore = useAssetHubStore();
-const { assetHubClient, initClient } = useAssetHub();
+const { assetHubClient } = useAssetHub();
 
 const loading = ref(false);
 const txHash = ref<string | undefined>();

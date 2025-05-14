@@ -4,6 +4,4 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-const showUnread = ref<boolean>(true);
-</script>
+<script lang="ts" setup></script>

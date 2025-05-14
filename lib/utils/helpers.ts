@@ -2,7 +2,7 @@ export function sleep(timeMs = 1000) {
   return new Promise(resolve => setTimeout(resolve, timeMs));
 }
 
-export function delay(fn: Function, delay = 500) {
+export function delay(fn: Func, delay = 500) {
   setTimeout(fn, delay);
 }
 
@@ -151,74 +151,6 @@ export function generatePriceServiceName(service: string, chain: number, action:
 }
 
 /**
- * Crypto
- */
-
-export function contractLink(contractAddress?: string | null, chainId?: number): string {
-  const address = contractAddress ? `address/${contractAddress}` : '';
-
-  switch (chainId) {
-    case EvmChainMainnet.MOONBEAM:
-      return `https://moonbeam.moonscan.io/${address}`;
-    case EvmChainTestnet.MOONBASE:
-      return `https://moonbase.moonscan.io/${address}`;
-    case EvmChainMainnet.ASTAR:
-      return `https://astar.blockscout.com/${address}`;
-    case SubstrateChain.ASTAR:
-      if (useRuntimeConfig().public.ENV === AppEnv.DEV) {
-        return `https://shibuya.subscan.io/${address}`;
-      } else {
-        return `https://astar.subscan.io/${address}`;
-      }
-    case SubstrateChain.PHALA:
-      return `https://phala.subscan.io/${address}`;
-    case SubstrateChain.UNIQUE:
-      if (useRuntimeConfig().public.ENV === AppEnv.DEV) {
-        return `https://uniquescan.io/opal/collections/${contractAddress}`;
-      } else {
-        return `https://uniquescan.io/unique/collections/${contractAddress}`;
-      }
-    default:
-      console.warn('Missing chainId');
-      return '';
-  }
-}
-
-export function transactionLink(transactionHash?: string | null, chainId?: number): string {
-  const hash = transactionHash ? `tx/${transactionHash}` : '';
-
-  switch (chainId) {
-    case EvmChainMainnet.MOONBEAM:
-      return `https://moonbeam.moonscan.io/${hash}`;
-    case EvmChainTestnet.MOONBASE:
-      return `https://moonbase.moonscan.io/${hash}`;
-    case EvmChainMainnet.ASTAR:
-      return `https://astar.blockscout.com/${hash}`;
-    case SubstrateChain.ASTAR:
-      if (useRuntimeConfig().public.ENV === AppEnv.DEV) {
-        return `https://shibuya.subscan.io/${hash}`;
-      } else {
-        return `https://astar.subscan.io/${hash}`;
-      }
-    case SubstrateChain.PHALA:
-      return `https://phala.subscan.io/${hash}`;
-    case SubstrateChain.UNIQUE:
-      if (useRuntimeConfig().public.ENV === AppEnv.DEV) {
-        return `https://opal.subscan.io/extrinsic/${transactionHash}`;
-      } else {
-        return `https://unique.subscan.io/extrinsic/${transactionHash}`;
-      }
-    case SubstrateChain.ASSET_HUB:
-      return `https://assethub-polkadot.subscan.io/extrinsic/${transactionHash}`;
-    case SubstrateChain.WESTEND_ASSET_HUB:
-      return `https://assethub-westend.subscan.io/extrinsic/${transactionHash}`;
-    default:
-      console.warn('Missing chainId');
-      return '';
-  }
-}
-
-/**
  * OG data
  */
 export function prepareOG(
@@ -240,7 +172,7 @@ export function prepareOG(
   };
 }
 
-export function createPagination(remote = true) {
+export function createPagination(remote = true): Pagination {
   const { t } = useI18n();
   return {
     itemCount: remote ? 0 : undefined,

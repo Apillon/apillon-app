@@ -81,10 +81,7 @@ async function updateThreshold() {
   loading.value = true;
 
   try {
-    const res = await $api.patch<CreditResponse>(
-      endpoints.creditSettings(dataStore.projectUuid),
-      formData.value
-    );
+    const res = await $api.patch<CreditResponse>(endpoints.creditSettings(dataStore.projectUuid), formData.value);
 
     paymentStore.credit = res.data;
     message.success(t('form.success.updated.creditThreshold'));

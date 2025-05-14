@@ -6,19 +6,9 @@
       :info="$t('storage.ipfs.ipfsInfo')"
       copy
     />
-    <HostingPreviewLink
-      :link="ipnsGateway"
-      :title="$t('storage.ipfs.ipns')"
-      :info="$t('storage.ipfs.ipnsInfo')"
-      copy
-    />
+    <HostingPreviewLink :link="ipnsGateway" :title="$t('storage.ipfs.ipns')" :info="$t('storage.ipfs.ipnsInfo')" copy />
     <HostingPreviewLink :link="gateway.project_uuid" :title="$t('storage.ipfs.project')" copy />
-    <Secret
-      :secret="gateway.secret"
-      :title="$t('general.secret')"
-      :info="$t('storage.ipfs.secretInfo')"
-      copy
-    />
+    <Secret :secret="gateway.secret" :title="$t('general.secret')" :info="$t('storage.ipfs.secretInfo')" copy />
   </n-space>
 </template>
 

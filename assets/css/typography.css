@@ -47,20 +47,31 @@
   /* Headline 5 */
   h5,
   .h5 {
-    @apply font-bold;
+    @apply font-semibold;
     font-size: 1.125rem;
     line-height: 1.6;
+
+    + p,
+    + ul {
+      @apply mt-2;
+    }
   }
 
   /* Headline 6 */
-  h6 {
+  h6,
+  .h6 {
     @apply font-bold;
     font-size: 0.875rem;
     line-height: 1.6;
+
+    + p,
+    + ul {
+      @apply mt-2;
+    }
   }
 
   p {
-    @apply body-md whitespace-break-spaces text-white-primary;
+    @apply body-md whitespace-break-spaces text-white-secondary;
 
     + h2,
     + .h2,

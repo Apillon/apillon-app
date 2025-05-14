@@ -113,31 +113,30 @@
   /** scrollbar */
   .scrollable {
     @apply transition-all duration-300;
-    -ms-overflow-style: auto;
-    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-    scrollbar-width: thin;
 
     &::-webkit-scrollbar-thumb,
     &::-webkit-scrollbar-track {
-      background-color: transparent;
+      @apply bg-transparent;
     }
+
     &::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
-      border-radius: 5px;
+      @apply h-[5px] w-[5px] rounded-[5px];
     }
 
     &:hover {
       &::-webkit-scrollbar-thumb {
-        background-color: rgba(255, 255, 255, 0.2);
-        border-radius: 5px;
+        @apply rounded-[5px] bg-white/20;
 
         &:hover {
-          background-color: rgba(255, 255, 255, 0.3);
+          @apply bg-white/30;
         }
       }
     }
   }
+}
+
+.hoverable:hover .hidden {
+  @apply block;
 }
 
 /** Payment package */

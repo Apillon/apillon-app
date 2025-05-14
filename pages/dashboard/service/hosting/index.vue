@@ -5,13 +5,16 @@
     </template>
     <slot>
       <n-space v-if="websiteStore.hasWebsites" class="pb-8" :size="32" vertical>
-        <ActionsHosting />
+        <ActionsHosting v-if="websiteStore.hasWebsites" />
         <TableHosting :websites="websiteStore.items" />
       </n-space>
       <Empty v-else :title="$t('hosting.web3Hosting')" :info="$t('hosting.web3HostingEnable')" icon="storage/empty">
-        <Btn type="primary" @click="createNewWebsite">
-          {{ $t('hosting.website.addFirst') }}
-        </Btn>
+        <div class="flex flex-col gap-4">
+          <StorageGithubProjectConfig class="locked" size="small" />
+          <Btn type="primary" @click="createNewWebsite">
+            {{ $t('hosting.website.addFirst') }}
+          </Btn>
+        </div>
       </Empty>
 
       <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnHide">
@@ -27,7 +30,7 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t, te } = useI18n();
 const dataStore = useDataStore();
 const storageStore = useStorageStore();
 const websiteStore = useWebsiteStore();
@@ -37,7 +40,7 @@ const pageLoading = ref<boolean>(true);
 const showModalNewWebsite = ref<boolean | null>(false);
 
 useHead({
-  title: $i18n.t('dashboard.nav.hosting'),
+  title: t('dashboard.nav.hosting'),
 });
 
 onMounted(async () => {
@@ -53,7 +56,7 @@ onMounted(async () => {
  * If W3Warn has already been shown, show modal create new website, otherwise show warn first
  * */
 function createNewWebsite() {
-  if (localStorage.getItem(LsW3WarnKeys.HOSTING_NEW) || !$i18n.te('w3Warn.hosting.upload')) {
+  if (localStorage.getItem(LsW3WarnKeys.HOSTING_NEW) || !te('w3Warn.hosting.upload')) {
     showModalNewWebsite.value = true;
   } else {
     modalW3WarnVisible.value = true;

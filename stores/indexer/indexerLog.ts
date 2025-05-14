@@ -59,10 +59,7 @@ export const useIndexerLogStore = defineStore('indexerLog', {
           params.container = this.filter.containers;
         }
 
-        const res = await $api.get<IndexerLogsResponse>(
-          endpoints.indexerLogs(this.indexerUuid),
-          params
-        );
+        const res = await $api.get<IndexerLogsResponse>(endpoints.indexerLogs(this.indexerUuid), params);
         this.items = res.data.logs;
 
         /** Save timestamp to SS */

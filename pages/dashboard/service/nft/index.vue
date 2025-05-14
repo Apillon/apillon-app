@@ -5,7 +5,7 @@
     :service="ServiceTypeName.NFT"
     docs="https://wiki.apillon.io/web3-services/4-nfts.html"
     video-id="qQJnuvUo-xo"
-    :videoChapters="[
+    :video-chapters="[
       { time: '00:00', title: 'Intro' },
       { time: '00:35', title: 'Dashboard' },
       { time: '02:53', title: 'NFT Collection' },
@@ -23,48 +23,24 @@
     </template>
     <slot>
       <n-space class="pb-8" :size="32" vertical>
-        <ActionsNftCollection />
-        <TableNftCollection :collections="collectionStore.items" />
+        <ActionsNft />
+        <TableNftCollection :collections="collectionStore.items" :search="collectionStore.search" />
       </n-space>
     </slot>
   </Dashboard>
 
   <!-- Modal - Collection Transfer -->
-  <ModalFullScreen
-    v-model:show="modalCreateCollectionVisible"
-    class="text-center"
-    :progress="15"
-    :title="$t('nft.collection.create')"
-  >
-    <FormNftCollectionMetadataType v-if="collectionStore.metadataStored === undefined" />
-    <FormNftCollectionNetworkSelect
-      v-else-if="collectionStore.form.behavior.chain === undefined"
-      @submit="onNetworkSelected"
-    />
-    <FormNftCollectionIpnsType v-else @submit="router.push({ name: 'dashboard-service-nft-new' })" />
-
-    <template #footer>
-      <div class="mx-auto flex w-full max-w-lg items-center justify-between gap-4">
-        <p>
-          <strong>Total costs: </strong>
-          <span>1 credits</span>
-        </p>
-        <Btn>Continue</Btn>
-      </div>
-    </template>
-  </ModalFullScreen>
+  <ModalNft v-model:show="modalCreateCollectionVisible" />
 </template>
 
 <script lang="ts" setup>
 import { ServiceTypeName } from '~/lib/types/service';
 
 const { t } = useI18n();
-const router = useRouter();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const storageStore = useStorageStore();
 const collectionStore = useCollectionStore();
-const { onNetworkSelected, resetAll } = useCollection();
 
 const pageLoading = ref<boolean>(true);
 const modalCreateCollectionVisible = ref<boolean>(false);
@@ -76,7 +52,6 @@ useHead({
 });
 
 onMounted(async () => {
-  resetAll();
   await dataStore.waitOnPromises();
   await collectionStore.getCollections();
 

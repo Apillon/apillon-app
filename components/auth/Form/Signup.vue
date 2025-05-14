@@ -20,9 +20,9 @@
       <n-checkbox v-model:checked="newsletterChecked" size="medium" :label="$t('auth.signup.newsletter')" />
     </div>
 
-    <n-form-item path="captcha" :show-label="false">
+    <n-form-item v-if="showCaptcha" path="captcha" :show-label="false">
       <div class="block h-20 w-full">
-        <Captcha />
+        <Captcha @captcha-verified="onCaptchaVerified" />
       </div>
       <n-input v-model:value="formData.captcha" class="absolute hidden" />
     </n-form-item>
@@ -64,16 +64,16 @@ const { query } = useRoute();
 const { t } = useI18n();
 const router = useRouter();
 const message = useMessage();
-const config = useRuntimeConfig();
 const authStore = useAuthStore();
 const { address, isConnected } = useAccount();
+const { showCaptcha, formCaptcha, captchaReset, captchaReload, onCaptchaVerified } = useCaptcha();
 
 const formRef = ref<NFormInst | null>(null);
 const formErrors = ref<boolean>(false);
 const newsletterChecked = ref<boolean>(false);
 const loading = ref<boolean>(false);
 
-const formData = ref<SignupForm>({
+const formData = reactive<SignupForm>({
   email: authStore.email,
   captcha: null as any,
   refCode: `${query?.REF || ''}`,
@@ -112,25 +112,21 @@ const termsLabel = computed<any>(() => {
   ]);
 });
 
+onMounted(() => {
+  showCaptcha.value = true;
+});
+
 function handleSubmit(e: MouseEvent | null) {
   e?.preventDefault();
   formErrors.value = false;
-
-  const prosopoToken = sessionStorage.getItem(AuthLsKeys.PROSOPO);
-  if (prosopoToken) {
-    formData.value.captcha = { token: prosopoToken, eKey: config.public.captchaKey };
-  }
+  formData.captcha = formCaptcha.value;
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       formErrors.value = true;
       errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
-    } else if (!formData.value.captcha) {
-      loading.value = true;
-      // TODO: captchaInput.value.execute();
     } else {
-      // Email validation
-      authStore.saveEmail(formData.value.email);
+      authStore.saveEmail(formData.email);
       await signupWithEmail();
     }
   });
@@ -140,22 +136,21 @@ async function signupWithEmail() {
 
   // Wallet register params
   if (authStore.wallet.signature && authStore.wallet.timestamp) {
-    formData.value.isEvmWallet = isConnected.value;
-    formData.value.signature = authStore.wallet.signature;
-    formData.value.timestamp = authStore.wallet.timestamp;
-    formData.value.wallet = isConnected.value ? address.value : authStore.wallet.address;
+    formData.isEvmWallet = authStore.wallet.isEvmWallet;
+    formData.signature = authStore.wallet.signature;
+    formData.timestamp = authStore.wallet.timestamp;
+    formData.wallet = isConnected.value ? address.value : authStore.wallet.address;
   }
 
   try {
-    await $api.post<ValidateMailResponse>(endpoints.validateMail, formData.value);
-    captchaReset();
+    await $api.post<ValidateMailResponse>(endpoints.validateMail, formData);
 
     if (!props.sendAgain) {
       if (newsletterChecked.value) {
-        await subscribeToNewsletter(formData.value.email);
+        await subscribeToNewsletter(formData.email);
       }
-      formData.value.signature = '';
-      formData.value.timestamp = 0;
+      formData.signature = '';
+      formData.timestamp = 0;
 
       /** Track new registration */
       trackEvent('registration_email_input');
@@ -165,16 +160,12 @@ async function signupWithEmail() {
       message.success(t('form.success.sendAgainEmail'));
     }
   } catch (error) {
-    formData.value.captcha = null;
+    formData.captcha = null;
     message.error(userFriendlyMsg(error));
-    captchaReset();
+    captchaReload();
   }
+  captchaReset();
   loading.value = false;
-}
-
-function captchaReset() {
-  formData.value.captcha = undefined;
-  sessionStorage.removeItem(AuthLsKeys.PROSOPO);
 }
 
 function getMetadata() {

@@ -45,14 +45,14 @@
 <script lang="ts" setup>
 import { colors } from '~/tailwind.config';
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
 const settingsStore = useSettingsStore();
 const loadingDiscord = ref<boolean>(false);
 
 useHead({
-  title: $i18n.t('profile.mySettings'),
+  title: t('profile.mySettings'),
 });
 
 onMounted(async () => {
@@ -86,7 +86,7 @@ async function discordDisconnect() {
     await $api.post(endpoints.discordDisconnect);
 
     removeDiscordFromOauthList(discordLink.value?.externalUserId);
-    message.success($i18n.t('profile.discord.disconnected'));
+    message.success(t('profile.discord.disconnected'));
   } catch (error) {
     /** Show error message */
     message.error(userFriendlyMsg(error));

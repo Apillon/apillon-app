@@ -1,4 +1,3 @@
-import { load } from '@fingerprintjs/fingerprintjs';
 import { defineStore } from 'pinia';
 
 export const useCloudFunctionStore = defineStore('cloudFunction', {
@@ -150,12 +149,8 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
 
       this.loading = showLoader;
       try {
-        const params: Record<string, string | number> = {
-          project_uuid: dataStore.projectUuid,
-          orderBy: 'createTime',
-          desc: 'true',
-          ...PARAMS_ALL_ITEMS,
-        };
+        const params = parseArguments(PARAMS_ALL_ITEMS);
+        params.project_uuid = dataStore.projectUuid;
         if (archive) {
           params.status = SqlModelStatus.ARCHIVED;
         }

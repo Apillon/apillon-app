@@ -118,7 +118,7 @@ const nftChains = [
   ...chains,
   {
     name: 'custom',
-    label: t('dashboard.solution.encryption.configure.customEvm'),
+    label: t('dashboard.solution.customEvm'),
     value: CUSTOM_EVM,
   },
 ];

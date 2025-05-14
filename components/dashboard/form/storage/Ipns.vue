@@ -1,32 +1,22 @@
 <template>
   <Spinner v-if="ipnsUuid && !ipns" />
   <div v-else>
-    <Notification v-if="isFormDisabled" type="error" class="w-full mb-8">
+    <Notification v-if="isFormDisabled" type="error" class="mb-8 w-full">
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
     <template v-else>
       <!-- Info text -->
-      <p v-if="ipnsUuid && $i18n.te('storage.ipns.infoNew')" class="text-body mb-8">
+      <p v-if="ipnsUuid && $te('storage.ipns.infoNew')" class="mb-8 text-body">
         {{ $t('storage.ipns.infoNew') }}
       </p>
-      <p v-else-if="ipnsUuid && $i18n.te('storage.ipns.infoEdit')" class="text-body mb-8">
+      <p v-else-if="ipnsUuid && $te('storage.ipns.infoEdit')" class="mb-8 text-body">
         {{ $t('storage.ipns.infoEdit') }}
       </p>
     </template>
 
-    <n-form
-      ref="formRef"
-      :model="formData"
-      :rules="rules"
-      :disabled="isFormDisabled"
-      @submit.prevent="handleSubmit"
-    >
+    <n-form ref="formRef" :model="formData" :rules="rules" :disabled="isFormDisabled" @submit.prevent="handleSubmit">
       <!--  Ipns name -->
-      <n-form-item
-        path="name"
-        :label="$t('form.label.ipnsName')"
-        :label-props="{ for: 'ipnsName' }"
-      >
+      <n-form-item path="name" :label="$t('form.label.ipnsName')" :label-props="{ for: 'ipnsName' }">
         <n-input
           v-model:value="formData.name"
           :input-props="{ id: 'ipnsName' }"
@@ -53,13 +43,7 @@
       <!--  Form submit -->
       <n-form-item :show-feedback="false">
         <input type="submit" class="hidden" :value="$t('storage.ipns.create')" />
-        <Btn
-          type="primary"
-          class="w-full mt-2"
-          :loading="loading"
-          :disabled="isFormDisabled"
-          @click="handleSubmit"
-        >
+        <Btn type="primary" class="mt-2 w-full" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
           <template v-if="ipns">
             {{ $t('storage.ipns.update') }}
           </template>
@@ -87,7 +71,7 @@ const props = defineProps({
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const message = useMessage();
-const $i18n = useI18n();
+const { t } = useI18n();
 const dataStore = useDataStore();
 const ipnsStore = useIpnsStore();
 const bucketStore = useBucketStore();
@@ -104,8 +88,8 @@ const formData = ref<FormIpns>({
 });
 
 const rules: NFormRules = {
-  name: [ruleRequired($i18n.t('validation.ipnsNameRequired'))],
-  description: [ruleDescription($i18n.t('validation.descriptionTooLong'))],
+  name: [ruleRequired(t('validation.ipnsNameRequired'))],
+  description: [ruleDescription(t('validation.descriptionTooLong'))],
 };
 
 onMounted(async () => {
@@ -128,9 +112,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else if (props.ipnsUuid) {
       await updateIpns();
     } else {
@@ -140,18 +122,12 @@ function handleSubmit(e: Event | MouseEvent) {
 }
 
 async function createIpns() {
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-  }
   loading.value = true;
 
   try {
-    const res = await $api.post<IpnsCreateResponse>(
-      endpoints.ipns(bucketStore.selected),
-      formData.value
-    );
+    const res = await $api.post<IpnsCreateResponse>(endpoints.ipns(bucketStore.selected), formData.value);
 
-    message.success($i18n.t('form.success.created.ipns'));
+    message.success(t('form.success.created.ipns'));
 
     /** On new ipns created add new item to list */
     ipnsStore.items.unshift(res.data);
@@ -174,7 +150,7 @@ async function updateIpns() {
       formData.value
     );
 
-    message.success($i18n.t('form.success.updated.ipns'));
+    message.success(t('form.success.updated.ipns'));
 
     /** On ipns updated refresh ipns data */
     ipnsStore.items.forEach((item: IpnsInterface) => {

@@ -14,6 +14,7 @@ export default function useStore() {
   const indexerDeploymentsStore = useIndexerDeploymentsStore();
   const ipfsStore = useIpfsStore();
   const ipnsStore = useIpnsStore();
+  const metadataStore = useMetadataStore();
   const paymentStore = usePaymentStore();
   const postStore = usePostStore();
   const rpcApiKeyStore = useRpcApiKeyStore();
@@ -25,9 +26,9 @@ export default function useStore() {
   function clearAll() {
     dataStore.resetData();
     embeddedWalletStore.resetData();
-    clearCollection();
     clearComputing();
     clearIndexer();
+    clearNft();
     clearPayments();
     clearRpc();
     clearSettings();
@@ -36,8 +37,9 @@ export default function useStore() {
     clearStorage();
   }
 
-  function clearCollection() {
+  function clearNft() {
     collectionStore.resetData();
+    metadataStore.resetData();
   }
 
   function clearComputing() {
@@ -92,7 +94,7 @@ export default function useStore() {
     clearAll,
     clearStorage,
     clearHosting,
-    clearCollection,
+    clearNft,
     clearSettings,
   };
 }

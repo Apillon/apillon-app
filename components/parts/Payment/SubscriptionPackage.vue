@@ -32,7 +32,7 @@
     >
       {{ $t('dashboard.payment.currentPlan') }}
     </Btn>
-    <n-tooltip v-else-if="!dataStore.isUserOwner" trigger="hover">
+    <n-tooltip v-else-if="!dataStore.isUserOwner" :trigger="isMd ? 'hover' : 'click'">
       <template #trigger>
         <Btn class="cursor-default opacity-60" type="primary" size="large" :color="colors.blue" round>
           {{ $t('dashboard.payment.selectPlan') }}
@@ -79,6 +79,7 @@ defineProps({
   plan: { type: Object as PropType<PricingPlan>, default: {} as PricingPlan },
 });
 
+const { isMd } = useScreen();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const { loading, getSubscriptionSessionUrl } = usePayment();

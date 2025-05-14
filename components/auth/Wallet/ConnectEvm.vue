@@ -16,14 +16,7 @@
         {{ $t('auth.wallet.evm.disconnect') }}
       </Btn>
     </div>
-    <Btn
-      v-else
-      size="large"
-      type="secondary"
-      :loading="loading || isConnecting"
-      borderless
-      @click="modalWalletVisible = true"
-    >
+    <Btn v-else size="large" type="secondary" :loading="loading" borderless @click="modalWalletVisible = true">
       {{ $t('auth.wallet.evm.connect') }}
     </Btn>
   </div>
@@ -32,13 +25,12 @@
     <p class="mb-8">
       {{ $t('auth.wallet.evm.info') }}
     </p>
-    <AuthWalletEvm :loading="loading" />
+    <AuthWalletEvm :loading="loading" @connected="onWalletConnected" />
   </modal>
 </template>
 
 <script lang="ts" setup>
-import { useAccount, useConnect, useDisconnect, useConnectorClient, useAccountEffect } from '@wagmi/vue';
-import { truncateWallet } from '~/lib/utils/strings';
+import { useAccount, useConnect, useDisconnect, useConnectorClient } from '@wagmi/vue';
 
 const { t } = useI18n();
 const authStore = useAuthStore();
@@ -47,9 +39,8 @@ const { connectAndSign } = useWallet();
 
 const { connect, connectors } = useConnect();
 const { refetch: refetchWalletClient } = useConnectorClient();
-const { address, isConnected, isConnecting } = useAccount();
+const { address, isConnected } = useAccount();
 const { disconnect } = useDisconnect();
-useAccountEffect({ onConnect: onWalletConnected });
 
 const loading = ref<boolean>(false);
 const loadingRemove = ref<boolean>(false);
@@ -69,7 +60,7 @@ function wagmiConnect(connector) {
   }
 }
 
-async function onWalletConnected({ address, connector, isReconnected }) {
+async function onWalletConnected({ address }) {
   await sleep(200);
   if (authStore.user.evmWallet !== address) {
     connectWallet();

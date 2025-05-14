@@ -33,8 +33,6 @@
 </template>
 
 <script lang="ts" setup>
-import { truncateWallet } from '~/lib/utils/strings';
-
 const { t } = useI18n();
 const { error, success } = useMessage();
 const authStore = useAuthStore();

@@ -86,7 +86,8 @@ export const useRpcEndpointStore = defineStore('endpoint', {
         sessionStorage.setItem(key, Date.now().toString());
 
         return items;
-      } catch (error) {
+      } catch (e: ApiError | any) {
+        console.error(e);
         dataStore.promises.rpcEndpoints = null;
 
         this.items = [] as Array<RpcEndpointInterface>;
@@ -122,7 +123,8 @@ export const useRpcEndpointStore = defineStore('endpoint', {
         sessionStorage.setItem(key, Date.now().toString());
 
         return res.data;
-      } catch (error) {
+      } catch (e: ApiError | any) {
+        console.error(e);
         dataStore.promises.rpcEndpoints = null;
 
         this.publicEndpoints = [] as Array<RpcEndpointInterface>;

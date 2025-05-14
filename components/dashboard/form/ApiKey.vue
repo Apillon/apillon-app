@@ -190,41 +190,46 @@ const unusedServices = computed<ServiceTypeField[]>(() => {
   return dataStore.serviceTypes.reduce((acc, serviceType) => {
     const isServiceInUse = dataStore.services.some(item => item.serviceType_id === serviceType.id);
     const newServiceType = { ...serviceType, enabled: false };
-    return !isServiceEnabled(serviceType) || isServiceInUse || serviceType.active === 0
+    return !isServiceEnabled(serviceType) ||
+      isServiceInUse ||
+      serviceType.active === 0 ||
+      serviceType.id === ServiceType.SIMPLETS
       ? acc
       : [...acc, newServiceType];
   }, [] as ServiceTypeField[]);
 });
 
 const createRoles = () => {
-  return dataStore.services.map(service => {
-    return {
-      enabled: isAnyPermissionEnabled(service),
-      name: service.name,
-      serviceType: service.serviceType,
-      service_uuid: service.service_uuid,
-      permissions: [
-        {
-          key: ApiKeyRole.READ,
-          value: isPermissionEnabled(service.service_uuid, ApiKeyRole.READ),
-          name: 'read',
-          label: t('dashboard.permissions.read'),
-        },
-        {
-          key: ApiKeyRole.EXECUTE,
-          value: isPermissionEnabled(service.service_uuid, ApiKeyRole.EXECUTE),
-          name: 'execute',
-          label: t('dashboard.permissions.execute'),
-        },
-        {
-          key: ApiKeyRole.WRITE,
-          value: isPermissionEnabled(service.service_uuid, ApiKeyRole.WRITE),
-          name: 'write',
-          label: t('dashboard.permissions.write'),
-        },
-      ],
-    };
-  });
+  return dataStore.services
+    .filter(s => s.serviceType_id !== ServiceType.SIMPLETS)
+    .map(service => {
+      return {
+        enabled: isAnyPermissionEnabled(service),
+        name: service.name,
+        serviceType: service.serviceType,
+        service_uuid: service.service_uuid,
+        permissions: [
+          {
+            key: ApiKeyRole.READ,
+            value: isPermissionEnabled(service.service_uuid, ApiKeyRole.READ),
+            name: 'read',
+            label: t('dashboard.permissions.read'),
+          },
+          {
+            key: ApiKeyRole.EXECUTE,
+            value: isPermissionEnabled(service.service_uuid, ApiKeyRole.EXECUTE),
+            name: 'execute',
+            label: t('dashboard.permissions.execute'),
+          },
+          {
+            key: ApiKeyRole.WRITE,
+            value: isPermissionEnabled(service.service_uuid, ApiKeyRole.WRITE),
+            name: 'write',
+            label: t('dashboard.permissions.write'),
+          },
+        ],
+      };
+    });
 };
 
 const createExpandedPermissions = () => {
