@@ -43,6 +43,7 @@
       type="password"
       :input-props="{ id: 'password', autocomplete: 'mysql-password' }"
       :placeholder="$t('form.placeholder.mysql.password')"
+      show-password-on="click"
       clearable
     />
   </n-form-item>

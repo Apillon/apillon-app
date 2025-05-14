@@ -18,6 +18,7 @@
     "emailRequired": "Typing in your email would definitely hit the spot :)",
     "expirationDate": "Date is expired",
     "expirationDateRequired": "Please enter expiration date",
+    "evmWalletAddress": "Please enter a valid EVM wallet address",
     "fileNoData": "The file is empty or has no data",
     "fileTypeNotAllow": "File \"{name}\" can't be uploaded here. Please use hosting service.",
     "fileTypeNotCsv": "File must be of type CSV",

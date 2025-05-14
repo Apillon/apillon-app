@@ -28,9 +28,9 @@ export const useSimpletStore = defineStore('simplets', {
       apiKey: null as Optional<string>,
       apiSecret: null as Optional<string>,
       mysql: {
-        host: '',
+        host: 'localhost',
         port: 3306,
-        database: '',
+        database: 'db_nft_studio',
         user: '',
         password: '',
       },
@@ -85,9 +85,9 @@ export const useSimpletStore = defineStore('simplets', {
       this.resetFormSmtp();
     },
     resetFormMySql() {
-      this.form.mysql.host = '';
+      this.form.mysql.host = 'localhost';
       this.form.mysql.port = 3306;
-      this.form.mysql.database = '';
+      this.form.mysql.database = 'db_nft_studio';
       this.form.mysql.user = '';
       this.form.mysql.password = '';
     },

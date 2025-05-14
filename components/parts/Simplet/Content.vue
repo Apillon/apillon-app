@@ -38,18 +38,4 @@ defineProps({
   icons: { type: Boolean, default: false },
   innerClass: { type: String, default: '' },
 });
-
-const linkExpr = /\[(.*?)\]\((.*?)\)/gi;
-
-const transformLinks = (str: string) => {
-  return str.replace(linkExpr, (expr, text) => {
-    try {
-      const [_, link] = expr.substring(1, expr.length - 1).split('](');
-      return text && link ? `<a href="${link}" class="link">${text}</a>` : expr;
-    } catch (e: any) {
-      console.error(e);
-      return expr;
-    }
-  });
-};
 </script>
