@@ -6,8 +6,10 @@
     </Notification>
 
     <Headline :title="$t('simplet.wizard.smtp.setup')" :content="$t('simplet.wizard.smtp.info')" />
+    <p class="my-6" v-html="transformLinks($t('simplet.wizard.smtp.help'))"></p>
+
     <Notification type="warning" class="mb-8 w-full">
-      {{ $t('simplet.wizard.smtp.warning') }}
+      <div v-html="transformLinks($t('simplet.wizard.smtp.warning'))"></div>
     </Notification>
 
     <n-form

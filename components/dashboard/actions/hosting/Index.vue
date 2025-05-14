@@ -5,7 +5,7 @@
     </div>
 
     <n-space size="large">
-      <n-button :disabled="authStore.isAdmin()" @click="showModalEditWebsite = true">
+      <n-button :disabled="authStore.isAdmin()" @click="showModalNewWebsite = true">
         <span class="icon-add mr-2 text-xl text-primary"></span>
         <span class="text-primary">{{ $t('hosting.website.add') }}</span>
       </n-button>
@@ -14,7 +14,7 @@
   </n-space>
 
   <!-- Modal - New website -->
-  <HostingModal v-model:show="showModalEditWebsite" :title="$t('hosting.website.new')" />
+  <HostingModal v-model:show="showModalNewWebsite" :title="$t('hosting.website.new')" />
 </template>
 
 <script lang="ts" setup>
@@ -24,5 +24,5 @@ defineProps({
 
 const authStore = useAuthStore();
 const websiteStore = useWebsiteStore();
-const showModalEditWebsite = ref<boolean>(false);
+const showModalNewWebsite = ref<boolean>(false);
 </script>

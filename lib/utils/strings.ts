@@ -127,3 +127,26 @@ export function hideSecret(source: string, partLength: number = 4): string {
 export function toStr(s?: any) {
   return s ? s.toString() : '';
 }
+
+// Generate a secure unique password for the database
+export const generatePassword = (length = 16) => {
+  const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]{}|;:,.<>?';
+  let password = '';
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charset.length);
+    password += charset[randomIndex];
+  }
+  return password;
+};
+
+export const transformLinks = (str: string) => {
+  return str.replace(/\[(.*?)\]\((.*?)\)/gi, (expr, text) => {
+    try {
+      const [_, link] = expr.substring(1, expr.length - 1).split('](');
+      return text && link ? `<a href="${link}" class="link">${text}</a>` : expr;
+    } catch (e: any) {
+      console.error(e);
+      return expr;
+    }
+  });
+};

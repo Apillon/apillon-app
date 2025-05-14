@@ -107,6 +107,7 @@
 defineExpose({ handleSubmit });
 
 const message = useMessage();
+const authStore = useAuthStore();
 const dataStore = useDataStore();
 const simpletStore = useSimpletStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
@@ -119,9 +120,12 @@ const formRef = ref<NFormInst | null>(null);
 const useDifferentDB = ref<boolean>(false);
 
 const rules = computed(() => ({
-  name: [ruleRequired(t('validation.simplet.nameRequired'))],
-  description: [ruleDescription(t('validation.descriptionTooLong'))],
-  walletAddress: [ruleRequired(t('validation.simplet.walletAddressRequired'))],
+  name: ruleRequired(t('validation.simplet.nameRequired')),
+  description: ruleDescription(t('validation.descriptionTooLong')),
+  walletAddress: [
+    ruleRequired(t('validation.simplet.walletAddressRequired')),
+    ruleWalletAddress(t('validation.evmWalletAddress')),
+  ],
   apiKey: ruleApiKey(simpletStore.form),
   apiSecret: ruleApiSecret(simpletStore.form),
   embeddedWallet: {
@@ -138,11 +142,13 @@ const isFormDisabled = computed<boolean>(() => {
   return dataStore.isProjectUser;
 });
 
-// Submit
+onMounted(() => {
+  simpletStore.form.mysql.user = authStore.username || authStore.email.split('@')[0];
+  simpletStore.form.mysql.password = generatePassword();
+});
+
 async function handleSubmit(e?: Event | MouseEvent): Promise<boolean> {
   e?.preventDefault();
-
-  if (!useDifferentDB.value) simpletStore.resetFormMySql();
 
   const validation = await formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     errors?.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));

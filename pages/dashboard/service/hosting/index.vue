@@ -22,9 +22,7 @@
       </W3Warn>
 
       <!-- Modal - Create Website -->
-      <modal v-model:show="showModalNewWebsite" :title="$t('hosting.website.new')">
-        <FormHostingWebsite />
-      </modal>
+      <HostingModal v-model:show="showModalNewWebsite" :title="$t('hosting.website.new')" />
     </slot>
   </Dashboard>
 </template>

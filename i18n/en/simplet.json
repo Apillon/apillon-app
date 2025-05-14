@@ -184,9 +184,10 @@
       },
       "smtp": {
         "info": "Add your SMTP settings so your emails are sent straight from your domain—no sketchy senders here.",
+        "help": "*[SMTP](https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol) is a protocol that enables sending and receiving mail messages. If you don’t have an SMTP server of your own yet, use [resend.com](https://resend.com/)",
         "setup": "Email server setup",
         "skip": "Skip email server setup for now. A default SMTP server will be pre-configured inside the Docker image. You can update the SMTP configuration later if needed.",
-        "warning": "Don’t worry—your SMTP details are safe. Simplets run in a Trusted Execution Environment (TEE), which means your sensitive data stays protected. Learn more about TEEs and confidential computing."
+        "warning": "Don’t worry—your SMTP details are safe. Simplets run in a Trusted Execution Environment (TEE), which means your sensitive data stays protected. [Learn more](https://phala.network/confidential-computation-with-tee) about TEEs and confidential computing."
       },
       "create": "Deploy simplet",
       "deploying": "Creating Simplet",
