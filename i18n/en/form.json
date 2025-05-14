@@ -364,7 +364,8 @@
       }
     },
     "error": {
-      "rpcEmailTaken": "Dwellir user with this email already exists. Please remove the user or use another email."
+      "rpcEmailTaken": "Dwellir user with this email already exists. Please remove the user or use another email.",
+      "wrongLoginType": "Please use email & password to sign in."
     },
     "success": {
       "apiKey": "API key has been created",

@@ -15,14 +15,8 @@ async function authenticate() {
   loading.value = true;
 
   try {
-    const res = await $api.get<GeneralResponse<{ url: string }>>(`/oauth/${OauthTypes.GOOGLE}/authenticate`, {
-      redirectUrl: `${config.baseUrl}/login/oauth/${OauthTypes.GOOGLE}`,
-    });
-
-    if (res.data.url) {
-      sessionStorage.setItem(SessionKeys.OAUTH_ACTION, OauthActionTypes.LOGIN);
-      window.location.href = res.data.url;
-    }
+    sessionStorage.setItem(SessionKeys.OAUTH_ACTION, OauthActionTypes.LOGIN);
+    window.location.href = `${config.public.apiUrl}/users/google`;
   } catch (e: ApiError | any) {
     console.error(e);
     message.error(userFriendlyMsg(e));
