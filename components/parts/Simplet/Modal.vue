@@ -170,41 +170,26 @@ async function deploy() {
 const prepareVariablesBE = (): KeyValue[] => [
   { key: 'CLAIM_TYPE', value: simpletStore.form.type || SimpletType.AIRDROP },
   { key: 'ADMIN_WALLET', value: simpletStore.form.walletAddress || '' },
-  ...(simpletStore.form.mysql.host
-    ? [
-        { key: 'MYSQL_HOST', value: simpletStore.form.mysql.host },
-        { key: 'MYSQL_PORT', value: simpletStore.form.mysql.port },
-        { key: 'MYSQL_DATABASE', value: simpletStore.form.mysql.database },
-        { key: 'MYSQL_USER', value: simpletStore.form.mysql.user },
-        { key: 'MYSQL_PASSWORD', value: simpletStore.form.mysql.password },
-      ]
-    : []),
-  ...(simpletStore.form.smtp.host
-    ? [
-        { key: 'SMTP_HOST', value: simpletStore.form.smtp.host },
-        { key: 'SMTP_PORT', value: simpletStore.form.smtp.port },
-        { key: 'SMTP_USERNAME', value: simpletStore.form.smtp.username },
-        { key: 'SMTP_PASSWORD', value: simpletStore.form.smtp.password },
-        { key: 'SMTP_NAME_FROM', value: simpletStore.form.smtp.senderName },
-        { key: 'SMTP_EMAIL_FROM', value: simpletStore.form.smtp.senderEmail },
-      ]
-    : []),
+  { key: 'MYSQL_HOST', value: simpletStore.form.mysql.host },
+  { key: 'MYSQL_PORT', value: simpletStore.form.mysql.port },
+  { key: 'MYSQL_DATABASE', value: simpletStore.form.mysql.database },
+  { key: 'MYSQL_USER', value: simpletStore.form.mysql.user },
+  { key: 'MYSQL_PASSWORD', value: simpletStore.form.mysql.password },
+  { key: 'SMTP_HOST', value: simpletStore.form.smtp.host },
+  { key: 'SMTP_PORT', value: simpletStore.form.smtp.port },
+  { key: 'SMTP_USERNAME', value: simpletStore.form.smtp.username },
+  { key: 'SMTP_PASSWORD', value: simpletStore.form.smtp.password },
+  { key: 'SMTP_NAME_FROM', value: simpletStore.form.smtp.senderName },
+  { key: 'SMTP_EMAIL_FROM', value: simpletStore.form.smtp.senderEmail },
 ];
 const prepareVariablesFE = (embeddedWallet: string): KeyValue[] => {
-  const frontendVariables: KeyValue[] = [
+  return [
     { key: 'NUXT_PUBLIC_CLAIM_TYPE', value: simpletStore.form.type || SimpletType.AIRDROP },
+    { key: 'NUXT_PUBLIC_CLAIM_START', value: simpletStore.form.startTime || 0 },
+    { key: 'NUXT_PUBLIC_CLAIM_END', value: simpletStore.form.endTime || 0 },
+    { key: 'NUXT_PUBLIC_COLLECTION_LOGO', value: simpletStore.form.collectionLogo || '' },
     { key: 'NUXT_PUBLIC_EMBEDDED_WALLET_CLIENT', value: embeddedWallet },
-    ...(simpletStore.form.collectionLogo
-      ? [{ key: 'NUXT_PUBLIC_COLLECTION_LOGO', value: simpletStore.form.collectionLogo }]
-      : []),
-    ...(simpletStore.form.type === SimpletType.POAP && simpletStore.form.startTime
-      ? [{ key: 'NUXT_PUBLIC_CLAIM_START', value: simpletStore.form.startTime }]
-      : []),
-    ...(simpletStore.form.type === SimpletType.POAP && simpletStore.form.endTime
-      ? [{ key: 'NUXT_PUBLIC_CLAIM_END', value: simpletStore.form.endTime }]
-      : []),
   ];
-  return frontendVariables;
 };
 
 async function createSimplet(simpletUuid: string) {
