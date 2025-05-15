@@ -82,6 +82,7 @@ defineEmits(['skip']);
 defineExpose({ handleSubmit });
 const { t } = useI18n();
 const message = useMessage();
+const authStore = useAuthStore();
 const dataStore = useDataStore();
 const simpletStore = useSimpletStore();
 const formRef = ref<NFormInst | null>(null);
@@ -99,7 +100,14 @@ const isFormDisabled = computed<boolean>(() => {
   return dataStore.isProjectUser;
 });
 
-// Submit
+onMounted(() => {
+  simpletStore.form.smtp.host = 'nft_studio_mail';
+  simpletStore.form.smtp.username = authStore.username || authStore.email.split('@')[0];
+  simpletStore.form.smtp.password = generatePassword();
+  simpletStore.form.smtp.senderName = authStore.username || authStore.email.split('@')[0];
+  simpletStore.form.smtp.senderEmail = authStore.email;
+});
+
 async function handleSubmit(e?: Event | MouseEvent): Promise<boolean> {
   e?.preventDefault();
 
