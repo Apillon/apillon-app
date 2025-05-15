@@ -35,12 +35,12 @@ export const useSimpletStore = defineStore('simplets', {
         password: '',
       },
       smtp: {
-        host: ' ',
-        port: 465,
-        username: ' ',
-        password: ' ',
-        senderName: ' ',
-        senderEmail: ' ',
+        host: '',
+        port: 25,
+        username: '',
+        password: '',
+        senderName: '',
+        senderEmail: '',
       },
     },
   }),
@@ -93,12 +93,12 @@ export const useSimpletStore = defineStore('simplets', {
       this.form.mysql.password = '';
     },
     resetFormSmtp() {
-      this.form.smtp.host = ' ';
+      this.form.smtp.host = '';
       this.form.smtp.port = 465;
-      this.form.smtp.username = ' ';
-      this.form.smtp.password = ' ';
-      this.form.smtp.senderName = ' ';
-      this.form.smtp.senderEmail = ' ';
+      this.form.smtp.username = '';
+      this.form.smtp.password = '';
+      this.form.smtp.senderName = '';
+      this.form.smtp.senderEmail = '';
     },
 
     /**
