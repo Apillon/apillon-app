@@ -169,7 +169,7 @@ async function deploy() {
 }
 
 const prepareVariablesBE = (): EnvVar[] => [
-  { key: 'CLAIM_EXPIRES_IN', value: 168 },
+  { key: 'CLAIM_EXPIRES_IN', value: '168' },
   { key: 'CLAIM_TYPE', value: simpletStore.form.type || SimpletType.AIRDROP },
   { key: 'ADMIN_WALLET', value: simpletStore.form.walletAddress || '' },
   { key: 'MYSQL_HOST', value: simpletStore.form.mysql.host },

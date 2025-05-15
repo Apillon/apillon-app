@@ -94,7 +94,7 @@ export const useSimpletStore = defineStore('simplets', {
     },
     resetFormSmtp() {
       this.form.smtp.host = '';
-      this.form.smtp.port = 465;
+      this.form.smtp.port = 25;
       this.form.smtp.username = '';
       this.form.smtp.password = '';
       this.form.smtp.senderName = '';
