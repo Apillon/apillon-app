@@ -169,6 +169,7 @@ async function deploy() {
 }
 
 const prepareVariablesBE = (): KeyValue[] => [
+  { key: 'CLAIM_EXPIRES_IN', value: 168 },
   { key: 'CLAIM_TYPE', value: simpletStore.form.type || SimpletType.AIRDROP },
   { key: 'ADMIN_WALLET', value: simpletStore.form.walletAddress || '' },
   { key: 'MYSQL_HOST', value: simpletStore.form.mysql.host },
@@ -176,6 +177,7 @@ const prepareVariablesBE = (): KeyValue[] => [
   { key: 'MYSQL_DATABASE', value: simpletStore.form.mysql.database },
   { key: 'MYSQL_USER', value: simpletStore.form.mysql.user },
   { key: 'MYSQL_PASSWORD', value: simpletStore.form.mysql.password },
+  { key: 'MYSQL_ROOT_PASSWORD', value: simpletStore.form.mysql.password },
   { key: 'SMTP_HOST', value: simpletStore.form.smtp.host },
   { key: 'SMTP_PORT', value: simpletStore.form.smtp.port },
   { key: 'SMTP_USERNAME', value: simpletStore.form.smtp.username },
