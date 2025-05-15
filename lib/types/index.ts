@@ -28,6 +28,10 @@ declare global {
     key: string | number;
     value: string | number;
   };
+  type EnvVar = {
+    key: string | number;
+    value?: string | number | null;
+  };
 
   /**
    * i18n
