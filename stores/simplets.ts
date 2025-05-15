@@ -18,7 +18,7 @@ export const useSimpletStore = defineStore('simplets', {
     form: {
       type: null as Optional<SimpletType>,
       collection: null as Optional<CollectionInterface>,
-      collectionLogo: '',
+      collectionLogo: undefined as Optional<string | undefined>,
       name: '',
       description: '',
       embeddedWallet: null as Optional<string>,
@@ -73,6 +73,7 @@ export const useSimpletStore = defineStore('simplets', {
     resetForm() {
       this.form.type = null as Optional<SimpletType>;
       this.form.collection = null;
+      this.form.collectionLogo = undefined;
       this.form.name = '';
       this.form.description = '';
       this.form.embeddedWallet = null;

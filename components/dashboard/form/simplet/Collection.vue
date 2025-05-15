@@ -77,7 +77,7 @@ function nextStep() {
     /** Add logo */
     const uuid = selectedCollection.value.collection_uuid;
     if (uuid in logos) {
-      simpletStore.form.collectionLogo = logos[uuid]?.link || '';
+      simpletStore.form.collectionLogo = logos[uuid]?.link;
     }
   } else {
     message.warning(t('simplet.wizard.selectCollection'));

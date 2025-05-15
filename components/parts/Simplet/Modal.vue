@@ -168,7 +168,7 @@ async function deploy() {
   simpletStore.stepSimpletCreate = simplet ? SimpletCreateStep.DEPLOYED : SimpletCreateStep.FORM;
 }
 
-const prepareVariablesBE = (): KeyValue[] => [
+const prepareVariablesBE = (): EnvVar[] => [
   { key: 'CLAIM_EXPIRES_IN', value: 168 },
   { key: 'CLAIM_TYPE', value: simpletStore.form.type || SimpletType.AIRDROP },
   { key: 'ADMIN_WALLET', value: simpletStore.form.walletAddress || '' },
@@ -185,15 +185,18 @@ const prepareVariablesBE = (): KeyValue[] => [
   { key: 'SMTP_NAME_FROM', value: simpletStore.form.smtp.senderName },
   { key: 'SMTP_EMAIL_FROM', value: simpletStore.form.smtp.senderEmail },
 ];
-const prepareVariablesFE = (embeddedWallet: string): KeyValue[] => [
-  { key: 'NUXT_PUBLIC_CHAIN_ID', value: simpletStore.form.collection?.chain || '' },
-  { key: 'NUXT_PUBLIC_CLAIM_TYPE', value: simpletStore.form.type || SimpletType.AIRDROP },
-  { key: 'NUXT_PUBLIC_CLAIM_START', value: simpletStore.form.startTime || 0 },
-  { key: 'NUXT_PUBLIC_CLAIM_END', value: simpletStore.form.endTime || 0 },
-  { key: 'NUXT_PUBLIC_COLLECTION_ADDRESS', value: simpletStore.form.collection?.contractAddress || '' },
-  { key: 'NUXT_PUBLIC_COLLECTION_LOGO', value: simpletStore.form.collectionLogo || '' },
-  { key: 'NUXT_PUBLIC_EMBEDDED_WALLET_CLIENT', value: embeddedWallet },
-];
+const prepareVariablesFE = (embeddedWallet: string): EnvVar[] =>
+  [
+    { key: 'NUXT_PUBLIC_CHAIN_ID', value: simpletStore.form.collection?.chain },
+    { key: 'NUXT_PUBLIC_CLAIM_TYPE', value: simpletStore.form.type || SimpletType.AIRDROP },
+    { key: 'NUXT_PUBLIC_CLAIM_START', value: simpletStore.form.startTime || 0 },
+    { key: 'NUXT_PUBLIC_CLAIM_END', value: simpletStore.form.endTime || 0 },
+    { key: 'NUXT_PUBLIC_COLLECTION_ADDRESS', value: simpletStore.form.collection?.contractAddress },
+    { key: 'NUXT_PUBLIC_EMBEDDED_WALLET_CLIENT', value: embeddedWallet },
+    simpletStore.form.collectionLogo
+      ? [{ key: 'NUXT_PUBLIC_COLLECTION_LOGO', value: simpletStore.form.collectionLogo }]
+      : [],
+  ].flat();
 
 async function createSimplet(simpletUuid: string) {
   try {
