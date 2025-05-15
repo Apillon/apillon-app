@@ -33,14 +33,13 @@ const pricing = computed<ProductPriceInterface[]>(() => {
   return prices;
 });
 
-const collectionName = (uuid: string) => collectionStore.items.find(c => c.collection_uuid === uuid)?.name || '';
 const ewIntergationName = (uuid?: string | null) =>
   embeddedWalletStore.items.find(c => c.integration_uuid === uuid)?.title || '';
 
 const data = ref<Record<string, string | boolean>[]>([
   { label: t('form.label.simplet.name'), value: simpletStore.form.name },
   { label: t('form.label.description'), value: simpletStore.form.description },
-  { label: t('nft.collection.preview'), value: collectionName(simpletStore.form.collection) },
+  { label: t('nft.collection.preview'), value: simpletStore.form.collection?.name || '' },
   { label: t('form.label.simplet.walletAddress'), value: simpletStore.form.walletAddress || '' },
   {
     label: t('form.label.embeddedWallet.integration'),

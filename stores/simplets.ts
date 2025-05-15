@@ -17,7 +17,7 @@ export const useSimpletStore = defineStore('simplets', {
     stepSimpletCreate: SimpletCreateStep.COLLECTION,
     form: {
       type: null as Optional<SimpletType>,
-      collection: '',
+      collection: null as Optional<CollectionInterface>,
       collectionLogo: '',
       name: '',
       description: '',
@@ -72,7 +72,7 @@ export const useSimpletStore = defineStore('simplets', {
     },
     resetForm() {
       this.form.type = null as Optional<SimpletType>;
-      this.form.collection = '';
+      this.form.collection = null;
       this.form.name = '';
       this.form.description = '';
       this.form.embeddedWallet = null;

@@ -68,6 +68,7 @@ const message = useMessage();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const simpletStore = useSimpletStore();
+const collectionStore = useCollectionStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
 
 const simpletTypeRef = useTemplateRef('simpletTypeRef');
@@ -131,7 +132,7 @@ function nextStep() {
       break;
     case SimpletCreateStep.COLLECTION:
       simpletCollectionRef.value?.nextStep();
-      if (simpletStore.form.collection) {
+      if (simpletStore.form.collection?.collection_uuid) {
         simpletStore.stepSimpletCreate += 1;
       }
       break;
@@ -182,15 +183,15 @@ const prepareVariablesBE = (): KeyValue[] => [
   { key: 'SMTP_NAME_FROM', value: simpletStore.form.smtp.senderName },
   { key: 'SMTP_EMAIL_FROM', value: simpletStore.form.smtp.senderEmail },
 ];
-const prepareVariablesFE = (embeddedWallet: string): KeyValue[] => {
-  return [
-    { key: 'NUXT_PUBLIC_CLAIM_TYPE', value: simpletStore.form.type || SimpletType.AIRDROP },
-    { key: 'NUXT_PUBLIC_CLAIM_START', value: simpletStore.form.startTime || 0 },
-    { key: 'NUXT_PUBLIC_CLAIM_END', value: simpletStore.form.endTime || 0 },
-    { key: 'NUXT_PUBLIC_COLLECTION_LOGO', value: simpletStore.form.collectionLogo || '' },
-    { key: 'NUXT_PUBLIC_EMBEDDED_WALLET_CLIENT', value: embeddedWallet },
-  ];
-};
+const prepareVariablesFE = (embeddedWallet: string): KeyValue[] => [
+  { key: 'NUXT_PUBLIC_CHAIN_ID', value: simpletStore.form.collection?.chain || '' },
+  { key: 'NUXT_PUBLIC_CLAIM_TYPE', value: simpletStore.form.type || SimpletType.AIRDROP },
+  { key: 'NUXT_PUBLIC_CLAIM_START', value: simpletStore.form.startTime || 0 },
+  { key: 'NUXT_PUBLIC_CLAIM_END', value: simpletStore.form.endTime || 0 },
+  { key: 'NUXT_PUBLIC_COLLECTION_ADDRESS', value: simpletStore.form.collection?.contractAddress || '' },
+  { key: 'NUXT_PUBLIC_COLLECTION_LOGO', value: simpletStore.form.collectionLogo || '' },
+  { key: 'NUXT_PUBLIC_EMBEDDED_WALLET_CLIENT', value: embeddedWallet },
+];
 
 async function createSimplet(simpletUuid: string) {
   try {
@@ -200,9 +201,9 @@ async function createSimplet(simpletUuid: string) {
       project_uuid: dataStore.projectUuid,
       name: simpletStore.form.name,
       description: simpletStore.form.description,
-      apillonApiKey: simpletStore.form.apiKey || null,
-      apillonApiSecret: simpletStore.form.apiSecret || null,
-      nftCollection_uuid: simpletStore.form.collection,
+      apillonApiKey: simpletStore.form.apiKey || undefined,
+      apillonApiSecret: simpletStore.form.apiSecret || undefined,
+      nftCollection_uuid: simpletStore.form.collection?.collection_uuid || null,
       backendVariables: prepareVariablesBE(),
       frontendVariables: prepareVariablesFE(embeddedWallet),
     };

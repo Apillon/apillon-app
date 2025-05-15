@@ -12,8 +12,8 @@
         :icon="logoImg(collection.collection_uuid) ? undefined : 'menu/NFTs'"
         :img="logoImg(collection.collection_uuid) || ''"
         :content="`${collection.maxSupply} ${$t('storage.files')}`"
-        :selected="selectedCollection === collection.collection_uuid"
-        @click="selectedCollection = collection.collection_uuid"
+        :selected="selectedCollection?.collection_uuid === collection.collection_uuid"
+        @click="selectedCollection = collection"
       >
         <template #title>
           <span>
@@ -41,7 +41,7 @@ const bucketStore = useBucketStore();
 const simpletStore = useSimpletStore();
 const collectionStore = useCollectionStore();
 
-const selectedCollection = ref('');
+const selectedCollection = ref<CollectionInterface>();
 const logos = reactive<Record<string, BucketItemInterface | undefined>>({});
 
 const collections = computed(() =>
@@ -75,8 +75,9 @@ function nextStep() {
     simpletStore.form.collection = selectedCollection.value;
 
     /** Add logo */
-    if (selectedCollection.value in logos) {
-      simpletStore.form.collectionLogo = logos[selectedCollection.value]?.link || '';
+    const uuid = selectedCollection.value.collection_uuid;
+    if (uuid in logos) {
+      simpletStore.form.collectionLogo = logos[uuid]?.link || '';
     }
   } else {
     message.warning(t('simplet.wizard.selectCollection'));
