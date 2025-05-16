@@ -86,7 +86,7 @@ export const useSimpletStore = defineStore('simplets', {
       this.resetFormSmtp();
     },
     resetFormMySql() {
-      this.form.mysql.host = 'localhost';
+      this.form.mysql.host = 'nft_studio_db';
       this.form.mysql.port = 3306;
       this.form.mysql.database = 'db_nft_studio';
       this.form.mysql.user = '';
