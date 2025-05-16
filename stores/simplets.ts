@@ -28,7 +28,7 @@ export const useSimpletStore = defineStore('simplets', {
       apiKey: null as Optional<string>,
       apiSecret: null as Optional<string>,
       mysql: {
-        host: 'localhost',
+        host: 'nft_studio_db',
         port: 3306,
         database: 'db_nft_studio',
         user: '',
