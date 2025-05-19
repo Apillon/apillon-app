@@ -26,6 +26,11 @@
         <n-divider class="mx-4 h-full" vertical />
       </template>
 
+      <n-button size="small" @click="navigateToAddIpns">
+        <span class="icon-web mr-2 text-xl"></span>
+        {{ $t('storage.add-fixed-url') }}
+      </n-button>
+
       <!-- Refresh directory content -->
       <n-button size="medium" @click="refreshDirectoryContent">
         <span class="icon-refresh mr-2 text-xl"></span>
@@ -76,6 +81,7 @@ import { colors } from '~/tailwind.config';
 
 const authStore = useAuthStore();
 const bucketStore = useBucketStore();
+const router = useRouter();
 const { downloading, downloadSelectedFiles } = useFile();
 
 const showModalNewFolder = ref<boolean>(false);
@@ -123,5 +129,14 @@ function onDeleted() {
     /** Remove timestamp for deleted items */
     sessionStorage.removeItem(LsCacheKeys.FILE_DELETED);
   }, 300);
+}
+
+function navigateToAddIpns() {
+  router.push({
+    name: 'dashboard-service-storage-add-ipns',
+    query: {
+      bucketUuid: bucketStore.active.bucket_uuid,
+    },
+  });
 }
 </script>
