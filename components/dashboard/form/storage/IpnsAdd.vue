@@ -12,19 +12,19 @@
       :disabled="isFormDisabled"
       @submit.prevent="handleSubmit"
     >
-      <n-form-item path="bucketUuid" :label="$t('hosting.deploy.form.repository')" :label-props="{ for: 'bucketUuid' }">
+      <n-form-item path="bucketUuid" :label="$t('hosting.add-ipns.bucket-label')" :label-props="{ for: 'bucketUuid' }">
         <n-select
           v-model:value="formData.bucketUuid"
-          :placeholder="$t('hosting.deploy.form.repository-placeholder')"
+          :placeholder="$t('hosting.add-ipns.bucket-placeholder')"
           :options="bucketOptions"
           filterable
           @update:value="handleUpdateBucket"
         />
       </n-form-item>
-      <n-form-item path="cid" :label="$t('hosting.deploy.form.repository')" :label-props="{ for: 'repo' }">
+      <n-form-item path="cid" :label="$t('hosting.add-ipns.folder-label')" :label-props="{ for: 'repo' }">
         <n-select
           v-model:value="formData.cid"
-          :placeholder="$t('hosting.deploy.form.repository-placeholder')"
+          :placeholder="$t('hosting.add-ipns.folder-placeholder')"
           :options="folderOptions"
           filterable
           :loading="repoLoading"

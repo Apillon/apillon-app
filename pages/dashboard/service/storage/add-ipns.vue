@@ -2,7 +2,7 @@
   <Dashboard :loading="pageLoading" :learn-collapsible="false">
     <template #heading>
       <div class="flex max-w-3xl flex-col gap-4">
-        <div class="flex flex-col">
+        <div class="flex flex-col gap-6">
           <div class="flex flex-row items-center gap-4">
             <NuxtLink
               :to="{
@@ -13,11 +13,11 @@
             </NuxtLink>
             <h2>{{ $t('storage.ipns.create-title') }}</h2>
           </div>
-          <span>{{ $t('storage.ipns.subtitle') }}</span>
+          <p>{{ $t('storage.ipns.subtitle') }}</p>
         </div>
-        <div>{{ $t('storage.ipns.create-description') }}</div>
-        <div style="white-space: pre-wrap">{{ $t('storage.ipns.how-to') }}</div>
-        <div>{{ $t('storage.ipns.learn-more') }}</div>
+        <p>{{ $t('storage.ipns.create-description') }}</p>
+        <p style="white-space: pre-wrap">{{ $t('storage.ipns.how-to') }}</p>
+        <p>{{ $t('storage.ipns.learn-more') }}</p>
         <FormStorageIpnsAdd :buckets="bucketStore.items" />
       </div>
     </template>

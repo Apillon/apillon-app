@@ -1,5 +1,11 @@
 {
   "hosting": {
+    "add-ipns": {
+      "bucket-label": "Choose bucket",
+      "bucket-placeholder": "Bucket",
+      "folder-label": "Choose IPNS record folder",
+      "folder-placeholder": "Folder"
+    },
     "deploy": {
       "connectRepo": "Connect Github repository to website",
       "infoEmpty": "Connect Github repository to enable Continuous Deployment for this website",
