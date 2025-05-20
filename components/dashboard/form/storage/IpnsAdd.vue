@@ -117,7 +117,7 @@ const rules: NFormRules = {
   name: [ruleRequired($i18n.t('validation.ipnsNameRequired'))],
   description: [ruleDescription($i18n.t('validation.descriptionTooLong'))],
   bucketUuid: [ruleRequired($i18n.t('validation.bucketRequired'))],
-  cid: [ruleRequired($i18n.t('validation.cidRequired'))],
+  cid: [ruleRequired($i18n.t('validation.folderRequired'))],
 };
 
 onMounted(async () => {
