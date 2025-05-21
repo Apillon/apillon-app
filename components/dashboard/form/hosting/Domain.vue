@@ -139,7 +139,7 @@ function handleSubmit(e: Event | MouseEvent) {
 
 async function createWebsiteDomain() {
   loading.value = true;
-  console.log('createWebsiteDomain', formData.value.domain, formData.value.ipns, props.websiteUuid);
+
   /** Create IPNS first if user check it */
   if (formData.value.ipns && !(await createIpns())) {
     loading.value = false;

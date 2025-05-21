@@ -1,13 +1,11 @@
 <template>
   <Dashboard :loading="authStore.loadingProfile" :learn-collapsible="false">
     <template #heading>
-      <Heading>
-        <h4>{{ $t('dashboard.onboarding.welcome') }}</h4>
-      </Heading>
+      <h4>{{ $t('dashboard.onboarding.welcome') }}</h4>
     </template>
     <slot>
       <div class="mb-8">
-        <div class="mb-10 mt-8 flex gap-4">
+        <div class="mb-10 flex gap-4">
           <div class="flex flex-col justify-between gap-8 rounded-lg bg-violet p-6 text-bg lg:w-5/12">
             <div>
               <h4>{{ $t('dashboard.onboarding.banner.title') }}</h4>
@@ -90,35 +88,12 @@
         <!-- Services-->
         <h4 class="mb-8">{{ $t('dashboard.onboarding.servicesTitle') }}</h4>
 
-        <div class="mb-8 grid grid-cols-billing gap-4">
+        <div class="grid-cols-cards mb-8 grid gap-4">
           <CardService v-for="(service, key) in onboardingServices" v-bind="service" :key="key" />
         </div>
 
-        <!-- Resources-->
-        <SolutionOverview />
-
-        <hr class="my-8 border-bg-lighter" />
-
-        <!-- Services-->
-        <h4 class="mb-8">{{ $t('general.explore') }}</h4>
-
-        <div class="grid grid-cols-billing gap-4">
-          <div v-for="(service, key) in services" :key="key" class="card-dark flex flex-col justify-between p-8">
-            <div class="flex items-center justify-between text-white">
-              <strong>{{ service.title }}</strong>
-              <NuxtLink
-                v-if="service.link"
-                :to="{ name: service.link }"
-                class="inline-flex-cc h-10 w-10 rounded-full transition-colors duration-300 hover:bg-bg-lighter"
-              >
-                <span class="icon-wide-right text-xl"></span>
-              </NuxtLink>
-            </div>
-            <div class="mt-4">
-              <p>{{ service.content }}</p>
-            </div>
-          </div>
-        </div>
+        <!-- Resources
+        <SolutionOverview />-->
       </div>
 
       <modal v-model:show="dataStore.project.showOnboarding" class="hide-header" size="small">
@@ -138,27 +113,7 @@ const { onboardingServices } = useService();
 
 const show = ref<boolean>(false);
 
-const pageTitle = useState('pageTitle', () => t('dashboard.homepage'));
-pageTitle.value = t('dashboard.homepage');
-
 useHead({
   title: t('dashboard.homepage'),
 });
-
-const services = [
-  {
-    title: t('dashboard.nav.services'),
-    content: t('dashboard.service.info'),
-    link: 'dashboard-service',
-  },
-  // {
-  //   title: t('dashboard.nav.smartContracts'),
-  //   content: t('smartContracts.info'),
-  // },
-  {
-    title: t('dashboard.nav.solutions'),
-    content: t('dashboard.solution.info'),
-    link: 'dashboard-simplet',
-  },
-];
 </script>

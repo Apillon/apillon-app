@@ -25,7 +25,7 @@ async function authenticate() {
 </script>
 
 <template>
-  <Btn type="secondary" class="w-full" inner-class="flex gap-2 items-center" :loading="loading" @click="authenticate">
+  <Btn size="large" type="secondary" inner-class="flex gap-2 items-center" :loading="loading" @click="authenticate">
     <NuxtIcon name="logo/google" class="text-xl" filled />
     <span v-if="register" class="text-white">{{ $t('auth.signup.google') }}</span>
     <span v-else class="text-white">{{ $t('auth.login.google') }}</span>

@@ -1,5 +1,11 @@
 <template>
-  <Dashboard :loading="pageLoading">
+  <ServiceEmpty
+    v-if="!dataStore.project.selected"
+    :name="toCamelCase(Feature.SMART_CONTRACTS)"
+    :service="ServiceTypeName.SMART_CONTRACTS"
+    docs="https://wiki.apillon.io/web3-services/12-web3-smart-contracts.html"
+  />
+  <Dashboard v-else :loading="pageLoading">
     <template #heading>
       <div ref="headingRef">
         <HeaderSmartContracts />

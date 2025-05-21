@@ -1,5 +1,11 @@
 <template>
-  <Dashboard :loading="pageLoading">
+  <ServiceEmpty
+    v-if="!dataStore.project.selected"
+    :name="toCamelCase(Feature.EMBEDDED_WALLET)"
+    :service="ServiceTypeName.EMBEDDED_WALLET"
+    docs="https://wiki.apillon.io/web3-services/7-web3-compute.html"
+  />
+  <Dashboard v-else :loading="pageLoading">
     <template #heading>
       <Heading
         :headline="$t('dashboard.nav.embeddedWallet')"

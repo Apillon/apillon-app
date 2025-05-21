@@ -107,7 +107,7 @@
   }
 
   .card-auth {
-    @apply bg-bg-dark p-10 md:p-14 lg:px-22;
+    @apply rounded-lg bg-bg-dark p-10 md:p-14 lg:px-22;
   }
 
   /** scrollbar */

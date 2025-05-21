@@ -14,7 +14,7 @@
   </n-space>
 
   <!-- Modal - Edit IPNS -->
-  <modal v-model:show="modalEditAuthVisible" :title="$t('dashboard.service.edit')">
+  <modal v-model:show="modalEditAuthVisible" :title="$t('service.edit')">
     <FormService
       :service-uuid="currentRow?.service_uuid"
       :service-type="ServiceType.AUTHENTICATION"
@@ -23,7 +23,7 @@
   </modal>
 
   <!-- Modal - Delete API key -->
-  <ModalDelete v-model:show="modalDeleteAuthVisible" :title="$t('dashboard.service.delete')">
+  <ModalDelete v-model:show="modalDeleteAuthVisible" :title="$t('service.delete')">
     <FormDelete :id="currentRow?.service_uuid" type="service" @submit-success="onServiceDeleted" />
   </ModalDelete>
 </template>

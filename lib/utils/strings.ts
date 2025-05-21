@@ -43,6 +43,8 @@ export function equalsIgnoreCase(str1?: string, str2?: string) {
     }) === 0
   );
 }
+export const toCamelCase = (str: string = '') =>
+  str.toLowerCase().replace(/([-_][a-z])/g, group => group.toUpperCase().replace('-', '').replace('_', ''));
 
 /**
  * Return values separated by dash. If values are same, return only one value

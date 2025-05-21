@@ -1,5 +1,11 @@
 <template>
-  <Dashboard :loading="pageLoading">
+  <ServiceEmpty
+    v-if="!dataStore.project.selected"
+    :name="ServiceTypeName.STORAGE.toLowerCase()"
+    :service="ServiceTypeName.STORAGE"
+    docs="https://wiki.apillon.io/web3-services/2-web3-storage.html"
+  />
+  <Dashboard v-else :loading="pageLoading">
     <template #heading>
       <Heading
         :headline="$t('dashboard.nav.storage')"

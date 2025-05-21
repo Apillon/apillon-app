@@ -1,5 +1,8 @@
 <template>
-  <RpcDisabled v-if="!isRpcActivated && !pageLoading" @service-created="onServiceCreated" />
+  <RpcDisabled
+    v-if="!dataStore.project.selected || (!isRpcActivated && !pageLoading)"
+    @service-created="onServiceCreated"
+  />
   <Dashboard v-else :loading="pageLoading">
     <template #heading>
       <HeaderRpc v-if="isRpcActivated" />

@@ -6,7 +6,7 @@
     <slot>
       <div class="pb-8">
         <div class="mb-8 max-w-lg">
-          <p>{{ $t('dashboard.service.description') }}</p>
+          <p>{{ $t('service.description') }}</p>
         </div>
         <div class="grid gap-4 md:grid-cols-3">
           <Card v-for="(service, key) in web3Services" :key="key" :service="service">

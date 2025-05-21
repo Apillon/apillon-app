@@ -1,6 +1,9 @@
 <template>
   <!-- Heading template -->
-  <div class="relative -mx-4 flex min-h-17 flex-col justify-end gap-2 bg-bg-light/65 px-4 text-sm sm:-mx-8 sm:px-8">
+  <div
+    class="relative -mx-4 flex min-h-17 flex-col justify-end gap-2 px-4 text-sm sm:-mx-8 sm:px-8"
+    :class="{ 'bg-bg-light/65': dataStore.project.selected }"
+  >
     <div v-if="back && isLg" class="absolute -top-2 left-8 -translate-y-full">
       <NuxtLink :to="back">
         <span class="icon-back align-sub text-2xl"></span>
@@ -34,9 +37,8 @@
 
       <!-- Info bar - right side -->
       <template v-if="$slots.info">
-        <div class="align-self-end self-end">
-          <slot name="info" />
-        </div>
+        <!-- <div> </div> -->
+        <slot name="info" class="align-self-end self-end" />
       </template>
     </div>
 
@@ -100,6 +102,7 @@ defineProps({
   technologies: { type: Array<string>, default: [] },
 });
 const { isLg } = useScreen();
+const dataStore = useDataStore();
 
 const modalDetailsVisible = ref<boolean>(false);
 </script>

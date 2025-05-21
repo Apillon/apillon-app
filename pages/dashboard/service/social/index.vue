@@ -12,7 +12,7 @@
         <TableSocialPost />
       </n-space>
       <Empty v-else :title="$t('social.post.empty')" :info="$t('social.post.emptyInfo')" icon="logo/grill-chat">
-        <Btn type="primary" @click="modalCreatePostVisible = true">
+        <Btn v-if="dataStore.project.selected" type="primary" @click="modalCreatePostVisible = true">
           {{ $t('social.post.createFirst') }}
         </Btn>
       </Empty>

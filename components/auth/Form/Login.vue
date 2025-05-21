@@ -1,5 +1,5 @@
 <template>
-  <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
+  <n-form ref="formRef" size="large" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
     <!--  Login email -->
     <n-form-item path="email" :show-label="false">
       <n-input
@@ -24,7 +24,7 @@
 
       <!-- Links -->
       <div class="absolute right-0 top-full">
-        <NuxtLink class="text-sm text-body" :to="{ name: 'login-reset-password' }">
+        <NuxtLink class="mt-2 inline-block text-sm text-body" :to="{ name: 'login-reset-password' }">
           {{ $t('auth.login.forgotPassword') }}
         </NuxtLink>
       </div>

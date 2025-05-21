@@ -36,19 +36,21 @@
     <template #info>
       <div
         v-if="
-          dataStore.isUserOwner &&
-          paymentStore.isRpcPlanLoaded &&
-          !hasRpcPlan &&
-          (rpcApiKeyStore?.usage?.totalRequests ?? 0) > 5000000
+          true ||
+          (dataStore.isUserOwner &&
+            paymentStore.isRpcPlanLoaded &&
+            !hasRpcPlan &&
+            (rpcApiKeyStore?.usage?.totalRequests ?? 0) > 5000000)
         "
-        class="relative top-1 flex max-w-xl flex-row items-center justify-start gap-4 border-2 border-yellow p-3"
+        class="flex max-w-xl flex-row items-center justify-start gap-4 border-2 border-yellow px-3 py-1"
       >
         <span class="icon-info text-xl"></span>
         {{ $t('rpc.apiKey.pleaseUpgrade') }}
-        <Btn type="primary" @click="modalSubscriptionVisible = true">
+        <Btn size="small" type="primary" @click="modalSubscriptionVisible = true">
           {{ $t('dashboard.payment.upgrade') }}
         </Btn>
       </div>
+      <div></div>
     </template>
 
     <template #submenu>

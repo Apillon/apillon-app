@@ -91,8 +91,8 @@ const columns = computed<NDataTableColumns<DeployedContractInterface>>(() => {
         { hidden: !selectedColumns.value.includes('contractType') },
       ],
       render(row: DeployedContractInterface) {
-        return !!row?.contractType && te(`dashboard.service.smartContracts.type.${row.contractType}`)
-          ? t(`dashboard.service.smartContracts.type.${row.contractType}`)
+        return !!row?.contractType && te(`service.smartContracts.type.${row.contractType}`)
+          ? t(`service.smartContracts.type.${row.contractType}`)
           : '';
       },
     },

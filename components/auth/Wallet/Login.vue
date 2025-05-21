@@ -1,6 +1,6 @@
 <template>
-  <Btn v-bind="$attrs" type="secondary" @click="modalWalletSelectVisible = true">
-    <span class="icon-wallet mr-2 align-sub text-xl"></span>
+  <Btn v-bind="$attrs" size="large" type="secondary" @click="modalWalletSelectVisible = true">
+    <span class="icon-wallet mr-2 align-sub text-xl text-yellow"></span>
     <span v-if="register" class="text-white">{{ $t('auth.signup.wallet') }}</span>
     <span v-else class="text-white">{{ $t('auth.login.wallet') }}</span>
   </Btn>

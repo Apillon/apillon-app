@@ -180,7 +180,7 @@ export const usePostStore = defineStore('post', {
 
         return res.data;
       } catch (e: ApiError | any) {
-        console.log(e);
+        console.error(e);
         this.active = {} as PostInterface;
       }
       return {} as PostInterface;

@@ -1,0 +1,163 @@
+{
+  "service": {
+    "assetHub": {
+      "description": "Decentralized hub for secure digital asset management on the Polkadot network. \nSecure storage, easy transfer, cross-chain compatibility.",
+      "name": "Asset Hub",
+      "usage": ["secure storage", "easy transfer", "cross-chain compatibility"]
+    },
+    "authentication": {
+      "name": "Decentralized Authentication",
+      "description": "Boost users’ privacy and security with decentralized digital identity.",
+      "didCount": "Number of digital identities",
+      "emptyTitle": "Your project does not have Authentication service yet",
+      "emptyInfo": "Add Web3 Authentication and create an API key.",
+      "emptyBtn": "Attach Web3 Auth",
+      "usage": ["decentralized id", "HIGH PRIVACY", "SEAMLESS UI", "OAuth protocol"]
+    },
+    "cloudFunctions": {
+      "description": "Deploy any script or backend app to a secure, scalable, and decentralized cloud network. \nDecentralized cloud, fully scalable, API gateway, cross-chain apps.",
+      "info": "Automate Web3 tasks with lightweight, serverless functions. No setup, no infrastructure—just instant execution.",
+      "deploymentCount": "Number of deployments",
+      "functionCount": "Number of functions",
+      "name": "Cloud Functions",
+      "usage": ["decentralized cloud", "fully scalable", "API gateway", "cross-chain apps"],
+      "introduction": [
+        { "title": "Code runs, no servers needed", "content": "Focus on building—scaling happens automatically." },
+        {
+          "title": "Trigger actions when things happen",
+          "content": "Automate alerts, transactions, and contract events."
+        },
+        {
+          "title": "Easily connect Web3 and APIs",
+          "content": "Hook up smart contracts, databases, and external services."
+        }
+      ]
+    },
+    "computing": {
+      "contractCount": "Number of contracts",
+      "computingTransactionCount": "Number of transactions",
+      "description": "Embrace the future of Web3 off-chain computation. Access the internet, boost performance, fully multichain, and ultimate data security.",
+      "info": "Run decentralized computations without relying on Big Tech. More power, no downtime, no gatekeepers.",
+      "name": "Computing",
+      "usage": ["computing smart contracts", "cross-chain", "secure computing environment", "internet access"],
+      "introduction": [
+        { "title": "Run heavy tasks, skip the costs", "content": "Web3-native computing, no cloud provider needed." },
+        { "title": "Use what you need, pay as you go", "content": "No wasted resources—just flexible computing." },
+        { "title": "Open, transparent, and trustless", "content": "Every task runs on a verifiable, secure network." }
+      ]
+    },
+    "embeddedWallet": {
+      "description": "Easily create secure and decentralized wallets for your users on any chain. \nWeb3 wallets, fully decentralized, easy integration, multi-chain support.",
+      "info": "Turn any app into a Web3 powerhouse. Let users interact with crypto—without even knowing what a wallet is.",
+      "integrationCount": "Number of integrations",
+      "name": "Embedded Wallet",
+      "walletCount": "Number of wallets",
+      "usage": ["Web3 wallets", "fully decentralized", "easy integration", "multi-chain support"],
+      "introduction": [
+        { "title": "Web2 logins, Web3 power", "content": "Users sign in easily—Web3 runs in the background." },
+        { "title": "No private key headaches", "content": "Users don’t manage keys—they just use your app." },
+        { "title": "More signups, less friction", "content": "Easier logins, smoother transactions, happy users." }
+      ]
+    },
+    "hosting": {
+      "description": "Make your website or app unstoppable and free from third-party impact.",
+      "info": "Websites that never go down. Host on Web3 and skip the middlemen, censorship, and downtime. Just a site that works, always.",
+      "name": "Hosting",
+      "pricing": "Start with 100 credits, then check pricing",
+      "title": "Web3 Hosting",
+      "tags": ["No code required", "API", "SDK", "CLI"],
+      "usage": ["unstoppable", "domain support", "free ssl support", "drag-n-drop ui"],
+      "usedBandwidth": "Used bandwidth",
+      "websiteCount": "Number of websites",
+
+      "introduction": [
+        {
+          "title": "Always online, no exceptions",
+          "content": "Your site works even when centralized servers don’t - try it as a backup."
+        },
+        { "title": "No gatekeepers, no limits", "content": "Full control over your content, domain, and access." },
+        {
+          "title": "Go live in seconds",
+          "content": "Deploy through a simple UI—no coding skills needed."
+        }
+      ]
+    },
+    "indexing": {
+      "description": "Fast and efficient data indexing for blockchain data. \nReal-time data sync, powerful APIs, on-chain data querying.",
+      "deployedIndexerCount": "Number of deployed indexers",
+      "name": "Indexing Service",
+      "usage": ["real-time data sync", "powerful APIs", "on-chain data querying"]
+    },
+    "rpc": {
+      "description": "Reliable and secure remote procedure call service for blockchain interaction. \nLow latency, high availability, multi-chain support.",
+      "keyCount": "Number of keys",
+      "name": "RPC Service",
+      "selectedNetworkCount": "Number of selected networks",
+      "usage": ["low latency", "high availability", "multi-chain support"]
+    },
+    "nft": {
+      "collectionCount": "Number of collections",
+      "description": "Deploy an NFT collection with just a few clicks and retain the ownership of your files.",
+      "info": "Your brand, your rules. Create NFTs to engage, reward, and build a community—no blockchain expertise needed.",
+      "name": "NFTs",
+      "nftTransactionCount": "Number of transactions",
+      "pricing": "Depends on chain (500-1000 credits)",
+      "usage": ["storage buckets", "smart contracts", "drag-n-drop ui", "website template", "hosting"],
+      "tags": ["No code required", "API", "SDK", "CLI"],
+      "introduction": [
+        { "title": "Mint NFTs, no stress", "content": "Launch in minutes—no coding, no setup, just results." },
+        { "title": "Give fans something to flex", "content": "Reward your audience with collectibles they’ll love." },
+        {
+          "title": "More than just cool pictures",
+          "content": "Use NFTs for VIP access, rewards, and interactive campaigns."
+        }
+      ]
+    },
+    "social": {
+      "description": "Connect and communicate with freedom. Experience social networking with secure and decentralized chat functionality.",
+      "name": "Social",
+      "postCount": "Number of channels",
+      "spaceCount": "Number of hubs",
+      "usage": ["social media", "real-time chat", "user-friendly UI", "HIGH PRIVACY", "configurable interface"]
+    },
+    "storage": {
+      "bucket": "Web3 storage bucket",
+      "bucketCount": "Number of buckets",
+      "description": "Make your content permanently accessible and easily shareable.",
+      "fileCount": "Number of files",
+      "info": "Your files, forever. Store NFT metadata, dApp assets, and user files on a network that never goes down. No middlemen, no limits.",
+      "name": "Storage",
+      "website": "Main Website Storage",
+      "usage": ["storage buckets", "different media", "drag-n-drop ui", "ipfs"],
+      "introduction": [
+        { "title": "Your files, always backed up", "content": "Stored safely worldwide, no single point of attack." },
+        { "title": "Scales with your project", "content": "Fast, secure storage that grows as you do." },
+        {
+          "title": "Save it once, access it anytime",
+          "content": "Files stay pinned—no maintenance needed."
+        }
+      ]
+    },
+    "smartContracts": {
+      "description": "Simplify smart contract deployment across multiple chains. \nAutomated verification, multi-chain support, security checks.",
+      "info": "Automate, tokenize, and build trustless systems—without touching Solidity. Deploy contracts in clicks, no sweat.",
+      "name": "Smart Contracts",
+      "usage": ["automated verification", "multi-chain support", "security checks"],
+      "introduction": [
+        { "title": "No dev team? No problem!", "content": "Launch smart contracts fast—zero coding required." },
+        { "title": "Pick a chain, any chain", "content": "Deploy on any major EVM chain in just a few clicks." },
+        {
+          "title": "Secure by design",
+          "content": "Make changes easily—versioning and upgrades built in."
+        }
+      ]
+    },
+    "addFirst": "Add first service",
+    "delete": "Delete service",
+    "description": "Choose the Web3 services to power the infrastructure behind your Web3 project and build using simple APIs, CLI, or SDK by Apillon. Launch a service, receive API keys and start building your next Web3 project.",
+    "edit": "Edit service",
+    "info": "Launch a service, receive API keys and start building your next dapp.",
+    "new": "New service",
+    "used": "Web3 services used"
+  }
+}

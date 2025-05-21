@@ -22,13 +22,13 @@
       <!-- Create new website -->
       <n-button size="medium" @click="showModalNewService = true">
         <span class="icon-create-folder mr-2 text-xl text-primary"></span>
-        <span class="text-primary">{{ $t('dashboard.service.new') }}</span>
+        <span class="text-primary">{{ $t('service.new') }}</span>
       </n-button>
     </n-space>
   </n-space>
 
   <!-- Modal - Create Service -->
-  <modal v-model:show="showModalNewService" :title="$t('dashboard.service.new')">
+  <modal v-model:show="showModalNewService" :title="$t('service.new')">
     <FormService :service-type="ServiceType.AUTHENTICATION" @submit-success="showModalNewService = false" />
   </modal>
 </template>

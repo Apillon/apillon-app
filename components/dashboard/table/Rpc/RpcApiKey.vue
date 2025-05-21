@@ -11,12 +11,12 @@
     :row-props="rowProps"
   />
 
-  <modal v-model:show="modalEditRpcKeyVisible" :title="$t('dashboard.service.edit')">
+  <modal v-model:show="modalEditRpcKeyVisible" :title="$t('service.edit')">
     <FormRpcApiKey :id="currentRow?.id" @submit-success="onRpcApiKeyUpdated" />
   </modal>
 
   <!-- Modal - Delete API key -->
-  <ModalDelete v-model:show="modalDeleteRpcKey" :title="$t('dashboard.service.delete')">
+  <ModalDelete v-model:show="modalDeleteRpcKey" :title="$t('service.delete')">
     <FormDelete :id="currentRow?.id" type="rpcApiKey" @submit-success="onRpcApiKeyDeleted" />
   </ModalDelete>
 </template>
