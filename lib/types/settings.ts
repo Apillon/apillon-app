@@ -135,7 +135,7 @@ declare global {
     createTime: string;
     id: number;
     message: string;
-    type: string;
+    type: NotificationType;
     userId: number;
   }
   interface NotificationsResponse extends GeneralItemsResponse<NotificationInterface> {}
