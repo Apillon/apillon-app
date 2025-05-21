@@ -549,6 +549,7 @@
     "search": "Search environment",
     "step": "Step {step}",
     "testnet": "Testnet",
+    "tokens": "tokens",
     "transactionType": "Transaction Type",
     "marketplaces": "Discover marketplaces"
   }

@@ -4,7 +4,7 @@
       <HeaderSmartContract>
         <template #title>
           <div>
-            <h1 class="md:whitespace-nowrap">
+            <h3 class="md:whitespace-nowrap">
               {{ deployedContractStore.active.name }}
               <small class="ml-2 text-sm text-body">
                 {{ t(`smartContracts.type.${deployedContractStore.active.contractVersion.contract.contractType}`) }}
@@ -12,7 +12,7 @@
               <small class="ml-2 text-sm text-body">
                 {{ $t(`nft.evmChain.${deployedContractStore.active.chain}`) }}
               </small>
-            </h1>
+            </h3>
             <TableLink
               class="text-sm"
               :prefix="t('smartContracts.table.contractAddress')"

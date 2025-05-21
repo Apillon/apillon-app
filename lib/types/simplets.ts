@@ -21,12 +21,12 @@ export enum SimpletCreateStep {
 }
 
 export enum ResourceStatus {
-  REQUESTED,
-  DEPLOYING,
-  ONLINE,
-  STOPPED,
-  SHUT_DOWN,
-  FAILED,
+  REQUESTED = 0,
+  DEPLOYING = 1,
+  ONLINE = 2,
+  STOPPED = 3,
+  SHUT_DOWN = 4,
+  FAILED = 5,
 }
 
 declare global {
@@ -62,4 +62,5 @@ declare global {
   }
   interface SimpletResponse extends GeneralResponse<SimpletInterface> {}
   interface SimpletsResponse extends GeneralItemsResponse<SimpletInterface> {}
+  interface SimpletCreateResponse extends GeneralResponse<{ data: SimpletInterface; errors: string[] }> {}
 }

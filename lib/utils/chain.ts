@@ -1,3 +1,23 @@
+import {
+  arbitrum,
+  arbitrumSepolia,
+  astar,
+  avalanche,
+  avalancheFuji,
+  base,
+  baseSepolia,
+  celo,
+  celoAlfajores,
+  mainnet,
+  moonbaseAlpha,
+  moonbeam,
+  optimism,
+  optimismSepolia,
+  polygon,
+  polygonAmoy,
+  sepolia,
+} from 'viem/chains';
+
 /**
  * Crypto
  */
@@ -30,41 +50,41 @@ export function chainRpc(chainId?: number): string {
   switch (chainId) {
     // EVM Mainnet
     case EvmChainMainnet.ETHEREUM:
-      return `https://etherscan.io/`;
+      return mainnet.blockExplorers.default.url;
     case EvmChainMainnet.MOONBEAM:
-      return `https://moonbeam.moonscan.io/`;
+      return moonbeam.blockExplorers.default.url;
     case EvmChainMainnet.ASTAR:
-      return `https://astar.blockscout.com/`;
+      return astar.blockExplorers.default.url;
     case EvmChainMainnet.CELO:
-      return `https://celo.blockscout.com/`;
+      return celo.blockExplorers.default.url;
     case EvmChainMainnet.BASE:
-      return `https://basescan.org/`;
+      return base.blockExplorers.default.url;
     case EvmChainMainnet.ARBITRUM_ONE:
-      return `https://arbiscan.io/`;
+      return arbitrum.blockExplorers.default.url;
     case EvmChainMainnet.AVALANCHE:
-      return `https://snowtrace.io/`;
+      return avalanche.blockExplorers.default.url;
     case EvmChainMainnet.OPTIMISM:
-      return `https://optimistic.etherscan.io/`;
+      return optimism.blockExplorers.default.url;
     case EvmChainMainnet.POLYGON:
-      return `https://polygonscan.com/`;
+      return polygon.blockExplorers.default.url;
 
     // EVM Testnet
     case EvmChainTestnet.SEPOLIA:
-      return `https://sepolia.etherscan.io/`;
+      return sepolia.blockExplorers.default.url;
     case EvmChainTestnet.MOONBASE:
-      return `https://moonbase.moonscan.io/`;
+      return moonbaseAlpha.blockExplorers.default.url;
     case EvmChainTestnet.ALFAJORES:
-      return `https://celo-alfajores.blockscout.com/`;
+      return celoAlfajores.blockExplorers.default.url;
     case EvmChainTestnet.BASE_SEPOLIA:
-      return `https://sepolia.basescan.org/`;
+      return baseSepolia.blockExplorers.default.url;
     case EvmChainTestnet.ARBITRUM_ONE_SEPOLIA:
-      return `https://sepolia.arbiscan.io/`;
+      return arbitrumSepolia.blockExplorers.default.url;
     case EvmChainTestnet.AVALANCHE_FUJI:
-      return `https://testnet.snowtrace.io/`;
+      return avalancheFuji.blockExplorers.default.url;
     case EvmChainTestnet.OPTIMISM_SEPOLIA:
-      return `https://sepolia-optimism.etherscan.io/`;
+      return optimismSepolia.blockExplorers.default.url;
     case EvmChainTestnet.POLYGON_AMOY:
-      return `https://amoy.polygonscan.com/`;
+      return polygonAmoy.blockExplorers.default.url;
 
     // Substrate Chains
     case SubstrateChain.ASTAR:

@@ -1,11 +1,7 @@
 <template>
   <Dashboard :loading="false">
     <template #heading>
-      <Heading>
-        <slot>
-          <h3>{{ $t('dashboard.nav.services') }}</h3>
-        </slot>
-      </Heading>
+      <Heading :headline="$t('dashboard.nav.services')" />
     </template>
     <slot>
       <div class="pb-8">

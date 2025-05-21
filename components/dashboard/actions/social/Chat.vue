@@ -6,9 +6,6 @@
     </div>
 
     <n-space size="large">
-      <!-- Modal Price list for Social -->
-      <ModalCreditCosts :service="ServiceTypeName.SOCIAL" />
-
       <!-- Refresh chats -->
       <n-button
         size="medium"

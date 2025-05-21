@@ -5,8 +5,6 @@
     </div>
 
     <n-space size="large">
-      <ModalCreditCosts :service="ServiceTypeName.SMART_CONTRACTS" />
-
       <!-- Refresh contracts -->
       <n-button size="medium" :loading="contractStore.loading" @click="contractStore.fetchContracts(archive)">
         <span class="icon-refresh mr-2 text-xl"></span>
@@ -33,8 +31,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ServiceTypeName } from '~/lib/types/service';
-
 defineProps({
   archive: { type: Boolean, default: false },
 });

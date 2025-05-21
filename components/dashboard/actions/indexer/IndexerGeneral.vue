@@ -3,12 +3,6 @@
     <div class="w-[20vw] min-w-[11rem] max-w-xs"></div>
 
     <n-space v-if="indexerStore.active" size="large">
-      <BtnDocumentation
-        size="medium"
-        href="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html#indexing-service"
-        hover-lighter
-      />
-
       <n-button size="medium" :loading="indexerStore.loading" @click="initIndexer">
         <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('general.refresh') }}

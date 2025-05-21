@@ -4,7 +4,10 @@
       ref="tabsRef"
       v-model:value="tab"
       animated
-      :class="`n-tabs-${tabsRef?.renderNameListRef?.value?.length || 0}`"
+      :class="[
+        `n-tabs-${tabsRef?.renderNameListRef?.value?.length || 0}`,
+        { 'mt-8': tabsRef?.renderNameListRef?.value?.length === 1 },
+      ]"
     >
       <n-tab-pane :name="Tabs.GENERAL">
         <slot> </slot>

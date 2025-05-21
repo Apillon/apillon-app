@@ -8,7 +8,7 @@
       <n-space
         v-for="(column, key) in metadataStore.csvAttributes"
         :key="key"
-        class="min-h-[40px]"
+        class="min-h-10"
         align="center"
         justify="space-between"
       >

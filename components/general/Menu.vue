@@ -73,14 +73,16 @@ function renderMenuExtra(option: NMenuOption) {
 }
 
 function renderMenuIcon(option: NMenuOption) {
+  const colorClass = option?.color === 'yellow' ? 'text-yellow' : option?.color === 'blue' ? 'text-blue' : '';
+
   if ('svgIcon' in option) {
     return h(
       resolveComponent('NuxtIcon'),
-      { name: option.svgIcon, class: `text-xl mx-2 ${iconClass(option.svgIcon)}` },
+      { name: option.svgIcon, class: `text-xl mx-2 ${colorClass} ${iconClass(option.svgIcon)}` },
       ''
     );
   } else if ('iconName' in option) {
-    return h('span', { class: iconClass(option.iconName) }, '');
+    return h('span', { class: `${colorClass} ${iconClass(option.iconName)}` }, '');
   }
   return null;
 }

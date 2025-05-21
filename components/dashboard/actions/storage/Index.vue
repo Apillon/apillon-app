@@ -40,8 +40,6 @@
         <n-divider class="mx-4 h-full" vertical />
       </template>
 
-      <ModalCreditCosts :service="ServiceTypeName.STORAGE" />
-
       <!-- Refresh storage content -->
       <n-button size="medium" :loading="bucketStore.loading" @click="bucketStore.fetchBuckets()">
         <span class="icon-refresh mr-2 text-xl"></span>

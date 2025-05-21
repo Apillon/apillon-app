@@ -1,11 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <Heading>
-        <slot>
-          <h1>{{ $t('dashboard.nav.authentication') }}</h1>
-        </slot>
-
+      <Heading :headline="$t('dashboard.nav.authentication')">
         <template #info>
           <n-space :size="32" align="center">
             <!-- API Keys -->

@@ -1,26 +1,15 @@
 <template>
-  <Heading>
-    <slot>
-      <div class="flex items-center gap-4">
-        <NuxtLink :to="{ name: 'dashboard-service-cloud-functions' }">
-          <span class="icon-back align-sub text-2xl"></span>
-        </NuxtLink>
-        <div>
-          <h2>{{ cloudFunctionStore.active.name }}</h2>
-          <TableEllipsis
-            :prefix="$t('computing.cloudFunctions.uuid')"
-            :text="cloudFunctionStore.active.function_uuid"
-          />
-        </div>
-      </div>
-    </slot>
+  <Heading
+    :back="{ name: 'dashboard-service-cloud-functions' }"
+    docs="https://wiki.apillon.io/web3-services/8-web3-cloud-functions.html"
+  >
+    <div>
+      <h2>{{ cloudFunctionStore.active.name }}</h2>
+      <TableEllipsis :prefix="$t('computing.cloudFunctions.uuid')" :text="cloudFunctionStore.active.function_uuid" />
+    </div>
 
     <template #info>
-      <ApiLink
-        v-if="cloudFunctionStore.active.activeJob_id"
-        :title="$t('computing.cloudFunctions.endpoint')"
-        :url="gatewayUrl"
-      />
+      <ApiLink :title="$t('computing.cloudFunctions.endpoint')" :url="gatewayUrl" />
     </template>
 
     <template #submenu>

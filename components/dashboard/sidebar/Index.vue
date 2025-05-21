@@ -29,7 +29,7 @@
           <!-- PROJECTS & NEW PROJECT -->
           <div :class="collapsed ? 'px-4' : 'px-8'">
             <!-- Projects dropdown -->
-            <div class="min-h-[48px]">
+            <div class="min-h-12">
               <SidebarSelectProject :collapsed="collapsed" />
               <Btn
                 v-if="!dataStore.hasProjects && projectsLoaded && !authStore.isAdmin()"
