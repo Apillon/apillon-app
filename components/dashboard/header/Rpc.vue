@@ -1,9 +1,12 @@
 <template>
-  <Heading v-bind="$attrs">
-    <slot>
-      <h1>{{ $t('dashboard.nav.rpc') }}</h1>
-    </slot>
-    <template #info>
+  <Heading
+    v-bind="$attrs"
+    :headline="$t('dashboard.nav.rpc')"
+    docs="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html"
+  >
+    <template #details>
+      <RpcFeatures />
+      <hr class="my-10 border-bg-lighter" />
       <div>
         <div v-if="rpcApiKeyStore.selectedId && rpcApiKeyStore?.usage">
           <RpcProgress
@@ -27,8 +30,10 @@
           </Btn>
         </div>
       </div>
+      <hr class="my-10 border-bg-lighter" />
     </template>
-    <template #submenu>
+
+    <template #info>
       <div
         v-if="
           dataStore.isUserOwner &&
@@ -36,7 +41,7 @@
           !hasRpcPlan &&
           (rpcApiKeyStore?.usage?.totalRequests ?? 0) > 5000000
         "
-        class="mb-4 flex max-w-xl flex-row items-center justify-start gap-4 border-2 border-yellow p-4"
+        class="relative top-1 flex max-w-xl flex-row items-center justify-start gap-4 border-2 border-yellow p-3"
       >
         <span class="icon-info text-xl"></span>
         {{ $t('rpc.apiKey.pleaseUpgrade') }}
@@ -44,19 +49,10 @@
           {{ $t('dashboard.payment.upgrade') }}
         </Btn>
       </div>
+    </template>
 
-      <div class="relative">
-        <MenuRpc class="left-0 top-0 z-1 w-full" />
-        <n-collapse v-if="isLg" accordion @update:expanded-names="onUpdateAccordion">
-          <n-collapse-item>
-            <template #header>
-              {{ instructionsVisible ? $t('general.information.hide') : $t('general.information.show') }}
-              <span class="icon-info ml-2 text-xl"></span>
-            </template>
-            <RpcFeatures />
-          </n-collapse-item>
-        </n-collapse>
-      </div>
+    <template #submenu>
+      <MenuRpc class="left-0 top-0 z-1 w-full" />
     </template>
   </Heading>
 
@@ -66,17 +62,11 @@
   </modal>
 </template>
 <script lang="ts" setup>
-const { isLg } = useScreen();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const rpcApiKeyStore = useRpcApiKeyStore();
 
-const instructionsVisible = ref<boolean>(false);
 const modalSubscriptionVisible = ref<boolean>(false);
-
-function onUpdateAccordion(expandedNames: Array<string | number>) {
-  instructionsVisible.value = expandedNames.length > 0;
-}
 
 onMounted(async () => {
   await paymentStore.getRpcPlan();
@@ -88,18 +78,3 @@ onMounted(async () => {
 
 const hasRpcPlan = computed(() => paymentStore.hasPaidRpcPlan);
 </script>
-
-<style lang="postcss" scoped>
-:deep(.n-collapse-item__header) {
-  @apply h-10;
-}
-:deep(.n-collapse-item__header--active) {
-  @apply border-b-1 border-bg-lighter;
-}
-:deep(.n-collapse-item__header-main) {
-  @apply justify-end;
-}
-:deep(.n-collapse-item__content-inner) {
-  @apply my-4;
-}
-</style>

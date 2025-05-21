@@ -26,7 +26,7 @@
         v-if="props.showUsageRefresh"
         size="medium"
         :loading="rpcApiKeyStore.loading"
-        @click="rpcApiKeyStore.fetchRpcApiKeyUsagePerChain"
+        @click="rpcApiKeyStore.fetchRpcApiKeyUsagePerChain()"
       >
         <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('general.refresh') }}
@@ -39,12 +39,6 @@
       >
         <span class="text-primary">{{ $t('rpc.endpoint.viewAll') }}</span>
       </n-button>
-
-      <BtnDocumentation
-        size="medium"
-        href="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html"
-        hover-lighter
-      />
     </div>
   </div>
 </template>

@@ -1,9 +1,7 @@
 <template>
   <Dashboard>
     <template #heading>
-      <Heading>
-        <h1>{{ $t('dashboard.nav.rpc') }}</h1>
-      </Heading>
+      <Heading :headline="$t('dashboard.nav.rpc')" />
     </template>
 
     <slot>

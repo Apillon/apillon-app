@@ -167,27 +167,28 @@ const rowProps = (row: SimpletInterface) => {
 
 const dropdownOptions = [
   {
-    key: 'simpletEdit',
-    label: t('general.edit'),
-    disabled: dataStore.isProjectUser,
+    key: 'simpletView',
+    label: t('general.view'),
     props: {
       onClick: () => {
-        showModalEditSimplet.value = true;
+        if (currentRow.value?.simpletDeploy_uuid) {
+          router.push(`/dashboard/simplet/${currentRow.value.simpletDeploy_uuid}`);
+        }
       },
     },
   },
-  {
-    key: 'simpletDelete',
-    label: t('general.archive'),
+  // {
+  //   key: 'simpletDelete',
+  //   label: t('general.archive'),
 
-    disabled: authStore.isAdmin(),
-    props: {
-      class: '!text-pink',
-      onClick: () => {
-        showModalDeleteSimplet.value = true;
-      },
-    },
-  },
+  //   disabled: authStore.isAdmin(),
+  //   props: {
+  //     class: '!text-pink',
+  //     onClick: () => {
+  //       showModalDeleteSimplet.value = true;
+  //     },
+  //   },
+  // },
 ];
 
 const dropdownOptionsArchive = [

@@ -25,6 +25,9 @@
               />
               {{ getChainName(item.value) }}
             </span>
+            <div v-else-if="item?.key === 'password'" class="inline-block max-w-[80%]">
+              <n-input :value="item.value" show-password-on="mousedown" size="tiny" type="password" readonly />
+            </div>
             <template v-else-if="item.value === true">{{ $t('form.booleanSelect.true') }}</template>
             <template v-else-if="item.value === false">{{ $t('form.booleanSelect.false') }}</template>
             <template v-else-if="typeof item.value === 'string' && item.value?.length === 42">

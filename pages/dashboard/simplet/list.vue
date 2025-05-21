@@ -17,6 +17,7 @@ const { t } = useI18n();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const simpletStore = useSimpletStore();
+const { checkUnfinishedSimplets } = useSimplet();
 
 const pageLoading = ref<boolean>(true);
 
@@ -28,6 +29,7 @@ onMounted(async () => {
   await dataStore.waitOnPromises();
   await simpletStore.getSimplets();
   paymentStore.getPriceList();
+  checkUnfinishedSimplets();
 
   pageLoading.value = false;
 });

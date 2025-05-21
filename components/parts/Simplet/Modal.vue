@@ -43,14 +43,6 @@
           <Btn v-if="!isStep(SimpletCreateStep.TYPE)" class="min-w-40" type="secondary" @click="back">
             {{ $t('general.back') }}
           </Btn>
-          <n-tooltip v-if="isStep(SimpletCreateStep.SMTP)" placement="top" :trigger="isMd ? 'hover' : 'click'">
-            <template #trigger>
-              <Btn class="min-w-40" type="secondary" @click="simpletStore.stepSimpletCreate += 1">
-                {{ $t('general.skip') }}
-              </Btn>
-            </template>
-            <span>{{ $t('simplet.wizard.smtp.skip') }}</span>
-          </n-tooltip>
           <Btn class="min-w-40" @click="nextStep()">{{ $t('form.continue') }} </Btn>
         </div>
       </div>
@@ -63,12 +55,10 @@ const props = defineProps({
   type: { type: Number, default: 0 },
 });
 const { t } = useI18n();
-const { isMd } = useScreen();
 const message = useMessage();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const simpletStore = useSimpletStore();
-const collectionStore = useCollectionStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
 
 const simpletTypeRef = useTemplateRef('simpletTypeRef');
@@ -185,14 +175,13 @@ const prepareVariablesBE = (): EnvVar[] => [
   { key: 'SMTP_NAME_FROM', value: simpletStore.form.smtp.senderName },
   { key: 'SMTP_EMAIL_FROM', value: simpletStore.form.smtp.senderEmail },
 ];
-const prepareVariablesFE = (embeddedWallet: string): EnvVar[] =>
+const prepareVariablesFE = (): EnvVar[] =>
   [
     { key: 'NUXT_PUBLIC_CHAIN_ID', value: simpletStore.form.collection?.chain },
     { key: 'NUXT_PUBLIC_CLAIM_TYPE', value: simpletStore.form.type || SimpletType.AIRDROP },
     { key: 'NUXT_PUBLIC_CLAIM_START', value: simpletStore.form.startTime || 0 },
     { key: 'NUXT_PUBLIC_CLAIM_END', value: simpletStore.form.endTime || 0 },
     { key: 'NUXT_PUBLIC_COLLECTION_ADDRESS', value: simpletStore.form.collection?.contractAddress },
-    { key: 'NUXT_PUBLIC_EMBEDDED_WALLET_CLIENT', value: embeddedWallet },
     simpletStore.form.collectionLogo
       ? [{ key: 'NUXT_PUBLIC_COLLECTION_LOGO', value: simpletStore.form.collectionLogo }]
       : [],
@@ -206,15 +195,16 @@ async function createSimplet(simpletUuid: string) {
       project_uuid: dataStore.projectUuid,
       name: simpletStore.form.name,
       description: simpletStore.form.description,
-      apillonApiKey: simpletStore.form.apiKey || undefined,
-      apillonApiSecret: simpletStore.form.apiSecret || undefined,
-      nftCollection_uuid: simpletStore.form.collection?.collection_uuid || null,
+      apillonApiKey: simpletStore.form?.apiKey,
+      apillonApiSecret: simpletStore.form?.apiSecret,
+      nftCollection_uuid: simpletStore.form.collection?.collection_uuid,
+      walletIntegration_uuid: embeddedWallet,
       backendVariables: prepareVariablesBE(),
-      frontendVariables: prepareVariablesFE(embeddedWallet),
+      frontendVariables: prepareVariablesFE(),
     };
 
-    const { data } = await $api.post<SimpletResponse>(endpoints.simpletDeploy(simpletUuid), bodyData);
-    simpletStore.active = data;
+    const { data } = await $api.post<SimpletCreateResponse>(endpoints.simpletDeploy(simpletUuid), bodyData);
+    simpletStore.active = data.data;
     message.success(t('simplet.wizard.deployingInfo'));
 
     return data;

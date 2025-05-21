@@ -1,10 +1,7 @@
 <template>
   <Heading
-    :service="ServiceTypeName.HOSTING"
-    :info="$t('w3Warn.simplets.info')"
+    :service="ServiceTypeName.SIMPLETS"
     :technologies="['logo/crust', 'library/typescript', 'library/javascript', 'library/nextjs']"
-    docs="sdocnkslk"
-    demo="qQJnuvUo-xo"
   >
     <slot>
       <n-space align="center">
@@ -27,9 +24,6 @@
         wrap
       />
       <hr class="my-10 border-bg-lighter" />
-    </template>
-    <template #links>
-      <StorageGithubProjectConfig />
     </template>
   </Heading>
 

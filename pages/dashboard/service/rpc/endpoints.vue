@@ -2,18 +2,10 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <Heading>
-        <slot>
-          <div class="flex items-center gap-4">
-            <NuxtLink v-if="rpcEndpointStore.hasFavorites" :to="{ name: 'dashboard-service-rpc' }">
-              <span class="icon-back align-sub text-2xl"></span>
-            </NuxtLink>
-            <div>
-              <h2>{{ $t('rpc.endpoint.allEndpoints') }}</h2>
-            </div>
-          </div>
-        </slot>
-      </Heading>
+      <Heading
+        :back="rpcEndpointStore.hasFavorites ? { name: 'dashboard-service-rpc' } : undefined"
+        :headline="$t('rpc.endpoint.allEndpoints')"
+      />
     </template>
 
     <n-space v-if="rpcApiKeyStore.selectedId" class="pb-8" :size="32" vertical>

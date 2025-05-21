@@ -8,14 +8,14 @@
       <!-- Show only if user select files -->
       <template v-if="bucketStore.folder.selectedItems.length > 0">
         <!-- Download files -->
-        <n-button class="w-10" size="medium" :focus="true" :loading="downloading" @click="downloadSelectedFiles">
+        <n-button class="w-10 !p-1" :focus="true" :loading="downloading" @click="downloadSelectedFiles">
           <span class="icon-download text-xl"></span>
         </n-button>
 
         <!-- Delete files -->
         <n-tooltip placement="bottom" :show="showPopoverDelete">
           <template #trigger>
-            <n-button class="w-10" size="medium" type="error" ghost @click="deleteSelectedFiles">
+            <n-button class="w-10 !p-1" type="error" ghost @click="deleteSelectedFiles">
               <span class="icon-delete text-xl"></span>
             </n-button>
           </template>
@@ -26,19 +26,19 @@
         <n-divider class="mx-4 h-full" vertical />
       </template>
 
-      <n-button size="small" @click="navigateToAddIpns">
+      <n-button @click="navigateToAddIpns">
         <span class="icon-web mr-2 text-xl"></span>
         {{ $t('storage.add-fixed-url') }}
       </n-button>
 
       <!-- Refresh directory content -->
-      <n-button size="medium" @click="refreshDirectoryContent">
+      <n-button @click="refreshDirectoryContent">
         <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('storage.refresh') }}
       </n-button>
 
       <!-- Create folder -->
-      <n-button size="medium" :disabled="authStore.isAdmin()" @click="showModalNewFolder = true">
+      <n-button :disabled="authStore.isAdmin()" @click="showModalNewFolder = true">
         <span class="icon-create-folder mr-2 text-xl"></span>
         {{ $t('storage.directory.create') }}
       </n-button>

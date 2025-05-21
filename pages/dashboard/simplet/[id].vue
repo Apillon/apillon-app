@@ -36,13 +36,16 @@ useHead({
 });
 
 onMounted(async () => {
-  if (!params?.id) router.push({ name: 'dashboard-service-nft' });
+  if (!params?.id) router.push({ name: 'dashboard-simplet' });
 
   await simpletStore.getSimplet(simpletUuid.value);
   if (!simpletStore.active?.simplet_uuid) {
     router.push({ name: 'dashboard-simplet' });
   }
   pageLoading.value = false;
-  initWebsite(-1, simpletStore.active.frontend_uuid);
+
+  if (simpletStore.active.frontend_uuid) {
+    initWebsite(-1, simpletStore.active.frontend_uuid);
+  }
 });
 </script>

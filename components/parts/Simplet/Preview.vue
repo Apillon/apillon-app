@@ -21,7 +21,6 @@ defineEmits(['back', 'deploy']);
 const { t } = useI18n();
 const paymentStore = usePaymentStore();
 const simpletStore = useSimpletStore();
-const collectionStore = useCollectionStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
 
 const pricing = computed<ProductPriceInterface[]>(() => {
@@ -61,20 +60,28 @@ const data = ref<Record<string, string | boolean>[]>([
 onMounted(() => {
   paymentStore.getPriceList();
 
-  if (simpletStore.form.type !== SimpletType.FREE_MINT && simpletStore.form.smtp.host) {
+  if (
+    simpletStore.form.type !== SimpletType.FREE_MINT &&
+    simpletStore.form.smtp.host &&
+    simpletStore.form.smtp.host !== 'nft_studio_mail'
+  ) {
     data.value.push({ label: t('form.label.smtp.host'), value: simpletStore.form.smtp.host });
     data.value.push({ label: t('form.label.smtp.port'), value: `${simpletStore.form.smtp.port}` });
     data.value.push({ label: t('form.label.smtp.username'), value: simpletStore.form.smtp.username });
-    data.value.push({ label: t('form.label.smtp.password'), value: simpletStore.form.smtp.password });
+    data.value.push({ key: 'password', label: t('form.label.smtp.password'), value: simpletStore.form.smtp.password });
     data.value.push({ label: t('form.label.smtp.sender'), value: simpletStore.form.smtp.senderName });
     data.value.push({ label: t('form.label.smtp.email'), value: simpletStore.form.smtp.senderEmail });
   }
-  if (simpletStore.form.mysql.host) {
+  if (simpletStore.form.mysql.host && simpletStore.form.mysql.host !== 'nft_studio_db') {
     data.value.push({ label: t('form.label.mysql.host'), value: simpletStore.form.mysql.host });
     data.value.push({ label: t('form.label.mysql.port'), value: `${simpletStore.form.mysql.port}` });
     data.value.push({ label: t('form.label.mysql.database'), value: simpletStore.form.mysql.database });
     data.value.push({ label: t('form.label.mysql.user'), value: simpletStore.form.mysql.user });
-    data.value.push({ label: t('form.label.mysql.password'), value: simpletStore.form.mysql.password });
+    data.value.push({
+      key: 'password',
+      label: t('form.label.mysql.password'),
+      value: simpletStore.form.mysql.password,
+    });
   }
 });
 </script>

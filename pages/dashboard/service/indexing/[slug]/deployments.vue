@@ -3,10 +3,11 @@
     <template #heading>
       <HeaderIndexer v-if="indexerStore.active.indexer_uuid" :indexer-uuid="indexerStore.active.indexer_uuid" />
     </template>
-    <slot>
+
+    <n-space v-if="indexerStore.hasIndexers" class="pb-8" :size="32" vertical>
       <ActionsIndexerDeployments />
       <TableIndexerDeployments />
-    </slot>
+    </n-space>
   </Dashboard>
 </template>
 

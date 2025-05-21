@@ -300,7 +300,7 @@
         "usage": ["Web3 wallets", "fully decentralized", "easy integration", "multi-chain support"]
       },
       "hosting": {
-        "name": "Decentralized Hosting",
+        "name": "Hosting",
         "description": "Make your website or app unstoppable and free from third-party impact.",
         "title": "Web3 Hosting",
         "usage": ["unstoppable", "domain support", "free ssl support", "drag-n-drop ui"],
@@ -341,7 +341,7 @@
         "bucketCount": "Number of buckets",
         "description": "Make your content permanently accessible and easily shareable.",
         "fileCount": "Number of files",
-        "name": "Decentralized Storage",
+        "name": "Storage",
         "website": "Main Website Storage",
         "usage": ["storage buckets", "different media", "drag-n-drop ui", "ipfs"]
       },

@@ -1,7 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderRpcKeys />
+      <Heading :back="{ name: 'dashboard-service-rpc' }" :headline="$t('rpc.apiKey.management')" />
     </template>
     <slot>
       <n-space v-if="rpcApiKeyStore.hasRpcApiKeys" :size="32" vertical>

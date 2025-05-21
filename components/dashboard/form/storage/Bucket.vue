@@ -41,7 +41,7 @@
       </n-form-item>
 
       <!--  Form submit -->
-      <n-form-item :show-feedback="false">
+      <n-form-item :show-label="false" :show-feedback="false">
         <input type="submit" class="hidden" :value="$t('form.createBucketAndContinue')" />
         <Btn type="primary" class="mt-2 w-full" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
           <template v-if="submitText">

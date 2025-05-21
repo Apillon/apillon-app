@@ -25,6 +25,12 @@ export default function useSimplet() {
   const { t, te, tm, rt } = useI18n();
   const simpletStore = useSimpletStore();
 
+  let simpletsInterval: any = null as any;
+
+  onUnmounted(() => {
+    clearInterval(simpletsInterval);
+  });
+
   const simplets = {
     [SimpletType.AIRDROP]: SimpletName.AIRDROP,
     [SimpletType.POAP]: SimpletName.POAP,
@@ -78,9 +84,33 @@ export default function useSimplet() {
     return rt(trans);
   }
 
+  /** Simplet polling */
+  function checkUnfinishedSimplets(archive = false) {
+    clearInterval(simpletsInterval);
+
+    const unfinishedSimplet = simpletStore.items.find(
+      simplet => Math.min(simplet.backendStatus, simplet.frontendStatus) < ResourceStatus.ONLINE
+    );
+    if (unfinishedSimplet === undefined) return;
+
+    simpletsInterval = setInterval(async () => {
+      const simplets = await simpletStore.fetchSimplets(
+        simpletStore.pagination.page,
+        simpletStore.pagination.pageSize,
+        archive,
+        false
+      );
+      const simplet = simplets.find(simplet => simplet.simpletDeploy_uuid === unfinishedSimplet.simpletDeploy_uuid);
+      if (!simplet || Math.min(simplet.backendStatus, simplet.frontendStatus) >= ResourceStatus.ONLINE) {
+        clearInterval(simpletsInterval);
+      }
+    }, 10000);
+  }
+
   return {
     simplets,
     simpletsContent,
+    checkUnfinishedSimplets,
     generateContent,
     getSimpletType,
     translate,

@@ -3,6 +3,7 @@
     <div class="flex flex-col">
       <!-- DEMO -->
       <LearnVideo
+        v-if="showVideo"
         title="Embedded Wallet"
         html-content="https://www.youtube.com/embed/9y-9nz0tpVs"
         class="w-full max-w-lg"
@@ -44,6 +45,9 @@ import img4 from '/assets/images/embedded-wallet/4.png';
 import img5 from '/assets/images/embedded-wallet/5.png';
 import img6 from '/assets/images/embedded-wallet/6.png';
 
+defineProps({
+  showVideo: { type: Boolean, default: true },
+});
 const { generateContent } = useSimplet();
 const content = generateContent('instructions', 'embeddedWallet');
 

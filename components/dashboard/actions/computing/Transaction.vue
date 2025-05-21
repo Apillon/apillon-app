@@ -34,8 +34,6 @@
         {{ $t('computing.contract.transfer') }}
       </n-button>
 
-      <ModalCreditCosts :service="ServiceTypeName.COMPUTING" />
-
       <!-- Refresh contracts -->
       <n-button
         size="medium"

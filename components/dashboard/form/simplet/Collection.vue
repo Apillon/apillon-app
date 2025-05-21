@@ -11,7 +11,7 @@
         :key="key"
         :icon="logoImg(collection.collection_uuid) ? undefined : 'menu/NFTs'"
         :img="logoImg(collection.collection_uuid) || ''"
-        :content="`${collection.maxSupply} ${$t('storage.files')}`"
+        :content="`${collection.maxSupply || '∞'} ${$t('nft.tokens')}`"
         :selected="selectedCollection?.collection_uuid === collection.collection_uuid"
         @click="selectedCollection = collection"
       >

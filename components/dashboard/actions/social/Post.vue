@@ -6,8 +6,9 @@
     </div>
 
     <n-space size="large">
-      <!-- Modal Price list for Social -->
-      <ModalCreditCosts :service="ServiceTypeName.SOCIAL" />
+      <Btn class="locked" type="secondary" :to="'/dashboard/service/social/hub'">
+        {{ $t('social.post.manageHubs') }}
+      </Btn>
 
       <!-- Refresh posts -->
       <n-button

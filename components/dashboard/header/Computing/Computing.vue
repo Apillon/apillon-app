@@ -1,9 +1,5 @@
 <template>
-  <Heading>
-    <slot>
-      <h1>{{ $t('dashboard.nav.computing') }}</h1>
-    </slot>
-
+  <Heading :service="ServiceTypeName.COMPUTING" :headline="$t('dashboard.nav.computing')">
     <template #info>
       <n-space :size="32" align="center">
         <IconInfo v-if="$te('w3Warn.contract.new')" @click="modalW3WarnVisible = true" />
