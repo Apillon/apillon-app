@@ -119,9 +119,6 @@ export default function useUpload() {
             if (!wrapFilesToDirectory) {
               const cids = {} as Record<string, UploadedFileInfo>;
 
-              console.log(fileRequests.data.files);
-              console.log(fileList.value);
-
               await Promise.all(
                 fileRequests.data.files.map(async uploadFileRequest => {
                   const content = fileList.value.find(
@@ -173,8 +170,6 @@ export default function useUpload() {
   }
 
   function uploadFilesToS3(uploadFilesRequests: S3FileUploadRequestInterface[]) {
-    console.log(uploadFilesRequests);
-    console.log(fileList.value);
     uploadFilesRequests.forEach(uploadFileRequest => {
       const file = fileList.value.find(
         file => file.name === uploadFileRequest.fileName && file.path === uploadFileRequest.path

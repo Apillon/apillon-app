@@ -54,6 +54,7 @@ export default {
     colors: colors,
 
     fontFamily: {
+      heading: ['New Spirit', 'Times', 'serif'],
       sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
     },
 
@@ -84,6 +85,7 @@ export default {
       },
       gridTemplateColumns: {
         billing: 'repeat(auto-fill, minmax(23rem, 1fr))',
+        cards: 'repeat(auto-fill, minmax(25rem, 1fr))',
         services: 'repeat(auto-fit, minmax(280px, 1fr))',
         nft: 'repeat(auto-fill, minmax(220px, 1fr))',
         nftSmall: 'repeat(auto-fill, minmax(120px, 1fr))',

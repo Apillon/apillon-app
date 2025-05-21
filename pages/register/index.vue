@@ -1,9 +1,17 @@
 <template>
   <div>
     <!-- Heading -->
-    <h1 class="mb-2 text-center sm:text-left">
+    <h4 class="mb-2 text-center sm:text-left">
       {{ route.query.REF === 'ZIGGI' ? $t('auth.signup.titleReferalZiggi') : $t('auth.signup.signup') }}
-    </h1>
+    </h4>
+
+    <!-- Links -->
+    <div class="my-8">
+      <span class="text-sm text-body">{{ $t('auth.signup.alreadyHaveAccount') }} </span>&nbsp;
+      <Btn type="builders" size="tiny" inner-class="text-sm" :to="{ name: 'login' }">
+        {{ $t('general.login') }}
+      </Btn>
+    </div>
 
     <!-- Separator -->
     <SeparatorText v-if="authStore.wallet.signature" :border-left="true">
@@ -12,16 +20,6 @@
 
     <!-- Form -->
     <AuthFormSignup />
-
-    <!-- Links -->
-    <n-space class="mt-8" vertical>
-      <div>
-        <span class="text-sm text-body">{{ $t('auth.signup.alreadyHaveAccount') }} </span>&nbsp;
-        <Btn type="builders" size="tiny" inner-class="text-sm" :to="{ name: 'login' }">
-          {{ $t('general.login') }}
-        </Btn>
-      </div>
-    </n-space>
 
     <!-- Separator -->
     <SeparatorText v-if="!authStore.wallet.signature" :border-left="allowWalletRegister">

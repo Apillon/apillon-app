@@ -125,7 +125,7 @@ export const useFileStore = defineStore('file', {
         this.currentBlockId = blockId.toJSON() as number;
         return blockId.toJSON() as number;
       } catch (e: ApiError | any) {
-        console.log(e);
+        console.error(e);
         this.currentBlockId = 0;
       }
       return 0;

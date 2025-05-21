@@ -1,13 +1,13 @@
 <template>
-  <div class="mx-auto max-w-4xl pb-8">
+  <div class="mx-auto max-w-4xl pb-8 pt-4">
     <div class="mb-12 flex gap-8">
       <div class="md:w-1/2">
-        <h3>{{ $t(`dashboard.service.${name}.name`) }}</h3>
-        <p class="my-4">{{ $t(`dashboard.service.${name}.description`) }}</p>
+        <h3>{{ $t(`service.${name}.name`) }}</h3>
+        <p class="my-4">{{ $t(`service.${name}.info`) }}</p>
 
         <div class="mt-2 flex flex-wrap gap-2">
           <Tag
-            v-for="(item, key) in translateItems(`dashboard.service.${service}.tags`)"
+            v-for="(item, key) in translateItems(`service.${service}.tags`)"
             :key="key"
             size="small"
             :type="item.includes('No code') ? 'success' : 'default'"
@@ -16,18 +16,23 @@
           </Tag>
         </div>
       </div>
-      <div class="card p-4 text-xs md:w-1/2">
-        <div class="flex items-center justify-between">
+      <div v-if="$te(`service.${name}.pricing`)" class="card p-4 text-xs md:w-1/2">
+        <div v-if="service === ServiceTypeName.NFT" class="flex items-center justify-between">
           <small>{{ $t('dashboard.supported') }}</small>
           <NftChains :chains="enumKeys(EvmChainMainnet)" />
         </div>
+        <PoweredBy
+          v-else-if="service === ServiceTypeName.HOSTING"
+          class="font-semibold text-white-terciary"
+          :icons="['logo/crust', 'library/python', 'library/javascript', 'library/nextjs']"
+        />
         <hr class="my-4 w-full border-bg-lighter" />
 
         <div class="flex items-center justify-between">
           <small>{{ $t('dashboard.credits.pricing') }}</small>
           <div class="text-right">
             <p>
-              <strong>{{ $t(`dashboard.service.${name}.pricing`) }}</strong>
+              <strong>{{ $t(`service.${name}.pricing`) }}</strong>
             </p>
 
             <ModalCreditCosts :service="service" show-create-collection>
@@ -45,33 +50,42 @@
       <div class="-my-2">
         <div class="flex justify-between gap-4">
           <div class="flex max-w-96 flex-col justify-evenly gap-6">
-            <div class="px-4 text-hover">
-              <strong>{{ $t('nft.collection.review.createCollection') }}</strong>
-              <span class="mt-2 block">Import your NFT files and metadata with just few clicks.</span>
-            </div>
-            <div class="border-l-2 border-blue px-4">
-              <strong>Add NFTs to Collection</strong>
-              <span class="mt-2 block">Simplifies the onboarding process.</span>
-            </div>
-            <div class="px-4 text-hover">
-              <strong>Mint your NFTs</strong>
-              <span class="mt-2 block">Simplifies the onboarding process.</span>
+            <div
+              v-for="(i, key) in introduction"
+              :key="key"
+              class="px-4"
+              :class="key === 1 ? 'border-l-2 border-blue' : 'text-hover'"
+            >
+              <strong>{{ i.title }}</strong>
+              <span class="mt-2 block">{{ i.content }}</span>
             </div>
           </div>
-          <div class="card card-lighter pb-9 pl-8 pt-8 text-right lg:w-[44%]">
+          <div v-if="image" class="lg:w-[44%]">
+            <img :src="image" :alt="name" width="370" height="280" />
+          </div>
+          <div v-else class="card card-lighter pb-9 pl-8 pt-8 text-right lg:w-[44%]">
             <NuxtIcon name="nft/new_collection" class="icon-auto ml-auto inline-block" filled />
           </div>
         </div>
         <hr class="my-4 w-full border-bg-lighter" />
         <div class="flex justify-between gap-4">
-          <Btn class="no-underline" type="link" inner-class="flex gap-2 items-center" @click="showVideo = true">
+          <Btn
+            v-if="videoId"
+            class="no-underline"
+            type="link"
+            inner-class="flex gap-2 items-center"
+            @click="showVideo = true"
+          >
             <span class="icon-video text-xl text-yellow"></span>
             <span class="text-white underline">{{ $t('dashboard.youTube.demo') }}</span>
           </Btn>
+          <span v-else></span>
 
           <div class="flex justify-between gap-2">
             <BtnDocumentation v-if="docs" :href="docs" />
-            <slot name="actions" />
+            <slot name="actions">
+              <Btn @click="modalCreateProjectVisible = true">{{ $t('dashboard.startBuilding') }}</Btn>
+            </slot>
           </div>
         </div>
       </div>
@@ -102,6 +116,11 @@
       </div>
     </div>
 
+    <!-- Modal - Create new project -->
+    <modal v-model:show="modalCreateProjectVisible" :title="$t('project.new')">
+      <FormProject @submit-success="modalCreateProjectVisible = false" @close="modalCreateProjectVisible = false" />
+    </modal>
+
     <Drawer v-model:show="showVideo">
       <DemoVideo :video-id="videoId" :chapters="videoChapters" />
     </Drawer>
@@ -113,15 +132,20 @@ import { enumKeys, translateItems } from '~/lib/utils';
 import { EvmChainMainnet } from '~/lib/types/nft';
 import type { ServiceTypeName } from '~/lib/types/service';
 
-defineProps({
+const props = defineProps({
   name: { type: String, required: true },
   service: { type: String as PropType<ServiceTypeName>, required: true },
   docs: { type: String, default: null },
+  image: { type: String, default: null },
   videoId: { type: String, default: null },
   videoChapters: { type: Array<VideoChapter>, default: null },
 });
 
+const { generateIntroduction } = useService();
+const introduction = generateIntroduction(props.name);
+
 const showVideo = ref<boolean>(false);
+const modalCreateProjectVisible = ref<boolean>(false);
 
 const guides = [
   {

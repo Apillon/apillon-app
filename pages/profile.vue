@@ -1,11 +1,7 @@
 <template>
   <Dashboard :loading="authStore.loadingProfile">
     <template #heading>
-      <Heading>
-        <slot>
-          <h1>{{ $t('profile.mySettings') }}</h1>
-        </slot>
-
+      <Heading :headline="$t('profile.mySettings')">
         <template #submenu>
           <MenuProfile />
         </template>

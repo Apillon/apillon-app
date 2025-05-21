@@ -1,17 +1,10 @@
 <template>
-  <Heading>
-    <slot>
-      <n-space align="center" size="large" :wrap="false">
-        <NuxtLink v-if="backLink" :to="backLink">
-          <span class="icon-back align-sub text-2xl"></span>
-        </NuxtLink>
-        <div class="flex items-center">
-          <h2 v-if="title">{{ title }}</h2>
-          <h2 v-else>{{ $t('assetHub.createAsset') }}</h2>
-          <img src="/icons/beta.svg" alt="Beta" class="ml-2 inline-block h-5 w-14" />
-        </div>
-      </n-space>
-    </slot>
+  <Heading :back="backLink">
+    <div class="flex items-center">
+      <h4 v-if="title">{{ title }}</h4>
+      <h4 v-else>{{ $t('assetHub.createAsset') }}</h4>
+      <img src="/icons/beta.svg" alt="Beta" class="ml-2 inline-block h-5 w-14" />
+    </div>
 
     <template #info>
       <div v-if="switcher">
@@ -40,7 +33,7 @@
           {{ $t('assetHub.connectWallet') }}
         </Btn>
       </div>
-      <div v-else></div>
+      <div v-else class="min-w-24"></div>
     </template>
   </Heading>
 

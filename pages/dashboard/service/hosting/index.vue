@@ -1,5 +1,12 @@
 <template>
-  <Dashboard :loading="pageLoading">
+  <ServiceEmpty
+    v-if="!dataStore.project.selected"
+    docs="https://wiki.apillon.io/web3-services/3-web3-hosting.html"
+    :name="ServiceTypeName.HOSTING.toLowerCase()"
+    :service="ServiceTypeName.HOSTING"
+    :image="WebsitePNG"
+  />
+  <Dashboard v-else :loading="pageLoading">
     <template #heading>
       <HeaderHosting />
     </template>
@@ -28,6 +35,8 @@
 </template>
 
 <script lang="ts" setup>
+import WebsitePNG from '/assets/images/hosting/website.png';
+
 const { t, te } = useI18n();
 const dataStore = useDataStore();
 const storageStore = useStorageStore();

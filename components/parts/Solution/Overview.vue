@@ -8,7 +8,7 @@
           class="text-2xl"
           :class="[service.icon, key % 3 === 0 ? 'text-blue' : key % 3 === 1 ? 'text-pink' : 'text-orange']"
         ></span>
-        <h5>{{ $t(`dashboard.service.${service.name}.name`) }}</h5>
+        <h5>{{ $t(`service.${service.name}.name`) }}</h5>
       </div>
       <div class="mb-3 border-b border-bg-lighter pb-1 text-sm">
         <div
@@ -56,11 +56,11 @@ const web3Services = computed(() => [
     icon: 'icon-storage',
     data: [
       {
-        name: t(`dashboard.service.storage.bucketCount`),
+        name: t(`service.storage.bucketCount`),
         value: dataStore.project.overview.bucketCount,
       },
       {
-        name: t(`dashboard.service.storage.fileCount`),
+        name: t(`service.storage.fileCount`),
         value: dataStore.project.overview.fileCount,
       },
     ],
@@ -75,11 +75,11 @@ const web3Services = computed(() => [
     icon: 'icon-hosting',
     data: [
       {
-        name: t(`dashboard.service.hosting.websiteCount`),
+        name: t(`service.hosting.websiteCount`),
         value: dataStore.project.overview.websiteCount,
       },
       {
-        name: t(`dashboard.service.hosting.usedBandwidth`),
+        name: t(`service.hosting.usedBandwidth`),
         value: formatBytes(dataStore.project.overview.usedBandwidth),
       },
     ],
@@ -94,11 +94,11 @@ const web3Services = computed(() => [
     icon: 'icon-nft',
     data: [
       {
-        name: t(`dashboard.service.nft.collectionCount`),
+        name: t(`service.nft.collectionCount`),
         value: dataStore.project.overview.numOfCollections || dataStore.project.overview.collectionCount,
       },
       {
-        name: t(`dashboard.service.nft.nftTransactionCount`),
+        name: t(`service.nft.nftTransactionCount`),
         value: dataStore.project.overview.nftTransactionCount,
       },
     ],
@@ -109,11 +109,11 @@ const web3Services = computed(() => [
     icon: 'icon-wallet',
     data: [
       {
-        name: t('dashboard.service.embeddedWallet.integrationCount'),
+        name: t('service.embeddedWallet.integrationCount'),
         value: dataStore.project.overview.integrationCount,
       },
       {
-        name: t('dashboard.service.embeddedWallet.walletCount'),
+        name: t('service.embeddedWallet.walletCount'),
         value: dataStore.project.overview.embeddedWalletCount,
       },
     ],
@@ -124,11 +124,11 @@ const web3Services = computed(() => [
     icon: 'icon-cloud-functions',
     data: [
       {
-        name: t('dashboard.service.cloudFunctions.functionCount'),
+        name: t('service.cloudFunctions.functionCount'),
         value: dataStore.project.overview.cloudFunctionCount,
       },
       {
-        name: t('dashboard.service.cloudFunctions.deploymentCount'),
+        name: t('service.cloudFunctions.deploymentCount'),
         value: dataStore.project.overview.cloudFunctionJobCount,
       },
     ],
@@ -139,11 +139,11 @@ const web3Services = computed(() => [
     icon: 'icon-rpc',
     data: [
       {
-        name: t('dashboard.service.rpc.keyCount'),
+        name: t('service.rpc.keyCount'),
         value: dataStore.project.overview.rpcApiKeyCount,
       },
       {
-        name: t('dashboard.service.rpc.selectedNetworkCount'),
+        name: t('service.rpc.selectedNetworkCount'),
         value: dataStore.project.overview.selectedRpcUrlCount,
       },
     ],
@@ -154,7 +154,7 @@ const web3Services = computed(() => [
     icon: 'icon-indexer',
     data: [
       {
-        name: t('dashboard.service.indexing.deployedIndexerCount'),
+        name: t('service.indexing.deployedIndexerCount'),
         value: dataStore.project.overview.indexerCount,
       },
     ],
@@ -180,7 +180,7 @@ const web3Services = computed(() => [
     icon: 'icon-authentication',
     data: [
       {
-        name: t(`dashboard.service.authentication.didCount`),
+        name: t(`service.authentication.didCount`),
         value: dataStore.project.overview.didCount,
       },
     ],
@@ -191,11 +191,11 @@ const web3Services = computed(() => [
     icon: 'icon-computing',
     data: [
       {
-        name: t(`dashboard.service.computing.contractCount`),
+        name: t(`service.computing.contractCount`),
         value: dataStore.project.overview.contractCount,
       },
       {
-        name: t(`dashboard.service.computing.computingTransactionCount`),
+        name: t(`service.computing.computingTransactionCount`),
         value: dataStore.project.overview.computingTransactionCount,
       },
     ],
@@ -206,11 +206,11 @@ const web3Services = computed(() => [
     icon: 'icon-social',
     data: [
       {
-        name: t(`dashboard.service.social.spaceCount`),
+        name: t(`service.social.spaceCount`),
         value: dataStore.project.overview.spaceCount,
       },
       {
-        name: t(`dashboard.service.social.postCount`),
+        name: t(`service.social.postCount`),
         value: dataStore.project.overview.postCount,
       },
     ],

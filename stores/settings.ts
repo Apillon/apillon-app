@@ -112,6 +112,7 @@ export const useSettingsStore = defineStore('settings', {
     /** API Keys */
     async fetchApiKeys() {
       const dataStore = useDataStore();
+      await dataStore.waitOnPromises(false);
       if (!dataStore.hasProjects) {
         this.apiKeys = [] as ApiKeyInterface[];
         return;
@@ -136,8 +137,10 @@ export const useSettingsStore = defineStore('settings', {
     /** Users */
     async fetchProjectUsers() {
       const dataStore = useDataStore();
+      await dataStore.waitOnPromises(false);
+      if (!dataStore.projectUuid) return;
       try {
-        const res = await $api.get<ProjectUsersResponse>(endpoints.projectUsers(dataStore.project.selected));
+        const res = await $api.get<ProjectUsersResponse>(endpoints.projectUsers(dataStore.projectUuid));
         this.users = res.data.items;
       } catch (error: ApiError | any) {
         this.users = [];

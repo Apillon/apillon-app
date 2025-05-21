@@ -92,15 +92,16 @@
       </div>
       <Empty
         v-else
-        :title="$t('dashboard.service.authentication.emptyTitle')"
-        :info="$t('dashboard.service.authentication.emptyInfo')"
+        :title="$t('service.authentication.emptyTitle')"
+        :info="$t('service.authentication.emptyInfo')"
         icon="storage/empty"
       >
         <FormService
+          v-if="dataStore.project.selected"
           class="mt-4 min-w-[13rem] pr-4 sm:pr-8"
           :service-type="ServiceType.AUTHENTICATION"
           default-service-name="Authentication service"
-          :btn-text="$t('dashboard.service.authentication.emptyBtn')"
+          :btn-text="$t('service.authentication.emptyBtn')"
         />
       </Empty>
     </slot>

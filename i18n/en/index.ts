@@ -13,6 +13,7 @@ import profile from './profile.json';
 import project from './project.json';
 import referral from './referral.json';
 import rpc from './rpc.json';
+import service from './service.json';
 import simplet from './simplet.json';
 import smartContracts from './smartContracts.json';
 import social from './social.json';
@@ -36,6 +37,7 @@ const messages = {
   ...project,
   ...referral,
   ...rpc,
+  ...service,
   ...simplet,
   ...smartContracts,
   ...social,

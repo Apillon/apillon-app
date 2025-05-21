@@ -3,6 +3,7 @@
     v-if="!dataStore.project.selected"
     :name="ServiceTypeName.NFT.toLowerCase()"
     :service="ServiceTypeName.NFT"
+    :image="NftCardsPNG"
     docs="https://wiki.apillon.io/web3-services/4-nfts.html"
     video-id="qQJnuvUo-xo"
     :video-chapters="[
@@ -13,9 +14,6 @@
       { time: '07:15', title: 'Website' },
     ]"
   >
-    <template #actions>
-      <Btn @click="modalCreateCollectionVisible = true">{{ $t('dashboard.startBuilding') }}</Btn>
-    </template>
   </ServiceEmpty>
   <Dashboard v-else :loading="pageLoading">
     <template #heading>
@@ -34,7 +32,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ServiceTypeName } from '~/lib/types/service';
+import NftCardsPNG from '/assets/images/nft/nft-cards.png';
 
 const { t } = useI18n();
 const dataStore = useDataStore();

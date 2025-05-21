@@ -1,7 +1,7 @@
 <template>
-  <n-form ref="formRef" :model="formData" :rules="rules">
+  <n-form ref="formRef" size="large" :model="formData" :rules="rules">
     <!--  Signup email -->
-    <n-form-item v-show="!sendAgain" path="email" :show-label="false" :show-feedback="formErrors">
+    <n-form-item v-show="!sendAgain" path="email" :show-label="false">
       <n-input
         v-model:value="formData.email"
         :input-props="{ type: 'email' }"

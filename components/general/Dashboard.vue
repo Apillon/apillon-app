@@ -2,7 +2,10 @@
   <div v-if="loading">
     <transition name="fade" appear>
       <div v-if="loadingAnimation" class="flex w-full flex-col gap-8" style="height: calc(100dvh - 56px)">
-        <div class="-mx-4 h-24 bg-bg-light/65 px-4 text-sm sm:-mx-8 sm:px-8"></div>
+        <div
+          class="-mx-4 h-24 px-4 text-sm sm:-mx-8 sm:px-8"
+          :class="{ 'bg-bg-light/65': dataStore.project.selected }"
+        ></div>
         <!-- Loading skeleton - on long page load show skeleton -->
         <n-skeleton height="40px" width="100%" />
         <n-skeleton height="40px" width="100%" />
@@ -71,6 +74,7 @@ const props = defineProps({
 /** Check if instructions are available (page has content and feature is enabled) */
 const $slots = useSlots();
 const authStore = useAuthStore();
+const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const warningStore = useWarningStore();
 const { activeDeployments } = useRefreshStatus();

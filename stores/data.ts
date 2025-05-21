@@ -52,7 +52,7 @@ export const useDataStore = defineStore('data', {
       if (project) {
         return project;
       }
-      console.log(state.project.items, this.project.selected);
+
       /** Select first project as fallback if currentProjectUuid is not available */
       this.project.selected = state.project.items[0].project_uuid;
       localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, this.project.selected);

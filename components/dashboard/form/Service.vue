@@ -28,7 +28,7 @@
     <!--  Service submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.login')" />
-      <Btn :disabled="disabled" type="primary" size="large" :loading="loading" @click="handleSubmit">
+      <Btn :disabled="disabled" type="primary" :loading="loading" @click="handleSubmit">
         <template v-if="service">
           {{ $t('form.update') }}
         </template>

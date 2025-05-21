@@ -258,6 +258,9 @@ const Endpoints = {
   /** Service status */
   serviceStatus: '/public/service-status',
 
+  /** Statistics */
+  statistics: '/public/statistics',
+
   /** Notifications */
   notification: '/notification',
 };

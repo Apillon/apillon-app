@@ -4,10 +4,10 @@
       <div>
         <div class="mb-4 flex items-center gap-2">
           <span class="text-2xl" :class="service.icon"></span>
-          <h5>{{ $t(`dashboard.service.${service.name}.name`) }}</h5>
+          <h5>{{ $t(`service.${service.name}.name`) }}</h5>
         </div>
         <p>
-          {{ $t(`dashboard.service.${service.name}.description`) }}
+          {{ $t(`service.${service.name}.description`) }}
         </p>
       </div>
     </div>

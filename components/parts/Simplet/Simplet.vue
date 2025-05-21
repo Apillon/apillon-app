@@ -15,7 +15,7 @@
           <small>{{ $t('dashboard.credits.pricing') }}</small>
           <div class="flex flex-col gap-1 text-right text-xs">
             <strong>150 credits for setup</strong>
-            <span>Check pricing</span>
+            <NuxtLink :to="{ name: 'dashboard-price-list' }">{{ $t('dashboard.credits.checkPricing') }}</NuxtLink>
           </div>
         </div>
       </div>

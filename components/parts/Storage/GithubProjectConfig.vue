@@ -73,8 +73,8 @@ function connectToGithub() {
       '_self'
     );
   } catch (e) {
-    console.log('Error connecting to Github');
-    console.log(e);
+    console.error('Error connecting to Github');
+    console.error(e);
   }
 }
 

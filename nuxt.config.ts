@@ -130,6 +130,13 @@ export default defineNuxtConfig({
       link: [
         { rel: 'icon', type: 'image/png', href: '/favicon.png' },
         { rel: 'manifest', href: '/manifest.json' },
+        {
+          rel: 'preload',
+          type: 'font/woff2',
+          href: '/fonts/new-spirit/new_spirit_medium-webfont.woff2',
+          as: 'font',
+          crossorigin: '',
+        },
       ],
 
       script: [],

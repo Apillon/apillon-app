@@ -1,11 +1,7 @@
 <template>
   <Dashboard :loading="loading">
     <template #heading>
-      <Heading>
-        <slot>
-          <h1>{{ $t('dashboard.billing') }}</h1>
-        </slot>
-
+      <Heading :headline="$t('dashboard.billing')">
         <template #submenu>
           <MenuBilling />
         </template>

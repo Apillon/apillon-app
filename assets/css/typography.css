@@ -1,3 +1,13 @@
+@font-face {
+  font-family: 'New Spirit';
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src:
+    url('/fonts/new-spirit/new_spirit_medium-webfont.woff2') format('woff2'),
+    url('/fonts/new-spirit/new_spirit_medium-webfont.woff') format('woff');
+}
+
 @layer base {
   /* Headline 1 */
   h1,
@@ -107,6 +117,12 @@
 
     > a {
       @apply text-primary;
+    }
+  }
+
+  a {
+    &.text-body {
+      @apply transition-colors duration-200 hover:text-yellow;
     }
   }
 

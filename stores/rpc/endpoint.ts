@@ -44,8 +44,11 @@ export const useRpcEndpointStore = defineStore('endpoint', {
     },
 
     async fetchEndpoints(showLoader = true): Promise<RpcEndpointInterface[]> {
-      this.loading = showLoader;
+      const dataStore = useDataStore();
+      await dataStore.waitOnPromises(false);
+      if (!dataStore.projectUuid) return [];
 
+      this.loading = showLoader;
       const rpcApiKeyStore = useRpcApiKeyStore();
 
       const apiKeyId = rpcApiKeyStore.selectedId;
@@ -54,8 +57,6 @@ export const useRpcEndpointStore = defineStore('endpoint', {
         this.loading = false;
         return [];
       }
-
-      const dataStore = useDataStore();
 
       try {
         const req = Promise.all([
@@ -99,9 +100,11 @@ export const useRpcEndpointStore = defineStore('endpoint', {
     },
 
     async fetchPublicEndpoints(showLoader = true): Promise<RpcEndpointInterface[]> {
-      this.loading = showLoader;
-
       const dataStore = useDataStore();
+      await dataStore.waitOnPromises(false);
+      if (!dataStore.projectUuid) return [];
+
+      this.loading = showLoader;
 
       try {
         const req = $api.get<RpcEndpointsResponse>(endpoints.rpcEndpoints());

@@ -1,5 +1,11 @@
 <template>
-  <Dashboard :loading="pageLoading">
+  <ServiceEmpty
+    v-if="!dataStore.project.selected"
+    docs="https://wiki.apillon.io/web3-services/8-web3-cloud-functions.html"
+    :name="toCamelCase(ServiceTypeName.CLOUD_FUNCTIONS)"
+    :service="ServiceTypeName.CLOUD_FUNCTIONS"
+  />
+  <Dashboard v-else :loading="pageLoading">
     <template #heading>
       <HeaderCloudFunctions />
     </template>
