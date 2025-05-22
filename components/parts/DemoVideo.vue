@@ -1,18 +1,25 @@
 <template>
   <div>
-    <VueYtframe ref="youtubeRef" :video-id="videoId" :player-vars="{ autoplay: 0 }" height="390" @ready="onReady" />
+    <div class="overflow-hidden rounded-lg">
+      <VueYtframe ref="youtubeRef" :video-id="videoId" :player-vars="{ autoplay: 0 }" height="390" @ready="onReady" />
+    </div>
 
     <div v-if="ytChapters?.length" class="my-8">
-      <h4>{{ $t('dashboard.youTube.chapters') }}</h4>
+      <h4 class="mb-2">{{ $t('dashboard.youTube.chapters') }}</h4>
 
       <table class="">
         <tr v-for="chapter in ytChapters" :key="chapter.time">
           <td>
-            <button class="inline-block h-6 w-full bg-bg-light px-1 text-center" @click="selectChapter(chapter.time)">
+            <button
+              class="my-2 inline-block h-6 w-full bg-bg-light px-1 text-center"
+              @click="selectChapter(chapter.time)"
+            >
               {{ chapter.time }}
             </button>
           </td>
-          <td class="pl-1">{{ chapter.title }}</td>
+          <td class="pl-2">
+            <button @click="selectChapter(chapter.time)">{{ chapter.title }}</button>
+          </td>
         </tr>
       </table>
     </div>

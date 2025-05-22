@@ -25,7 +25,7 @@
         class="flex w-1/2 flex-col justify-between gap-8 rounded-lg bg-bg-dark px-10 py-16 text-center md:px-16 xl:px-20 xxl:px-28"
       >
         <div class="mx-auto max-w-sm px-5">
-          <h1 class="font-heading mx-auto mb-6 max-w-64">{{ $t('auth.register.banner.title') }}</h1>
+          <h1 class="mx-auto mb-6 max-w-64 font-heading">{{ $t('auth.register.banner.title') }}</h1>
           <p>{{ $t('auth.register.banner.content') }}</p>
         </div>
         <div class="flex-cc relative w-full">
@@ -39,18 +39,10 @@
           <p class="my-2">{{ $t('auth.register.banner.footer') }}</p>
 
           <div class="flex justify-center gap-2">
-            <div v-for="(item, key) in statistics" :key="key" class="h-24 w-24 p-5 text-center">
+            <div v-for="(item, key) in statistics" :key="key" class="h-24 w-24 px-1 py-5 text-center">
               <h5 class="font-heading">{{ item.value }}</h5>
-              <p>{{ item.name }}</p>
+              <p class="text-xs">{{ item.name }}</p>
             </div>
-            <!-- <div class="h-24 w-24 p-5 text-center">
-              <h5 class="font-heading">139K+</h5>
-              <p>{{ $t('auth.register.banner.builders') }}</p>
-            </div>
-            <div class="h-24 w-24 p-5 text-center">
-              <h5 class="font-heading">139K+</h5>
-              <p>{{ $t('auth.register.banner.builders') }}</p>
-            </div> -->
           </div>
         </div>
       </div>
@@ -65,7 +57,7 @@ const { isLg } = useScreen();
 const router = useRouter();
 const { statistics } = useStatistics();
 
-const isRegister = computed(() => isLg.value && router.currentRoute.value.fullPath === '/register');
+const isRegister = computed(() => isLg.value && router.currentRoute.value.name === 'register');
 
 /** Global messages */
 const message = useMessage();

@@ -74,7 +74,7 @@
     @apply card-border rounded-lg bg-bg;
   }
   .card-dark {
-    @apply card-border rounded-lg bg-bg-dark;
+    @apply card-border rounded-lg bg-bg-dark transition-colors duration-150 hover:border-white;
 
     &-multiple {
       @apply relative z-1 pt-3;

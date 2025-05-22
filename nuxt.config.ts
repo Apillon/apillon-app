@@ -170,7 +170,7 @@ export default defineNuxtConfig({
     download: true,
     families: {
       Inter: {
-        wght: [400, 700],
+        wght: [400, 600, 700],
       },
     },
   },

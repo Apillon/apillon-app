@@ -41,13 +41,19 @@
             <NuxtIcon name="dashboard/token" class="text-4xl" filled />
             <h4>{{ $t('dashboard.onboarding.banner.token') }}</h4>
             <p>{{ $t('dashboard.onboarding.banner.tokenInfo') }}</p>
-            <Btn href="https://www.apillon.io/token">{{ $t('general.learnMore') }}</Btn>
+
+            <Btn type="tertiary" href="https://www.apillon.io/token">{{ $t('general.learnMore') }}</Btn>
           </div>
 
           <div class="flex flex-col gap-6 text-sm lg:w-1/3">
             <div class="flex items-center justify-between">
               <strong>{{ $t('dashboard.usage.title') }}</strong>
-              <Btn class="font-bold no-underline" type="link" :to="{ name: 'dashboard-payments' }">
+              <Btn
+                v-if="dataStore.currentProject"
+                class="font-bold no-underline"
+                type="tertiary"
+                :to="{ name: 'dashboard-payments' }"
+              >
                 <template v-if="paymentStore.hasActiveSubscription">
                   {{ $t('dashboard.payment.managePlan') }}
                 </template>
@@ -88,7 +94,7 @@
         <!-- Services-->
         <h4 class="mb-8">{{ $t('dashboard.onboarding.servicesTitle') }}</h4>
 
-        <div class="grid-cols-cards mb-8 grid gap-4">
+        <div class="mb-8 grid grid-cols-cards gap-4">
           <CardService v-for="(service, key) in onboardingServices" v-bind="service" :key="key" />
         </div>
 

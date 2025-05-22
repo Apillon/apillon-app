@@ -1,11 +1,11 @@
 <template>
-  <div class="card-dark flex flex-col justify-between p-8">
+  <div class="card-dark relative flex flex-col justify-between p-6">
     <div class="flex items-center justify-between text-white">
       <strong>{{ name }}</strong>
       <NuxtLink
         v-if="link"
         :to="{ name: link }"
-        class="inline-flex-cc h-10 w-10 rounded-full transition-colors duration-300 hover:bg-bg-lighter"
+        class="inline-flex-cc h-10 w-10 rounded-full transition-colors duration-300"
       >
         <span class="icon-wide-right text-xl"></span>
       </NuxtLink>
@@ -24,6 +24,7 @@
         {{ item }}
       </Tag>
     </div>
+    <NuxtLink v-if="link" :to="{ name: link }" class="absolute left-0 top-0 h-full w-full"> </NuxtLink>
   </div>
 </template>
 

@@ -5,14 +5,12 @@
     :href="!authStore.loggedIn ? 'https://apillon.io/' : undefined"
     class="inline-block text-center"
   >
-    <img
-      v-if="version < 1"
-      :src="`/images/logo/apillon-beta@2x.png?ver='${version}`"
-      :width="168"
-      :height="24"
+    <NuxtIcon
+      name="logo/apillon"
+      class="icon-inherit block"
       :alt="alt"
+      :style="{ width: `${width}px`, height: `${height}px` }"
     />
-    <img v-else src="/images/logo/apillon.png" :width="width" :height="height" :alt="alt" />
   </component>
 </template>
 
@@ -29,8 +27,4 @@ const NuxtLink = resolveComponent('NuxtLink');
 const link = computed(() => {
   return authStore.loggedIn ? { name: 'dashboard' } : { name: 'login' };
 });
-
-/** App version */
-const config = useRuntimeConfig();
-const version = ref<number>(parseFloat(config.public.VERSION));
 </script>
