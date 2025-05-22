@@ -93,6 +93,7 @@ const btnClass = computed(() => {
       'opacity-60 !text-disabled hover:!text-disabled': props.disabled,
       'border-lighter': props.type == 'secondary',
       'text-yellow hover:!text-yellow hover:underline': props.type == 'text',
+      'text-yellow font-semibold locked': props.type == 'tertiary',
       'hover-bounce': !['link', 'builders', 'text'].includes(props.type),
       quaternary: props.quaternary || props.type === 'builders',
       locked: isBtnLocked.value,

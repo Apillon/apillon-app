@@ -384,6 +384,13 @@ body .nuxt-icon {
   &.icon-auto svg {
     @apply h-auto w-auto;
   }
+  &.icon-full svg {
+    @apply h-full w-full;
+  }
+  &.icon-inherit svg {
+    width: inherit;
+    height: inherit;
+  }
   svg {
     @apply mb-0;
   }
