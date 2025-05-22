@@ -1,32 +1,16 @@
 <template>
-  <n-tag
-    v-bind="$attrs"
-    :type="getCollectionStatus(collectionStatus)"
-    :bordered="collectionStatus < CollectionStatus.DEPLOYED"
-    size="tiny"
-    round
-  >
-    <n-space
-      :class="collectionStatus < CollectionStatus.DEPLOYED ? 'text-body' : 'text-bg-dark'"
-      :size="0"
-      align="center"
-      :wrap="false"
-    >
-      <span class="mx-1 uppercase">{{ $t(`nft.collection.status.${collectionStatus}`) }}</span>
-      <AnimationTyping v-if="collectionStatus < CollectionStatus.DEPLOYED" />
-    </n-space>
-  </n-tag>
+  <Tag v-if="status !== null" :animation="status < CollectionStatus.DEPLOYED" :type="getStatus(status)">
+    {{ $t(`nft.collection.status.${status}`) }}
+  </Tag>
 </template>
 
 <script lang="ts" setup>
-import { CollectionStatus } from '~/lib/types/nft';
-
 defineProps({
-  collectionStatus: { type: Number as PropType<CollectionStatus>, default: 0 },
+  status: { type: Number as PropType<CollectionStatus>, default: null },
 });
 
 /** Deployment status */
-function getCollectionStatus(status: number): TagType {
+function getStatus(status: number): TagType {
   switch (status) {
     case CollectionStatus.DEPLOYED:
       return 'success';

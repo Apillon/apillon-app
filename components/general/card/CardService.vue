@@ -1,5 +1,5 @@
 <template>
-  <div class="card-dark relative flex flex-col justify-between p-6">
+  <div class="card-dark relative flex flex-col justify-between p-6" :class="{ 'hover:border-white': link }">
     <div class="flex items-center justify-between text-white">
       <strong>{{ name }}</strong>
       <NuxtLink

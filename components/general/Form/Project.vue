@@ -32,19 +32,28 @@
         <n-input
           v-model:value="formData.description"
           type="textarea"
+          rows="4"
           :input-props="{ id: 'projectDescription' }"
           :placeholder="$t('form.placeholder.projectDescription')"
         />
       </n-form-item>
 
+      <p>
+        <span class="text-placeholder">{{ $t('dashboard.onboarding.modal.credits.reward') }}: </span>
+        <span class="inline-block whitespace-nowrap text-blue">
+          <span class="icon-credits mx-2 inline-block align-text-top text-xl"></span>
+          <strong class="text-xs"> 1200 </strong>
+        </span>
+      </p>
       <slot />
 
       <!--  Project submit -->
       <n-form-item :show-feedback="false">
         <input type="submit" class="hidden" :value="$t('form.createNewProject')" />
         <Btn
-          type="primary"
           class="mt-2 w-full"
+          size="large"
+          type="primary"
           :loading="loading"
           :disabled="dataStore.project.quotaReached === true"
           @click="handleSubmit"

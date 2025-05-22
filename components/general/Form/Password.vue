@@ -1,5 +1,12 @@
 <template>
-  <n-form v-if="!isWalletRegister" ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
+  <n-form
+    v-if="!isWalletRegister"
+    ref="formRef"
+    size="large"
+    :model="formData"
+    :rules="rules"
+    @submit.prevent="handleSubmit"
+  >
     <!--  Register password -->
     <n-form-item path="password" :label="$t('form.label.password', { length: 12 })" :label-props="{ for: 'password' }">
       <n-input

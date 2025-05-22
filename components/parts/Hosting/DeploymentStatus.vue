@@ -1,20 +1,16 @@
 <template>
-  <Tag
-    v-if="deploymentStatus !== null"
-    :animation="deploymentStatus < DeploymentStatus.IN_REVIEW"
-    :type="getDeploymentStatus(deploymentStatus)"
-  >
-    {{ $t(`hosting.deployment.status.${deploymentStatus}`) }}
+  <Tag v-if="status !== null" :animation="status < DeploymentStatus.IN_REVIEW" :type="getStatus(status)">
+    {{ $t(`hosting.deployment.status.${status}`) }}
   </Tag>
 </template>
 
 <script lang="ts" setup>
 defineProps({
-  deploymentStatus: { type: Number as PropType<DeploymentStatus>, default: null },
+  status: { type: Number as PropType<DeploymentStatus>, default: null },
 });
 
 /** Deployment status */
-function getDeploymentStatus(status: number): TagType {
+function getStatus(status: number): TagType {
   switch (status) {
     case DeploymentStatus.INITIATED:
     case DeploymentStatus.IN_PROGRESS:

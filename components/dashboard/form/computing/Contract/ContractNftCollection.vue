@@ -19,13 +19,9 @@
           <div v-if="chain.value === CUSTOM_EVM" class="flex-cc h-[74px] w-[74px] rounded-full bg-orange p-4">
             <span class="text-center text-xs text-black">{{ chain.label }}</span>
           </div>
-          <NuxtIcon
-            v-else
-            :name="`logo/${chain.name.toLowerCase()}`"
-            class="mx-auto flex justify-center text-7xl"
-            filled
-          />
-          <p class="mt-4 text-center">{{ chain.label }}</p>
+          <NftCollectionChain v-else :chain-id="chain.value" />
+          <!-- <NuxtIcon :name="`logo/${chain.name.toLowerCase()}`" class="mx-auto flex justify-center text-7xl" filled />
+          <p class="mt-4 text-center">{{ chain.label }}</p> -->
         </div>
       </div>
     </div>

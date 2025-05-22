@@ -36,7 +36,7 @@ const createColumns = (): NDataTableColumns<DeploymentBuildInterface> => {
       title: t('hosting.deploy.build-table.build-status'),
       key: 'buildStatus',
       render(row) {
-        return h(resolveComponent('HostingDeploymentBuildStatus'), { buildStatus: row.buildStatus }, '');
+        return h(resolveComponent('HostingDeploymentBuildStatus'), { status: row.buildStatus }, '');
       },
     },
     {

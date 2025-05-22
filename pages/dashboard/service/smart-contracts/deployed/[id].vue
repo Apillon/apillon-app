@@ -56,12 +56,7 @@
             <img src="~/assets/images/solution/smart-contracts.png" alt="" />
           </div>
         </div>
-        <Btn v-if="isContractTransferring" class="w-full max-w-xs" :disabled="true">
-          <span class="flex items-center gap-2">
-            <AnimationTyping />
-            {{ SmartContractStatus[contractStatus] }}
-          </span>
-        </Btn>
+        <SmartContractsStatus v-if="isContractTransferring" :status="contractStatus" />
         <FormSmartContractAction
           v-else-if="isConnected && !isContractTransferred && fnTransferOwnership"
           class="max-w-sm"

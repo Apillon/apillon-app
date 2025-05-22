@@ -6,7 +6,10 @@
     <slot>
       <div class="mb-8">
         <div class="mb-10 flex gap-4">
-          <div class="flex flex-col justify-between gap-8 rounded-lg bg-violet p-6 text-bg lg:w-5/12">
+          <div
+            class="flex cursor-pointer flex-col justify-between gap-8 rounded-lg bg-violet p-6 text-bg lg:w-5/12"
+            @click="showVideo = true"
+          >
             <div>
               <h4>{{ $t('dashboard.onboarding.banner.title') }}</h4>
               <span class="text-sm">{{ $t('dashboard.onboarding.banner.content') }}</span>
@@ -27,9 +30,9 @@
               </div>
               <Btn
                 class="!text-bg-dark no-underline"
-                type="link"
+                type="tertiary"
                 inner-class="flex gap-2 items-center"
-                @click="show = true"
+                @click="showVideo = true"
               >
                 <span class="icon-video text-xl text-bg-dark"></span>
                 <strong>{{ $t('dashboard.youTube.play') }}</strong>
@@ -78,7 +81,7 @@
             />
           </div>
         </div>
-        <Drawer v-model:show="show">
+        <Drawer v-model:show="showVideo">
           <DemoVideo
             video-id="qQJnuvUo-xo"
             :chapters="[
@@ -117,7 +120,7 @@ const paymentStore = usePaymentStore();
 const storageStore = useStorageStore();
 const { onboardingServices } = useService();
 
-const show = ref<boolean>(false);
+const showVideo = ref<boolean>(false);
 
 useHead({
   title: t('dashboard.homepage'),

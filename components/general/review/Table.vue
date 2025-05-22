@@ -16,15 +16,7 @@
         <tr v-for="item in data" :key="item.key" :class="{ hidden: item.show === false }">
           <td class="!text-white">{{ item.label }}</td>
           <td class="relative">
-            <span v-if="item?.key === 'chain'" class="flex items-center gap-2">
-              <NuxtIcon
-                :name="`logo/${getChainIconName(item.value)}`"
-                class="inline-flex text-xl"
-                filled
-                :title="item.value"
-              />
-              {{ getChainName(item.value) }}
-            </span>
+            <NftCollectionChain v-if="item?.key === 'chain'" :chain-id="item.value" />
             <div v-else-if="item?.key === 'password'" class="inline-block max-w-[80%]">
               <n-input :value="item.value" show-password-on="mousedown" size="tiny" type="password" readonly />
             </div>
@@ -54,13 +46,4 @@ defineProps({
   info: { type: String, default: '' },
   data: { type: Array<RecordData>, default: [] },
 });
-
-const { nftChains, chainsTestnet } = useCollection();
-
-function getChainIconName(collectionChain?: number) {
-  return [...nftChains, ...chainsTestnet].find(chain => chain.value === collectionChain)?.name;
-}
-function getChainName(collectionChain?: number) {
-  return [...nftChains, ...chainsTestnet].find(chain => chain.value === collectionChain)?.label;
-}
 </script>

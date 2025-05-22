@@ -7,7 +7,7 @@
       />
     </div>
 
-    <div class="flex h-fit w-full flex-col justify-center gap-6 md:max-w-60">
+    <div class="sticky top-4 flex h-fit w-full flex-col justify-center gap-6 md:max-w-60">
       <div class="card relative p-6">
         <PoweredBy class="font-semibold text-white-terciary" :icons="['logo/docker']" />
         <hr class="my-4 border-bg-lighter" />
@@ -22,7 +22,7 @@
       <div class="card relative p-6">
         <h6>{{ $t('simplet.deploy') }}</h6>
         <div class="mt-5 flex flex-col gap-4">
-          <Btn class="w-full" type="info" href="https://github.com/Apillon/nft-studio-template">
+          <Btn class="w-full" type="secondary" href="https://github.com/Apillon/nft-studio-template">
             <span class="icon-github mr-2"></span>
             <strong> {{ $t('simplet.viewCode') }}</strong>
           </Btn>

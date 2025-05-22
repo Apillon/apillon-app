@@ -16,7 +16,7 @@
             <Image :src="item.img" class="h-5 w-5 rounded-full object-cover" alt="" />
           </div>
           <Spinner v-if="item.loading" class="w-full" :size="16" :text="item.value" />
-          <component :is="item.component" v-else-if="item.component" v-bind="item.data" />
+          <component :is="item.component" v-else-if="item.component" v-bind="item.data">{{ item?.value }}</component>
           <TableLink v-else-if="item.link && item.value" class="w-full" :link="item.link" :text="`${item.value}`" />
           <TableEllipsis v-else-if="item.copy" class="w-full justify-between" :text="`${item.value}`" />
           <p v-else class="w-full">{{ item.value }}</p>

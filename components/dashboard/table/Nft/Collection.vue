@@ -50,15 +50,17 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       ],
       minWidth: 120,
       render(row: CollectionInterface) {
-        return h(
-          'span',
-          {},
-          {
-            default: () =>
-              te(`nft.chain.${EvmChain[row.chain]}`) ? t(`nft.chain.${EvmChain[row.chain]}`) : EvmChain[row.chain],
-          }
-        );
+        return h(resolveComponent('NftCollectionChain'), { chainId: row.chain });
       },
+    },
+    {
+      key: 'name',
+      title: t('nft.collection.name'),
+      className: [
+        'font-semibold',
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
+        { hidden: !selectedColumns.value.includes('name') },
+      ],
     },
     {
       key: 'symbol',
@@ -67,19 +69,8 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
         { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
         { hidden: !selectedColumns.value.includes('symbol') },
       ],
-      render(row) {
-        return h('strong', {}, { default: () => row.symbol });
-      },
-    },
-    {
-      key: 'name',
-      title: t('nft.collection.name'),
-      className: [
-        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
-        { hidden: !selectedColumns.value.includes('name') },
-      ],
-      render(row) {
-        return h('strong', {}, { default: () => row.name });
+      render(row: CollectionInterface) {
+        return h('span', { class: 'uppercase !text-white-terciary' }, { default: () => row.symbol });
       },
     },
     {
@@ -115,7 +106,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
 
         return h(
           resolveComponent('TableLink'),
-          { link: contractLink(row.contractAddress, row.chain), text: row.contractAddress },
+          { link: contractLink(row.contractAddress, row.chain), text: truncateWallet(row.contractAddress) },
           ''
         );
       },
@@ -123,6 +114,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
     {
       key: 'baseUri',
       title: t('nft.collection.baseUri'),
+      minWidth: 120,
       className: { hidden: !selectedColumns.value.includes('baseUri') },
       render(row: CollectionInterface) {
         return h(resolveComponent('TableEllipsis'), { text: row.baseUri }, '');
@@ -160,7 +152,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       title: t('general.status'),
       className: { hidden: !selectedColumns.value.includes('collectionStatus') },
       render(row) {
-        return h(resolveComponent('NftCollectionStatus'), { collectionStatus: row.collectionStatus }, '');
+        return h(resolveComponent('NftCollectionStatus'), { status: row.collectionStatus }, '');
       },
     },
     {
@@ -267,7 +259,7 @@ const rowProps = (row: CollectionInterface) => {
 };
 
 function maxSupply(maxSupply: number) {
-  return maxSupply > 0 ? maxSupply : t('form.supplyTypes.unlimited');
+  return maxSupply > 0 ? maxSupply : '∞';
 }
 
 async function deleteCollection() {

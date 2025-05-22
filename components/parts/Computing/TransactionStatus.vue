@@ -1,34 +1,16 @@
 <template>
-  <n-tag
-    v-bind="$attrs"
-    :type="getComputingTransactionStatus(transactionStatus)"
-    :bordered="transactionStatus < ComputingTransactionStatus.CONFIRMED"
-    size="tiny"
-    round
-  >
-    <n-space
-      :class="transactionStatus < ComputingTransactionStatus.CONFIRMED ? 'text-body' : 'text-bg-dark'"
-      :size="0"
-      align="center"
-      :wrap="false"
-    >
-      <span class="mx-1 uppercase">
-        {{ $t(`computing.transaction.status.${transactionStatus}`) }}
-      </span>
-      <AnimationTyping v-if="transactionStatus < ComputingTransactionStatus.WORKER_SUCCESS" />
-    </n-space>
-  </n-tag>
+  <Tag v-if="status !== null" :animation="status < ComputingTransactionStatus.WORKER_SUCCESS" :type="getStatus(status)">
+    {{ $t(`computing.transaction.status.${status}`) }}
+  </Tag>
 </template>
 
 <script lang="ts" setup>
-import { ComputingTransactionStatus } from '~/lib/types/computing';
-
 defineProps({
-  transactionStatus: { type: Number as PropType<ComputingTransactionStatus>, default: 1 },
+  status: { type: Number as PropType<ComputingTransactionStatus>, default: 1 },
 });
 
 /** Transaction status */
-function getComputingTransactionStatus(status: number): TagType {
+function getStatus(status: number): TagType {
   switch (status) {
     case ComputingTransactionStatus.PENDING:
       return 'warning';

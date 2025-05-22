@@ -96,7 +96,7 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
       key: 'contractStatus',
       title: t('general.status'),
       render(row) {
-        return h(resolveComponent('ComputingContractStatus'), { contractStatus: row.contractStatus }, '');
+        return h(resolveComponent('ComputingContractStatus'), { status: row.contractStatus }, '');
       },
     },
     {

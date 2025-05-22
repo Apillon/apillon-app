@@ -1,35 +1,23 @@
 <template>
-  <n-tag
-    v-bind="$attrs"
-    :type="getDeploymentBuildStatus(buildStatus)"
-    :bordered="buildStatus === DeploymentBuildStatus.PENDING"
-    size="tiny"
-    round
+  <Tag
+    v-if="status !== null"
+    :animation="[DeploymentBuildStatus.PENDING, DeploymentBuildStatus.IN_PROGRESS].includes(status)"
+    :type="getStatus(status)"
   >
-    <n-space
-      :class="buildStatus === DeploymentBuildStatus.PENDING ? 'text-body' : 'text-bg-dark'"
-      :size="0"
-      align="center"
-      :wrap="false"
-    >
-      <span class="mx-1">{{ $t(`hosting.deploy.build-table.status.${buildStatus}`) }}</span>
-      <AnimationTyping
-        v-if="[DeploymentBuildStatus.PENDING, DeploymentBuildStatus.IN_PROGRESS].includes(buildStatus)"
-      />
-    </n-space>
-  </n-tag>
+    {{ $t(`hosting.deploy.build-table.status.${status}`) }}
+  </Tag>
 </template>
 
 <script lang="ts" setup>
 defineProps({
-  buildStatus: {
+  status: {
     type: Number as PropType<DeploymentBuildStatus>,
     default: DeploymentBuildStatus.PENDING,
   },
 });
 
 /** Deployment status */
-function getDeploymentBuildStatus(status: number): TagType {
+function getStatus(status: number): TagType {
   switch (status) {
     case DeploymentBuildStatus.PENDING:
       return 'info';

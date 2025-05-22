@@ -5,7 +5,7 @@
       {{ text }}
     </n-ellipsis>
     <button class="ml-2" @click="copyToClipboard(text)">
-      <span class="icon-copy" :class="color"></span>
+      <span class="icon-copy text-white-primary" :class="color"></span>
     </button>
   </div>
 </template>

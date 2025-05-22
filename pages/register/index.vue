@@ -6,7 +6,7 @@
     </h4>
 
     <!-- Links -->
-    <div class="my-8">
+    <div class="my-5">
       <span class="text-sm text-body">{{ $t('auth.signup.alreadyHaveAccount') }} </span>&nbsp;
       <Btn type="builders" size="tiny" inner-class="text-sm" :to="{ name: 'login' }">
         {{ $t('general.login') }}

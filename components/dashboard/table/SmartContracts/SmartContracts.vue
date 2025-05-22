@@ -78,7 +78,7 @@ const columns = computed<NDataTableColumns<DeployedContractInterface>>(() => {
       render(row: DeployedContractInterface) {
         return h(
           resolveComponent('TableLink'),
-          { link: contractLink(row.contractAddress, row.chain), text: row.contractAddress },
+          { link: contractLink(row.contractAddress, row.chain), text: truncateWallet(row.contractAddress) },
           ''
         );
       },
@@ -117,7 +117,7 @@ const columns = computed<NDataTableColumns<DeployedContractInterface>>(() => {
       title: t('smartContracts.table.contractStatus'),
       className: { hidden: !selectedColumns.value.includes('contractStatus') },
       render(row: DeployedContractInterface) {
-        return h(resolveComponent('SmartContractsStatusLabel'), { contractStatus: row.contractStatus }, '');
+        return h(resolveComponent('SmartContractsStatus'), { status: row.contractStatus }, '');
       },
     },
     {
