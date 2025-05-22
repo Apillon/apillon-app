@@ -44,7 +44,6 @@
 <script lang="ts" setup>
 import { useAccount } from '@wagmi/vue';
 import { createPublicClient, createWalletClient, custom, http } from 'viem';
-import { SmartContractStatus } from '~/lib/types/smartContracts';
 
 const props = defineProps({
   args: { type: Array<string | null>, default: null },

@@ -30,7 +30,7 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
         return h(
           resolveComponent('TableLink'),
           {
-            text: row.transactionHash,
+            text: truncateWallet(row.transactionHash),
             link: transactionLink(row.transactionHash, SubstrateChain.PHALA),
           },
           ''
@@ -48,7 +48,7 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
       key: 'transactionStatus',
       title: t('general.status'),
       render(row: TransactionInterface) {
-        return h(resolveComponent('ComputingTransactionStatus'), { transactionStatus: row.transactionStatus }, '');
+        return h(resolveComponent('ComputingTransactionStatus'), { status: row.transactionStatus }, '');
       },
     },
   ];

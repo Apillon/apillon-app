@@ -42,7 +42,7 @@ const createColumns = (): NDataTableColumns<DeploymentInterface> => {
       title: t('hosting.deploymentStatus'),
       key: 'deploymentStatus',
       render(row) {
-        return h(resolveComponent('HostingDeploymentStatus'), { deploymentStatus: row.deploymentStatus }, '');
+        return h(resolveComponent('HostingDeploymentStatus'), { status: row.deploymentStatus }, '');
       },
     },
     {

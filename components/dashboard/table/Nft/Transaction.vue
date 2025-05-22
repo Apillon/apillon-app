@@ -63,7 +63,7 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
           resolveComponent('TableLink'),
           {
             link: transactionLink(row.transactionHash, collectionStore.active.chain || row.chainId),
-            text: row.transactionHash,
+            text: truncateWallet(row.transactionHash),
           },
           ''
         );
@@ -80,7 +80,7 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
       key: 'transactionStatus',
       title: t('general.status'),
       render(row: TransactionInterface) {
-        return h(resolveComponent('NftTransactionStatus'), { transactionStatus: row.transactionStatus }, '');
+        return h(resolveComponent('NftTransactionStatus'), { status: row.transactionStatus }, '');
       },
     },
   ];

@@ -71,7 +71,7 @@ const columns = computed(() => [
     key: 'status',
     title: t('indexer.table.status'),
     render(row: IndexerBaseInterface) {
-      return h(resolveComponent('IndexerStatusLabel'), { indexerStatus: row.status }, '');
+      return h(resolveComponent('IndexerStatusLabel'), { status: row.status }, '');
     },
   },
   {

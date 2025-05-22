@@ -132,9 +132,9 @@ function renderOption(info: RenderOptionInfo) {
     return h(
       resolveComponent('Btn'),
       {
-        class: 'locked mt-2',
-        type: 'info',
-        size: props.collapsed ? 'small' : 'large',
+        class: 'locked mt-2 w-full',
+        type: 'primary',
+        size: props.collapsed ? 'small' : 'medium',
         onClick: () => {
           modalNewProjectVisible.value = true;
         },

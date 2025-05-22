@@ -7,7 +7,7 @@
       <div class="relative flex flex-col justify-between" :class="isRegister ? 'items-start' : 'w-full items-center'">
         <AuthHeader :class="{ 'justify-center': !isRegister }" />
 
-        <div class="relative w-full" :class="isRegister ? 'max-w-md md:px-4' : 'max-w-2xl md:px-6'">
+        <div class="relative w-full" :class="isRegister ? 'max-w-md' : 'max-w-2xl'">
           <div v-if="!isRegister" class="bg-ellipse absoluteCenter"></div>
           <router-view v-slot="{ Component, route }">
             <transition :name="(route.meta?.transition as string) || 'fadeBlur'" :duration="500">

@@ -1,27 +1,15 @@
 <template>
-  <n-tag v-bind="$attrs" :type="getStatus(status)" :bordered="status < SocialStatus.INACTIVE" size="tiny" round>
-    <n-space
-      :class="status < SocialStatus.INACTIVE ? 'text-body' : 'text-bg-dark'"
-      :size="0"
-      align="center"
-      :wrap="false"
-    >
-      <span v-if="$te(`social.chat.status.${status}`)" class="mx-1 uppercase">
-        {{ $t(`social.chat.status.${status}`) }}
-      </span>
-      <span v-else class="mx-1 uppercase">{{ SocialStatus[status].replaceAll('_', ' ') }}</span>
-
-      <AnimationTyping v-if="status < SocialStatus.INACTIVE" />
-    </n-space>
-  </n-tag>
+  <Tag v-if="status !== null" :animation="status < SocialStatus.INACTIVE" :type="getStatus(status)">
+    <span v-if="$te(`social.chat.status.${status}`)" class="mx-1 uppercase">
+      {{ $t(`social.chat.status.${status}`) }}
+    </span>
+    <span v-else class="mx-1 uppercase">{{ SocialStatus[status].replaceAll('_', ' ') }}</span>
+  </Tag>
 </template>
 
 <script lang="ts" setup>
 defineProps({
-  status: {
-    type: Number,
-    default: 0,
-  },
+  status: { type: Number, default: null },
 });
 
 /** Deployment status */

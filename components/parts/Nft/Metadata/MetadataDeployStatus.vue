@@ -1,26 +1,14 @@
 <template>
-  <n-tag
-    v-bind="$attrs"
+  <Tag
+    v-if="status !== null"
+    :animation="status < MetadataDeployStatus.UPLOAD_METADATA_TO_IPFS"
     :type="getStatus(status)"
-    :bordered="status < MetadataDeployStatus.UPLOAD_METADATA_TO_IPFS"
-    size="tiny"
-    round
   >
-    <n-space
-      :class="status < MetadataDeployStatus.UPLOAD_METADATA_TO_IPFS ? 'text-body' : 'text-bg-dark'"
-      :size="0"
-      align="center"
-      :wrap="false"
-    >
-      <span class="mx-1 uppercase">{{ $t(`nft.metadata.deployStatus.${status}`) }}</span>
-      <AnimationTyping v-if="status < MetadataDeployStatus.UPLOAD_METADATA_TO_IPFS" />
-    </n-space>
-  </n-tag>
+    {{ $t(`nft.metadata.deployStatus.${status}`) }}
+  </Tag>
 </template>
 
 <script lang="ts" setup>
-import { MetadataDeployStatus } from '~/lib/types/nft';
-
 defineProps({
   status: { type: Number as PropType<MetadataDeployStatus>, default: 0 },
 });

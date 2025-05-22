@@ -1,5 +1,5 @@
 <template>
-  <n-form ref="formRef" class="inline" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
+  <n-form ref="formRef" class="inline" size="large" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
     <!--  Email - hidden if email provided by props -->
     <div class="mb-8" :class="{ 'invisible absolute': email }">
       <n-form-item path="email" :show-label="false" :show-feedback="false">

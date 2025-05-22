@@ -316,9 +316,9 @@ const columns = computed<NDataTableColumns<BucketItemInterface>>(() => {
         if (!row.fileStatus) {
           return '';
         } else if (props.type === TableFilesType.HOSTING && row.fileStatus === FileStatus.UPLOADED_TO_S3) {
-          return h(resolveComponent('StorageFileStatus'), { fileStatus: FileStatus.UPLOAD_COMPLETED }, '');
+          return h(resolveComponent('StorageFileStatus'), { status: FileStatus.UPLOAD_COMPLETED }, '');
         } else {
-          return h(resolveComponent('StorageFileStatus'), { fileStatus: row.fileStatus }, '');
+          return h(resolveComponent('StorageFileStatus'), { status: row.fileStatus }, '');
         }
       },
     },

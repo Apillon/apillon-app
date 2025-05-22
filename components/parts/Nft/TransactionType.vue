@@ -1,9 +1,7 @@
 <template>
-  <n-tag v-bind="$attrs" :type="getTransactionType(transactionType)" :bordered="false" size="tiny" round>
-    <n-space class="text-bg-dark" :size="0" align="center" :wrap="false">
-      <span class="mx-1 uppercase">{{ $t(`nft.transaction.type.${transactionType}`) }}</span>
-    </n-space>
-  </n-tag>
+  <Tag v-if="transactionType !== null" :type="getTransactionType(transactionType)">
+    {{ $t(`nft.transaction.type.${transactionType}`) }}
+  </Tag>
 </template>
 
 <script lang="ts" setup>

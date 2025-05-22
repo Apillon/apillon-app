@@ -1,7 +1,9 @@
 <template>
   <div class="w-full text-center">
+    <NuxtIcon name="dashboard/pigeon" class="icon-auto mx-auto inline-block" filled />
+
     <!-- Heading -->
-    <h4 class="mb-2">{{ $t('auth.signup.checkEmail') }}</h4>
+    <h4 class="mb-2 mt-8">{{ $t('auth.signup.checkEmail') }}</h4>
     <p class="my-4 whitespace-pre-line">
       {{ $t('auth.signup.emailSent') }}
     </p>

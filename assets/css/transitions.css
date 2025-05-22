@@ -149,7 +149,7 @@
   transition: opacity 1s;
 }
 .fade-leave-active {
-  position: absolute;
+  @apply absolute left-0 top-0 w-full;
 }
 .fade-enter,
 .fade-enter-from,
@@ -172,7 +172,7 @@
     filter 0.5s;
 }
 .fadeBlur-leave-active {
-  position: absolute;
+  @apply absolute left-0 top-0 w-full;
 }
 .fadeBlur-enter,
 .fadeBlur-enter-from,

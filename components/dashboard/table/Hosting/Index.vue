@@ -103,7 +103,7 @@ const columns = computed<NDataTableColumns<WebsiteBaseInterface>>(() => {
         { hidden: !selectedColumns.value.includes('status') },
       ],
       render(row: WebsiteBaseInterface) {
-        return h(resolveComponent('HostingDeploymentStatus'), { deploymentStatus: row.lastDeploymentStatus });
+        return h(resolveComponent('HostingDeploymentStatus'), { status: row.lastDeploymentStatus });
       },
     },
     {

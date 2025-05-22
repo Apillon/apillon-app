@@ -10,7 +10,7 @@
       />
     </n-form-item>
 
-    <div v-show="!sendAgain" class="relative" :class="formErrors ? '-top-2' : 'mt-2'">
+    <div v-show="!sendAgain" class="relative" :class="formErrors ? '-top-2' : 'mt-0'">
       <n-form-item path="terms" :show-label="false" :show-feedback="formErrors && !formData.terms">
         <n-checkbox v-model:checked="formData.terms" size="medium" :label="termsLabel" />
       </n-form-item>
@@ -21,7 +21,7 @@
     </div>
 
     <n-form-item v-if="showCaptcha" path="captcha" :show-label="false">
-      <div class="block h-20 w-full">
+      <div class="block h-20 w-full" :class="{ 'mx-auto max-w-[302px]': sendAgain }">
         <Captcha @captcha-verified="onCaptchaVerified" />
       </div>
       <n-input v-model:value="formData.captcha" class="absolute hidden" />

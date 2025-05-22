@@ -35,10 +35,10 @@
       "43113": "Avalanche Sepolia",
       "43114": "Avalanche (Mainnet)",
       "44787": "Celo (Testnet)",
-      "80002": "Polygon Amoy",
-      "84532": "Base sepolia",
-      "421614": "Arbitrum One Sepolia",
-      "11155420": "Optimism Sepolia",
+      "80002": "Polygon Amoy (Testnet)",
+      "84532": "Base sepolia (Testnet)",
+      "421614": "Arbitrum One Sepolia (Testnet)",
+      "11155420": "Optimism Sepolia (Testnet)",
       "11155111": "Sepolia (Testnet)"
     },
     "chainType": {
