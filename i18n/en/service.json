@@ -51,7 +51,9 @@
       "info": "Turn any app into a Web3 powerhouse. Let users interact with crypto—without even knowing what a wallet is.",
       "integrationCount": "Number of integrations",
       "name": "Embedded Wallet",
+      "pricing": "20 credits",
       "walletCount": "Number of wallets",
+      "tags": ["Ready-to-use", "Customizable", "Open-source"],
       "usage": ["Web3 wallets", "fully decentralized", "easy integration", "multi-chain support"],
       "introduction": [
         { "title": "Web2 logins, Web3 power", "content": "Users sign in easily—Web3 runs in the background." },
@@ -88,13 +90,6 @@
       "name": "Indexing Service",
       "usage": ["real-time data sync", "powerful APIs", "on-chain data querying"]
     },
-    "rpc": {
-      "description": "Reliable and secure remote procedure call service for blockchain interaction. \nLow latency, high availability, multi-chain support.",
-      "keyCount": "Number of keys",
-      "name": "RPC Service",
-      "selectedNetworkCount": "Number of selected networks",
-      "usage": ["low latency", "high availability", "multi-chain support"]
-    },
     "nft": {
       "collectionCount": "Number of collections",
       "description": "Deploy an NFT collection with just a few clicks and retain the ownership of your files.",
@@ -113,6 +108,13 @@
         }
       ]
     },
+    "rpc": {
+      "description": "Reliable and secure remote procedure call service for blockchain interaction. \nLow latency, high availability, multi-chain support.",
+      "keyCount": "Number of keys",
+      "name": "RPC Service",
+      "selectedNetworkCount": "Number of selected networks",
+      "usage": ["low latency", "high availability", "multi-chain support"]
+    },
     "social": {
       "description": "Connect and communicate with freedom. Experience social networking with secure and decentralized chat functionality.",
       "name": "Social",
@@ -127,8 +129,10 @@
       "fileCount": "Number of files",
       "info": "Your files, forever. Store NFT metadata, dApp assets, and user files on a network that never goes down. No middlemen, no limits.",
       "name": "Storage",
+      "pricing": "Start with 100 credits, then check pricing",
       "website": "Main Website Storage",
       "usage": ["storage buckets", "different media", "drag-n-drop ui", "ipfs"],
+      "tags": ["Ready-to-use", "Customizable", "Open-source"],
       "introduction": [
         { "title": "Your files, always backed up", "content": "Stored safely worldwide, no single point of attack." },
         { "title": "Scales with your project", "content": "Fast, secure storage that grows as you do." },

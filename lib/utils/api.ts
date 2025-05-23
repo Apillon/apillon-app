@@ -112,9 +112,9 @@ class Api {
         UserError.USER_INVALID_LOGIN,
         UserError.USER_IS_NOT_AUTHENTICATED,
       ];
-      console.log(response.status, error.message, !loginMsgs.includes(error.message || ''));
       if (
         (response.status === 401 && !loginMsgs.includes(error.message || '')) ||
+        (response.status === 400 && error.message === UserError.USER_AUTH_TOKEN_IS_INVALID) ||
         (response.status === 500 && error.message === UserError.AUTH_TOKEN_EXPIRED) ||
         (response.status === 500 && error.message === UserError.INVALID_SIGNATURE) ||
         (response.status === 500 && error.message === UserError.JWT_TOKEN_EXPIRED) ||

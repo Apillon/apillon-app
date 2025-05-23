@@ -21,15 +21,13 @@
         v-if="collectionStore.hasCollections"
         size="medium"
         :disabled="authStore.isAdmin()"
-        @click="modalCreateCollectionVisible = true"
+        @click="collectionStore.modalCreateVisible = true"
       >
         <span class="icon-create-folder mr-2 text-xl text-primary"></span>
         <span class="text-primary">{{ $t('nft.collection.new') }}</span>
       </n-button>
     </n-space>
   </n-space>
-
-  <ModalNft v-model:show="modalCreateCollectionVisible" />
 </template>
 
 <script lang="ts" setup>
@@ -39,5 +37,4 @@ defineProps({
 
 const authStore = useAuthStore();
 const collectionStore = useCollectionStore();
-const modalCreateCollectionVisible = ref<boolean>(false);
 </script>

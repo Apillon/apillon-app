@@ -5,7 +5,7 @@
       <span v-if="info" class="text-[11px]"> ({{ info }})</span>
     </div>
     <template v-if="!link.includes('null')">
-      <div v-if="copy" class="card-dark flex items-center justify-between rounded-lg px-4 py-2 text-body">
+      <div v-if="copy" class="card-dark flex items-center justify-between rounded-lg px-4 py-[6px] text-body">
         <n-ellipsis class="align-bottom" :line-clamp="1">
           <a :href="link" target="_blank">
             {{ link }}

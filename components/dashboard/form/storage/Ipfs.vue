@@ -22,24 +22,31 @@
     <!--  Form submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('storage.ipfs.generateLink')" />
-      <Btn type="primary" class="mt-2 w-full" :loading="loading" @click="handleSubmit">
+      <Btn
+        class="mt-2"
+        :class="size === 'large' ? '!w-auto' : 'w-full'"
+        :size="size"
+        type="primary"
+        :loading="loading"
+        @click="handleSubmit"
+      >
         {{ $t('storage.ipfs.generateLink') }}
       </Btn>
     </n-form-item>
 
-    <div class="min-h-[5rem]">
-      <HostingPreviewLink
-        v-if="ipfsLink"
-        :loading="loading"
-        :link="ipfsLink"
-        :title="$t('storage.ipfs.ipfsLink')"
-        :info="$t('storage.ipfs.ipfsLinkInfo')"
-      />
-    </div>
+    <HostingPreviewLink
+      v-if="ipfsLink"
+      :loading="loading"
+      :link="ipfsLink"
+      :title="$t('storage.ipfs.ipfsLink')"
+      :info="$t('storage.ipfs.ipfsLinkInfo')"
+    />
   </n-form>
 </template>
 
 <script lang="ts" setup>
+import type { Size } from 'naive-ui/es/button/src/interface';
+
 type FormIpfs = {
   cid: string;
   type: string | null;
@@ -48,6 +55,10 @@ enum IpfsType {
   CID = 'CID',
   IPNS = 'IPNS',
 }
+
+defineProps({
+  size: { type: String as PropType<Size>, default: 'medium' },
+});
 
 const message = useMessage();
 const { t } = useI18n();

@@ -20,6 +20,9 @@
       </div>
     </transition>
   </div>
+  <div v-else-if="empty && $slots.empty">
+    <slot name="empty"> </slot>
+  </div>
   <div v-else>
     <div v-if="$slots.heading" ref="headingRef">
       <slot name="heading"> </slot>
@@ -65,6 +68,7 @@
 
 <script lang="ts" setup>
 const props = defineProps({
+  empty: { type: Boolean, default: false },
   fullHeight: { type: Boolean, default: false },
   loading: { type: Boolean, default: false },
   learnCollapsible: { type: Boolean, default: false },

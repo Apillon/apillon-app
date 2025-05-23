@@ -71,18 +71,32 @@
   <SidebarDetails v-model:show="modalDetailsVisible" v-bind="$attrs">
     <slot name="details" />
 
-    <template v-if="technologies.length">
-      <PoweredBy :icons="technologies" />
-      <hr class="my-10 border-bg-lighter" />
-    </template>
-    <div v-if="docs || $slots.links" class="flex items-center justify-between">
-      <span class="text-xs">{{ $t('dashboard.quickLinks') }}</span>
-      <div class="flex items-center gap-4">
-        <slot name="links" />
-        <BtnDocumentation v-if="docs" :href="docs" />
-      </div>
-    </div>
+    <PoweredBy v-if="technologies.length" :icons="technologies" />
+    <PoweredBy
+      v-else-if="[ServiceTypeName.HOSTING, ServiceTypeName.STORAGE].includes($attrs?.service as ServiceTypeName)"
+      :icons="['logo/crust', 'library/python', 'library/javascript', 'library/nextjs']"
+    />
+    <PoweredBy v-else-if="$attrs?.service === ServiceTypeName.EMBEDDED_WALLET">
+      <NuxtIcon name="logo/oasis_logo" class="icon-auto h-6 w-14 text-white" filled />
+    </PoweredBy>
+    <PoweredBy v-else-if="$attrs?.service === ServiceTypeName.NFT">
+      <NftChains :chains="enumKeys(EvmChainMainnet)" />
+    </PoweredBy>
+    <hr v-if="technologies.length || $attrs?.service" class="my-10 border-bg-lighter" />
+
+    <QuickLinks v-if="docs || $slots.links">
+      <slot name="links" />
+      <BtnDocumentation v-if="docs" :href="docs" />
+    </QuickLinks>
+
     <slot name="detailsAdditional" />
+
+    <template #detailsIpfsGateway>
+      <slot name="detailsIpfsGateway" />
+    </template>
+    <template #detailsGenerate>
+      <slot name="detailsGenerate" />
+    </template>
 
     <Notification v-if="info" type="warning" class="mt-10 w-full">
       {{ info }}

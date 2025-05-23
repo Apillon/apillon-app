@@ -1,43 +1,36 @@
 <template>
-  <ServiceEmpty
-    v-if="!dataStore.project.selected"
-    :name="ServiceTypeName.COMPUTING.toLowerCase()"
-    :service="ServiceTypeName.COMPUTING"
-    docs="https://wiki.apillon.io/web3-services/7-web3-compute.html"
-  />
-  <Dashboard v-else :loading="pageLoading">
+  <Dashboard :empty="!dataStore.project.selected || !contractStore.hasContracts" :loading="pageLoading">
+    <template #empty>
+      <ServiceEmpty
+        :name="ServiceTypeName.COMPUTING.toLowerCase()"
+        :service="ServiceTypeName.COMPUTING"
+        docs="https://wiki.apillon.io/web3-services/7-web3-compute.html"
+      >
+        <template #actions>
+          <Btn size="large" type="primary" @click="showModalCreateContract()">
+            {{ $t('computing.contract.create') }}
+          </Btn>
+        </template>
+      </ServiceEmpty>
+    </template>
     <template #heading>
       <HeaderComputing />
     </template>
-    <slot>
-      <n-space v-if="contractStore.hasContracts" class="pb-8" :size="32" vertical>
-        <ActionsComputingContract />
-        <TableComputingContract :contracts="contractStore.items" />
-      </n-space>
-      <Empty
-        v-else
-        :title="$t('computing.contract.empty')"
-        :info="$t('computing.contract.emptyInfo')"
-        icon="storage/empty"
-      >
-        <Btn type="primary" @click="showModalCreateContract()">
-          {{ $t('computing.contract.createFirst') }}
-        </Btn>
-      </Empty>
 
-      <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnHide">
-        {{ $t('w3Warn.contract.new') }}
-      </W3Warn>
-
-      <!-- Modal - Create Contract -->
-      <modal v-model:show="modalCreateContractVisible" :title="$t('computing.contract.new')">
-        <FormComputingContract
-          @submit-success="modalCreateContractVisible = false"
-          @create-success="onContractCreated"
-        />
-      </modal>
-    </slot>
+    <n-space class="pb-8" :size="32" vertical>
+      <ActionsComputingContract />
+      <TableComputingContract :contracts="contractStore.items" />
+    </n-space>
   </Dashboard>
+
+  <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnHide">
+    {{ $t('w3Warn.contract.new') }}
+  </W3Warn>
+
+  <!-- Modal - Create Contract -->
+  <modal v-model:show="modalCreateContractVisible" :title="$t('computing.contract.new')">
+    <FormComputingContract @submit-success="modalCreateContractVisible = false" @create-success="onContractCreated" />
+  </modal>
 </template>
 
 <script lang="ts" setup>

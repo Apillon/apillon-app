@@ -1,61 +1,43 @@
 <template>
-  <ServiceEmpty
-    v-if="!dataStore.project.selected"
-    :name="ServiceTypeName.STORAGE.toLowerCase()"
-    :service="ServiceTypeName.STORAGE"
-    docs="https://wiki.apillon.io/web3-services/2-web3-storage.html"
-  />
-  <Dashboard v-else :loading="pageLoading">
-    <template #heading>
-      <Heading
-        :headline="$t('dashboard.nav.storage')"
+  <Dashboard :loading="pageLoading" :empty="!dataStore.project.selected || !bucketStore.hasBuckets">
+    <template #empty>
+      <ServiceEmpty
         docs="https://wiki.apillon.io/web3-services/2-web3-storage.html"
-        :info="$t('w3Warn.bucket.new')"
+        :name="ServiceTypeName.STORAGE.toLowerCase()"
         :service="ServiceTypeName.STORAGE"
+        :image="FilesPNG"
       >
-        <template #details>
-          <StorageProgress
-            :key="storageStore.info.usedStorage"
-            :size="storageStore.info.usedStorage"
-            :max-size="storageStore.info.availableStorage"
-          />
-          <hr class="my-10 border-bg-lighter" />
+        <template #actions>
+          <Btn size="large" type="primary" @click="createNewBucket">
+            {{ $t('storage.bucket.new') }}
+          </Btn>
         </template>
-
-        <template #submenu>
-          <MenuStorage />
-        </template>
-      </Heading>
+      </ServiceEmpty>
     </template>
-    <slot>
-      <TableStorageBucket v-if="bucketStore.hasBuckets" :buckets="bucketStore.items" />
-      <Empty
-        v-else
-        :title="$t('storage.bucket.noActiveService')"
-        :info="$t('storage.bucket.attachService')"
-        icon="storage/empty"
-      >
-        <Btn type="primary" @click="createNewBucket">
-          {{ $t('storage.bucket.new') }}
-        </Btn>
-      </Empty>
+    <template #heading>
+      <HeaderStorage />
+    </template>
 
-      <W3Warn v-model:show="showModalW3Warn" @submit="onModalW3WarnHide">
-        {{ $t('w3Warn.bucket.new') }}
-      </W3Warn>
-
-      <!-- Modal - Create bucket -->
-      <modal v-model:show="showModalNewBucket" :title="$t('project.newBucket')">
-        <FormStorageBucket @submit-success="showModalNewBucket = false" @create-success="onBucketCreated" />
-      </modal>
-    </slot>
+    <TableStorageBucket :buckets="bucketStore.items" />
   </Dashboard>
+
+  <W3Warn v-model:show="showModalW3Warn" @submit="onModalW3WarnHide">
+    {{ $t('w3Warn.bucket.new') }}
+  </W3Warn>
+
+  <!-- Modal - Create bucket -->
+  <modal v-model:show="showModalNewBucket" :title="$t('project.newBucket')">
+    <FormStorageBucket @submit-success="showModalNewBucket = false" @create-success="onBucketCreated" />
+  </modal>
 </template>
 
 <script lang="ts" setup>
+import FilesPNG from '/assets/images/storage/file.png';
+
 const { t } = useI18n();
 const router = useRouter();
 const dataStore = useDataStore();
+const ipfsStore = useIpfsStore();
 const bucketStore = useBucketStore();
 const storageStore = useStorageStore();
 const pageLoading = ref<boolean>(true);
@@ -70,6 +52,7 @@ onMounted(async () => {
   await dataStore.waitOnPromises();
   await storageStore.getStorageInfo();
   await bucketStore.getBuckets();
+  ipfsStore.getIpfsInfo(dataStore.projectUuid);
 
   pageLoading.value = false;
 });

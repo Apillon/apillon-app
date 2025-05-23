@@ -1,34 +1,31 @@
 <template>
-  <ServiceEmpty
-    v-if="!dataStore.project.selected"
-    :name="ServiceTypeName.NFT.toLowerCase()"
-    :service="ServiceTypeName.NFT"
-    :image="NftCardsPNG"
-    docs="https://wiki.apillon.io/web3-services/4-nfts.html"
-    video-id="qQJnuvUo-xo"
-    :video-chapters="[
-      { time: '00:00', title: 'Intro' },
-      { time: '00:35', title: 'Dashboard' },
-      { time: '02:53', title: 'NFT Collection' },
-      { time: '05:20', title: 'Minting' },
-      { time: '07:15', title: 'Website' },
-    ]"
-  >
-  </ServiceEmpty>
-  <Dashboard v-else :loading="pageLoading">
+  <Dashboard :empty="!dataStore.project.selected || !collectionStore.hasCollections" :loading="pageLoading">
+    <template #empty>
+      <ServiceEmpty
+        docs="https://wiki.apillon.io/web3-services/4-nfts.html"
+        :image="NftCardsPNG"
+        :name="ServiceTypeName.NFT.toLowerCase()"
+        :service="ServiceTypeName.NFT"
+      >
+        <template #actions>
+          <Btn size="large" type="primary" @click="collectionStore.modalCreateVisible = true">
+            {{ $t('nft.collection.new') }}
+          </Btn>
+        </template>
+      </ServiceEmpty>
+    </template>
     <template #heading>
       <HeaderNft />
     </template>
-    <slot>
-      <n-space class="pb-8" :size="32" vertical>
-        <ActionsNft />
-        <TableNftCollection :collections="collectionStore.items" :search="collectionStore.search" />
-      </n-space>
-    </slot>
+
+    <n-space class="pb-8" :size="32" vertical>
+      <ActionsNft />
+      <TableNftCollection :collections="collectionStore.items" :search="collectionStore.search" />
+    </n-space>
   </Dashboard>
 
   <!-- Modal - Collection Transfer -->
-  <ModalNft v-model:show="modalCreateCollectionVisible" />
+  <ModalNft v-model:show="collectionStore.modalCreateVisible" />
 </template>
 
 <script lang="ts" setup>
@@ -41,7 +38,6 @@ const storageStore = useStorageStore();
 const collectionStore = useCollectionStore();
 
 const pageLoading = ref<boolean>(true);
-const modalCreateCollectionVisible = ref<boolean>(false);
 
 let collectionInterval: any = null as any;
 

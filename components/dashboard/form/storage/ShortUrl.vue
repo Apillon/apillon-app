@@ -17,7 +17,14 @@
     <!--  Form submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('storage.shortUrl.generateLink')" />
-      <Btn type="primary" class="mt-2 w-full" :loading="loading" @click="handleSubmit">
+      <Btn
+        class="mt-2"
+        :class="size === 'large' ? '!w-auto' : 'w-full'"
+        :size="size"
+        type="primary"
+        :loading="loading"
+        @click="handleSubmit"
+      >
         {{ $t('storage.shortUrl.generateLink') }}
       </Btn>
     </n-form-item>
@@ -48,14 +55,17 @@
 </template>
 
 <script lang="ts" setup>
+import type { Size } from 'naive-ui/es/button/src/interface';
+
 type FormIpfs = {
   targetUrl: string | null;
 };
 
 const emit = defineEmits(['close', 'submitSuccess']);
 const props = defineProps({
-  targetUrl: { type: String, default: null },
   autoSubmit: { type: Boolean, default: false },
+  size: { type: String as PropType<Size>, default: 'medium' },
+  targetUrl: { type: String, default: null },
 });
 
 const message = useMessage();

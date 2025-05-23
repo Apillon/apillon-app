@@ -1,37 +1,35 @@
 <template>
-  <ServiceEmpty
-    v-if="!dataStore.project.selected"
-    docs="https://wiki.apillon.io/web3-services/3-web3-hosting.html"
-    :name="ServiceTypeName.HOSTING.toLowerCase()"
-    :service="ServiceTypeName.HOSTING"
-    :image="WebsitePNG"
-  />
-  <Dashboard v-else :loading="pageLoading">
+  <Dashboard :empty="!dataStore.project.selected || !websiteStore.hasWebsites" :loading="pageLoading">
+    <template #empty>
+      <ServiceEmpty
+        docs="https://wiki.apillon.io/web3-services/3-web3-hosting.html"
+        :name="ServiceTypeName.HOSTING.toLowerCase()"
+        :service="ServiceTypeName.HOSTING"
+        :image="WebsitePNG"
+      >
+        <template #actions>
+          <Btn size="large" type="primary" @click="createNewWebsite">
+            {{ $t('hosting.website.addFirst') }}
+          </Btn>
+        </template>
+      </ServiceEmpty>
+    </template>
     <template #heading>
       <HeaderHosting />
     </template>
-    <slot>
-      <n-space v-if="websiteStore.hasWebsites" class="pb-8" :size="32" vertical>
-        <ActionsHosting v-if="websiteStore.hasWebsites" />
-        <TableHosting :websites="websiteStore.items" />
-      </n-space>
-      <Empty v-else :title="$t('hosting.web3Hosting')" :info="$t('hosting.web3HostingEnable')" icon="storage/empty">
-        <div class="flex flex-col gap-4">
-          <StorageGithubProjectConfig class="locked" size="small" />
-          <Btn type="primary" @click="createNewWebsite">
-            {{ $t('hosting.website.addFirst') }}
-          </Btn>
-        </div>
-      </Empty>
 
-      <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnHide">
-        {{ $t('w3Warn.hosting.upload') }}
-      </W3Warn>
-
-      <!-- Modal - Create Website -->
-      <HostingModal v-model:show="showModalNewWebsite" :title="$t('hosting.website.new')" />
-    </slot>
+    <n-space class="pb-8" :size="32" vertical>
+      <ActionsHosting />
+      <TableHosting :websites="websiteStore.items" />
+    </n-space>
   </Dashboard>
+
+  <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnHide">
+    {{ $t('w3Warn.hosting.upload') }}
+  </W3Warn>
+
+  <!-- Modal - Create Website -->
+  <HostingModal v-model:show="showModalNewWebsite" :title="$t('hosting.website.new')" />
 </template>
 
 <script lang="ts" setup>
