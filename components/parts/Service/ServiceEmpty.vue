@@ -7,10 +7,10 @@
 
         <div class="mt-2 flex flex-wrap gap-2">
           <Tag
-            v-for="(item, key) in translateItems(`service.${service}.tags`)"
+            v-for="(item, key) in translateItems(`service.${name}.tags`)"
             :key="key"
             size="small"
-            :type="item.includes('No code') ? 'success' : 'default'"
+            :type="key === 0 ? 'success' : 'default'"
           >
             {{ item }}
           </Tag>
@@ -22,10 +22,13 @@
           <NftChains :chains="enumKeys(EvmChainMainnet)" />
         </div>
         <PoweredBy
-          v-else-if="service === ServiceTypeName.HOSTING"
+          v-else-if="[ServiceTypeName.HOSTING, ServiceTypeName.STORAGE].includes(service)"
           class="font-semibold text-white-terciary"
           :icons="['logo/crust', 'library/python', 'library/javascript', 'library/nextjs']"
         />
+        <PoweredBy v-else-if="service === ServiceTypeName.EMBEDDED_WALLET" class="font-semibold text-white-terciary">
+          <NuxtIcon name="logo/oasis_logo" class="icon-auto h-6 w-14 text-white" filled />
+        </PoweredBy>
         <hr class="my-4 w-full border-bg-lighter" />
 
         <div class="flex items-center justify-between">
@@ -35,7 +38,7 @@
               <strong>{{ $t(`service.${name}.pricing`) }}</strong>
             </p>
 
-            <ModalCreditCosts :service="service" show-create-collection>
+            <ModalCreditCosts :service="service" :show-create-collection="service === ServiceTypeName.NFT">
               <template #button>
                 <span class="underline">{{ $t('dashboard.details') }} </span>
               </template>
@@ -60,8 +63,8 @@
               <span class="mt-2 block">{{ i.content }}</span>
             </div>
           </div>
-          <div v-if="image" class="lg:w-[44%]">
-            <img :src="image" :alt="name" width="370" height="280" />
+          <div v-if="image" class="text-center lg:w-[44%]">
+            <img :src="image" class="mx-auto" height="280" :alt="name" />
           </div>
           <div v-else class="card card-lighter pb-9 pl-8 pt-8 text-right lg:w-[44%]">
             <NuxtIcon name="nft/new_collection" class="icon-auto ml-auto inline-block" filled />
@@ -72,7 +75,8 @@
           <Btn
             v-if="videoId"
             class="no-underline"
-            type="link"
+            size="large"
+            type="tertiary"
             inner-class="flex gap-2 items-center"
             @click="showVideo = true"
           >
@@ -82,10 +86,14 @@
           <span v-else></span>
 
           <div class="flex justify-between gap-2">
-            <BtnDocumentation v-if="docs" :href="docs" />
-            <slot name="actions">
-              <Btn @click="modalCreateProjectVisible = true">{{ $t('dashboard.startBuilding') }}</Btn>
-            </slot>
+            <BtnDocumentation v-if="docs" class="flex-1" :href="docs" size="large" />
+
+            <div class="flex-1 lg:min-w-48">
+              <slot v-if="dataStore.project.selected" name="actions"> </slot>
+              <Btn v-else size="large" @click="modalCreateProjectVisible = true">
+                {{ $t('dashboard.startBuilding') }}
+              </Btn>
+            </div>
           </div>
         </div>
       </div>
@@ -116,6 +124,8 @@
       </div>
     </div>
 
+    <slot />
+
     <!-- Modal - Create new project -->
     <modal v-model:show="modalCreateProjectVisible" :title="$t('project.new')">
       <FormProject @submit-success="modalCreateProjectVisible = false" @close="modalCreateProjectVisible = false" />
@@ -141,6 +151,7 @@ const props = defineProps({
   videoChapters: { type: Array<VideoChapter>, default: null },
 });
 
+const dataStore = useDataStore();
 const { generateIntroduction } = useService();
 const introduction = generateIntroduction(props.name);
 

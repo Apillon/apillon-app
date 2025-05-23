@@ -8,9 +8,9 @@ export default function useWallet() {
   const authStore = useAuthStore();
 
   /** Evm wallet - wagmi */
-  const { connectAsync } = useConnect();
   const { data: walletClient, refetch } = useConnectorClient();
   const { address, connector } = useAccount();
+  const { connectAsync } = useConnect();
 
   async function connectAndSign() {
     await sleep(200);

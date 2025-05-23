@@ -6,6 +6,7 @@ export const useCollectionStore = defineStore('collection', {
     items: [] as CollectionInterface[],
     loading: false,
     metadataDeploys: [] as MetadataDeployInterface[],
+    modalCreateVisible: false,
     pagination: createPagination(false),
     search: '',
     quotaReached: undefined as boolean | undefined,

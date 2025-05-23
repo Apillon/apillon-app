@@ -1,5 +1,5 @@
 <template>
-  <n-space class="pb-8" :size="16" vertical>
+  <n-space :size="16" vertical>
     <HostingPreviewLink
       :link="ipfsGateway"
       :title="$t('storage.ipfs.title')"

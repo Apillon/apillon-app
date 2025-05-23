@@ -1,6 +1,9 @@
 <template>
   <transition name="slide-down" appear>
-    <div class="p-4 pb-0 sm:px-8" :class="{ 'bg-bg-light/65': dataStore.project.selected }">
+    <div
+      class="p-4 pb-0 sm:px-8"
+      :class="{ 'bg-bg-light/65': dataStore.project.selected && currentRoute.name != 'dashboard' }"
+    >
       <div class="flex items-center justify-between">
         <div class="flex items-center pr-2 sm:pr-4">
           <small v-if="pageTitle">{{ pageTitle }}</small>
@@ -36,6 +39,7 @@
 const emit = defineEmits(['toggleSidebar', 'toggleChat']);
 
 const { t } = useI18n();
+const { currentRoute } = useRouter();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const pageTitle = useState('pageTitle');

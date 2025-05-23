@@ -126,7 +126,7 @@
     },
     "shortUrl": {
       "btnCopy": "I've copied short URL",
-      "generateLink": "Generate",
+      "generateLink": "Generate short URL",
       "generateShortLink": "Generate a Short URL",
       "shortUrlInfo": "Please save this generated shorthand URL.",
       "targetUrl": "Target URL",

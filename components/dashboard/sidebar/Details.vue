@@ -32,6 +32,12 @@
       <n-tab-pane v-if="demo" :name="Tabs.DEMO">
         <DemoVideo :video-id="demo" />
       </n-tab-pane>
+      <n-tab-pane v-if="$slots.detailsIpfsGateway" :name="$t('storage.ipfs.title')">
+        <slot name="detailsIpfsGateway" />
+      </n-tab-pane>
+      <n-tab-pane v-if="$slots.detailsGenerate" :name="$t('storage.shortUrl.title')">
+        <slot name="detailsGenerate" />
+      </n-tab-pane>
     </n-tabs>
   </Drawer>
 </template>

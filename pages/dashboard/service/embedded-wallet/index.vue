@@ -1,11 +1,26 @@
 <template>
-  <ServiceEmpty
-    v-if="!dataStore.project.selected"
-    :name="toCamelCase(Feature.EMBEDDED_WALLET)"
-    :service="ServiceTypeName.EMBEDDED_WALLET"
-    docs="https://wiki.apillon.io/web3-services/7-web3-compute.html"
-  />
-  <Dashboard v-else :loading="pageLoading">
+  <Dashboard :empty="!dataStore.project.selected || !embeddedWalletStore.hasEmbeddedWallets" :loading="pageLoading">
+    <template #empty>
+      <ServiceEmpty
+        :name="toCamelCase(Feature.EMBEDDED_WALLET)"
+        :service="ServiceTypeName.EMBEDDED_WALLET"
+        docs="https://wiki.apillon.io/web3-services/7-web3-compute.html"
+      >
+        <template #actions>
+          <Btn
+            inner-class="flex items-center justify-center "
+            size="large"
+            @click="modalNewEmbeddedWalletVisible = true"
+          >
+            <span>{{ $t('embeddedWallet.createNew') }}</span>
+          </Btn>
+        </template>
+        <!-- Modal - Create new EW -->
+        <modal v-model:show="modalNewEmbeddedWalletVisible" :title="$t('embeddedWallet.createNew')">
+          <FormEmbeddedWallet @submit-success="modalNewEmbeddedWalletVisible = false" />
+        </modal>
+      </ServiceEmpty>
+    </template>
     <template #heading>
       <Heading
         :headline="$t('dashboard.nav.embeddedWallet')"
@@ -19,15 +34,10 @@
       </Heading>
     </template>
 
-    <slot>
-      <div class="pb-8">
-        <n-space v-if="embeddedWalletStore.hasEmbeddedWallets" :size="32" vertical>
-          <ActionsEmbeddedWallet />
-          <TableEmbeddedWallet />
-        </n-space>
-        <EmbeddedWalletInstructions v-else />
-      </div>
-    </slot>
+    <n-space class="pb-8" :size="32" vertical>
+      <ActionsEmbeddedWallet />
+      <TableEmbeddedWallet />
+    </n-space>
   </Dashboard>
 </template>
 
@@ -37,6 +47,7 @@ const dataStore = useDataStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
 
 const pageLoading = ref<boolean>(true);
+const modalNewEmbeddedWalletVisible = ref<boolean>(false);
 
 useHead({
   title: t('embeddedWallet.title'),
