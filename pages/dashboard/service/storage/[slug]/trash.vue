@@ -1,7 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderBucket />
+      <HeaderStorageBucket />
     </template>
     <slot>
       <TableStorageTrash v-if="fileStore.hasDeletedFiles" />
