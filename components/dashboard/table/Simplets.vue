@@ -41,7 +41,6 @@ const { t } = useI18n();
 const router = useRouter();
 const message = useMessage();
 const authStore = useAuthStore();
-const dataStore = useDataStore();
 const simpletStore = useSimpletStore();
 
 const { getSimpletType } = useSimplet();
@@ -50,7 +49,6 @@ const { availableColumns, selectedColumns, initTableColumns, handleColumnChange 
 );
 const pagination = reactive(props.archive ? simpletStore.archive.pagination : simpletStore.pagination);
 
-const showModalEditSimplet = ref<boolean>(false);
 const showModalDeleteSimplet = ref<boolean>(false);
 
 const columns = computed<NDataTableColumns<SimpletInterface>>(() => {
@@ -103,17 +101,17 @@ const columns = computed<NDataTableColumns<SimpletInterface>>(() => {
         return h('span', {}, { default: () => dateTimeToDate(row.createTime) });
       },
     },
-    {
-      key: 'type',
-      title: t('general.type'),
-      className: [
-        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
-        { hidden: !selectedColumns.value.includes('type') },
-      ],
-      render(row: SimpletInterface) {
-        return getSimpletType(row.simplet_uuid);
-      },
-    },
+    // {
+    //   key: 'type',
+    //   title: t('general.type'),
+    //   className: [
+    //     { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
+    //     { hidden: !selectedColumns.value.includes('type') },
+    //   ],
+    //   render(row: SimpletInterface) {
+    //     return getSimpletType(row.simplet_uuid);
+    //   },
+    // },
     {
       key: 'actions',
       align: 'right',

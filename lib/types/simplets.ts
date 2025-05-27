@@ -14,10 +14,9 @@ export enum SimpletCreateStep {
   TYPE = 1,
   COLLECTION = 2,
   FORM = 3,
-  SMTP = 4,
-  REVIEW = 5,
-  DEPLOYING = 6,
-  DEPLOYED = 7,
+  REVIEW = 4,
+  DEPLOYING = 5,
+  DEPLOYED = 6,
 }
 
 export enum ResourceStatus {

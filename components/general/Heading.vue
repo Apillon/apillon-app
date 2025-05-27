@@ -91,10 +91,10 @@
 
     <slot name="detailsAdditional" />
 
-    <template #detailsIpfsGateway>
+    <template v-if="$slots.detailsIpfsGateway" #detailsIpfsGateway>
       <slot name="detailsIpfsGateway" />
     </template>
-    <template #detailsGenerate>
+    <template v-if="$slots.detailsGenerate" #detailsGenerate>
       <slot name="detailsGenerate" />
     </template>
 
