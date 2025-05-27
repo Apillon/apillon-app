@@ -166,6 +166,7 @@ const prepareVariablesFE = (): EnvVar[] =>
     { key: 'NUXT_PUBLIC_CLAIM_START', value: simpletStore.form.startTime || 0 },
     { key: 'NUXT_PUBLIC_CLAIM_END', value: simpletStore.form.endTime || 0 },
     { key: 'NUXT_PUBLIC_COLLECTION_ADDRESS', value: simpletStore.form.collection?.contractAddress },
+    { key: 'NUXT_PUBLIC_SMTP_HOST', value: simpletStore.form.smtp.host },
     simpletStore.form.collectionLogo
       ? [{ key: 'NUXT_PUBLIC_COLLECTION_LOGO', value: simpletStore.form.collectionLogo }]
       : [],
