@@ -231,6 +231,9 @@ const Endpoints = {
   simpletDeploy: (uuid: number | string) => `/simplets/${uuid}/deploy`,
   simpletDeployed: (uuid?: number | string) => (uuid ? `/simplets/deployed/${uuid}` : `/simplets/deployed/`),
   simpletRedeploy: (uuid: number | string) => `/simplets/deployed/${uuid}/redeploy`,
+  simpletBackend: (uuid?: number | string) => (uuid ? `/deploy/backends/${uuid}` : '/deploy/backends/'),
+  simpletBackendDetails: (uuid: number | string) => `/deploy/backends/${uuid}/details`,
+  simpletBackendRedeploy: (uuid: number | string) => `/deploy/backends/${uuid}/redeploy`,
 
   /** Oauth links */
   oauthLinks: '/users/oauth-links/',

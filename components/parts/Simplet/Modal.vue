@@ -2,7 +2,7 @@
   <ModalFullScreen
     :progress="progress"
     :steps="SimpletCreateStep"
-    :active-step="isStep(SimpletCreateStep.SMTP) ? SimpletCreateStep.FORM : simpletStore.stepSimpletCreate"
+    :active-step="simpletStore.stepSimpletCreate"
     trans-key="simplet.wizard.createStep"
     :title="$t('simplet.wizard.create')"
   >
@@ -14,12 +14,7 @@
         class="mx-auto max-w-lg"
       />
       <FormSimplet v-else-if="isStep(SimpletCreateStep.FORM)" ref="simpletFormRef" class="mx-auto max-w-lg" />
-      <FormSimpletSmtp
-        v-else-if="isStep(SimpletCreateStep.SMTP)"
-        ref="simpletFormSmtpRef"
-        class="mx-auto max-w-lg"
-        @skip="skipSmtp()"
-      />
+
       <SimpletPreview
         v-else-if="isStep(SimpletCreateStep.REVIEW)"
         @back="simpletStore.stepSimpletCreate = SimpletCreateStep.FORM"
@@ -56,6 +51,7 @@ const props = defineProps({
 });
 const { t } = useI18n();
 const message = useMessage();
+const authStore = useAuthStore();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const simpletStore = useSimpletStore();
@@ -64,7 +60,6 @@ const embeddedWalletStore = useEmbeddedWalletStore();
 const simpletTypeRef = useTemplateRef('simpletTypeRef');
 const simpletCollectionRef = useTemplateRef('simpletCollectionRef');
 const simpletFormRef = useTemplateRef('simpletFormRef');
-const simpletFormSmtpRef = useTemplateRef('simpletFormSmtpRef');
 
 const totalCredits = 150;
 const progress = computed(() => Math.min(100, 20 * (simpletStore.stepSimpletCreate - 1)));
@@ -92,13 +87,14 @@ const isStep = (step: SimpletCreateStep) => simpletStore.stepSimpletCreate === s
 
 async function submitForm() {
   if (await simpletFormRef.value?.handleSubmit()) {
-    simpletStore.stepSimpletCreate =
-      simpletStore.form.type === SimpletType.FREE_MINT ? SimpletCreateStep.REVIEW : SimpletCreateStep.SMTP;
-  }
-}
-async function submitFormSmtp() {
-  if (await simpletFormSmtpRef.value?.handleSubmit()) {
     simpletStore.stepSimpletCreate = SimpletCreateStep.REVIEW;
+  }
+  if (simpletStore.form.type !== SimpletType.FREE_MINT) {
+    simpletStore.form.smtp.host = 'nft_studio_mail';
+    simpletStore.form.smtp.username = authStore.username || authStore.email.split('@')[0];
+    simpletStore.form.smtp.password = generatePassword();
+    simpletStore.form.smtp.senderName = authStore.username || authStore.email.split('@')[0];
+    simpletStore.form.smtp.senderEmail = authStore.email;
   }
 }
 
@@ -129,22 +125,10 @@ function nextStep() {
     case SimpletCreateStep.FORM:
       submitForm();
       break;
-    case SimpletCreateStep.SMTP:
-      submitFormSmtp();
-      break;
     default:
       simpletStore.stepSimpletCreate += 1;
       break;
   }
-}
-
-async function skipSmtp() {
-  simpletStore.form.smtp.host = '';
-  simpletStore.form.smtp.username = '';
-  simpletStore.form.smtp.password = '';
-  simpletStore.form.smtp.senderName = '';
-  simpletStore.form.smtp.senderEmail = '';
-  simpletStore.stepSimpletCreate = SimpletCreateStep.REVIEW;
 }
 
 async function deploy() {

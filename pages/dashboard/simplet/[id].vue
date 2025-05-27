@@ -23,6 +23,7 @@
 const { t } = useI18n();
 const router = useRouter();
 const { params } = useRoute();
+const dataStore = useDataStore();
 const simpletStore = useSimpletStore();
 const { initWebsite } = useHosting();
 
@@ -46,6 +47,27 @@ onMounted(async () => {
 
   if (simpletStore.active.frontend_uuid) {
     initWebsite(-1, simpletStore.active.frontend_uuid);
+  }
+
+  try {
+    const bodyParams = {
+      project_uuid: dataStore.projectUuid,
+      ...PARAMS_ALL_ITEMS,
+    };
+    const { data } = await $api.get(endpoints.simpletBackend(), bodyParams);
+    console.log(data);
+
+    if (simpletStore.active.backend_uuid) {
+      const res = await $api.get(endpoints.simpletBackend(simpletStore.active.backend_uuid));
+      console.log(res);
+      const res2 = await $api.get(endpoints.simpletBackendDetails(simpletStore.active.backend_uuid));
+      console.log(res2);
+    }
+  } catch (e: ApiError | any) {
+    console.error(e);
+
+    /** Show error message */
+    window.$message.error(userFriendlyMsg(e));
   }
 });
 </script>

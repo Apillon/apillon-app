@@ -100,13 +100,7 @@ const isFormDisabled = computed<boolean>(() => {
   return dataStore.isProjectUser;
 });
 
-onMounted(() => {
-  simpletStore.form.smtp.host = 'nft_studio_mail';
-  simpletStore.form.smtp.username = authStore.username || authStore.email.split('@')[0];
-  simpletStore.form.smtp.password = generatePassword();
-  simpletStore.form.smtp.senderName = authStore.username || authStore.email.split('@')[0];
-  simpletStore.form.smtp.senderEmail = authStore.email;
-});
+onMounted(() => {});
 
 async function handleSubmit(e?: Event | MouseEvent): Promise<boolean> {
   e?.preventDefault();

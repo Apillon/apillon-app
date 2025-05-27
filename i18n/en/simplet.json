@@ -177,6 +177,7 @@
         "addDomain": "Don’t let a random link steal your thunder. \nAdd your own domain anytime in {0}."
       },
       "smtp": {
+        "edit": "Edit SMTP config",
         "info": "Add your SMTP settings so your emails are sent straight from your domain—no sketchy senders here.",
         "help": "*[SMTP](https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol) is a protocol that enables sending and receiving mail messages. If you don’t have an SMTP server of your own yet, use [resend.com](https://resend.com/)",
         "setup": "Email server setup",
