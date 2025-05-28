@@ -75,15 +75,18 @@ const data = computed(() => {
     },
     {
       label: t('general.website'),
-      value: websiteStore.active.domain || websiteStore.active.w3ProductionLink || '',
       loading: websiteStore.loading,
-      tag: t('dashboard.nav.hosting'),
-      copy: true,
+      component: resolveComponent('TableLink'),
+      data: {
+        link: websiteStore.active.domain || websiteStore.active.w3ProductionLink,
+      },
     },
     {
       label: t('simplet.endpoint'),
-      value: simpletStore.active?.backendUrl || '',
-      copy: true,
+      component: resolveComponent('TableLink'),
+      data: {
+        link: simpletStore.active?.backendUrl,
+      },
     },
   ];
 });

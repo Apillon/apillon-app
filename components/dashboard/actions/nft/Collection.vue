@@ -57,16 +57,6 @@
       <span class="icon-nft mr-2 text-xl"></span>
       {{ $t('nft.collection.mint') }}
     </n-button>
-    <n-button
-      v-if="collectionStore.active?.collectionType === NFTCollectionType.NESTABLE"
-      class="w-full"
-      size="medium"
-      :disabled="authStore.isAdmin() || actionsDisabled"
-      @click="emit('nestMint')"
-    >
-      <span class="icon-nft mr-2 text-xl"></span>
-      <span class="inline-block w-full">{{ $t('nft.collection.nestMint') }}</span>
-    </n-button>
 
     <!-- Transfer ownership -->
     <n-button

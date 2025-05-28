@@ -3,10 +3,8 @@
     <h2>{{ $t('nft.collection.environment') }}</h2>
     <p>{{ $t('nft.collection.environmentContent') }}</p>
 
-    <div class="my-6 flex items-center text-sm">
-      <span>{{ $t('nft.testnet') }}</span>
-      <n-switch v-model:value="isMainnet" />
-      <strong :class="{ 'text-green': isMainnet }">{{ $t('nft.mainnet') }}</strong>
+    <div class="my-6">
+      <FormFieldSwitch v-model:value="isMainnet" :text-inactive="$t('nft.testnet')" :text-active="$t('nft.mainnet')" />
     </div>
     <FormFieldSearch v-model:value="search" :placeholder="$t('nft.search')" />
     <div class="my-8">

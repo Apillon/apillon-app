@@ -62,12 +62,6 @@ export enum SubstrateChainPrefix {
   UNIQUE = 7391,
 }
 
-/** NFT Collection type */
-export enum NFTCollectionType {
-  GENERIC = 1,
-  NESTABLE = 2,
-}
-
 /** NFT Collection status */
 export enum CollectionStatus {
   CREATED = 0,
@@ -105,6 +99,14 @@ export enum CollectionCreateStep {
   DEPLOYING = 5,
   DEPLOYED = 6,
 }
+
+export enum CollectionFormStep {
+  BASE = 1,
+  BEHAVIOR = 2,
+  ROYALTIES = 3,
+  DROP = 4,
+}
+
 /** NFT Metadata steps */
 export enum NftMetadataStep {
   CHAIN = 1,
@@ -119,6 +121,7 @@ export enum NftMetadataStep {
   JSON = 10,
   JSON_PREVIEW = 11,
 }
+
 /** NFTs metadata field */
 export enum MetadataFieldRequired {
   NAME = 'name',

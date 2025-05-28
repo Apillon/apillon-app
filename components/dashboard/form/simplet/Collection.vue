@@ -45,13 +45,7 @@ const selectedCollection = ref<CollectionInterface>();
 const logos = reactive<Record<string, BucketItemInterface | undefined>>({});
 
 const collections = computed(() =>
-  collectionStore.items.filter(
-    c =>
-      c.drop &&
-      c.dropReserve > 0 &&
-      c.collectionStatus === CollectionStatus.DEPLOYED &&
-      c.collectionType === NFTCollectionType.GENERIC
-  )
+  collectionStore.items.filter(c => c.drop && c.dropReserve > 0 && c.collectionStatus === CollectionStatus.DEPLOYED)
 );
 
 onMounted(async () => {

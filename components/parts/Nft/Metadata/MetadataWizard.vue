@@ -1,10 +1,10 @@
 <template>
   <div class="mx-auto h-full" :class="metadataStore.stepMetadata <= NftMetadataStep.NEW ? 'max-w-lg' : 'max-w-6xl'">
     <FormNftCollectionNetworkSelect v-if="metadataStore.stepMetadata === NftMetadataStep.CHAIN" />
-    <FormNftMetadataSelect
+    <!-- <FormNftMetadataSelect
       v-else-if="metadataStore.stepMetadata === NftMetadataStep.METADATA"
       @next-step="v => (step = v)"
-    />
+    /> -->
     <FormNftMetadataAmount
       v-else-if="metadataStore.stepMetadata === NftMetadataStep.NEW"
       @next-step="v => (step = v)"
@@ -29,7 +29,6 @@
 
 <script setup lang="ts">
 import { useTemplateRef } from 'vue';
-import { NftMetadataStep } from '~/lib/types/nft';
 
 defineExpose({ back, nextStep });
 const metadataStore = useMetadataStore();
@@ -39,6 +38,7 @@ const step = ref(metadataStore.stepMetadata);
 
 const formSingleRef = useTemplateRef('formSingleRef');
 const submitFormSingle = async () => (formSingleRef.value ? await formSingleRef.value.handleSubmitForm() : false);
+
 async function submitSingle() {
   const formSingleSubmitted = await submitFormSingle();
   if (formSingleSubmitted) {
@@ -50,6 +50,9 @@ async function submitSingle() {
 function back() {
   switch (metadataStore.stepMetadata) {
     case NftMetadataStep.CHAIN:
+      step.value = NftMetadataStep.CHAIN;
+      break;
+    case NftMetadataStep.NEW:
       step.value = NftMetadataStep.CHAIN;
       break;
     case NftMetadataStep.SINGLE:
@@ -74,6 +77,8 @@ function nextStep() {
       step.value += 1;
       break;
     case NftMetadataStep.CHAIN:
+      step.value = NftMetadataStep.NEW;
+      break;
     case NftMetadataStep.ENDPOINT:
     case NftMetadataStep.JSON:
       step.value += 1;

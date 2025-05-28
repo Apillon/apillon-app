@@ -2,7 +2,9 @@
   <transition name="slide-down" appear>
     <div
       class="p-4 pb-0 sm:px-8"
-      :class="{ 'bg-bg-light/65': dataStore.project.selected && currentRoute.name != 'dashboard' }"
+      :class="{
+        'bg-bg-light/65': dataStore.project.selected && hasServices((currentRoute?.name || '').toString()),
+      }"
     >
       <div class="flex items-center justify-between">
         <div class="flex items-center pr-2 sm:pr-4">
@@ -42,6 +44,13 @@ const { t } = useI18n();
 const { currentRoute } = useRouter();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
+const bucketStore = useBucketStore();
+const websiteStore = useWebsiteStore();
+const contractStore = useContractStore();
+const collectionStore = useCollectionStore();
+const cloudFunctionStore = useCloudFunctionStore();
+const embeddedWalletStore = useEmbeddedWalletStore();
+const deployedContractStore = useDeployedContractStore();
 const pageTitle = useState('pageTitle');
 
 const renderIcon = (iconName: string) => {
@@ -80,6 +89,29 @@ const docs = [
     icon: renderIcon('social/discord'),
   },
 ];
+
+const hasServices = (routeName: string) => {
+  switch (routeName) {
+    case 'dashboard':
+      return false;
+    case 'dashboard-service-storage':
+      return bucketStore.hasBuckets || bucketStore.loading;
+    case 'dashboard-service-hosting':
+      return websiteStore.hasWebsites || websiteStore.loading;
+    case 'dashboard-service-computing':
+      return contractStore.hasContracts || contractStore.loading;
+    case 'dashboard-service-nft':
+      return collectionStore.hasCollections || collectionStore.loading;
+    case 'dashboard-service-cloud-functions':
+      return cloudFunctionStore.hasCloudFunctions || cloudFunctionStore.loading;
+    case 'dashboard-service-smart-contracts':
+      return deployedContractStore.hasDeployedContracts || deployedContractStore.loading;
+    case 'dashboard-service-embedded-wallet':
+      return embeddedWalletStore.hasEmbeddedWallets || embeddedWalletStore.loading;
+    default:
+      return true;
+  }
+};
 
 function handleSelect(key: string) {
   const doc = docs.find(item => item.key === key);

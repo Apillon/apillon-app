@@ -48,7 +48,6 @@ const data = ref<Record<string, string | number | boolean | null>[]>([
   },
   { label: t('nft.collection.name'), value: metadataStore.form.smartContract.name },
   { label: t('form.label.collection.symbol'), value: metadataStore.form.smartContract.symbol },
-  { label: t('form.label.collection.type'), value: metadataStore.form.smartContract.collectionType },
   { label: t('form.label.collection.useGateway'), value: metadataStore.form.smartContract.useApillonIpfsGateway },
   { label: t('form.label.collection.useIpns'), value: !!metadataStore.form.smartContract.useIpns },
   {
@@ -70,23 +69,22 @@ const data = ref<Record<string, string | number | boolean | null>[]>([
     value: (metadataStore.form.smartContract.royaltiesFees || '0') + '%',
     show: !!metadataStore.form.smartContract.royaltiesAddress,
   },
-  { label: t('form.label.collection.drop'), value: metadataStore.form.smartContract.drop },
   {
     label: t('form.label.collection.dropReserve'),
     value: metadataStore.form.smartContract.dropReserve,
-    show: metadataStore.form.smartContract.drop,
+    show: metadataStore.form.smartContract.dropPrice > 0,
   },
   {
     label: t('form.label.collection.dropPrice', {
       currency: chainCurrency(metadataStore.form.smartContract.chain),
     }),
     value: metadataStore.form.smartContract.dropPrice,
-    show: metadataStore.form.smartContract.drop,
+    show: metadataStore.form.smartContract.dropPrice > 0,
   },
   {
     label: t('form.label.collection.dropStart'),
     value: timestampToDateAndTime(metadataStore.form.smartContract.dropStart / 1000),
-    show: metadataStore.form.smartContract.drop,
+    show: metadataStore.form.smartContract.dropPrice > 0,
   },
   {
     label: t('form.label.collection.dropReserve'),

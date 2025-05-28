@@ -29,6 +29,7 @@ export const useIpfsStore = defineStore('ipfs', {
      * API calls
      */
     async fetchIpfsInfo(project_uuid: string): Promise<IpfsInterface> {
+      if (!project_uuid) return {} as IpfsInterface;
       try {
         const res = await $api.get<IpfsResponse>(endpoints.ipfsInfo, {
           project_uuid,
