@@ -25,7 +25,7 @@
   </Dashboard>
 
   <!-- Modal - Collection Transfer -->
-  <ModalNft v-model:show="collectionStore.modalCreateVisible" />
+  <NftModal v-model:show="collectionStore.modalCreateVisible" />
 </template>
 
 <script lang="ts" setup>

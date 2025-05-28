@@ -52,8 +52,6 @@
       "addLogo": "Select logo",
       "address": "Collection address",
       "baseUri": "Base URI",
-      "behavior": "Collection supply and behavior",
-      "behaviorInfo": "Set the total number of NFTs in your collection or choose to keep it unlimited. Customize how your NFTs behave by enabling or disabling special features.",
       "chainType": "Chain type",
       "contractAddress": "Contract address",
       "create": "Create NFT Collection",
@@ -77,8 +75,8 @@
       "emptyInfo": "Add it to your Web3 project",
       "emptyArchive": "NFT collections Archive",
       "emptyArchiveInfo": "There are currently no NFT collections in the Archive.",
-      "environment": "Chose a chain",
-      "environmentContent": "We suggest you first to deploy on Testnet to test the template before launching it in production on Mainnet.",
+      "environment": "Choose a chain",
+      "environmentContent": "We recommend deploying on Testnet first to test your template before launching in production on Mainnet.",
       "enterData": "Enter collection data",
       "headline": "How does it work?",
       "info": "Launch your end-to-end decentralized NFT collection with one click. Create NFTs, deploy smart contract and host the collection website on Web3.",
@@ -93,10 +91,8 @@
       "preview": "NFT collection",
       "previewTab": "Collection preview",
       "revoke": "Burn",
-      "royalties": "Collection royalties",
-      "royaltiesInfo": "Set up royalties to earn a percentage of every resale of your NFTs after minting. This percentage will be automatically deducted from transactions and sent to your designated wallet.",
       "setBaseUri": "Set base URI",
-      "smartContract": "Collection Smart Contract data",
+      "smartContract": "NFT Collection data",
       "symbol": "Symbol",
       "showWebsite": "Show website",
       "title": "Collection",
@@ -161,9 +157,14 @@
         }
       },
       "instruction": {
-        "data": "All collection data can be changed later in settings.",
+        "behavior": "1 - Supply and behavior",
+        "behaviorInfo": "Set the total number of NFTs in your collection or choose to keep it unlimited. Customize how your NFTs behave by enabling or disabling special features.",
+        "drop": "3 - Mint scheduling, reservation and pricing",
+        "dropInfo": "Decide when minting starts, set a price, and reserve NFTs if needed.",
+        "royalties": "2 - Collection royalties",
+        "royaltiesInfo": "Set up royalties to earn a percentage of every resale of your NFTs after minting. This percentage will be automatically deducted from transactions and sent to your designated wallet.",
         "smartContract": "Define the core details of your NFT collection. These details will be stored permanently on-chain.",
-        "visuals": "All collection data can be changed later in settings."
+        "visuals": "Choose a cover and profile image to enhance your collection's appearance. It's optional - you can always add it later in settings."
       },
       "review": {
         "balance": "Your balance",

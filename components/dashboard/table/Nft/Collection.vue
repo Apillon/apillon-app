@@ -74,22 +74,6 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       },
     },
     {
-      key: 'type',
-      title: t('general.type'),
-      minWidth: 100,
-      className: [
-        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
-        { hidden: !selectedColumns.value.includes('type') },
-      ],
-      render(row) {
-        if (row.collectionType) {
-          return t(`nft.collection.type.${row.collectionType}`);
-        } else {
-          return t(`nft.collection.type.${NFTCollectionType.GENERIC}`);
-        }
-      },
-    },
-    {
       key: 'collection_uuid',
       title: t('nft.collection.uuid'),
       className: { hidden: !selectedColumns.value.includes('collection_uuid') },

@@ -98,7 +98,7 @@
         "name": "Name",
         "revocable": "Revokable",
         "royaltiesAddress": "Royalties address",
-        "royaltiesFees": "Royalties fees",
+        "royaltiesFees": "Royalties percentage",
         "soulbound": "Soulbound",
         "symbol": "Symbol",
         "supplyLimited": "Total supply",

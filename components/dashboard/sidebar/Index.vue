@@ -33,7 +33,7 @@
               <SidebarSelectProject :collapsed="collapsed" />
               <Btn
                 v-if="!dataStore.hasProjects && projectsLoaded && !authStore.isAdmin()"
-                type="info"
+                type="primary"
                 :size="collapsed ? 'small' : 'large'"
                 @click="modalNewProjectVisible = true"
               >
@@ -101,7 +101,8 @@
 
   <!-- Modal - Create new project -->
   <modal v-model:show="modalNewProjectVisible" :title="$t('project.new')">
-    <FormProject @submit-success="modalNewProjectVisible = false" @close="modalNewProjectVisible = false" />
+    <OnboardingFinish v-if="firstProjectCreated" @close="modalNewProjectVisible = false" />
+    <FormProject v-else @submit-success="onProjectCreated" @close="modalNewProjectVisible = false" />
   </modal>
 </template>
 
@@ -120,6 +121,7 @@ const { isSm, isLg } = useScreen();
 const { width } = useWindowSize();
 
 const projectsLoaded = ref<boolean>(false);
+const firstProjectCreated = ref<boolean>(false);
 const modalNewProjectVisible = ref<boolean>(false);
 const emit = defineEmits(['toggleSidebar']);
 
@@ -178,6 +180,14 @@ async function initProject() {
       await dataStore.getProject(dataStore.project.selected);
     }
     projectsLoaded.value = true;
+  }
+}
+
+async function onProjectCreated() {
+  if (dataStore.project.items.length <= 1) {
+    firstProjectCreated.value = true;
+  } else {
+    modalNewProjectVisible.value = false;
   }
 }
 

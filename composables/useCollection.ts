@@ -57,18 +57,7 @@ export default function useCollection() {
       value: ChainType[k],
     };
   });
-  const collectionTypes = enumKeys(NFTCollectionType).map(k => {
-    return {
-      name: k.toLowerCase(),
-      label: t(`nft.collection.type.${NFTCollectionType[k]}`),
-      value: NFTCollectionType[k],
-    };
-  });
 
-  const supplyTypes = [
-    { label: t('form.supplyTypes.unlimited'), value: 0 },
-    { label: t('form.supplyTypes.limited'), value: 1 },
-  ];
   const booleanSelect = [
     { label: t('form.booleanSelect.true'), value: true },
     { label: t('form.booleanSelect.false'), value: false },
@@ -82,7 +71,7 @@ export default function useCollection() {
   });
 
   const isSupplyLimited = computed(() => {
-    return metadataStore.form.smartContract.supplyLimited === 1;
+    return metadataStore.form.smartContract.supplyLimited;
   });
 
   const isUnique = computed(() => {
@@ -162,14 +151,10 @@ export default function useCollection() {
       project_uuid: dataStore.projectUuid,
       name: metadataStore.form.smartContract.name,
       symbol: metadataStore.form.smartContract.symbol,
-      collectionType: metadataStore.form.smartContract.collectionType,
-      maxSupply: metadataStore.form.smartContract.supplyLimited === 1 ? metadataStore.form.smartContract.maxSupply : 0,
+      maxSupply: metadataStore.form.smartContract.supplyLimited ? metadataStore.form.smartContract.maxSupply : 0,
       isRevokable: metadataStore.form.smartContract.revocable,
       isSoulbound: metadataStore.form.smartContract.soulbound,
-      isAutoIncrement:
-        metadataStore.form.smartContract.collectionType === NFTCollectionType.GENERIC
-          ? metadataStore.form.smartContract.isAutoIncrement
-          : true,
+      isAutoIncrement: metadataStore.form.smartContract.isAutoIncrement,
       royaltiesAddress:
         metadataStore.form.smartContract.royaltiesFees === 0
           ? undefined
@@ -180,7 +165,7 @@ export default function useCollection() {
     }
     if (!isUnique.value) {
       params.baseExtension = metadataStore.form.smartContract.baseExtension;
-      params.drop = metadataStore.form.smartContract.drop;
+      params.drop = metadataStore.form.smartContract.dropPrice > 0;
       params.dropPrice = metadataStore.form.smartContract.dropPrice;
       params.dropStart = Math.floor((metadataStore.form.smartContract.dropStart || Date.now()) / 1000);
       params.dropReserve = metadataStore.form.smartContract.dropReserve;
@@ -215,7 +200,7 @@ export default function useCollection() {
    */
   function validateReserve(_: FormItemRule, value: number): boolean {
     return (
-      metadataStore.form.smartContract.supplyLimited === 0 ||
+      !metadataStore.form.smartContract.supplyLimited ||
       metadataStore.form.smartContract.maxSupply === 0 ||
       value <= metadataStore.form.smartContract.maxSupply
     );
@@ -224,10 +209,10 @@ export default function useCollection() {
     return value <= NFT_MAX_SUPPLY && (isSupplyLimited.value ? value > 0 : true);
   }
   function validateDropStart(_: FormItemRule, value: number): boolean {
-    return !metadataStore.form.smartContract.drop || value > Date.now();
+    return metadataStore.form.smartContract.dropPrice === 0 || value > Date.now();
   }
   function validateDropPrice(_: FormItemRule, value: number): boolean {
-    return !metadataStore.form.smartContract.drop || (value >= 0.00001 && value <= 10000000000);
+    return metadataStore.form.smartContract.dropPrice === 0 || (value >= 0.00001 && value <= 10000000000);
   }
   function validateRoyaltiesAddress(_: FormItemRule, value: string): boolean {
     return (
@@ -253,7 +238,8 @@ export default function useCollection() {
     return (
       (metadataStore.form.smartContract.chainType === ChainType.EVM &&
         metadataStore.form.smartContract.royaltiesFees > 0) ||
-      (metadataStore.form.smartContract.chainType === ChainType.SUBSTRATE && metadataStore.form.smartContract.drop)
+      (metadataStore.form.smartContract.chainType === ChainType.SUBSTRATE &&
+        metadataStore.form.smartContract.dropPrice > 0)
     );
   }
 
@@ -318,7 +304,6 @@ export default function useCollection() {
     chains,
     chainsTestnet,
     chainTypes,
-    collectionTypes,
     enterpriseChainIDs,
     formRef,
     isFormDisabled,
@@ -328,7 +313,6 @@ export default function useCollection() {
     rules,
     rulesSingle,
     substrateChains,
-    supplyTypes,
     collectionEndpoint,
     disablePastDate,
     disablePastTime,

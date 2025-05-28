@@ -119,14 +119,15 @@ async function createProject() {
   emit('submitActive', true);
 
   try {
-    const res = await $api.post<CreateProjectResponse>(endpoints.projects, formData.value);
+    const { data } = await $api.post<CreateProjectResponse>(endpoints.projects, formData.value);
 
-    if (res.data) {
+    if (data) {
       /** Clear all stored data */
       clearAll();
 
       /** Set new project as current project */
-      dataStore.setCurrentProject(res.data.project_uuid);
+      dataStore.setCurrentProject(data.project_uuid);
+      dataStore.project.items.unshift(data);
 
       emit('submitSuccess');
       emit('submitActive', false);

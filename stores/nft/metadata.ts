@@ -15,6 +15,7 @@ export const useMetadataStore = defineStore('metadata', {
     metadata: [] as MetadataItem[],
     stepCollectionCreate: CollectionCreateStep.METADATA,
     stepMetadata: NftMetadataStep.CHAIN,
+    stepSmartContract: CollectionFormStep.BASE,
     form: {
       single: {
         image: '',
@@ -29,7 +30,6 @@ export const useMetadataStore = defineStore('metadata', {
         adminAddress: null as string | null,
         chain: undefined as number | undefined,
         chainType: ChainType.EVM,
-        collectionType: NFTCollectionType.GENERIC,
         useApillonIpfsGateway: false,
         useIpns: undefined as boolean | undefined,
         baseUri: '',
@@ -45,7 +45,7 @@ export const useMetadataStore = defineStore('metadata', {
         royaltiesAddress: null,
         royaltiesFees: 0,
         soulbound: false as boolean | null,
-        supplyLimited: 0,
+        supplyLimited: false,
         symbol: '',
       },
       visual: {
@@ -101,7 +101,6 @@ export const useMetadataStore = defineStore('metadata', {
       this.form.smartContract.adminAddress = null;
       this.form.smartContract.chain = undefined;
       this.form.smartContract.chainType = ChainType.EVM;
-      this.form.smartContract.collectionType = NFTCollectionType.GENERIC;
       this.form.smartContract.useApillonIpfsGateway = false;
       this.form.smartContract.useIpns = undefined;
       this.form.smartContract.baseUri = '';

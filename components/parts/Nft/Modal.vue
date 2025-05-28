@@ -12,12 +12,12 @@
         ref="metadataRef"
       />
       <FormNftCollectionSmartContract
-        v-if="metadataStore.stepCollectionCreate === CollectionCreateStep.SMART_CONTRACT"
+        v-else-if="metadataStore.stepCollectionCreate === CollectionCreateStep.SMART_CONTRACT"
         ref="formSmartContractRef"
         class="mx-auto max-w-lg"
         hide-submit
       />
-      <div v-if="metadataStore.stepCollectionCreate === CollectionCreateStep.VISUAL" class="mx-auto max-w-lg">
+      <div v-else-if="metadataStore.stepCollectionCreate === CollectionCreateStep.VISUAL" class="mx-auto max-w-lg">
         <h4>{{ $t(`nft.collection.createStep.${CollectionCreateStep.VISUAL}`) }}</h4>
         <p>{{ $t('nft.collection.instruction.visuals') }}</p>
         <FormNftCollectionVisual ref="formVisualRef" class="my-6" hide-submit />
@@ -111,15 +111,9 @@ onMounted(async () => {
 });
 
 const metadataValid = () => !metadataStore.metadata.some(item => !item.image || !item.name || !item.description);
-const submitForm = async formRef => (formRef ? await formRef.handleSubmitForm() : false);
 
-async function submitFormSmartContract() {
-  if (await submitForm(formSmartContractRef.value)) {
-    metadataStore.stepCollectionCreate = CollectionCreateStep.VISUAL;
-  }
-}
 async function submitFormVisual() {
-  if (await submitForm(formVisualRef.value)) {
+  if (await formVisualRef.value.handleSubmitForm()) {
     metadataStore.stepCollectionCreate = CollectionCreateStep.REVIEW;
   }
 }
@@ -128,6 +122,9 @@ function back() {
   switch (metadataStore.stepCollectionCreate) {
     case CollectionCreateStep.METADATA:
       metadataRef.value?.back();
+      break;
+    case CollectionCreateStep.SMART_CONTRACT:
+      formSmartContractRef.value?.back();
       break;
     default:
       metadataStore.stepCollectionCreate -= 1;
@@ -139,7 +136,7 @@ function nextStep() {
       metadataRef.value?.nextStep();
       break;
     case CollectionCreateStep.SMART_CONTRACT:
-      submitFormSmartContract();
+      formSmartContractRef.value?.nextStep();
       break;
     case CollectionCreateStep.VISUAL:
       submitFormVisual();
