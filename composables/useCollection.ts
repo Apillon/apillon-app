@@ -151,6 +151,7 @@ export default function useCollection() {
       project_uuid: dataStore.projectUuid,
       name: metadataStore.form.smartContract.name,
       symbol: metadataStore.form.smartContract.symbol,
+      collectionType: metadataStore.form.smartContract.collectionType,
       maxSupply: metadataStore.form.smartContract.supplyLimited ? metadataStore.form.smartContract.maxSupply : 0,
       isRevokable: metadataStore.form.smartContract.revocable,
       isSoulbound: metadataStore.form.smartContract.soulbound,

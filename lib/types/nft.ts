@@ -62,6 +62,11 @@ export enum SubstrateChainPrefix {
   UNIQUE = 7391,
 }
 
+/** NFT Collection type */
+export enum NFTCollectionType {
+  GENERIC = 1,
+}
+
 /** NFT Collection status */
 export enum CollectionStatus {
   CREATED = 0,

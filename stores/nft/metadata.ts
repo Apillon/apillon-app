@@ -30,6 +30,7 @@ export const useMetadataStore = defineStore('metadata', {
         adminAddress: null as string | null,
         chain: undefined as number | undefined,
         chainType: ChainType.EVM,
+        collectionType: NFTCollectionType.GENERIC,
         useApillonIpfsGateway: false,
         useIpns: undefined as boolean | undefined,
         baseUri: '',
@@ -101,6 +102,7 @@ export const useMetadataStore = defineStore('metadata', {
       this.form.smartContract.adminAddress = null;
       this.form.smartContract.chain = undefined;
       this.form.smartContract.chainType = ChainType.EVM;
+      this.form.smartContract.collectionType = NFTCollectionType.GENERIC;
       this.form.smartContract.useApillonIpfsGateway = false;
       this.form.smartContract.useIpns = undefined;
       this.form.smartContract.baseUri = '';
@@ -114,7 +116,7 @@ export const useMetadataStore = defineStore('metadata', {
       this.form.smartContract.name = '';
       this.form.smartContract.revocable = false;
       this.form.smartContract.soulbound = false;
-      this.form.smartContract.supplyLimited = 0;
+      this.form.smartContract.supplyLimited = false;
       this.form.smartContract.symbol = '';
     },
     resetSingleFormData(clear = true) {
