@@ -54,7 +54,12 @@
             title="Temporarily unavailable"
           >
             <div>
-              <NuxtIcon :name="`logo/${chainType.name}`" class="mx-auto flex justify-center text-7xl" filled />
+              <NuxtIcon
+                :name="`logo/${chainType.name}`"
+                class="mx-auto flex justify-center text-7xl"
+                :title="chainType.name"
+                filled
+              />
               <p>{{ chainType.label }}</p>
             </div>
           </div>
@@ -68,7 +73,12 @@
             @click="metadataStore.form.smartContract.chainType = chainType.value"
           >
             <div>
-              <NuxtIcon :name="`logo/${chainType.name}`" class="mx-auto flex justify-center text-7xl" filled />
+              <NuxtIcon
+                :name="`logo/${chainType.name}`"
+                class="mx-auto flex justify-center text-7xl"
+                :title="chainType.name"
+                filled
+              />
               <p>{{ chainType.label }}</p>
             </div>
           </div>

@@ -33,6 +33,7 @@
               <SidebarSelectProject :collapsed="collapsed" />
               <Btn
                 v-if="!dataStore.hasProjects && projectsLoaded && !authStore.isAdmin()"
+                class="!min-w-0"
                 type="primary"
                 :size="collapsed ? 'small' : 'large'"
                 @click="modalNewProjectVisible = true"
