@@ -41,6 +41,11 @@
         {{ $t('simplet.wizard.smtp.edit') }}
       </Btn>
 
+      <!-- MySQL -->
+      <Btn class="locked w-full" size="medium" type="primary" @click="modalMysqlVisible = true">
+        {{ $t('simplet.mysql.edit') }}
+      </Btn>
+
       <!-- Redeploy -->
       <Btn
         v-if="
@@ -56,12 +61,27 @@
       </Btn>
     </n-space>
 
-    <!-- Modal - Github configuration -->
+    <!-- Modal - SMTP -->
     <ModalFullScreen v-model:show="modalSmtpVisible" :title="$t('hosting.menu.envVars')">
       <FormSimpletSmtp ref="simpletFormSmtpRef" class="mx-auto max-w-lg" />
 
       <template #footer>
         <Btn class="float-right" type="primary" @click="submitFormSmtp()">
+          {{ $t('simplet.wizard.smtp.edit') }}
+        </Btn>
+      </template>
+    </ModalFullScreen>
+
+    <!-- Modal - MySQL -->
+    <ModalFullScreen v-model:show="modalMysqlVisible" :title="$t('hosting.menu.envVars')">
+      <div class="mx-auto max-w-lg">
+        <n-form ref="formRef" :model="simpletStore.form" :rules="rules" @submit.prevent="submitFormMysql">
+          <FormFieldMySql :form="simpletStore.form.mysql" />
+        </n-form>
+      </div>
+
+      <template #footer>
+        <Btn class="float-right" type="primary" @click="submitFormMysql()">
           {{ $t('simplet.wizard.smtp.edit') }}
         </Btn>
       </template>
@@ -75,9 +95,18 @@ const message = useMessage();
 const dataStore = useDataStore();
 const simpletStore = useSimpletStore();
 const websiteStore = useWebsiteStore();
-
 const simpletFormSmtpRef = useTemplateRef('simpletFormSmtpRef');
+
+const formRef = ref<NFormInst | null>(null);
 const modalSmtpVisible = ref<boolean>(false);
+const modalMysqlVisible = ref<boolean>(false);
+
+const rules = reactive({
+  ['mysql.host']: ruleRequired(t('validation.mysqlRequired')),
+  ['mysql.database']: ruleRequired(t('validation.mysqlRequired')),
+  ['mysql.user']: ruleRequired(t('validation.mysqlRequired')),
+  ['mysql.password']: ruleRequired(t('validation.mysqlRequired')),
+});
 
 async function submitFormSmtp() {
   if (await simpletFormSmtpRef.value?.handleSubmit()) {
@@ -102,6 +131,41 @@ async function submitFormSmtp() {
     } catch (e) {
       message.error(userFriendlyMsg(e));
     }
+  }
+}
+
+async function submitFormMysql(e?: Event | MouseEvent) {
+  e?.preventDefault();
+  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
+    if (errors) {
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
+    } else {
+      await updateMysql();
+    }
+  });
+}
+
+async function updateMysql() {
+  try {
+    const bodyData = {
+      project_uuid: dataStore.projectUuid,
+      secrets: [
+        { key: 'MYSQL_HOST', value: simpletStore.form.mysql.host },
+        { key: 'MYSQL_PORT', value: simpletStore.form.mysql.port },
+        { key: 'MYSQL_DATABASE', value: simpletStore.form.mysql.database },
+        { key: 'MYSQL_USER', value: simpletStore.form.mysql.user },
+        { key: 'MYSQL_PASSWORD', value: simpletStore.form.mysql.password },
+        { key: 'MYSQL_ROOT_PASSWORD', value: simpletStore.form.mysql.password },
+      ],
+    };
+    const { data } = await $api.post<SimpletResponse>(
+      endpoints.simpletBackendRedeploy(simpletStore.active.backend_uuid),
+      bodyData
+    );
+    message.success(t('simplet.wizard.redeployingInfo'));
+    console.log(data);
+  } catch (e) {
+    message.error(userFriendlyMsg(e));
   }
 }
 

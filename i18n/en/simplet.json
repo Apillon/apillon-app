@@ -101,6 +101,7 @@
       "templates": "Templates"
     },
     "mysql": {
+      "edit": "Change MySQL config",
       "useDifferentDB": "Use a different database",
       "labelInfo": {
         "useDifferentDB": "Provide the MySQL connection details, including host, port, username, password, and database name."

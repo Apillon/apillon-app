@@ -1,6 +1,11 @@
 <template>
   <div v-if="chainId" class="flex items-center gap-2">
-    <NuxtIcon :name="`logo/${getChainIconName(chainId)}`" class="inline-flex text-xl" filled />
+    <NuxtIcon
+      :name="`logo/${getChainIconName(chainId)}`"
+      class="inline-flex text-xl"
+      :title="getChainIconName(chainId)"
+      filled
+    />
     <p class="whitespace-nowrap">{{ getChainName(chainId) }}</p>
   </div>
 </template>
