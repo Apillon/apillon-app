@@ -81,7 +81,6 @@
       <!--  File -->
       <n-form-item
         v-if="!props.jobUuid"
-        accept="text/javascript"
         path="file"
         :label="$t('form.label.contract.file')"
         :label-props="{ for: 'file' }"
@@ -175,8 +174,9 @@ onMounted(async () => {
 async function onFileChange({ file, onError, onFinish }: UploadCustomRequestOptions) {
   const size = file.file?.size || 0;
 
-  if (!file.type?.startsWith('text/javascript')) {
+  if (!file.type?.startsWith('text/javascript') && !file.type?.startsWith('application/x-javascript')) {
     message.warning(t('validation.cloudFunctions.fileType'));
+    console.warn('File type is not supported:', file.type);
     onError();
     return;
   }
