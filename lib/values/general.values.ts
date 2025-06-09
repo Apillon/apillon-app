@@ -157,6 +157,7 @@ export const LsCacheKeys = {
   WEBSITES: 'al_cache_websites',
   WEBSITE_ARCHIVE: 'al_cache_website_archive',
   SIMPLET: 'al_cache_simplet',
+  SIMPLET_BACKEND: 'al_cache_simplet_backend',
   SIMPLETS: 'al_cache_simplets',
   SIMPLETS_ARCHIVED: 'al_cache_simplets_archived',
   SMART_CONTRACT: 'al_cache_smart_contract',

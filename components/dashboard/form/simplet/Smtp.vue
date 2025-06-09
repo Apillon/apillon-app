@@ -51,6 +51,7 @@
         <n-input
           v-model:value="simpletStore.form.smtp.password"
           type="password"
+          show-password-on="click"
           :input-props="{ id: 'password', autocomplete: 'smtp-password' }"
           :placeholder="$t('form.placeholder.smtp.password')"
           clearable
@@ -82,7 +83,6 @@ defineEmits(['skip']);
 defineExpose({ handleSubmit });
 const { t } = useI18n();
 const message = useMessage();
-const authStore = useAuthStore();
 const dataStore = useDataStore();
 const simpletStore = useSimpletStore();
 const formRef = ref<NFormInst | null>(null);

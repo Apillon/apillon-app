@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 export const useSimpletStore = defineStore('simplets', {
   state: () => ({
     active: {} as SimpletInterface,
+    backend: {} as SimpletBackendInterface,
     items: [] as SimpletInterface[],
     templates: [] as SimpletTemplateInterface[],
     loading: false,
@@ -61,6 +62,7 @@ export const useSimpletStore = defineStore('simplets', {
   actions: {
     resetData() {
       this.active = {} as SimpletInterface;
+      this.backend = {} as SimpletBackendInterface;
       this.items = [] as SimpletInterface[];
       this.templates = [] as SimpletTemplateInterface[];
       this.search = '';
@@ -101,6 +103,10 @@ export const useSimpletStore = defineStore('simplets', {
       this.form.smtp.senderEmail = '';
     },
 
+    getBackendVariable(key: string): string | undefined {
+      return this.backend?.environmentVariables?.find(v => v.key === key)?.value;
+    },
+
     /**
      * Fetch wrappers
      */
@@ -132,6 +138,13 @@ export const useSimpletStore = defineStore('simplets', {
         return this.active;
       }
       return await this.fetchSimplet(simpletUuid);
+    },
+
+    async getBackend(backendUuid: string) {
+      if (this.backend?.backend_uuid === backendUuid && !isCacheExpired(LsCacheKeys.SIMPLET_BACKEND)) {
+        return this.backend;
+      }
+      return await this.fetchBackend(backendUuid);
     },
 
     /**
@@ -198,8 +211,8 @@ export const useSimpletStore = defineStore('simplets', {
       if (!simpletUuid) return;
 
       try {
-        const res = await $api.get<SimpletResponse>(endpoints.simpletDeployed(simpletUuid));
-        this.active = res.data;
+        const { data } = await $api.get<SimpletResponse>(endpoints.simpletDeployed(simpletUuid));
+        this.active = data;
 
         sessionStorage.setItem(LsCacheKeys.SIMPLET, Date.now().toString());
       } catch (e: ApiError | any) {
@@ -210,6 +223,24 @@ export const useSimpletStore = defineStore('simplets', {
         window.$message.error(userFriendlyMsg(e));
       }
       return this.active;
+    },
+
+    async fetchBackend(backendUuid: string | undefined) {
+      if (!backendUuid) return;
+
+      try {
+        const { data } = await $api.get<SimpletBackendResponse>(endpoints.simpletBackend(backendUuid));
+        this.backend = data;
+
+        sessionStorage.setItem(LsCacheKeys.SIMPLET_BACKEND, Date.now().toString());
+      } catch (e: ApiError | any) {
+        console.error(e);
+        this.backend = {} as SimpletBackendInterface;
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(e));
+      }
+      return this.backend;
     },
   },
 

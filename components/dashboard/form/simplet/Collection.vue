@@ -45,7 +45,13 @@ const selectedCollection = ref<CollectionInterface>();
 const logos = reactive<Record<string, BucketItemInterface | undefined>>({});
 
 const collections = computed(() =>
-  collectionStore.items.filter(c => c.drop && c.dropReserve > 0 && c.collectionStatus === CollectionStatus.DEPLOYED)
+  collectionStore.items.filter(
+    c =>
+      c.drop &&
+      c.dropReserve > 0 &&
+      c.collectionStatus === CollectionStatus.DEPLOYED &&
+      (simpletStore.form.type !== SimpletType.AIRDROP || c.isAutoIncrement)
+  )
 );
 
 onMounted(async () => {

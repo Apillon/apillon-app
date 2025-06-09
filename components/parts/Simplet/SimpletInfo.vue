@@ -34,8 +34,8 @@ onMounted(async () => {
   loadingImages.value = false;
 });
 
-const adminWallet = computed(() => deploymentStore.variables.find(v => v.key === 'ADMIN_WALLET'));
-const simpletType = computed(() => deploymentStore.variables.find(v => v.key.includes('CLAIM_TYPE')));
+const adminWallet = computed(() => simpletStore.getBackendVariable('ADMIN_WALLET'));
+const simpletType = computed(() => simpletStore.getBackendVariable('CLAIM_TYPE'));
 
 const data = computed(() => {
   return [
@@ -49,23 +49,9 @@ const data = computed(() => {
       copy: true,
     },
     {
-      label: t('general.status'),
-      value: simpletStore.active.frontendStatus,
-      component: resolveComponent('SimpletStatus'),
-      data: {
-        status: simpletStore.active.frontendStatus,
-      },
-    },
-    {
-      label: t('form.label.simplet.walletAddress'),
-      value: adminWallet.value?.value || '',
-      loading: deploymentStore.loading,
-      copy: true,
-    },
-    {
       label: t('general.type'),
       value: simpletType.value
-        ? t(`simplet.${simplets[simpletType.value.value]}.name`)
+        ? t(`simplet.${simplets[simpletType.value]}.name`)
         : getSimpletType(simpletStore.active.simplet_uuid),
     },
     {
@@ -74,11 +60,17 @@ const data = computed(() => {
       img: logo.value?.link || '',
     },
     {
-      label: t('general.website'),
-      loading: websiteStore.loading,
-      component: resolveComponent('TableLink'),
+      label: t('form.label.simplet.walletAddress'),
+      value: adminWallet.value || '',
+      loading: deploymentStore.loading,
+      copy: true,
+    },
+    {
+      label: t('simplet.backendStatus'),
+      value: simpletStore.active.backendStatus,
+      component: resolveComponent('SimpletStatus'),
       data: {
-        link: websiteStore.active.domain || websiteStore.active.w3ProductionLink,
+        status: simpletStore.active.backendStatus,
       },
     },
     {
@@ -86,6 +78,26 @@ const data = computed(() => {
       component: resolveComponent('TableLink'),
       data: {
         link: simpletStore.active?.backendUrl,
+      },
+    },
+    {
+      label: t('simplet.frontendStatus'),
+      value: simpletStore.active.frontendStatus,
+      component: resolveComponent('SimpletStatus'),
+      data: {
+        status: simpletStore.active.frontendStatus,
+      },
+    },
+    {
+      label: t('general.website'),
+      loading: websiteStore.loading,
+      component: resolveComponent('TableLink'),
+      data: {
+        text: websiteStore.active.domain || websiteStore.active.name,
+        link:
+          websiteStore.active.domain ||
+          websiteStore.active.w3ProductionLink ||
+          `/dashboard/service/hosting/${websiteStore.active.website_uuid}`,
       },
     },
   ];
