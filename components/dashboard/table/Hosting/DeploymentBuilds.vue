@@ -29,7 +29,17 @@ const createColumns = (): NDataTableColumns<DeploymentBuildInterface> => {
       type: 'expand',
       expandable: () => true,
       renderExpand: rowData => {
-        return h('pre', {}, rowData.logs || '');
+        return h(
+          'pre',
+          {
+            style: {
+              maxHeight: '400px', // Limit the height
+              overflowY: 'auto', // Add vertical scrollbar
+              whiteSpace: 'pre-wrap', // Preserve whitespace and wrap text
+            },
+          },
+          rowData.logs || ''
+        );
       },
     },
     {
