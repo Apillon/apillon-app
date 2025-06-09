@@ -62,4 +62,52 @@ declare global {
   interface SimpletResponse extends GeneralResponse<SimpletInterface> {}
   interface SimpletsResponse extends GeneralItemsResponse<SimpletInterface> {}
   interface SimpletCreateResponse extends GeneralResponse<{ data: SimpletInterface; errors: string[] }> {}
+
+  interface EnvironmentVariable {
+    key: string;
+    value: string;
+  }
+
+  interface Teepod {
+    id: number;
+    name: string;
+  }
+
+  interface BackendData {
+    id: number;
+    name: string;
+    vcpu: number;
+    appId: string;
+    appUrl: string | null;
+    memory: number;
+    runner: string;
+    status: string;
+    teepod: Teepod;
+    userId: number;
+    vmUuid: string;
+    version: string;
+    diskSize: number;
+    features: unknown;
+    teepodId: number;
+    baseImage: string;
+    createdAt: string;
+    instanceId: string | null;
+    dashboardUrl: string;
+    manifestVersion: number;
+    dockerComposeFile: string;
+    encryptedEnvPubkey: string;
+  }
+
+  interface SimpletBackendInterface extends BaseObjectInterface {
+    project_uuid: string;
+    backend_uuid: string;
+    backendStatus: number;
+    dockerCompose: string;
+    environmentVariables: EnvironmentVariable[];
+    instanceId: string;
+    url: string;
+    data: BackendData;
+    tableName: string;
+  }
+  interface SimpletBackendResponse extends GeneralResponse<SimpletBackendInterface> {}
 }
