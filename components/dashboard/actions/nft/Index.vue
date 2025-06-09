@@ -21,7 +21,7 @@
         v-if="collectionStore.hasCollections"
         size="medium"
         :disabled="authStore.isAdmin()"
-        @click="collectionStore.modalCreateVisible = true"
+        @click="openModalCreateCollection()"
       >
         <span class="icon-create-folder mr-2 text-xl text-primary"></span>
         <span class="text-primary">{{ $t('nft.collection.new') }}</span>
@@ -36,5 +36,11 @@ defineProps({
 });
 
 const authStore = useAuthStore();
+const metadataStore = useMetadataStore();
 const collectionStore = useCollectionStore();
+
+function openModalCreateCollection() {
+  collectionStore.modalCreateVisible = true;
+  metadataStore.resetForms();
+}
 </script>

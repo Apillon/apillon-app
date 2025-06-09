@@ -139,18 +139,4 @@ export const useMetadataStore = defineStore('metadata', {
       sessionStorage.removeItem(LsCacheKeys.COLLECTION_QUOTA);
     },
   },
-  persist: {
-    key: SessionKeys.METADATA_STORE,
-    storage: piniaPluginPersistedstate.sessionStorage(),
-    pick: [
-      'csvAttributes',
-      'columns',
-      'csvData',
-      'csvSelectedAttributes',
-      'form',
-      'metadata',
-      'stepCollectionCreate',
-      'stepMetadata',
-    ],
-  } as any,
 });
