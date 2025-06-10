@@ -18,18 +18,18 @@
         <n-button v-if="deploymentStore.deploymentConfig?.id" class="w-full" @click="modalVariablesVisible = true">
           {{ $t('hosting.menu.envVars') }}
         </n-button>
-
-        <Btn
-          class="locked w-full"
-          size="medium"
-          type="primary"
-          :loading="deploying"
-          :disabled="authStore.isAdmin()"
-          @click="deployWebsite(DeploymentEnvironment.DIRECT_TO_PRODUCTION)"
-        >
-          {{ $t('hosting.deployProd') }}
-        </Btn>
       </template>
+
+      <Btn
+        class="locked w-full"
+        size="medium"
+        type="primary"
+        :loading="deploying"
+        :disabled="authStore.isAdmin()"
+        @click="deployWebsite(DeploymentEnvironment.DIRECT_TO_PRODUCTION)"
+      >
+        {{ $t('hosting.deployProd') }}
+      </Btn>
 
       <template v-if="websiteStore.active.w3ProductionLink">
         <BtnDomain />
