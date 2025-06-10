@@ -5,6 +5,7 @@
     :active-step="websiteStore.stepWebsiteCreate"
     trans-key="hosting.website.createStep"
     :title="$t('hosting.website.create')"
+    :minimize="websiteStore.stepWebsiteCreate > 1"
   >
     <slot>
       <FormHostingWebsiteTypeSelect

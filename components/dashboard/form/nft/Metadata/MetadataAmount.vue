@@ -38,8 +38,8 @@ onMounted(() => {
 
 const options = [
   { key: 'csv', icon: 'icon/table', value: NftMetadataStep.CSV },
-  { key: 'endpoint', icon: 'icon/web', value: NftMetadataStep.ENDPOINT },
-  { key: 'json', icon: 'icon/json', value: NftMetadataStep.JSON },
+  // { key: 'endpoint', icon: 'icon/web', value: NftMetadataStep.ENDPOINT },
+  // { key: 'json', icon: 'icon/json', value: NftMetadataStep.JSON },
 ];
 
 function select(next: number) {

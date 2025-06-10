@@ -46,6 +46,9 @@ export const useSimpletStore = defineStore('simplets', {
     },
   }),
   getters: {
+    backendStatus(state): number {
+      return Math.max(state.active?.backendStatus || 0, state.backend?.backendStatus || 0);
+    },
     hasTemplates(state): boolean {
       return Array.isArray(state.templates) && state.templates.length > 0;
     },
