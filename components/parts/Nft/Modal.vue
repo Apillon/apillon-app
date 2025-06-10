@@ -5,6 +5,7 @@
     :active-step="metadataStore.stepCollectionCreate"
     trans-key="nft.collection.createStep"
     :title="$t('nft.collection.create')"
+    :minimize="Math.max(metadataStore.stepCollectionCreate, metadataStore.stepMetadata) > 1"
   >
     <slot>
       <NftMetadataWizard
@@ -113,7 +114,7 @@ onMounted(async () => {
 const metadataValid = () => !metadataStore.metadata.some(item => !item.image || !item.name || !item.description);
 
 async function submitFormVisual() {
-  if (await formVisualRef.value.handleSubmitForm()) {
+  if (await formVisualRef.value?.handleSubmitForm()) {
     metadataStore.stepCollectionCreate = CollectionCreateStep.REVIEW;
   }
 }

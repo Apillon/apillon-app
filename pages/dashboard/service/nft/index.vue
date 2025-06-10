@@ -22,10 +22,9 @@
       <ActionsNft />
       <TableNftCollection :collections="collectionStore.items" :search="collectionStore.search" />
     </n-space>
-  </Dashboard>
 
-  <!-- Modal - Collection Transfer -->
-  <NftModal v-model:show="collectionStore.modalCreateVisible" />
+    <NftModal v-model:show="collectionStore.modalCreateVisible" />
+  </Dashboard>
 </template>
 
 <script lang="ts" setup>

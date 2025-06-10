@@ -9,7 +9,6 @@
         <span class="icon-add mr-2 text-xl text-primary"></span>
         <span class="text-primary">{{ $t('hosting.website.add') }}</span>
       </n-button>
-      <!-- <StorageGithubProjectConfig class="locked" /> -->
     </n-space>
   </n-space>
 
