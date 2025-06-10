@@ -16,7 +16,6 @@
             <ActionsNftCollection
               @add-nfts="openModalAddNfts"
               @mint="modalMintCollectionVisible = true"
-              @nest-mint="modalNestMintCollectionVisible = true"
               @revoke="modalBurnTokensVisible = true"
               @transfer="modalTransferOwnershipVisible = true"
               @set-base-uri="modalSetBaseUriVisible = true"
@@ -92,15 +91,6 @@
         <FormNftMint :collection="collectionStore.active" @submit-success="onNftMinted" />
       </modal>
 
-      <!-- Modal - Collection Nest Mint -->
-      <modal v-model:show="modalNestMintCollectionVisible" class="dropdown-grid" :title="t('nft.collection.nestMint')">
-        <FormNftNestMint
-          :collection-uuid="collectionStore.active.collection_uuid"
-          :chain-id="collectionStore.active.chain"
-          @submit-success="onNftNestMinted"
-        />
-      </modal>
-
       <!-- Modal - Burn Tokens -->
       <modal v-model:show="modalBurnTokensVisible" :title="$t('nft.collection.burn.title')">
         <FormNftBurn :collection="collectionStore.active" @submit-success="onNftBurned" />
@@ -157,7 +147,6 @@ const collectionStore = useCollectionStore();
 
 const pageLoading = ref<boolean>(true);
 const modalMintCollectionVisible = ref<boolean | null>(false);
-const modalNestMintCollectionVisible = ref<boolean | null>(false);
 const modalBurnTokensVisible = ref<boolean | null>(false);
 const modalTransferOwnershipVisible = ref<boolean | null>(false);
 const modalSetBaseUriVisible = ref<boolean | null>(false);
@@ -218,19 +207,6 @@ watch(
 
 function onNftMinted(hash: string) {
   modalMintCollectionVisible.value = false;
-  transactionHash.value = hash;
-
-  setTimeout(() => {
-    collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid, false);
-
-    setTimeout(() => {
-      checkUnfinishedTransactions();
-    }, 3000);
-  }, 3000);
-}
-
-function onNftNestMinted(hash: string) {
-  modalNestMintCollectionVisible.value = false;
   transactionHash.value = hash;
 
   setTimeout(() => {

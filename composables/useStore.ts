@@ -1,9 +1,7 @@
 export default function useStore() {
   const bucketStore = useBucketStore();
-  const chatStore = useChatStore();
   const cloudFunctionStore = useCloudFunctionStore();
   const collectionStore = useCollectionStore();
-  const contractStore = useContractStore();
   const dataStore = useDataStore();
   const deployedContractStore = useDeployedContractStore();
   const deploymentStore = useDeploymentStore();
@@ -16,7 +14,6 @@ export default function useStore() {
   const ipnsStore = useIpnsStore();
   const metadataStore = useMetadataStore();
   const paymentStore = usePaymentStore();
-  const postStore = usePostStore();
   const rpcApiKeyStore = useRpcApiKeyStore();
   const rpcEndpointStore = useRpcEndpointStore();
   const settingsStore = useSettingsStore();
@@ -33,7 +30,6 @@ export default function useStore() {
     clearRpc();
     clearSettings();
     clearSmartContracts();
-    clearSocial();
     clearStorage();
   }
 
@@ -43,7 +39,6 @@ export default function useStore() {
   }
 
   function clearComputing() {
-    contractStore.resetData();
     cloudFunctionStore.resetData();
   }
 
@@ -73,11 +68,6 @@ export default function useStore() {
 
   function clearSmartContracts() {
     deployedContractStore.resetData();
-  }
-
-  function clearSocial() {
-    chatStore.resetData();
-    postStore.resetData();
   }
 
   function clearStorage() {

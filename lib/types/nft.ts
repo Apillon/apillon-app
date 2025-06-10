@@ -46,8 +46,6 @@ export enum SubstrateChain {
   KILT = 2,
   PHALA = 4,
   POLKADOT = 5,
-  SUBSOCIAL = 6,
-  XSOCIAL = 7,
   ASTAR = 8,
   ACURAST = 9,
   UNIQUE = 11,

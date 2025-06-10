@@ -99,7 +99,7 @@
 defineProps({
   env: { type: Number, default: 0 },
 });
-const emit = defineEmits(['addNfts', 'mint', 'nestMint', 'revoke', 'transfer', 'setBaseUri']);
+const emit = defineEmits(['addNfts', 'mint', 'revoke', 'transfer', 'setBaseUri']);
 
 const message = useMessage();
 const authStore = useAuthStore();

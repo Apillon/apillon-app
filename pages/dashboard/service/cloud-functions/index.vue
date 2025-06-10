@@ -12,7 +12,7 @@
           </Btn>
         </template>
         <modal v-model:show="modalCreateCloudFunctionsVisible" :title="$t('computing.cloudFunctions.new')">
-          <FormComputingCloudFunctions @submit-success="modalCreateCloudFunctionsVisible = false" />
+          <FormCloudFunctions @submit-success="modalCreateCloudFunctionsVisible = false" />
         </modal>
       </ServiceEmpty>
     </template>
@@ -21,7 +21,7 @@
     </template>
     <slot>
       <n-space class="pb-8" :size="32" vertical>
-        <ActionsComputingCloudFunctions />
+        <ActionsCloudFunctions />
         <TableComputingCloudFunctions :functions="cloudFunctionStore.items" />
       </n-space>
     </slot>

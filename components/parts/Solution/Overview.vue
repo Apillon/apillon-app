@@ -185,36 +185,6 @@ const web3Services = computed(() => [
       },
     ],
   },
-  {
-    id: ServiceType.COMPUTING,
-    name: 'computing',
-    icon: 'icon-computing',
-    data: [
-      {
-        name: t(`service.computing.contractCount`),
-        value: dataStore.project.overview.contractCount,
-      },
-      {
-        name: t(`service.computing.computingTransactionCount`),
-        value: dataStore.project.overview.computingTransactionCount,
-      },
-    ],
-  },
-  {
-    id: ServiceType.SOCIAL,
-    name: 'social',
-    icon: 'icon-social',
-    data: [
-      {
-        name: t(`service.social.spaceCount`),
-        value: dataStore.project.overview.spaceCount,
-      },
-      {
-        name: t(`service.social.postCount`),
-        value: dataStore.project.overview.postCount,
-      },
-    ],
-  },
 ]);
 
 onMounted(async () => {

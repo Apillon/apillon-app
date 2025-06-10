@@ -29,28 +29,6 @@ export default function useHosting() {
   /** Website ID from route */
   const websiteUuid = ref<string>(params.id ? `${params?.id}` : `${params?.slug}`);
 
-  const ruleApiKey = (form: Record<string, any>) => ({
-    validator: (_, value) => validateApiKey(value, form?.apiSecret),
-    message: t('validation.apiKeyRequired'),
-    trigger: 'blur',
-  });
-  const ruleApiSecret = (form: Record<string, any>) => ({
-    validator: (_, value) => validateApiSecret(value, form?.apiKey),
-    message: t('validation.apiSecretRequired'),
-    trigger: 'blur',
-  });
-
-  /** Website rules */
-  const rulesWebsite: NFormRules = {
-    name: [ruleRequired(t('validation.website.nameRequired'))],
-    description: [ruleDescription(t('validation.descriptionTooLong'))],
-    repoId: [ruleRequired(t('validation.hosting.repoRequired'))],
-    branchName: [ruleRequired(t('validation.hosting.branchNameRequired'))],
-    buildDirectory: [ruleRequired(t('validation.hosting.buildDirectoryRequired'))],
-    apiKey: ruleApiKey(websiteStore.form),
-    apiSecret: ruleApiSecret(websiteStore.form),
-  };
-
   onUnmounted(() => {
     clearInterval(deploymentInterval);
     clearInterval(websiteInterval);
@@ -256,9 +234,9 @@ export default function useHosting() {
     loading.value = false;
     return null;
   }
-  async function onWebsiteDeleted(websitUuuid?: string) {
-    if (websitUuuid) {
-      websiteStore.items = websiteStore.items.filter(item => item.website_uuid !== websitUuuid);
+  async function onWebsiteDeleted(websiteUuid?: string) {
+    if (websiteUuid) {
+      websiteStore.items = websiteStore.items.filter(item => item.website_uuid !== websiteUuid);
     }
     sessionStorage.removeItem(LsCacheKeys.WEBSITE);
     sessionStorage.removeItem(LsCacheKeys.WEBSITE_ARCHIVE);
@@ -269,7 +247,6 @@ export default function useHosting() {
   return {
     activeTab,
     pageLoading,
-    rulesWebsite,
     tabs,
     websiteUuid,
     checkUnfinishedBuilds,
@@ -279,8 +256,6 @@ export default function useHosting() {
     initWebsite,
     onWebsiteDeleted,
     refreshWebpage,
-    ruleApiKey,
-    ruleApiSecret,
     updateWebsite,
   };
 }

@@ -10,7 +10,7 @@
     </template>
 
     <template #details>
-      <ComputingCloudFunctionsInstructions />
+      <CloudFunctionsInstructions />
     </template>
   </Heading>
 </template>

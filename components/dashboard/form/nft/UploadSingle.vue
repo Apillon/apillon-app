@@ -1,5 +1,5 @@
 <template>
-  <n-form ref="formRef" class="h-full" :model="metadataStore.form.single" :rules="rulesSingle">
+  <n-form ref="formRef" class="h-full" :model="metadataStore.form.single" :rules="rulesNftSingle">
     <div class="flex h-full flex-col gap-12 md:flex-row">
       <div class="md:w-1/2">
         <h4>{{ $t('nft.add') }}</h4>
@@ -7,7 +7,7 @@
 
         <n-grid :cols="12" :x-gap="32">
           <!--  Collection cover image -->
-          <n-form-item-gi :span="6" path="image" :label="infoLabel('image')" :label-props="{ for: 'image' }">
+          <n-form-item-gi :span="6" path="image" :label="labelInfo('image')" :label-props="{ for: 'image' }">
             <NftCard
               v-if="metadataStore.form.single.image"
               class="mx-auto max-w-72"
@@ -25,7 +25,7 @@
           </n-form-item-gi>
 
           <!-- NFT name -->
-          <n-form-item-gi :span="12" path="name" :label="infoLabel('name')" :label-props="{ for: 'name' }">
+          <n-form-item-gi :span="12" path="name" :label="labelInfo('name')" :label-props="{ for: 'name' }">
             <n-input
               v-model:value="metadataStore.form.single.name"
               :input-props="{ id: 'name' }"
@@ -35,7 +35,7 @@
           </n-form-item-gi>
 
           <!-- NFT ID -->
-          <n-form-item-gi :span="6" path="id" :label="infoLabel('id')" :label-props="{ for: 'nftId' }">
+          <n-form-item-gi :span="6" path="id" :label="labelInfo('id')" :label-props="{ for: 'nftId' }">
             <n-input-number
               v-model:value="metadataStore.form.single.id"
               :input-props="{ id: 'nftId' }"
@@ -48,7 +48,7 @@
           </n-form-item-gi>
 
           <!-- Number NFT of copies -->
-          <n-form-item-gi :span="6" path="copies" :label="infoLabel('copies')" :label-props="{ for: 'copies' }">
+          <n-form-item-gi :span="6" path="copies" :label="labelInfo('copies')" :label-props="{ for: 'copies' }">
             <n-input-number
               v-model:value="metadataStore.form.single.copies"
               :min="0"
@@ -61,7 +61,7 @@
           <n-form-item-gi
             :span="12"
             path="description"
-            :label="infoLabel('description')"
+            :label="labelInfo('description')"
             :label-props="{ for: 'description' }"
           >
             <n-input
@@ -84,7 +84,7 @@
           <n-form-item-gi
             :span="12"
             path="attributes"
-            :label="infoLabel('attributes')"
+            :label="labelInfo('attributes')"
             :label-props="{ for: 'attributes' }"
             size="large"
           >
@@ -111,16 +111,12 @@ const { t } = useI18n();
 const message = useMessage();
 const metadataStore = useMetadataStore();
 
-const { labelInfo } = useComputing();
-const { formRef, rulesSingle } = useCollection();
+const { rulesNftSingle, labelInfo } = useForm('form.label.nft');
+const { formRef } = useCollection();
 const { createSingleNft, handleImageRemove, uploadImageRequest } = useMetadata();
 defineExpose({ formRef, handleSubmitForm });
 
 const uploadRef = ref<UploadInst | null>(null);
-
-function infoLabel(field: string) {
-  return labelInfo(field, 'form.label.nft');
-}
 
 function removeImages() {
   metadataStore.images.pop();

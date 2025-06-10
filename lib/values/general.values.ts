@@ -57,7 +57,6 @@ export const LsTableColumnsKeys = {
   NFT_COLLECTION: 'al_table_nft_collection_columns',
   SIMPLETS: 'al_table_simplets',
   SMART_CONTRACTS: 'al_table_smart_contracts',
-  SOCIAL_POST: 'al_table_social_channel',
 };
 
 export const LsW3WarnKeys = {
@@ -73,7 +72,6 @@ export const LsW3WarnKeys = {
   HOSTING_DEPLOY: 'al_w3warn_hosting_deploy',
   HOSTING_DELETE: 'al_w3warn_hosting_delete',
   NFT_NEW: 'al_w3warn_nft_new',
-  SOCIAL_NEW: 'al_w3warn_social_new',
 };
 
 export const LsCacheKeys = {
@@ -94,10 +92,6 @@ export const LsCacheKeys = {
   COLLECTION_METADATA: 'al_cache_collection_metadata',
   COLLECTION_TRANSACTIONS: 'al_cache_collection_transactions',
   COLLECTION_QUOTA: 'al_cache_collection_quota',
-  COMPUTING_TRANSACTIONS: 'al_cache_computing_transactions',
-  CONTRACT: 'al_cache_contract',
-  CONTRACTS: 'al_cache_contracts',
-  CONTRACT_ARCHIVE: 'al_cache_contract_archive',
   CLOUD_FUNCTION: 'al_cache_cloud_function',
   CLOUD_FUNCTIONS: 'al_cache_cloud_functions',
   CLOUD_FUNCTIONS_ARCHIVE: 'al_cache_cloud_functions_archive',

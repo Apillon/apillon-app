@@ -225,8 +225,6 @@ function getIconName(service: ProductPriceInterface) {
   switch (service.category.trim()) {
     case PriceServiceCategory.ACURAST:
       return 'icon/cloud-functions';
-    case PriceServiceCategory.GRILL_CHAT:
-      return 'logo/subsocial';
     case PriceServiceName.INDEXER:
       return 'menu/indexer';
   }
@@ -245,8 +243,6 @@ function getIconName(service: ProductPriceInterface) {
   switch (service.service) {
     case ServiceTypeName.COMPUTING:
       return 'menu/computing';
-    case ServiceTypeName.SOCIAL:
-      return 'logo/subsocial';
     case ServiceTypeName.EMBEDDED_WALLET:
       return 'icon/wallet';
     case ServiceTypeName.SMART_CONTRACTS:

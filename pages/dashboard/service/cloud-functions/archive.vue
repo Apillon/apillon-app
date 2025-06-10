@@ -5,7 +5,7 @@
     </template>
     <slot>
       <n-space v-if="cloudFunctionStore.hasCloudFunctions" class="pb-8" :size="32" vertical>
-        <ActionsComputingCloudFunctions archive />
+        <ActionsCloudFunctions archive />
         <TableComputingCloudFunctions :functions="cloudFunctionStore.archive" archive />
       </n-space>
       <Empty

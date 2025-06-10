@@ -185,7 +185,7 @@ const dropdownOptions = [
     },
   },
   {
-    key: 'socialDelete',
+    key: 'delete',
     label: t('general.archive'),
     disabled: authStore.isAdmin(),
     props: {

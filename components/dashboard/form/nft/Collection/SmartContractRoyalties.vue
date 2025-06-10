@@ -3,7 +3,7 @@
     <n-form-item
       path="royaltiesAddress"
       :span="8"
-      :label="infoLabel('royaltiesAddress')"
+      :label="labelInfo('royaltiesAddress')"
       :label-props="{ for: 'royaltiesAddress' }"
     >
       <FormFieldWalletAddress
@@ -16,7 +16,7 @@
       <n-form-item-gi
         path="royaltiesFees"
         :span="isLg ? 6 : 12"
-        :label="infoLabel('royaltiesFees')"
+        :label="labelInfo('royaltiesFees')"
         :label-props="{ for: 'royaltiesFees' }"
       >
         <n-input-number
@@ -50,13 +50,9 @@ const { isLg } = useScreen();
 const message = useMessage();
 const metadataStore = useMetadataStore();
 
-const { labelInfo } = useComputing();
-const { formRef, rules } = useCollection();
+const { rulesCollection: rules, labelInfo } = useForm();
+const { formRef } = useCollection();
 defineExpose({ formRef, handleSubmitForm });
-
-function infoLabel(field: string) {
-  return labelInfo(field, 'form.label.collection');
-}
 
 // Submit
 async function handleSubmitForm(e?: Event | MouseEvent): Promise<boolean> {

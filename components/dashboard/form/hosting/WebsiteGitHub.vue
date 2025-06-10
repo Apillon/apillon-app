@@ -129,14 +129,15 @@ const props = defineProps({
   title: { type: String, default: null },
   hideSubmit: { type: Boolean, default: false },
 });
-
-const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const storageStore = useStorageStore();
 const websiteStore = useWebsiteStore();
 const warningStore = useWarningStore();
-const { rulesWebsite, createWebsite } = useHosting();
+
+const { t } = useI18n();
+const { rulesWebsite } = useForm();
+const { createWebsite } = useHosting();
 
 const loading = ref<boolean>(false);
 const repoSelected = ref<boolean>(false);

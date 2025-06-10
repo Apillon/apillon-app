@@ -10,7 +10,6 @@ export enum Permission {
   NFTS = 3,
   AUTHENTICATION = 4,
   COMPUTING = 5,
-  SOCIAL = 6,
   EMBEDDED_WALLET = 7,
   CONTRACTS = 8,
   RPC = 9,
@@ -27,6 +26,13 @@ export enum OauthLinkType {
 
 export enum NotificationType {
   UNKNOWN = 0,
+  WEBSITE_DEPLOYED = 1,
+  NFT_METADATA_DEPLOYED = 2,
+  NFT_COLLECTION_DEPLOYED = 3,
+  CLOUD_FUNCTION_DEPLOYED = 4,
+  INDEXER_DEPLOYED = 5,
+  SMART_CONTRACT_DEPLOYED = 6,
+  EMBEDDED_WALLET_GENERATED = 7,
 }
 
 declare global {

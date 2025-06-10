@@ -7,7 +7,7 @@
     ref="formRef"
     class="max-w-xl"
     :model="metadataStore.form.visual"
-    :rules="rules"
+    :rules="rulesCollection"
     @submit.prevent="handleSubmitForm"
   >
     <n-grid :cols="12" :x-gap="32">
@@ -15,7 +15,7 @@
       <n-form-item-gi
         :span="6"
         path="logo"
-        :label="infoLabel('logo')"
+        :label="labelInfo('logo')"
         :label-props="{ for: 'collectionLogo' }"
         :show-feedback="false"
       >
@@ -26,7 +26,7 @@
       <n-form-item-gi
         :span="6"
         path="coverImage"
-        :label="infoLabel('coverImage')"
+        :label="labelInfo('coverImage')"
         :label-props="{ for: 'coverImage' }"
         :show-feedback="false"
       >
@@ -55,13 +55,9 @@ const { t } = useI18n();
 const message = useMessage();
 const metadataStore = useMetadataStore();
 
-const { labelInfo } = useComputing();
-const { formRef, isFormDisabled, rules } = useCollection();
+const { rulesCollection, labelInfo } = useForm();
+const { formRef, isFormDisabled } = useCollection();
 defineExpose({ formRef, handleSubmitForm });
-
-function infoLabel(field: string) {
-  return labelInfo(field, 'form.label.collection');
-}
 
 // Submit
 async function handleSubmitForm(e?: Event | MouseEvent): Promise<boolean> {

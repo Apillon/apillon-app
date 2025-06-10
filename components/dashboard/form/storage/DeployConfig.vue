@@ -101,12 +101,13 @@ const props = defineProps({
   configId: { type: Number, default: 0 },
 });
 
-const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
-const { rulesWebsite } = useHosting();
 const deploymentStore = useDeploymentStore();
+
+const { t } = useI18n();
+const { rulesWebsite } = useForm();
 
 const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);

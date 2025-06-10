@@ -46,7 +46,6 @@ const authStore = useAuthStore();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const websiteStore = useWebsiteStore();
-const contractStore = useContractStore();
 const collectionStore = useCollectionStore();
 const cloudFunctionStore = useCloudFunctionStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
@@ -98,8 +97,6 @@ const hasServices = (routeName: string) => {
       return bucketStore.hasBuckets || bucketStore.loading;
     case 'dashboard-service-hosting':
       return websiteStore.hasWebsites || websiteStore.loading;
-    case 'dashboard-service-computing':
-      return contractStore.hasContracts || contractStore.loading;
     case 'dashboard-service-nft':
       return collectionStore.hasCollections || collectionStore.loading;
     case 'dashboard-service-cloud-functions':

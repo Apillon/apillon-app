@@ -61,7 +61,6 @@
 
 <script lang="ts" setup>
 import { useTemplateRef } from 'vue';
-import { CollectionCreateStep, NftMetadataStep } from '~/lib/types/nft';
 
 const message = useMessage();
 const authStore = useAuthStore();

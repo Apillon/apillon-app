@@ -70,7 +70,6 @@ export default defineNuxtConfig({
               'viem/chains',
               'swiper/vue',
               'swiper/modules',
-              '@subsocial/grill-widget',
               '@wdns/vue-code-block',
               'vue3-youtube',
               'swiper/types',

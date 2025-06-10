@@ -6,7 +6,7 @@
       :text-inactive="$t('form.supplyTypes.unlimited')"
     />
     <n-grid v-show="metadataStore.form.smartContract.supplyLimited" class="items-end" :cols="12" :x-gap="32">
-      <n-form-item-gi path="maxSupply" :span="6" :label="infoLabel('maxSupply')" :label-props="{ for: 'maxSupply' }">
+      <n-form-item-gi path="maxSupply" :span="6" :label="labelInfo('maxSupply')" :label-props="{ for: 'maxSupply' }">
         <n-input-number
           v-model:value="metadataStore.form.smartContract.maxSupply"
           :min="0"
@@ -20,7 +20,7 @@
     </n-grid>
 
     <n-grid class="items-end" :cols="12" :x-gap="32">
-      <n-form-item-gi path="revocable" :span="4" :label="infoLabel('revocable')" :label-props="{ for: 'revocable' }">
+      <n-form-item-gi path="revocable" :span="4" :label="labelInfo('revocable')" :label-props="{ for: 'revocable' }">
         <select-options
           v-model:value="metadataStore.form.smartContract.revocable"
           :options="booleanSelect"
@@ -29,7 +29,7 @@
           filterable
         />
       </n-form-item-gi>
-      <n-form-item-gi path="soulbound" :span="4" :label="infoLabel('soulbound')" :label-props="{ for: 'soulbound' }">
+      <n-form-item-gi path="soulbound" :span="4" :label="labelInfo('soulbound')" :label-props="{ for: 'soulbound' }">
         <select-options
           v-model:value="metadataStore.form.smartContract.soulbound"
           :options="booleanSelect"
@@ -41,7 +41,7 @@
       <n-form-item-gi
         path="isAutoIncrement"
         :span="4"
-        :label="infoLabel('autoIncrement')"
+        :label="labelInfo('autoIncrement')"
         :label-props="{ for: 'autoIncrement' }"
       >
         <select-options
@@ -72,8 +72,8 @@ const { t } = useI18n();
 const message = useMessage();
 const metadataStore = useMetadataStore();
 
-const { labelInfo } = useComputing();
-const { booleanSelect, formRef, rules } = useCollection();
+const { rulesCollection: rules, labelInfo } = useForm();
+const { booleanSelect, formRef } = useCollection();
 defineExpose({ formRef, handleSubmitForm });
 
 onMounted(() => {
@@ -81,10 +81,6 @@ onMounted(() => {
     metadataStore.form.smartContract.maxSupply = metadataStore.metadata.length;
   }
 });
-
-function infoLabel(field: string) {
-  return labelInfo(field, 'form.label.collection');
-}
 
 async function handleSubmitForm(e?: Event | MouseEvent): Promise<boolean> {
   e?.preventDefault();

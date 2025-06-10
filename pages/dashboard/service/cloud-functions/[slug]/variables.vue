@@ -6,7 +6,7 @@
 
     <slot>
       <n-space v-if="cloudFunctionStore.hasVariables" class="pb-8" :size="32" vertical>
-        <ActionsComputingCloudFunctionsEnvironment />
+        <ActionsCloudFunctionsEnvironment />
         <TableComputingCloudFunctionVariables v-if="cloudFunctionStore.hasVariables" />
       </n-space>
       <n-space v-else class="pb-8" :size="32" vertical>
@@ -41,7 +41,7 @@
 
       <!-- Modal - Create Cloud Function variables -->
       <modal v-model:show="modalCreateVariableVisible" :title="$t('computing.cloudFunctions.variable.new')">
-        <FormComputingCloudFunctionsVariable
+        <FormCloudFunctionsVariable
           :function-uuid="cloudFunctionStore.functionUuid"
           @submit-success="modalCreateVariableVisible = false"
         />

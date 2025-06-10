@@ -1,7 +1,7 @@
 <template>
   <n-form ref="formRef" :model="metadataStore.form.smartContract" :rules="rules" @submit.prevent="handleSubmitForm">
     <n-grid :cols="12" :x-gap="32">
-      <n-form-item-gi :span="8" path="name" :label="infoLabel('name')" :label-props="{ for: 'name' }">
+      <n-form-item-gi :span="8" path="name" :label="labelInfo('name')" :label-props="{ for: 'name' }">
         <n-input
           v-model:value="metadataStore.form.smartContract.name"
           :input-props="{ id: 'name' }"
@@ -9,7 +9,7 @@
           clearable
         />
       </n-form-item-gi>
-      <n-form-item-gi :span="4" path="symbol" :label="infoLabel('symbol')" :label-props="{ for: 'symbol' }">
+      <n-form-item-gi :span="4" path="symbol" :label="labelInfo('symbol')" :label-props="{ for: 'symbol' }">
         <n-input
           v-model:value="metadataStore.form.smartContract.symbol"
           :minlength="1"
@@ -21,7 +21,7 @@
       </n-form-item-gi>
     </n-grid>
 
-    <n-form-item v-if="showNetwork" path="chain" :label="infoLabel('chain')" :label-props="{ for: 'chain' }">
+    <n-form-item v-if="showNetwork" path="chain" :label="labelInfo('chain')" :label-props="{ for: 'chain' }">
       <select-options
         v-model:value="metadataStore.form.smartContract.chain"
         :options="chains"
@@ -35,7 +35,7 @@
     <n-form-item
       v-if="metadataStore.form.smartContract.chainType !== ChainType.SUBSTRATE"
       path="adminAddress"
-      :label="infoLabel('adminAddress')"
+      :label="labelInfo('adminAddress')"
       :label-props="{ for: 'adminAddress' }"
     >
       <FormFieldWalletAddress
@@ -50,7 +50,7 @@
         id="useApillonIpfsGateway"
         v-model:checked="metadataStore.form.smartContract.useApillonIpfsGateway"
         size="medium"
-        :label="infoLabel('useGateway')"
+        :label="labelInfo('useGateway')"
       />
     </n-form-item>
 
@@ -58,7 +58,7 @@
       <n-checkbox
         v-model:checked="metadataStore.form.smartContract.useIpns"
         size="medium"
-        :label="infoLabel('useIpns')"
+        :label="labelInfo('useIpns')"
       />
     </n-form-item>
 
@@ -80,15 +80,11 @@ defineProps({
 const message = useMessage();
 const metadataStore = useMetadataStore();
 
-const { labelInfo } = useComputing();
-const { chainsTestnet, formRef, isUnique, nftChains, rules, isChainAvailable } = useCollection();
+const { rulesCollection: rules, labelInfo } = useForm();
+const { chainsTestnet, formRef, isUnique, nftChains, isChainAvailable } = useCollection();
 defineExpose({ formRef, handleSubmitForm });
 
 const chains = computed(() => [...nftChains, ...chainsTestnet].filter(chain => isChainAvailable(chain.value)));
-
-function infoLabel(field: string) {
-  return labelInfo(field, 'form.label.collection');
-}
 
 // Submit
 async function handleSubmitForm(e?: Event | MouseEvent): Promise<boolean> {

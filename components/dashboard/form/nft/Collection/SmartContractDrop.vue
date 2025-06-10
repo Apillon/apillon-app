@@ -21,7 +21,7 @@
       </n-form-item-gi>
 
       <!--  Collection Drop start -->
-      <n-form-item-gi path="dropStart" :span="6" :label="infoLabel('dropStart')" :label-props="{ for: 'dropStart' }">
+      <n-form-item-gi path="dropStart" :span="6" :label="labelInfo('dropStart')" :label-props="{ for: 'dropStart' }">
         <n-date-picker
           v-model:value="metadataStore.form.smartContract.dropStart"
           class="w-full"
@@ -38,7 +38,7 @@
         v-if="metadataStore.form.smartContract.chainType === ChainType.EVM"
         path="dropReserve"
         :span="6"
-        :label="infoLabel('dropReserve')"
+        :label="labelInfo('dropReserve')"
         :label-props="{ for: 'dropReserve' }"
       >
         <n-input-number
@@ -68,13 +68,9 @@ defineProps({
 const message = useMessage();
 const metadataStore = useMetadataStore();
 
-const { labelInfo } = useComputing();
-const { formRef, rules } = useCollection();
+const { rulesCollection: rules, labelInfo } = useForm();
+const { formRef } = useCollection();
 defineExpose({ formRef, handleSubmitForm });
-
-function infoLabel(field: string) {
-  return labelInfo(field, 'form.label.collection');
-}
 
 // Submit
 async function handleSubmitForm(e?: Event | MouseEvent): Promise<boolean> {

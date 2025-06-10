@@ -23,7 +23,7 @@
 
       <!--  IPNS -->
       <n-form-item v-if="!website?.ipnsProduction" path="ipns" :show-label="false">
-        <n-checkbox v-model:checked="formData.ipns" :label="labelInfo('useIpns', 'hosting.domain')" />
+        <n-checkbox v-model:checked="formData.ipns" :label="labelInfo('useIpns')" />
       </n-form-item>
 
       <!--  Form submit -->
@@ -68,7 +68,7 @@ const authStore = useAuthStore();
 const websiteStore = useWebsiteStore();
 const warningStore = useWarningStore();
 const deploymentStore = useDeploymentStore();
-const { labelInfo } = useComputing();
+const { labelInfo } = useForm('hosting.domain');
 const { checkUnfinishedWebsite } = useHosting();
 
 const loading = ref<boolean>(false);

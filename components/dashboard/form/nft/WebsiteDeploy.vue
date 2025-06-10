@@ -39,7 +39,7 @@ const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const collectionStore = useCollectionStore();
-const { ruleApiKey, ruleApiSecret } = useHosting();
+const { ruleApiKey, ruleApiSecret } = useForm();
 
 const loading = ref<boolean>(false);
 

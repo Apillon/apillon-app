@@ -1,16 +1,16 @@
 import type { UploadCustomRequestOptions, UploadFileInfo } from 'naive-ui';
-import type { FormCloudFunctions } from '~/components/dashboard/form/computing/CloudFunctions/Job.vue';
 
 let jobInterval: any = null as any;
 
 export default function useCloudFunctions() {
-  const { t } = useI18n();
-  const { params } = useRoute();
   const router = useRouter();
   const message = useMessage();
   const dataStore = useDataStore();
   const cloudFunctionStore = useCloudFunctionStore();
-  const { uploadFileToIPFS } = useComputing();
+
+  const { t } = useI18n();
+  const { params } = useRoute();
+  const { uploadFileToIPFS } = useFile();
   const { refreshInterval, clearIntervalJob, setJobStatus, updateJobStatus } = useRefreshStatus();
 
   const pageLoading = ref<boolean>(true);
@@ -118,7 +118,7 @@ export default function useCloudFunctions() {
     }
   }
 
-  async function createNewJob(data: FormCloudFunctions, functionUuid: string): Promise<JobInterface | null> {
+  async function createNewJob(data: FormCloudFunctionsJob, functionUuid: string): Promise<JobInterface | null> {
     const projectUuid = await dataStore.getProjectUuid();
     try {
       setJobStatus(data?.file?.name);
