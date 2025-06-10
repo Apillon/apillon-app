@@ -1,41 +1,41 @@
 {
-    "w3Warn": {
-        "bucket": {
-          "new": "Each file hosting that passes through Crust's pinning and replication service is paid up front for a minimum period of 6 months. Apillon has no control over amending that period, so keep in mind that all files you deploy to Apillon storage buckets will remain accessible for that period of time.",
-          "delete": "All items stored in this bucket will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before.",
-          "destroyed": ""
-        },
-        "contract": {
-          "_new": "New Phat contract"
-        },
-        "rpc": {
-          "new": "INSERT SOME TEXT"
-        },
-        "file": {
-          "delete": "This item will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."
-        },
-        "folder": {
-          "delete": "All items stored in this folder will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."
-        },
-        "hosting": {
-          "upload": "With web3 hosting you can only hosting static, client site rendered pages. Server side rendering is not supported.",
-          "delete": "Deleted sites are no longer accessible, but they are still available in Website Archive. Websites in the archive can be republished.",
-          "deploy": "Please be advised that the deployment may take up to 5 minutes to complete."
-        },
-        "ipfs": {
-          "gateway": ""
-        },
-        "nft": {
-          "collection": "You are about to deploy a NFT collection to the blockchain. If you confirm this step, your NFT collection will irreversibly be deployed.",
-          "new": "Your NFT collection is now configured. If you proceed with this step, the deployment of NFT collection on blockchain will start. Once deployed, the NFTs will be live on the blockchain and ready to mingle with the world.",
-          "delete": "Deleting NFT collection will erased collection's metadata, but collection will still exists on chain."
-        },
-        "social": {
-          "info": "Subsocial is a set of Substrate pallets that allows anyone to launch their own decentralized social network or community, or add social features to an existing application. Subsocial is not a decentralized social network, like Twitter or Facebook, but rather Subsocial is a platform for building social networks.",
-          "grillChat": " is a mobile-friendly, anonymous chat application powered by Subsocial, allowing anyone to communicate on-chain, without needing a wallet or tokens!"
-        },
-        "storage": {
-          "shortUrl": ""
-        }
-      }
+  "w3Warn": {
+    "bucket": {
+      "new": "Each file hosting that passes through Crust's pinning and replication service is paid up front for a minimum period of 6 months. Apillon automatically amends the pinning lease on Crust every 6 months, so your files will remain accessible indefinitely.",
+      "delete": "All items stored in this bucket will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before.",
+      "destroyed": ""
+    },
+    "contract": {
+      "_new": "New Phat contract"
+    },
+    "rpc": {
+      "new": "INSERT SOME TEXT"
+    },
+    "file": {
+      "delete": "This item will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."
+    },
+    "folder": {
+      "delete": "All items stored in this folder will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."
+    },
+    "hosting": {
+      "upload": "With web3 hosting you can only hosting static, client site rendered pages. Server side rendering is not supported.",
+      "delete": "Deleted sites are no longer accessible, but they are still available in Website Archive. Websites in the archive can be republished.",
+      "deploy": "Please be advised that the deployment may take up to 5 minutes to complete."
+    },
+    "ipfs": {
+      "gateway": ""
+    },
+    "nft": {
+      "collection": "You are about to deploy a NFT collection to the blockchain. If you confirm this step, your NFT collection will irreversibly be deployed.",
+      "new": "Your NFT collection is now configured. If you proceed with this step, the deployment of NFT collection on blockchain will start. Once deployed, the NFTs will be live on the blockchain and ready to mingle with the world.",
+      "delete": "Deleting NFT collection will erased collection's metadata, but collection will still exists on chain."
+    },
+    "social": {
+      "info": "Subsocial is a set of Substrate pallets that allows anyone to launch their own decentralized social network or community, or add social features to an existing application. Subsocial is not a decentralized social network, like Twitter or Facebook, but rather Subsocial is a platform for building social networks.",
+      "grillChat": " is a mobile-friendly, anonymous chat application powered by Subsocial, allowing anyone to communicate on-chain, without needing a wallet or tokens!"
+    },
+    "storage": {
+      "shortUrl": ""
+    }
+  }
 }
