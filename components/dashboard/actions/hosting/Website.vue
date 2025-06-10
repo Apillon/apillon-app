@@ -20,7 +20,6 @@
         </n-button>
 
         <Btn
-          v-if="websiteStore.active.cidProduction"
           class="locked w-full"
           size="medium"
           type="primary"
