@@ -19,8 +19,8 @@
           {{ $t('hosting.menu.envVars') }}
         </n-button>
       </template>
-
       <Btn
+        v-else
         class="locked w-full"
         size="medium"
         type="primary"
