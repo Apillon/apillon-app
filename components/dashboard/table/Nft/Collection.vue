@@ -24,7 +24,7 @@ const props = defineProps({
   search: { type: String, default: '' },
 });
 
-const { t, te } = useI18n();
+const { t } = useI18n();
 const router = useRouter();
 const message = useMessage();
 const authStore = useAuthStore();
@@ -77,6 +77,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       key: 'collection_uuid',
       title: t('nft.collection.uuid'),
       className: { hidden: !selectedColumns.value.includes('collection_uuid') },
+      show: false,
       render(row: CollectionInterface) {
         return h(resolveComponent('TableEllipsis'), { text: row.collection_uuid }, '');
       },
@@ -100,6 +101,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       title: t('nft.collection.baseUri'),
       minWidth: 120,
       className: { hidden: !selectedColumns.value.includes('baseUri') },
+      show: false,
       render(row: CollectionInterface) {
         return h(resolveComponent('TableEllipsis'), { text: row.baseUri }, '');
       },
@@ -107,6 +109,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
     {
       key: 'dropPrice',
       title: t('nft.collection.dropPrice'),
+      show: false,
       className: [
         { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
         { hidden: !selectedColumns.value.includes('dropPrice') },
@@ -115,6 +118,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
     {
       key: 'dropReserve',
       title: t('nft.collection.dropReserve'),
+      show: false,
       className: [
         { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
         { hidden: !selectedColumns.value.includes('dropReserve') },
@@ -143,6 +147,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       key: 'dropStart',
       title: t('nft.collection.dropStart'),
       className: { hidden: !selectedColumns.value.includes('dropStart') },
+      show: false,
       render(row: CollectionInterface) {
         if (row.drop) {
           return h('span', {}, { default: () => timestampToDateAndTime(row.dropStart) });

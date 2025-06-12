@@ -215,12 +215,12 @@ export default function useHosting() {
       }
 
       const { data } = await $api.post<WebsiteResponse>(endpoints.website, bodyData);
-
-      message.success(t('form.success.created.website'));
+      websiteStore.active = data;
 
       /** On new website created add new website to list */
       websiteStore.items.unshift(data as WebsiteBaseInterface);
 
+      message.success(t('form.success.created.website'));
       loading.value = false;
       return data;
     } catch (error) {
