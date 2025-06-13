@@ -1,7 +1,10 @@
 import { defineStore } from 'pinia';
 import NextJsPNG from '/assets/images/hosting/nextJs.png';
 
-const apillonOwner = { avatar_url: 'https://avatars.githubusercontent.com/u/68999895?s=48&v=4', login: 'Apillon' };
+export const apillonOwner = {
+  avatar_url: 'https://avatars.githubusercontent.com/u/68999895?s=48&v=4',
+  login: 'Apillon',
+};
 
 export const apillonRepos: GithubRepo[] = [
   {
@@ -129,6 +132,7 @@ export const useStorageStore = defineStore('storage', {
       const projectUuid = await dataStore.getProjectUuid();
 
       if (this.projectConfig === undefined) await this.getGithubProjectConfig();
+      console.log(projectUuid, this.projectConfig);
       if (!this.hasProjectConfigLoaded) return;
 
       this.loading = true;

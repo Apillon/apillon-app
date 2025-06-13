@@ -135,8 +135,7 @@ async function deploy() {
   simpletStore.stepSimpletCreate = SimpletCreateStep.DEPLOYING;
 
   const simpletUuid =
-    simpletStore.templates.find(t => t.name === 'nft-studio-simplet')?.simplet_uuid ||
-    simpletStore.templates[0].simplet_uuid;
+    simpletStore.templates.find(t => t.name === 'nft-studio')?.simplet_uuid || simpletStore.templates[0].simplet_uuid;
   const simplet = await createSimplet(simpletUuid);
 
   simpletStore.stepSimpletCreate = simplet ? SimpletCreateStep.DEPLOYED : SimpletCreateStep.FORM;

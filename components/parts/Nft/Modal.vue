@@ -180,6 +180,7 @@ async function deployNftCollection(): Promise<CollectionInterface> {
 
 async function deployUniqueCollection(): Promise<CollectionInterface> {
   const bucketUuid = await createBucket(metadataStore.form.smartContract.name);
+  await uploadLogoAndCover(bucketUuid);
   const body = await prepareUniqueData(bucketUuid);
 
   const req = await fetch(APISettings.basePath + endpoints.collectionsUnique, {
@@ -191,8 +192,6 @@ async function deployUniqueCollection(): Promise<CollectionInterface> {
     },
   });
   const { data } = await $api.onResponse<CollectionResponse>(req);
-
-  await uploadLogoAndCover(bucketUuid);
 
   return data;
 }
@@ -218,6 +217,16 @@ async function prepareUniqueData(bucketUuid: string) {
 
   const body = new FormData();
   body.append('bucket_uuid', bucketUuid);
+
+  const logoImg = bucketStore.getUploadedFileByFilename('logo');
+  const coverImg = bucketStore.getUploadedFileByFilename('cover');
+
+  if (logoImg?.link) {
+    body.append('logoUrl', logoImg.link);
+  }
+  if (coverImg?.link) {
+    body.append('bannerUrl', coverImg.link);
+  }
 
   const baseData = prepareFormData();
   Object.entries(baseData).forEach(([key, value]) => {

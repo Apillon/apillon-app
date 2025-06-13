@@ -28,7 +28,7 @@
           "subtitle": "What you’ll need before you start:",
           "content": [
             "Create an NFT collection using Apillon’s step-by-step [NFT Wizard](/dashboard/service/nft), keeping in mind that attendees will mint from that collection.",
-            "If you're using email, you’ll need your [SMTP]() details so you can send invies directly from your domain."
+            "If you're using email, you’ll need your [SMTP](https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol) details so you can send invites directly from your domain."
           ]
         },
         {
@@ -75,7 +75,7 @@
           "subtitle": "What you’ll need before you start:",
           "content": [
             "Create an NFT collection using Apillon’s step-by-step [NFT Wizard](/dashboard/service/nft), keeping in mind that attendees will mint from that collection.",
-            "If you're using email, you’ll need your [SMTP]() details so you can send invies directly from your domain."
+            "If you're using email, you’ll need your [SMTP](https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol) details so you can send invites directly from your domain."
           ]
         },
         {

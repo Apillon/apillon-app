@@ -8,7 +8,7 @@
     <div class="flex w-full items-center justify-between">
       <small class="inline-block md:w-1/3">{{ title }}</small>
       <div class="flex items-center gap-4 text-xs">
-        <strong class="text-yellow">
+        <strong v-if="$te(`${transKey}.${activeStep}`)" class="text-yellow">
           {{ $t(`${transKey}.${activeStep}`) }}
         </strong>
       </div>

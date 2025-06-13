@@ -8,7 +8,7 @@
     autocomplete="off"
     @submit.prevent="handleSubmit"
   >
-    <FormFieldRepo v-model:value="websiteStore.form.repoId" :disabled="!!configId" />
+    <FormFieldRepo v-if="!isSimplet" v-model:value="websiteStore.form.repoId" :disabled="!!configId" />
     <n-form-item path="branchName" :label="$t('form.label.website.branchName')" :label-props="{ for: 'branchName' }">
       <n-input
         v-model:value="websiteStore.form.branchName"
@@ -20,13 +20,13 @@
 
     <n-form-item
       path="installCommand"
-      :label="$t('hosting.deploy.form.install-command')"
+      :label="$t('form.label.website.installCommand')"
       :label-props="{ for: 'installCommand' }"
     >
       <n-input
         v-model:value="websiteStore.form.installCommand"
         :input-props="{ id: 'installCommand' }"
-        :placeholder="$t('hosting.deploy.form.install-command-placeholder')"
+        :placeholder="$t('form.placeholder.website.installCommand')"
         clearable
       />
     </n-form-item>
@@ -99,14 +99,17 @@
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess', 'close']);
 const props = defineProps({
   configId: { type: Number, default: 0 },
+  isSimplet: { type: Boolean, default: false },
 });
 
-const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
+const simpletStore = useSimpletStore();
 const websiteStore = useWebsiteStore();
-const { rulesWebsite } = useHosting();
 const deploymentStore = useDeploymentStore();
+
+const { t } = useI18n();
+const { rulesWebsite } = useHosting();
 
 const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
@@ -115,6 +118,21 @@ const deleteLoading = ref<boolean>(false);
 
 const isFormDisabled = computed<boolean>(() => {
   return dataStore.isProjectUser;
+});
+
+onMounted(async () => {
+  if (props.isSimplet) {
+    await simpletStore.getSimpletTemplates();
+
+    const repoSimplet = simpletStore.templates.find(t => t.name === 'nft-studio') || simpletStore.templates[0];
+    if (repoSimplet) {
+      websiteStore.form.repoId = repoSimplet.id;
+      websiteStore.form.repoName = repoSimplet.name;
+      websiteStore.form.branchName = 'main';
+      websiteStore.form.repoOwnerName = apillonOwner.login;
+      websiteStore.form.repoUrl = repoSimplet.frontendRepo;
+    }
+  }
 });
 
 function handleSubmit(e: Event | MouseEvent) {

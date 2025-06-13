@@ -16,16 +16,21 @@ import type { SelectOption } from 'naive-ui';
 
 const storageStore = useStorageStore();
 const websiteStore = useWebsiteStore();
+const deploymentStore = useDeploymentStore();
 const repoOptions = ref<SelectOption[]>([]);
 
 onMounted(async () => {
   await storageStore.getGithubProjectConfig();
   if (storageStore.projectConfig) {
-    await storageStore.getRepos();
     repoOptions.value = storageStore.repos.map((item: GithubRepo) => ({
       value: item.id,
       label: item.name,
     }));
+  }
+  await storageStore.getRepos();
+
+  if (deploymentStore.deploymentConfig?.repoId) {
+    handleUpdateValue(deploymentStore.deploymentConfig?.repoId);
   }
 });
 

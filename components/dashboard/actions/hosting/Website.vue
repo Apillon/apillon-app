@@ -69,7 +69,11 @@
       v-model:show="modalGithubConfigVisible"
       :title="$t(websiteStore.isActiveWebsiteGithubSource ? 'hosting.deploy.update' : 'hosting.deploy.new')"
     >
-      <FormStorageDeployConfig :config-id="deploymentStore.deploymentConfig?.id" @submit-success="handleConfigChange" />
+      <FormStorageDeployConfig
+        :config-id="deploymentStore.deploymentConfig?.id"
+        :is-simplet="websiteStore.active.isSimplet"
+        @submit-success="handleConfigChange"
+      />
     </modal>
 
     <!-- Modal - Github configuration -->

@@ -8,7 +8,7 @@
       </div>
       <p class="whitespace-break-spaces" v-html="service.description"></p>
       <div v-if="service.usage && !hideUsage" class="my-2 flex flex-wrap gap-2">
-        <Tag v-for="(item, key) in service.usage" :key="key">
+        <Tag v-for="(item, key) in service.usage" :key="key" :type="item.includes('No code') ? 'success' : 'default'">
           {{ item }}
         </Tag>
       </div>
