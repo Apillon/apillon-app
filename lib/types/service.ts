@@ -17,6 +17,7 @@ export enum ServiceType {
   ASSET_HUB = 51,
 }
 export enum ServiceTypeName {
+  ASSET_HUB = 'ASSET_HUB',
   AUTHENTICATION = 'IDENTITY',
   CLOUD_FUNCTIONS = 'CLOUD_FUNCTIONS',
   COMPUTING = 'COMPUTING',
@@ -188,3 +189,9 @@ declare global {
   interface ServicesResponse extends GeneralItemsResponse<ServiceInterface> {}
   interface ServiceTypesResponse extends GeneralResponse<ServiceTypeInterface[]> {}
 }
+
+export type ServiceGuide = {
+  title: string;
+  content: string;
+  link: string;
+};

@@ -1,5 +1,5 @@
 <template>
-  <n-data-table
+  <DataTable
     :bordered="false"
     :columns="columns"
     :data="items"

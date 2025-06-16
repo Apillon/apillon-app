@@ -50,7 +50,7 @@
       <div v-else></div>
 
       <div
-        v-if="$slots.details || $slots.links || docs || technologies.length"
+        v-if="$slots.details || $slots.links || docs || technologies.length || info || $attrs.service"
         class="relative z-10"
         :class="[!$slots.info && !$slots.submenu ? '-mt-8' : '-mt-1', !!$slots.info ? 'bottom-1' : 'bottom-2']"
       >

@@ -19,7 +19,7 @@
       />
       <div v-else class="mt-12"></div>
     </template>
-    <n-data-table
+    <DataTable
       v-else
       :columns="columns"
       :bordered="false"

@@ -28,7 +28,7 @@
         />-->
       </n-space>
     </n-space>
-    <n-data-table
+    <DataTable
       remote
       :bordered="false"
       :columns="columns"

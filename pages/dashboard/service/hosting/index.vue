@@ -5,6 +5,7 @@
         docs="https://wiki.apillon.io/web3-services/3-web3-hosting.html"
         :name="ServiceTypeName.HOSTING.toLowerCase()"
         :service="ServiceTypeName.HOSTING"
+        :guides="serviceGuides"
         :image="WebsitePNG"
       >
         <template #actions>
@@ -43,6 +44,21 @@ const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.HOSTING_NEW);
 
 const pageLoading = ref<boolean>(true);
 const showModalNewWebsite = ref<boolean | null>(false);
+
+const serviceGuides = [
+  {
+    title: 'Should you choose decentralized hosting for your website?',
+    content:
+      'Explore the benefits and the possible risks of decentralized hosting to make an informed decision for your project.',
+    link: 'https://blog.apillon.io/should-you-choose-decentralized-hosting-for-your-website-eed25da50470',
+  },
+  {
+    title: 'The Web3Approved initiative offers free decentralized hosting for 100 years',
+    content:
+      'The initiative is a joint effort of Apillon and Crust Network, inviting Web3 players to practice what they preach.',
+    link: 'https://blog.apillon.io/the-web3approved-initiative-offers-free-decentralized-hosting-for-100-years-c350a06f33b8',
+  },
+];
 
 useHead({
   title: t('dashboard.nav.hosting'),

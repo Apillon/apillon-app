@@ -210,6 +210,8 @@
       "unique": "Deploy NFT collection"
     },
     "metadata": {
+      "createMethod": "Start by adding NFTs",
+      "createMethodInfo": "Add NFTs to your collection effortlessly - we provide multiple flexible options to suit your needs.",
       "currentStep": "Metadata deploy step",
       "deployTitle": "Metadata deploys",
       "infoCollectionBehavior": "Configure the behavior of your NFT collection. ",

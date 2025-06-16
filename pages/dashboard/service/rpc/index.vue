@@ -1,8 +1,13 @@
 <template>
-  <RpcDisabled
-    v-if="!dataStore.project.selected || (!isRpcActivated && !pageLoading)"
-    @service-created="onServiceCreated"
+  <ServiceEmpty
+    v-if="!dataStore.project.selected"
+    docs="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html#rpc-service"
+    :name="toCamelCase(ServiceTypeName.RPC)"
+    :service="ServiceTypeName.RPC"
+    :guides="serviceGuides"
+    powered-by="dwellir"
   />
+  <RpcDisabled v-else-if="!isRpcActivated && !pageLoading" @service-created="onServiceCreated" />
   <Dashboard v-else :loading="pageLoading">
     <template #heading>
       <HeaderRpc v-if="isRpcActivated" />
@@ -46,6 +51,21 @@ const isRpcActivated = ref<boolean>(false);
 const initialLoadComplete = ref<boolean>(false);
 const modalSubscriptionVisible = ref<boolean>(false);
 const isInitialVisit = ref<boolean>(false);
+
+const serviceGuides = [
+  {
+    title: 'RPC in blockchain: A beginner’s guide to seamless dapp interaction',
+    content:
+      'Unlock the RPC magic. Learn how this vital tech bridges the gap between Web2 APIs and Web3 dapps for seamless connectivity.',
+    link: 'https://blog.apillon.io/rpc-in-blockchain-a-beginners-guide-to-seamless-dapp-interaction-b67a632d44ba/',
+  },
+  {
+    title: 'Top 5 RPC providers compared: features that matter most',
+    content:
+      'From speed demons to budget-friendly champs, here’s a deep dive into top RPC providers. Compare speed, reliability and other benefits.',
+    link: 'https://blog.apillon.io/top-5-rpc-providers-compared-features-that-matter-most-2791f9adbefb/',
+  },
+];
 
 useHead({
   title: t('dashboard.nav.rpc'),

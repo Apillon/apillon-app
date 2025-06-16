@@ -30,18 +30,24 @@
           <PoweredBy v-else-if="service === ServiceTypeName.EMBEDDED_WALLET" class="font-semibold text-white-terciary">
             <NuxtIcon name="logo/oasis_logo" class="icon-auto h-6 w-14 text-white" filled />
           </PoweredBy>
+          <PoweredBy v-else-if="service === ServiceTypeName.INDEXING" class="font-semibold text-white-terciary">
+            <NuxtIcon name="logo/sqd" class="icon-auto h-6 w-14 text-white" filled />
+          </PoweredBy>
+          <PoweredBy v-else-if="poweredBy" class="font-semibold text-white-terciary">
+            <NuxtIcon :name="`logo/${poweredBy}`" class="icon-auto h-6 text-white" filled />
+          </PoweredBy>
           <hr class="my-4 w-full border-bg-lighter" />
 
           <div class="flex items-center justify-between">
             <small>{{ $t('dashboard.credits.pricing') }}</small>
-            <div class="text-right">
+            <div class="pl-2 text-right">
               <p>
                 <strong>{{ $t(`service.${name}.pricing`) }}</strong>
               </p>
 
               <ModalCreditCosts :service="service" :show-create-collection="service === ServiceTypeName.NFT">
                 <template #button>
-                  <span class="underline">{{ $t('dashboard.details') }} </span>
+                  <span class="underline hover:text-yellow">{{ $t('dashboard.details') }} </span>
                 </template>
               </ModalCreditCosts>
             </div>
@@ -100,34 +106,33 @@
         </div>
       </n-card>
 
-      <small>{{ $t('general.learnMore') }}</small>
+      <small v-if="guides.length">{{ $t('general.learnMore') }}</small>
       <div class="mt-2 grid grid-cols-nft gap-4">
         <div
           v-for="(guide, key) in guides"
           :key="key"
-          class="card-dark relative flex flex-col justify-between gap-4 p-4"
+          class="card-dark relative flex flex-col gap-4 p-4"
           :class="{ 'hover:border-white': guide?.link }"
         >
           <NuxtLink
             v-if="guide?.link"
-            :to="{ name: guide.link }"
+            :href="guide.link"
             class="inline-flex-cc absolute right-4 top-4 h-5 w-5 -rotate-45 rounded-full transition-colors duration-300 hover:bg-bg-lighter"
+            target="_blank"
           >
             <span class="icon-wide-right text-xl"></span>
           </NuxtLink>
           <div class="flex gap-2">
-            <Tag v-for="(item, key2) in guide.tags" :key="key2" size="small" type="info">
-              {{ item }}
-            </Tag>
+            <Tag size="small" type="info"> Guide </Tag>
           </div>
 
-          <div class="flex items-center justify-between text-white">
+          <div class="min-h-10 text-white">
             <strong>{{ guide.title }}</strong>
           </div>
           <div>
             <p class="text-xs text-white-secondary">{{ guide.content }}</p>
           </div>
-          <NuxtLink v-if="guide?.link" :to="{ name: guide.link }" class="absolute left-0 top-0 h-full w-full">
+          <NuxtLink v-if="guide?.link" :href="guide.link" class="absolute left-0 top-0 h-full w-full" target="_blank">
           </NuxtLink>
         </div>
       </div>
@@ -147,15 +152,13 @@
 </template>
 
 <script lang="ts" setup>
-import { enumKeys, translateItems } from '~/lib/utils';
-import { EvmChainMainnet } from '~/lib/types/nft';
-import type { ServiceTypeName } from '~/lib/types/service';
-
 const props = defineProps({
   name: { type: String, required: true },
   service: { type: String as PropType<ServiceTypeName>, required: true },
+  guides: { type: Array<ServiceGuide>, default: [] },
   docs: { type: String, default: null },
   image: { type: String, default: null },
+  poweredBy: { type: String, default: null },
   videoId: { type: String, default: null },
   videoChapters: { type: Array<VideoChapter>, default: null },
 });
@@ -166,25 +169,4 @@ const introduction = generateIntroduction(props.name);
 
 const showVideo = ref<boolean>(false);
 const modalCreateProjectVisible = ref<boolean>(false);
-
-const guides = [
-  {
-    tags: ['Guide'],
-    title: 'Generate NFT art (with AI) and get files ready',
-    content: 'You will learn how to prepare files and metadata for a smooth deployment of your NFTs.',
-    link: 'dashboard-service',
-  },
-  {
-    tags: ['Guide'],
-    title: 'Generate NFT art (with AI) and get files ready',
-    content: 'You will learn how to prepare files and metadata for a smooth deployment of your NFTs.',
-    link: 'dashboard-service',
-  },
-  {
-    tags: ['Guide'],
-    title: 'Generate NFT art (with AI) and get files ready',
-    content: 'You will learn how to prepare files and metadata for a smooth deployment of your NFTs.',
-    link: 'dashboard-service',
-  },
-];
 </script>

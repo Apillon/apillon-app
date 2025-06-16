@@ -132,7 +132,6 @@ export const useStorageStore = defineStore('storage', {
       const projectUuid = await dataStore.getProjectUuid();
 
       if (this.projectConfig === undefined) await this.getGithubProjectConfig();
-      console.log(projectUuid, this.projectConfig);
       if (!this.hasProjectConfigLoaded) return;
 
       this.loading = true;

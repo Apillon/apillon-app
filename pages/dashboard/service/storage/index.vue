@@ -5,6 +5,7 @@
         docs="https://wiki.apillon.io/web3-services/2-web3-storage.html"
         :name="ServiceTypeName.STORAGE.toLowerCase()"
         :service="ServiceTypeName.STORAGE"
+        :guides="serviceGuides"
         :image="FilesPNG"
       >
         <template #actions>
@@ -56,6 +57,27 @@ onMounted(async () => {
 
   pageLoading.value = false;
 });
+
+const serviceGuides = [
+  {
+    title: 'Upload files to IPFS with Apillon for free',
+    content:
+      'Get free and easy IPFS upload and store your files in a more efficient and distributed way on the Apillon platform.',
+    link: 'https://blog.apillon.io/upload-files-to-ipfs-with-apillon-for-free-703003cf7e5/',
+  },
+  {
+    title: 'FAQ: Apillon Web3 Storage',
+    content:
+      'Find answers to your questions on the Apillon Web3 Storage service, how to store files on a decentralized network, and more.',
+    link: 'https://blog.apillon.io/faq-apillon-web3-storage-c99a9b0e8b12/',
+  },
+  {
+    title: 'Apillon Recipe #4 — NFT metadata storage',
+    content:
+      'In round four of cooking Web3 with Apillon, you will find why the storage of NFT metadata matters and how to bring it to a decentralized…',
+    link: 'https://blog.apillon.io/apillon-recipe-4-nft-metadata-storage-71da4fe7c60f/',
+  },
+];
 
 /**
  * On createNewBucket click
