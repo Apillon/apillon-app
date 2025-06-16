@@ -6,7 +6,6 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
-const bucketStore = useBucketStore();
 const simpletStore = useSimpletStore();
 const websiteStore = useWebsiteStore();
 const deploymentStore = useDeploymentStore();
@@ -15,22 +14,9 @@ const collectionStore = useCollectionStore();
 const { simplets, getSimpletType } = useSimplet();
 
 const loadingImages = ref<boolean>(true);
-const collection = ref<CollectionInterface | null>();
-const logo = ref<BucketItemInterface | undefined>();
 
 onMounted(async () => {
-  collection.value = await collectionStore.getCollection(simpletStore.active.contract_uuid);
-
-  if (collection.value) {
-    collectionStore.active = collection.value;
-    await bucketStore.fetchDirectoryContent({
-      bucketUuid: collection.value.bucket_uuid,
-      search: 'logo',
-    });
-    logo.value = bucketStore.folder.items.find(item => item.type === BucketItemType.FILE && item.name.includes('logo'));
-  }
-
-  await sleep(10);
+  collectionStore.active = await collectionStore.getCollection(simpletStore.active.contract_uuid);
   loadingImages.value = false;
 });
 
@@ -56,11 +42,16 @@ const data = computed(() => {
     },
     {
       label: t('nft.collection.preview'),
-      value: collection.value?.name,
-      img: logo.value?.link || '',
+      value: collectionStore.active?.name,
+      component: resolveComponent('TableLink'),
+      show: !!collectionStore.active?.name,
+      data: {
+        text: collectionStore.active?.name,
+        link: `/dashboard/service/nft/${simpletStore.active.contract_uuid}`,
+      },
     },
     {
-      label: t('form.label.simplet.walletAddress'),
+      label: t('form.label.collection.adminAddress'),
       value: adminWallet.value || '',
       loading: deploymentStore.loading,
       copy: true,
@@ -92,6 +83,7 @@ const data = computed(() => {
       label: t('general.website'),
       loading: websiteStore.loading,
       component: resolveComponent('TableLink'),
+      show: !!websiteStore.active?.website_uuid,
       data: {
         text: websiteStore.active.domain || websiteStore.active.name,
         link:

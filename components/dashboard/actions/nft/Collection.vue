@@ -53,7 +53,13 @@
     </n-button>
 
     <!-- Mint -->
-    <n-button class="w-full" size="medium" :disabled="authStore.isAdmin() || actionsDisabled" @click="emit('mint')">
+    <n-button
+      v-if="collectionStore.active.chainType === ChainType.EVM"
+      class="w-full"
+      size="medium"
+      :disabled="authStore.isAdmin() || actionsDisabled"
+      @click="emit('mint')"
+    >
       <span class="icon-nft mr-2 text-xl"></span>
       {{ $t('nft.collection.mint') }}
     </n-button>

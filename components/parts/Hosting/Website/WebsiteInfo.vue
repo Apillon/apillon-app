@@ -18,10 +18,6 @@ const storageStore = useStorageStore();
 const websiteStore = useWebsiteStore();
 const deploymentStore = useDeploymentStore();
 
-onMounted(() => {
-  storageStore.getRepos();
-});
-
 const activeRepo = computed(() =>
   storageStore.repos.find(repo => repo.id === deploymentStore.deploymentConfig?.repoId)
 );
@@ -85,14 +81,14 @@ const data = computed(() => {
     {
       label: t('form.label.website.repository'),
       value: deploymentStore.deploymentConfig?.repoName,
-      link: activeRepo.value?.html_url,
+      link: deploymentStore.deploymentConfig?.repoUrl,
       show: !!deploymentStore.deploymentConfig?.repoName,
     },
     {
       label: t('form.label.website.branchName'),
       value: deploymentStore.deploymentConfig?.branchName,
-      link: activeRepo.value?.html_url
-        ? `${activeRepo.value?.html_url}/tree/${deploymentStore.deploymentConfig?.branchName}`
+      link: deploymentStore.deploymentConfig?.repoUrl
+        ? `${deploymentStore.deploymentConfig?.repoUrl}/tree/${deploymentStore.deploymentConfig?.branchName}`
         : '',
       show: !!deploymentStore.deploymentConfig?.branchName,
     },
