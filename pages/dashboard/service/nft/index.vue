@@ -6,6 +6,7 @@
         :image="NftCardsPNG"
         :name="ServiceTypeName.NFT.toLowerCase()"
         :service="ServiceTypeName.NFT"
+        :guides="serviceGuides"
       >
         <template #actions>
           <Btn size="large" type="primary" @click="collectionStore.modalCreateVisible = true">
@@ -22,9 +23,8 @@
       <ActionsNft />
       <TableNftCollection :collections="collectionStore.items" :search="collectionStore.search" />
     </n-space>
-
-    <NftModal v-model:show="collectionStore.modalCreateVisible" />
   </Dashboard>
+  <NftModal v-model:show="collectionStore.modalCreateVisible" />
 </template>
 
 <script lang="ts" setup>
@@ -39,6 +39,27 @@ const collectionStore = useCollectionStore();
 const pageLoading = ref<boolean>(true);
 
 let collectionInterval: any = null as any;
+
+const serviceGuides = [
+  {
+    title: 'Guide: NFT Service prerequisites - Generate NFT art (with AI) and get files ready',
+    content:
+      'In this preliminary guide on the Apillon NFT Service, you will learn how to prepare files and metadata for a smooth deployment of your…',
+    link: 'https://blog.apillon.io/guide-nft-service-pt-1-generate-nft-art-with-ai-and-get-files-ready-200168b6b303/',
+  },
+  {
+    title: 'Guide: NFT Service — Create and deploy NFT collection on Moonbeam',
+    content:
+      'In this guide, you will learn step-by-step how to go from raw data and files to a permanently deployed NFT collection on Moonbeam Network.',
+    link: 'https://blog.apillon.io/guide-nft-service-pt-2-create-and-deploy-nft-collection-on-moonbeam-2d7eedf79756/',
+  },
+  {
+    title: 'Guide: NFT Service — Create and deploy NFT collection on Astar',
+    content:
+      'With the latest addition to the Apillon NFT Service, you can now deploy NFTs to the Astar Network in a few-click manner.',
+    link: 'https://blog.apillon.io/guide-nft-service-create-and-deploy-nft-collection-on-astar-3d6674994b0f/',
+  },
+];
 
 useHead({
   title: t('dashboard.nav.nft'),

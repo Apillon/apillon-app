@@ -111,6 +111,7 @@
       },
       "created": {
         "bucket": "newly created bucket",
+        "build": "Build NFT website",
         "explorer": "blockchain explorer",
         "goBack": "Go back to NFT Collection",
         "info": "To display your NFTs and mint them, you need a website. \nUse the Apillon NFT website template and host it on a decentralized network.",
@@ -127,11 +128,12 @@
       },
       "deployed": {
         "info": "We're still deploying your images to the blockchain. This may take a few minutes, but we'll notify you once it's done.",
-        "next": "So what’s next? What’s next for your collection?",
-        "nextInfo": "Before you finish, let us know where you plan to use it - we’ll make your next step easier.",
-        "title": "Great, NFT Collection successfully created!",
+        "next": "So what’s next?",
+        "nextInfo": "Show your collection to the world by deploying the NFT store website.",
+        "skip": "Skip deployment for now - Show me the NFT collection",
         "standalone": "Standalone Collection",
-        "standaloneInfo": "Easily expand your collection to multiple marketplaces with Apillon."
+        "standaloneInfo": "Easily expand your collection to multiple marketplaces with Apillon.",
+        "title": "Great, NFT Collection successfully created!"
       },
       "displayTypes": {
         "string": {
@@ -207,6 +209,8 @@
       "unique": "Deploy NFT collection"
     },
     "metadata": {
+      "createMethod": "Start by adding NFTs",
+      "createMethodInfo": "Add NFTs to your collection effortlessly - we provide multiple flexible options to suit your needs.",
       "currentStep": "Metadata deploy step",
       "deployTitle": "Metadata deploys",
       "infoCollectionBehavior": "Configure the behavior of your NFT collection. ",
@@ -535,6 +539,18 @@
       "imagesMissing": "Missing images:",
       "imagesInvalid": "Invalid image names. Example: ",
       "selectAmount": "Please select how many NFTs would you like to create."
+    },
+    "website": {
+      "autoDeploy": {
+        "name": "NFT Studio Autodeploy",
+        "description": "This option will automatically deploy your NFT store to our hosting and you can immediately start using it.",
+        "usage": ["No code", "Plug & Play"]
+      },
+      "build": {
+        "name": "Build your own store",
+        "description": "Get access to pre-made templates on Github, customise it and utilise our Github CI flow for automatic build and deploy process.",
+        "usage": ["Code required", "Customize", "CI/CD"]
+      }
     },
     "add": "Add NFT",
     "addNfts": "Add NFTs",

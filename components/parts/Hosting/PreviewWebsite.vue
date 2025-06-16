@@ -5,7 +5,12 @@
     </template>
 
     <template #right>
-      <ReviewPricing class="mt-8 md:!w-1/2" :pricing="pricing" @deploy="$emit('deploy')" />
+      <ReviewPricing
+        class="mt-8 md:!w-1/2"
+        :pricing="pricing"
+        :deploy-text="$t('hosting.website.create')"
+        @deploy="$emit('deploy')"
+      />
     </template>
   </ReviewLayout>
 </template>

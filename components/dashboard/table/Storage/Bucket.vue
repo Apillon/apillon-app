@@ -2,7 +2,7 @@
   <n-space class="pb-8" :size="32" vertical>
     <ActionsStorage @on-bucket-delete="deleteBucket" />
 
-    <n-data-table
+    <DataTable
       ref="tableRef"
       v-bind="$attrs"
       v-model:checked-row-keys="checkedRowKeys"
@@ -47,7 +47,6 @@
 <script lang="ts" setup>
 import type { DataTableRowKey } from 'naive-ui';
 import { NDropdown, NEllipsis } from 'naive-ui';
-import { PAGINATION_LIMIT } from '~/lib/values/general.values';
 
 const props = defineProps({
   buckets: { type: Array<BucketInterface>, default: [] },

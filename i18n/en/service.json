@@ -2,8 +2,24 @@
   "service": {
     "assetHub": {
       "description": "Decentralized hub for secure digital asset management on the Polkadot network. \nSecure storage, easy transfer, cross-chain compatibility.",
+      "info": "Create and manage tokens or NFTs without code. Built on Polkadot, made for humans.",
       "name": "Asset Hub",
-      "usage": ["secure storage", "easy transfer", "cross-chain compatibility"]
+      "pricing": "Creating a new asset on Polkadot Asset Hub costs approximately 0.11 DOT.",
+      "usage": ["secure storage", "easy transfer", "cross-chain compatibility"],
+      "introduction": [
+        {
+          "title": "Launch tokens without dev work",
+          "content": "Issue assets through a simple UI—no smart contracts needed."
+        },
+        {
+          "title": "Manage everything in one spot",
+          "content": "Track supply, holders, and settings with ease."
+        },
+        {
+          "title": "Play nice across Polkadot",
+          "content": "Your assets work with any parachain out of the box."
+        }
+      ]
     },
     "authentication": {
       "name": "Decentralized Authentication",
@@ -74,8 +90,18 @@
     "indexing": {
       "description": "Fast and efficient data indexing for blockchain data. \nReal-time data sync, powerful APIs, on-chain data querying.",
       "deployedIndexerCount": "Number of deployed indexers",
+      "info": "Index on-chain data to power your app’s logic, dashboards, or alerts—no more manual tracking.",
       "name": "Indexing Service",
-      "usage": ["real-time data sync", "powerful APIs", "on-chain data querying"]
+      "pricing": "To deploy an indexer, your project account must have at least 5,000 credits.",
+      "usage": ["real-time data sync", "powerful APIs", "on-chain data querying"],
+      "introduction": [
+        { "title": "Know everything, instantly", "content": "Focus on building—scaling happens automatically." },
+        { "title": "No setup, no syncing", "content": "We do the indexing—you just use the data." },
+        {
+          "title": "Perfect for custom logic",
+          "content": "Trigger automation or surface insights, all from one place."
+        }
+      ]
     },
     "nft": {
       "collectionCount": "Number of collections",
@@ -97,10 +123,26 @@
     },
     "rpc": {
       "description": "Reliable and secure remote procedure call service for blockchain interaction. \nLow latency, high availability, multi-chain support.",
+      "info": "Talk to the blockchain without lag. RPC service gets you fast, reliable access to on-chain data.",
       "keyCount": "Number of keys",
       "name": "RPC Service",
+      "pricing": "5 million API requests included in Free plan",
       "selectedNetworkCount": "Number of selected networks",
-      "usage": ["low latency", "high availability", "multi-chain support"]
+      "usage": ["low latency", "high availability", "multi-chain support"],
+      "introduction": [
+        {
+          "title": "Speed you can count on",
+          "content": "No timeouts, no delays—just steady, low-latency calls."
+        },
+        {
+          "title": "We handle the heavy lifting",
+          "content": "Skip node maintenance and focus on building your app."
+        },
+        {
+          "title": "Plug it in, let it run",
+          "content": "Works right away—connect and start fetching data."
+        }
+      ]
     },
     "storage": {
       "bucket": "Web3 storage bucket",

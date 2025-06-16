@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <h2>{{ $t('nft.collection.createStep.1') }}</h2>
+    <h4>{{ $t('nft.collection.createStep.1') }}</h4>
     <p>{{ $t('nft.metadata.startFresh') }}</p>
 
     <CardSelect

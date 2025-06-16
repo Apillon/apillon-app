@@ -31,7 +31,7 @@ export const useMetadataStore = defineStore('metadata', {
         chain: undefined as number | undefined,
         chainType: ChainType.EVM,
         collectionType: NFTCollectionType.GENERIC,
-        useApillonIpfsGateway: false,
+        useApillonIpfsGateway: true,
         useIpns: undefined as boolean | undefined,
         baseUri: '',
         baseExtension: '.json',
@@ -103,7 +103,7 @@ export const useMetadataStore = defineStore('metadata', {
       this.form.smartContract.chain = undefined;
       this.form.smartContract.chainType = ChainType.EVM;
       this.form.smartContract.collectionType = NFTCollectionType.GENERIC;
-      this.form.smartContract.useApillonIpfsGateway = false;
+      this.form.smartContract.useApillonIpfsGateway = true;
       this.form.smartContract.useIpns = undefined;
       this.form.smartContract.baseUri = '';
       this.form.smartContract.baseExtension = '.json';

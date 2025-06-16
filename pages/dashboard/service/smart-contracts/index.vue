@@ -4,6 +4,7 @@
       <ServiceEmpty
         :name="toCamelCase(Feature.SMART_CONTRACTS)"
         :service="ServiceTypeName.SMART_CONTRACTS"
+        :guides="serviceGuides"
         docs="https://wiki.apillon.io/web3-services/12-web3-smart-contracts.html"
       >
         <template #actions>
@@ -36,6 +37,21 @@ useHead({
   title: t('dashboard.nav.smartContracts'),
 });
 const pageLoading = ref<boolean>(true);
+
+const serviceGuides = [
+  {
+    title: 'Apillon integrates Moonbeam and brings the third fully-fledged service to the Apillon Web3',
+    content:
+      'With the newly-integrated smart contract connectivity, a new era of intuitive deployment of Web3 assets, NFTs included, is right ahead.',
+    link: 'https://blog.apillon.io/apillon-integrates-moonbeam-and-brings-the-third-fully-fledged-service-to-the-apillon-web3-adff526633d7/',
+  },
+  {
+    title: 'Apillon partners with Astar to deliver multi-chain smart contract connectivity',
+    content:
+      'Building future-proof projects that support free flow of digital assets between Polkadot, Ethereum, Cosmos, and other ecosystems just got…',
+    link: 'https://blog.apillon.io/apillon-partners-with-astar-to-deliver-multi-chain-smart-contract-connectivity-63d1d5f1e288/',
+  },
+];
 
 onMounted(async () => {
   await dataStore.waitOnPromises();

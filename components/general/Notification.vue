@@ -1,5 +1,8 @@
 <template>
-  <div class="card-dark flex gap-2 rounded-lg p-3 text-sm text-white-secondary" :class="notificationClass">
+  <div
+    class="card-dark flex gap-2 rounded-lg p-3 text-sm text-white-secondary hover:border-bg-lighter"
+    :class="notificationClass"
+  >
     <NuxtIcon v-if="!hideIcon && alert" name="icon/alert" class="text-xl" filled />
     <span v-else-if="!hideIcon" class="text-xl" :class="iconClass"></span>
     <div>

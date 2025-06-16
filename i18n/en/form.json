@@ -128,7 +128,7 @@
           "royaltiesAddress": "The wallet where royalty payments will be sent.",
           "royaltiesFees": "The share you’ll receive from each NFT transaction.",
           "soulbound": " Prevents NFTs from being sold or transferred (they stay bound to the wallet).",
-          "supplyLimited": "If limited, please specify the actual number of the NFTs in total supply on the right.",
+          "supplyLimited": "With limited, you set a fixed number of NFTs in this collection. With unlimited there's no cap on how many NFTs you can create, good for ongoing drops or evolving collections.",
           "symbol": "A short identifier (a ticker) for your collection.",
           "type": "",
           "uri": "Paste the collection metadata base URI here.",

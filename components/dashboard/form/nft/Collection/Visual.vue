@@ -19,7 +19,11 @@
         :label-props="{ for: 'collectionLogo' }"
         :show-feedback="false"
       >
-        <FormNftCollectionUpload id="collectionLogo" :image="metadataStore.form.visual.logo" is-logo />
+        <FormNftCollectionUpload
+          id="collectionLogo"
+          :image="metadataStore.form.visual.logo || ({} as FileListItemType)"
+          is-logo
+        />
       </n-form-item-gi>
 
       <!--  Collection cover image -->

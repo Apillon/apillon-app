@@ -9,10 +9,10 @@
         { 'mt-8': tabsRef?.renderNameListRef?.value?.length === 1 },
       ]"
     >
-      <n-tab-pane :name="Tabs.GENERAL">
+      <n-tab-pane :name="Tabs.GENERAL" class="mb-4">
         <slot> </slot>
       </n-tab-pane>
-      <n-tab-pane v-if="service || category || chain" :name="Tabs.PRICING" class="min-h-40">
+      <n-tab-pane v-if="service || category || chain" :name="Tabs.PRICING" class="mb-4 min-h-40">
         <div>
           <p v-if="$te(`dashboard.credits.services.${service || category}.description`)" class="mb-8 text-body">
             {{ $t(`dashboard.credits.services.${service || category}.description`) }}
@@ -29,13 +29,13 @@
           <slot name="pricing"> </slot>
         </div>
       </n-tab-pane>
-      <n-tab-pane v-if="demo" :name="Tabs.DEMO">
+      <n-tab-pane v-if="demo" :name="Tabs.DEMO" class="mb-4">
         <DemoVideo :video-id="demo" />
       </n-tab-pane>
-      <n-tab-pane v-if="$slots.detailsIpfsGateway" :name="$t('storage.ipfs.title')">
+      <n-tab-pane v-if="$slots.detailsIpfsGateway" :name="$t('storage.ipfs.title')" class="mb-4">
         <slot name="detailsIpfsGateway" />
       </n-tab-pane>
-      <n-tab-pane v-if="$slots.detailsGenerate" :name="$t('storage.shortUrl.title')">
+      <n-tab-pane v-if="$slots.detailsGenerate" :name="$t('storage.shortUrl.title')" class="mb-4">
         <slot name="detailsGenerate" />
       </n-tab-pane>
     </n-tabs>

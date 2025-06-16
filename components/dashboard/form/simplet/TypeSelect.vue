@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Headline :title="$t('hosting.website.selectType')" />
+    <Headline :title="$t('simplet.wizard.selectType')" />
     <CardSelect
       v-for="(simplet, key) in simpletsContent"
       :key="key"

@@ -5,11 +5,7 @@
     :service-name="$t('dashboard.nav.hosting')"
     :name="websiteStore.active.name"
     :info="$t('w3Warn.hosting.upload')"
-  >
-    <template #details>
-      <TableEllipsis :prefix="$t('hosting.website.uuid')" :text="websiteStore.active.website_uuid" />
-    </template>
-  </Heading>
+  />
 
   <!-- W3Warn: hosting upload static files -->
   <W3Warn v-model:show="showModalW3Warn">

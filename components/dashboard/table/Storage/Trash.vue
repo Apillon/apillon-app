@@ -13,7 +13,7 @@
         </n-button>
       </n-space>
     </n-space>
-    <n-data-table
+    <DataTable
       ref="tableRef"
       :bordered="false"
       :columns="columns"

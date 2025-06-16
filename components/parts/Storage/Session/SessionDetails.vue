@@ -1,6 +1,6 @@
 <template>
   <div class="-m-3 bg-bg-dark p-3">
-    <n-data-table
+    <DataTable
       remote
       :bordered="false"
       :columns="columns"

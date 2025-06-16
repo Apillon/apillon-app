@@ -147,7 +147,6 @@ async function submitFormSmtp() {
         bodyData
       );
       message.success(t('simplet.wizard.redeployingInfo'));
-      console.log(data);
     } catch (e) {
       message.error(userFriendlyMsg(e));
     }
@@ -183,7 +182,6 @@ async function updateMysql() {
       bodyData
     );
     message.success(t('simplet.wizard.redeployingInfo'));
-    console.log(data);
   } catch (e) {
     message.error(userFriendlyMsg(e));
   }

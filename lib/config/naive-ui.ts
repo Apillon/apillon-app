@@ -154,9 +154,9 @@ export const themeOverrides: GlobalThemeOverrides = {
   DataTable: {
     borderColor: colors.bg.lighter,
     tdColor: colors.bg.DEFAULT,
-    tdColorHover: colors.transparent,
+    tdColorHover: colors.bg.dark,
     tdColorModal: colors.transparent,
-    tdColorHoverModal: colors.transparent,
+    tdColorHoverModal: colors.bg.dark,
     tdTextColor: colors.white.DEFAULT,
     thColor: `${colors.bg.light}a3`,
     thColorHover: `${colors.bg.light}a3`,

@@ -31,7 +31,7 @@ export function chainIdToName(id: number) {
 }
 
 export function contractLink(contractAddress?: string | null, chainId?: number): string {
-  return contractAddress ? `${chainRpc(chainId)}address/${contractAddress}` : '';
+  return contractAddress ? `${chainRpc(chainId)}/address/${contractAddress}` : '';
 }
 
 export function transactionLink(transactionHash?: string | null, chainId?: number): string {
@@ -41,9 +41,9 @@ export function transactionLink(transactionHash?: string | null, chainId?: numbe
     case SubstrateChain.UNIQUE:
     case SubstrateChain.ASSET_HUB:
     case SubstrateChain.WESTEND_ASSET_HUB:
-      return `${chainRpc(chainId)}extrinsic/${transactionHash}`;
+      return `${chainRpc(chainId)}/extrinsic/${transactionHash}`;
     default:
-      return `${chainRpc(chainId)}tx/${transactionHash}`;
+      return `${chainRpc(chainId)}/tx/${transactionHash}`;
   }
 }
 export function chainRpc(chainId?: number): string {
@@ -88,15 +88,15 @@ export function chainRpc(chainId?: number): string {
 
     // Substrate Chains
     case SubstrateChain.ASTAR:
-      return useRuntimeConfig().public.ENV === AppEnv.DEV ? `https://shibuya.subscan.io/` : `https://astar.subscan.io/`;
+      return useRuntimeConfig().public.ENV === AppEnv.DEV ? `https://shibuya.subscan.io` : `https://astar.subscan.io`;
     case SubstrateChain.PHALA:
-      return `https://phala.subscan.io/`;
+      return `https://phala.subscan.io`;
     case SubstrateChain.UNIQUE:
-      return useRuntimeConfig().public.ENV === AppEnv.DEV ? `https://opal.subscan.io/` : `https://unique.subscan.io/`;
+      return useRuntimeConfig().public.ENV === AppEnv.DEV ? `https://opal.subscan.io` : `https://unique.subscan.io`;
     case SubstrateChain.ASSET_HUB:
-      return `https://assethub-polkadot.subscan.io/`;
+      return `https://assethub-polkadot.subscan.io`;
     case SubstrateChain.WESTEND_ASSET_HUB:
-      return `https://assethub-westend.subscan.io/`;
+      return `https://assethub-westend.subscan.io`;
 
     default:
       console.warn('Missing chainId');

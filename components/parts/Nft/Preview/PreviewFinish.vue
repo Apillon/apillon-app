@@ -85,7 +85,7 @@
       {{ $t('w3Warn.nft.new') }}
     </W3Warn>
     <modal v-model:show="modalDeployWebsiteVisible" :title="$t('nft.collection.created.deploy')">
-      <FormNftWebsiteDeploy @submit-success="handleSubmit" />
+      <FormNftWebsiteDeploy @submit-success="onWebsiteDeployed" />
     </modal>
   </div>
 </template>
@@ -111,7 +111,8 @@ const backLink = computed(() =>
       }
     : { name: 'dashboard-service-nft' }
 );
-const handleSubmit = (website: WebsiteInterface) => {
+
+const onWebsiteDeployed = (website: WebsiteInterface) => {
   modalDeployWebsiteVisible.value = false;
   deployedWebsite.value = website;
 };

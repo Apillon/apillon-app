@@ -24,7 +24,7 @@
           </n-ellipsis>
           <p v-if="description">{{ description }}</p>
         </div>
-        <button v-if="'onRemove' in $attrs" class="flex-cc p-1" @click="$emit('remove')">
+        <button v-if="hasRemove" class="flex-cc p-1" @click="$emit('remove')">
           <span class="icon-delete text-xl"></span>
         </button>
       </figcaption>
@@ -33,6 +33,8 @@
 </template>
 
 <script lang="ts" setup>
+import { getCurrentInstance } from 'vue';
+
 defineEmits(['remove']);
 defineProps({
   name: { type: String, default: null },
@@ -40,5 +42,8 @@ defineProps({
   image: { type: [String, Object], default: null },
 });
 
+const { vnode } = getCurrentInstance();
 const { createThumbnailUrl, imageByName } = useMetadata();
+
+const hasRemove = computed(() => 'onRemove' in vnode.props);
 </script>

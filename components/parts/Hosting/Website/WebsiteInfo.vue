@@ -68,7 +68,7 @@ const data = computed(() => {
       show: websiteStore.active?.lastDeploymentStatus !== null,
       component: resolveComponent('HostingDeploymentStatus'),
       data: {
-        deploymentStatus: websiteStore.active?.lastDeploymentStatus,
+        status: websiteStore.active?.lastDeploymentStatus,
       },
     },
     {

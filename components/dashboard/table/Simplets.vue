@@ -1,5 +1,5 @@
 <template>
-  <n-data-table
+  <DataTable
     ref="tableRef"
     v-bind="$attrs"
     :bordered="false"

@@ -18,22 +18,21 @@
         <n-button v-if="deploymentStore.deploymentConfig?.id" class="w-full" @click="modalVariablesVisible = true">
           {{ $t('hosting.menu.envVars') }}
         </n-button>
-
-        <Btn
-          v-if="websiteStore.active.cidProduction"
-          class="locked w-full"
-          size="medium"
-          type="primary"
-          :loading="deploying"
-          :disabled="authStore.isAdmin()"
-          @click="deployWebsite(DeploymentEnvironment.DIRECT_TO_PRODUCTION)"
-        >
-          {{ $t('hosting.deployProd') }}
-        </Btn>
       </template>
+      <Btn
+        v-else
+        class="locked w-full"
+        size="medium"
+        type="primary"
+        :loading="deploying"
+        :disabled="authStore.isAdmin()"
+        @click="deployWebsite(DeploymentEnvironment.DIRECT_TO_PRODUCTION)"
+      >
+        {{ $t('hosting.deployProd') }}
+      </Btn>
 
       <template v-if="websiteStore.active.w3ProductionLink">
-        <BtnDomain />
+        <BtnDomain v-if="websiteStore.active.lastDeploymentStatus === DeploymentStatus.SUCCESSFUL" />
         <FormStorageShortUrl :target-url="websiteStore.active.w3ProductionLink" class="w-full" />
       </template>
 
@@ -70,7 +69,11 @@
       v-model:show="modalGithubConfigVisible"
       :title="$t(websiteStore.isActiveWebsiteGithubSource ? 'hosting.deploy.update' : 'hosting.deploy.new')"
     >
-      <FormStorageDeployConfig :config-id="deploymentStore.deploymentConfig?.id" @submit-success="handleConfigChange" />
+      <FormStorageDeployConfig
+        :config-id="deploymentStore.deploymentConfig?.id"
+        :is-simplet="websiteStore.active.isSimplet"
+        @submit-success="handleConfigChange"
+      />
     </modal>
 
     <!-- Modal - Github configuration -->

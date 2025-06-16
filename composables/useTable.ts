@@ -22,7 +22,7 @@ export default function useTable(key: string) {
     if (localStorage.getItem(key)) {
       selectedColumns.value = JSON.parse(localStorage.getItem(key) || '');
     } else {
-      selectedColumns.value = createSelectedColumns(columns);
+      selectedColumns.value = createSelectedColumns(columns.filter(c => c?.show !== false));
     }
     availableColumns.value = createAvailableColumns(columns);
   }
