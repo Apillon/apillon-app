@@ -88,7 +88,6 @@ watch(
       paymentStore.loading = true;
 
       /** Save current project ID to LS and redirect to Dashboard */
-      console.debug(DataLsKeys.CURRENT_PROJECT_ID, projectUuid);
       localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, projectUuid);
       if (projectUuid !== oldProjectUuid && oldProjectUuid !== '') {
         router.push({ name: 'dashboard' });

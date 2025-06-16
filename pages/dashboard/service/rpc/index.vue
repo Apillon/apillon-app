@@ -5,6 +5,7 @@
     :name="toCamelCase(ServiceTypeName.RPC)"
     :service="ServiceTypeName.RPC"
     :guides="serviceGuides"
+    :image="BannerWEBP"
     powered-by="dwellir"
   />
   <RpcDisabled v-else-if="!isRpcActivated && !pageLoading" @service-created="onServiceCreated" />
@@ -40,6 +41,8 @@
 </template>
 
 <script lang="ts" setup>
+import BannerWEBP from '/assets/images/service/rpc.webp';
+
 const { t } = useI18n();
 const router = useRouter();
 const dataStore = useDataStore();

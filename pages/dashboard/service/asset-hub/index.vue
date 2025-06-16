@@ -11,6 +11,7 @@
         :name="toCamelCase(ServiceTypeName.ASSET_HUB)"
         :service="ServiceTypeName.ASSET_HUB"
         :guides="serviceGuides"
+        :image="BannerWEBP"
         powered-by="polkadot"
       >
         <template #actions>
@@ -71,7 +72,10 @@
     />
   </modal>
 </template>
+
 <script lang="ts" setup>
+import BannerWEBP from '/assets/images/service/assetHub.webp';
+
 const { t } = useI18n();
 const dataStore = useDataStore();
 const assetHubStore = useAssetHubStore();

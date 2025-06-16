@@ -5,7 +5,8 @@
         :name="toCamelCase(Feature.EMBEDDED_WALLET)"
         :service="ServiceTypeName.EMBEDDED_WALLET"
         :guides="serviceGuides"
-        docs="https://wiki.apillon.io/web3-services/7-web3-compute.html"
+        :image="BannerWEBP"
+        docs="https://wiki.apillon.io/web3-services/9-embedded-wallets.html"
       >
         <template #actions>
           <Btn
@@ -43,6 +44,8 @@
 </template>
 
 <script lang="ts" setup>
+import BannerWEBP from '/assets/images/storage/file.webp';
+
 const { t } = useI18n();
 const dataStore = useDataStore();
 const embeddedWalletStore = useEmbeddedWalletStore();

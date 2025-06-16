@@ -6,7 +6,7 @@
         :name="ServiceTypeName.STORAGE.toLowerCase()"
         :service="ServiceTypeName.STORAGE"
         :guides="serviceGuides"
-        :image="FilesPNG"
+        :image="BannerWEBP"
       >
         <template #actions>
           <Btn size="large" type="primary" @click="createNewBucket">
@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import FilesPNG from '/assets/images/storage/file.png';
+import BannerWEBP from '/assets/images/storage/file.webp';
 
 const { t } = useI18n();
 const router = useRouter();
