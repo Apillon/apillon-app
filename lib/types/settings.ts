@@ -25,10 +25,6 @@ export enum OauthLinkType {
   GITHUB = 3,
 }
 
-export enum NotificationType {
-  UNKNOWN = 0,
-}
-
 declare global {
   /**
    * API key
