@@ -1,3 +1,8 @@
+import { NDropdown } from 'naive-ui';
+import type { DropdownMixedOption } from 'naive-ui/es/dropdown/src/interface';
+
+type TableColumnAlign = 'left' | 'center' | 'right';
+
 export const createSelectedColumns = (columns: NDataTableColumns<any>): Array<string> =>
   columns.filter((c: any) => c?.key && c.key !== 'actions').map((c: any) => c.key);
 
@@ -12,10 +17,28 @@ export const createAvailableColumns = (columns: NDataTableColumns<any>): TableCo
     return acc;
   }, []);
 
-export default function useTable(key: string) {
+export default function useTable(key: string = 'table') {
+  const { t } = useI18n();
+
   /** Available columns - show/hide column */
   const selectedColumns = ref<Array<string>>([]);
   const availableColumns = ref<TableColumnSelect[]>([]);
+
+  const tableRowCreateTime = {
+    key: 'createTime',
+    title: t('dashboard.created'),
+    minWidth: 120,
+    render(row) {
+      return dateTimeToDateAndTime(row?.createTime || '');
+    },
+  };
+  const tableRowUpdateTime = {
+    key: 'updateTime',
+    title: t('general.updateTime'),
+    render(row) {
+      return dateTimeToDateAndTime(row?.updateTime || '');
+    },
+  };
 
   function initTableColumns(columns: NDataTableColumns<any>) {
     /** Check if selected columns are stored in LS */
@@ -35,6 +58,8 @@ export default function useTable(key: string) {
   return {
     availableColumns,
     selectedColumns,
+    tableRowCreateTime,
+    tableRowUpdateTime,
     handleColumnChange,
     initTableColumns,
   };

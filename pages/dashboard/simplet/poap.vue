@@ -1,7 +1,7 @@
 <template>
   <Dashboard :loading="false">
     <template #heading>
-      <HeaderSimplet :name="$t('simplet.airdrop.name')" />
+      <HeaderSimplet :name="$t('simplet.poap.name')" />
     </template>
 
     <Simplet :simplet-id="SimpletType.POAP" />

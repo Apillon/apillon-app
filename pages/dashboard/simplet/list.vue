@@ -22,7 +22,7 @@ const { checkUnfinishedSimplets } = useSimplet();
 const pageLoading = ref<boolean>(true);
 
 useHead({
-  title: t('dashboard.nav.nft'),
+  title: t('dashboard.nav.simplets'),
 });
 
 onMounted(async () => {

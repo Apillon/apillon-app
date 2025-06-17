@@ -50,7 +50,7 @@
       <div v-else></div>
 
       <div
-        v-if="$slots.details || $slots.links || docs || technologies.length || info || $attrs.service"
+        v-if="!hideDetails && ($slots.details || $slots.links || docs || technologies.length || info || $attrs.service)"
         class="relative z-10"
         :class="[!$slots.info && !$slots.submenu ? '-mt-8' : '-mt-1', !!$slots.info ? 'bottom-1' : 'bottom-2']"
       >
@@ -110,6 +110,7 @@ defineProps({
   beta: { type: Boolean, default: false },
   docs: { type: String, default: null },
   headline: { type: String, default: null },
+  hideDetails: { type: Boolean, default: false },
   info: { type: String, default: null },
   name: { type: String, default: null },
   serviceName: { type: String, default: null },

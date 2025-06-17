@@ -33,7 +33,14 @@ import { NDropdown } from 'naive-ui';
 const { t } = useI18n();
 const ipnsStore = useIpnsStore();
 const bucketStore = useBucketStore();
-const { availableColumns, selectedColumns, initTableColumns, handleColumnChange } = useTable(LsTableColumnsKeys.IPNS);
+const {
+  availableColumns,
+  selectedColumns,
+  tableRowCreateTime,
+  tableRowUpdateTime,
+  initTableColumns,
+  handleColumnChange,
+} = useTable(LsTableColumnsKeys.IPNS);
 
 const tableRef = ref<DataTableInst | null>(null);
 const currentRow = ref<IpnsInterface>({} as IpnsInterface);
@@ -78,22 +85,8 @@ const columns = computed<NDataTableColumns<IpnsInterface>>(() => {
         return h(resolveComponent('TableLink'), { link: row.link }, '');
       },
     },
-    {
-      key: 'createTime',
-      title: t('dashboard.createTime'),
-      className: { hidden: !selectedColumns.value.includes('createTime') },
-      render(row: IpnsInterface) {
-        return h('span', {}, { default: () => dateTimeToDateAndTime(row.createTime || '') });
-      },
-    },
-    {
-      key: 'updateTime',
-      title: t('general.updateTime'),
-      className: { hidden: !selectedColumns.value.includes('updateTime') },
-      render(row: IpnsInterface) {
-        return h('span', {}, { default: () => dateTimeToDateAndTime(row.updateTime || '') });
-      },
-    },
+    { ...tableRowCreateTime, className: { hidden: !selectedColumns.value.includes('createTime') } },
+    { ...tableRowUpdateTime, className: { hidden: !selectedColumns.value.includes('updateTime') } },
     {
       key: 'actions',
       title: '',

@@ -24,9 +24,11 @@
 </template>
 
 <script lang="ts" setup>
+const dataStore = useDataStore();
 const settingsStore = useSettingsStore();
 
-onMounted(() => {
+onMounted(async () => {
+  await dataStore.waitOnPromises();
   settingsStore.getNotifications();
 });
 

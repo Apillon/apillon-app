@@ -7,15 +7,16 @@ export const useSimpletStore = defineStore('simplets', {
     items: [] as SimpletInterface[],
     templates: [] as SimpletTemplateInterface[],
     loading: false,
+    modalCreateVisible: false,
     pagination: createPagination(),
     search: '',
+    stepSimpletCreate: SimpletCreateStep.COLLECTION,
     archive: {
       items: [] as SimpletInterface[],
       loading: false,
       search: '',
       pagination: createPagination(),
     },
-    stepSimpletCreate: SimpletCreateStep.COLLECTION,
     form: {
       type: null as Optional<SimpletType>,
       collection: null as Optional<CollectionInterface>,
@@ -213,6 +214,7 @@ export const useSimpletStore = defineStore('simplets', {
     async fetchSimplet(simpletUuid: string | undefined) {
       if (!simpletUuid) return;
 
+      this.loading = true;
       try {
         const { data } = await $api.get<SimpletResponse>(endpoints.simpletDeployed(simpletUuid));
         this.active = data;
@@ -225,6 +227,7 @@ export const useSimpletStore = defineStore('simplets', {
         /** Show error message */
         window.$message.error(userFriendlyMsg(e));
       }
+      this.loading = false;
       return this.active;
     },
 

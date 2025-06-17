@@ -25,9 +25,9 @@
     </template>
     <Notification v-else type="error" alert>
       {{ $t('simplet.wizard.collection.first') }}
-      <NuxtLink :to="{ name: 'dashboard-service-nft' }">
+      <Btn type="link" @click="openModalNft">
         <strong class="underline">{{ $t('dashboard.createHere') }}</strong>
-      </NuxtLink>
+      </Btn>
     </Notification>
   </div>
 </template>
@@ -39,6 +39,7 @@ const message = useMessage();
 
 const bucketStore = useBucketStore();
 const simpletStore = useSimpletStore();
+const metadataStore = useMetadataStore();
 const collectionStore = useCollectionStore();
 
 const selectedCollection = ref<CollectionInterface>();
@@ -69,6 +70,12 @@ onMounted(async () => {
 const logoImg = (uuid: string) => {
   return uuid in logos ? logos[uuid]?.link : '';
 };
+
+function openModalNft() {
+  metadataStore.resetForms();
+  simpletStore.modalCreateVisible = false;
+  setTimeout(() => (collectionStore.modalCreateVisible = true), 100);
+}
 
 function nextStep() {
   if (selectedCollection.value) {

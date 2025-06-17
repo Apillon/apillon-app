@@ -55,20 +55,10 @@ import { useDebounceFn } from '@vueuse/core';
 const { t } = useI18n();
 const dataStore = useDataStore();
 const fileStore = useFileStore();
+const { tableRowCreateTime, tableRowUpdateTime } = useTable();
 
 const loading = ref<boolean>(false);
 const currentRow = ref<FileUploadSessionInterface>({} as FileUploadSessionInterface);
-
-/** File status
-const fileStatus = ref<number | undefined>();
-const fileStatuses = ref<Array<SelectOption>>(
-  enumValues(FileUploadSessionStatus).map(value => {
-    return {
-      value,
-      label: FileUploadSessionStatus[value],
-    };
-  })
-); */
 
 /** Columns */
 const createColumns = (): NDataTableColumns<FileUploadSessionInterface> => {
@@ -95,20 +85,8 @@ const createColumns = (): NDataTableColumns<FileUploadSessionInterface> => {
       title: t('storage.numOfUploadedFiles'),
       key: 'numOfUploadedFiles',
     },
-    {
-      key: 'createTime',
-      title: t('dashboard.createTime'),
-      render(row: FileUploadSessionInterface) {
-        return h('span', {}, { default: () => dateTimeToDateAndTime(row.createTime || '') });
-      },
-    },
-    {
-      key: 'updateTime',
-      title: t('general.updateTime'),
-      render(row: FileUploadSessionInterface) {
-        return h('span', {}, { default: () => dateTimeToDateAndTime(row.updateTime || '') });
-      },
-    },
+    tableRowCreateTime,
+    tableRowUpdateTime,
     {
       title: t('storage.sessionStatus'),
       key: 'sessionStatus',

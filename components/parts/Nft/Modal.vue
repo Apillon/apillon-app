@@ -16,6 +16,7 @@
         v-else-if="metadataStore.stepCollectionCreate === CollectionCreateStep.SMART_CONTRACT"
         ref="formSmartContractRef"
         class="mx-auto max-w-lg"
+        :simplet="simplet"
         hide-submit
       />
       <div v-else-if="metadataStore.stepCollectionCreate === CollectionCreateStep.VISUAL" class="mx-auto max-w-lg">
@@ -33,7 +34,7 @@
         class="min-h-full"
       />
       <NftCollectionDeployed
-        v-if="metadataStore.stepCollectionCreate === CollectionCreateStep.DEPLOYED"
+        v-else-if="metadataStore.stepCollectionCreate === CollectionCreateStep.DEPLOYED && !simplet"
         class="mx-auto max-w-5xl"
       />
     </slot>
@@ -61,7 +62,11 @@
 
 <script lang="ts" setup>
 import { useTemplateRef } from 'vue';
-import { CollectionCreateStep, NftMetadataStep } from '~/lib/types/nft';
+
+const emit = defineEmits(['onCreated']);
+defineProps({
+  simplet: { type: Boolean, default: false },
+});
 
 const message = useMessage();
 const authStore = useAuthStore();
@@ -164,6 +169,8 @@ async function createCollection() {
     metadataStore.form.single.collectionUuid = collection.collection_uuid;
 
     metadataStore.stepCollectionCreate = CollectionCreateStep.DEPLOYED;
+
+    emit('onCreated', collection);
   } catch (error) {
     message.error(userFriendlyMsg(error));
     metadataStore.stepCollectionCreate = CollectionCreateStep.REVIEW;

@@ -29,6 +29,8 @@ const { t } = useI18n();
 const router = useRouter();
 const dataStore = useDataStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
+const { tableRowCreateTime } = useTable();
+
 const modalEditEmbeddedWalletVisible = ref<boolean>(false);
 
 const pagination = reactive(createPagination(false));
@@ -96,13 +98,7 @@ const createColumns = (): NDataTableColumns<EmbeddedWalletInterface> => {
       title: t('embeddedWallet.table.numberOfSignatures'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
-    {
-      title: t('embeddedWallet.table.created'),
-      key: 'created',
-      render(row: EmbeddedWalletInterface) {
-        return h('span', {}, { default: () => dateTimeToDate(row.createTime) });
-      },
-    },
+    tableRowCreateTime,
     {
       title: '',
       key: 'actions',

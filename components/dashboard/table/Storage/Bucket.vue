@@ -53,13 +53,15 @@ const props = defineProps({
   deleted: { type: Boolean, default: false },
 });
 
-const { t, te } = useI18n();
 const router = useRouter();
 const message = useMessage();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const storageStore = useStorageStore();
+
+const { t, te } = useI18n();
+const { tableRowCreateTime } = useTable();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.BUCKET_DELETE);
 
 const showModalEditBucket = ref<boolean>(false);
@@ -77,6 +79,42 @@ const data = computed<Array<BucketInterface>>(() => {
     ) || []
   );
 });
+
+const dropdownOptions = [
+  {
+    key: 'storageEdit',
+    label: t('storage.edit'),
+    disabled: dataStore.isProjectUser,
+    props: {
+      onClick: () => {
+        showModalEditBucket.value = true;
+      },
+    },
+  },
+  {
+    key: 'storageDelete',
+    label: t('general.delete'),
+    disabled: authStore.isAdmin(),
+    props: {
+      onClick: () => {
+        deleteBucket(true);
+      },
+    },
+  },
+];
+
+const dropdownDeletedOptions = [
+  {
+    key: 'storageRestore',
+    label: t('general.restore'),
+    disabled: authStore.isAdmin(),
+    props: {
+      onClick: () => {
+        restoreBucket();
+      },
+    },
+  },
+];
 
 const createColumns = (): NDataTableColumns<BucketInterface> => {
   return [
@@ -131,6 +169,7 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
         return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.description });
       },
     },
+    tableRowCreateTime,
     {
       key: 'actions',
       title: '',
@@ -172,42 +211,6 @@ const rowProps = (row: BucketInterface) => {
     },
   };
 };
-
-const dropdownOptions = [
-  {
-    key: 'storageEdit',
-    label: t('storage.edit'),
-    disabled: dataStore.isProjectUser,
-    props: {
-      onClick: () => {
-        showModalEditBucket.value = true;
-      },
-    },
-  },
-  {
-    key: 'storageDelete',
-    label: t('general.delete'),
-    disabled: authStore.isAdmin(),
-    props: {
-      onClick: () => {
-        deleteBucket(true);
-      },
-    },
-  },
-];
-
-const dropdownDeletedOptions = [
-  {
-    key: 'storageRestore',
-    label: t('general.restore'),
-    disabled: authStore.isAdmin(),
-    props: {
-      onClick: () => {
-        restoreBucket();
-      },
-    },
-  },
-];
 
 /**
  * On deleteBucket click

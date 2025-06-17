@@ -23,7 +23,7 @@
       :row-props="rowProps"
       remote
       @update:page="(page: number) => handlePageChange(page, fileStore.trash.pagination.pageSize)"
-      @update:sorter="(pageSize: number) => handlePageChange(1, pageSize)"
+      @update:sorter="handleSorterChange"
     />
   </n-space>
 </template>
@@ -36,8 +36,9 @@ import { NDropdown, NEllipsis, useMessage } from 'naive-ui';
 const { t } = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
-const bucketStore = useBucketStore();
 const fileStore = useFileStore();
+const bucketStore = useBucketStore();
+const { tableRowCreateTime, tableRowUpdateTime } = useTable();
 
 const tableRef = ref<DataTableInst | null>(null);
 const currentRow = ref<BucketItemInterface>({} as BucketItemInterface);
@@ -100,19 +101,13 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
       },
     },
     {
-      key: 'createTime',
+      ...tableRowCreateTime,
       sorter: 'default',
-      title: t('dashboard.created'),
-      render(row: BucketItemInterface) {
-        return h('span', {}, { default: () => dateTimeToDate(row.createTime || '') });
-      },
     },
     {
-      key: 'createTime',
+      ...tableRowUpdateTime,
+      sorter: 'default',
       title: t('dashboard.deletedAt'),
-      render(row: BucketItemInterface) {
-        return h('span', {}, { default: () => dateTimeToDateForDeletedFiles(row.updateTime || '') });
-      },
     },
     {
       key: 'contentType',
@@ -167,6 +162,14 @@ function rowProps(row: BucketItemInterface) {
       currentRow.value = row;
     },
   };
+}
+
+/** Sort column - fetch directory content with order params  */
+async function handleSorterChange(sorter?: DataTableSortState) {
+  sort.value = sorter && sorter.order !== false ? sorter : null;
+  if (sorter) {
+    getDeletedFiles(1);
+  }
 }
 
 /** Reset sort if user search change directory or search directory content */

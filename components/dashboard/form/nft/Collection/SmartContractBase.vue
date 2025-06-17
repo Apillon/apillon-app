@@ -33,7 +33,7 @@
     </n-form-item>
 
     <n-form-item
-      v-if="metadataStore.form.smartContract.chainType !== ChainType.SUBSTRATE"
+      v-if="!simplet && metadataStore.form.smartContract.chainType !== ChainType.SUBSTRATE"
       path="adminAddress"
       :label="infoLabel('adminAddress')"
       :label-props="{ for: 'adminAddress' }"
@@ -45,7 +45,7 @@
       />
     </n-form-item>
 
-    <n-form-item v-if="!isUnique" path="useApillonIpfsGateway" :show-label="false" :show-feedback="false">
+    <n-form-item v-if="!simplet && !isUnique" path="useApillonIpfsGateway" :show-label="false" :show-feedback="false">
       <n-checkbox
         id="useApillonIpfsGateway"
         v-model:checked="metadataStore.form.smartContract.useApillonIpfsGateway"
@@ -54,7 +54,7 @@
       />
     </n-form-item>
 
-    <n-form-item v-if="!isUnique && showIpns" path="useIpns" :show-label="false" :show-feedback="false">
+    <n-form-item v-if="!simplet && !isUnique && showIpns" path="useIpns" :show-label="false" :show-feedback="false">
       <n-checkbox
         v-model:checked="metadataStore.form.smartContract.useIpns"
         size="medium"
@@ -76,6 +76,7 @@ defineProps({
   hideSubmit: { type: Boolean, default: true },
   showNetwork: { type: Boolean, default: true },
   showIpns: { type: Boolean, default: true },
+  simplet: { type: Boolean, default: false },
 });
 const message = useMessage();
 const metadataStore = useMetadataStore();

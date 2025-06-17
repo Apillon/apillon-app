@@ -22,12 +22,13 @@ import { NDropdown } from 'naive-ui';
 
 const { t } = useI18n();
 const router = useRouter();
-const indexerStore = useIndexerStore();
+const message = useMessage();
 const dataStore = useDataStore();
 const authStore = useAuthStore();
-const showModalEditIndexer = ref<boolean | null>(false);
-const message = useMessage();
+const indexerStore = useIndexerStore();
+const { tableRowCreateTime } = useTable();
 
+const showModalEditIndexer = ref<boolean | null>(false);
 const rowKey = (row: IndexerBaseInterface) => row.indexer_uuid;
 const currentRow = ref<IndexerBaseInterface>(indexerStore.items[0]);
 const pagination = reactive(createPagination(false));
@@ -60,13 +61,7 @@ const columns = computed(() => [
       return h('strong', {}, { default: () => row.description });
     },
   },
-  {
-    key: 'createTime',
-    title: t('dashboard.createTime'),
-    render(row: IndexerBaseInterface) {
-      return h('span', {}, { default: () => dateTimeToDateAndTime(row.createTime || '') });
-    },
-  },
+  tableRowCreateTime,
   {
     key: 'status',
     title: t('indexer.table.status'),

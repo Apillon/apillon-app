@@ -35,7 +35,7 @@
     <n-grid class="items-end" :cols="12" :x-gap="32">
       <!--  Collection Reserve -->
       <n-form-item-gi
-        v-if="metadataStore.form.smartContract.chainType === ChainType.EVM"
+        v-if="!simplet && metadataStore.form.smartContract.chainType === ChainType.EVM"
         path="dropReserve"
         :span="6"
         :label="infoLabel('dropReserve')"
@@ -62,8 +62,9 @@
 </template>
 
 <script lang="ts" setup>
-defineProps({
+const props = defineProps({
   hideSubmit: { type: Boolean, default: true },
+  simplet: { type: Boolean, default: false },
 });
 const message = useMessage();
 const metadataStore = useMetadataStore();
@@ -71,6 +72,12 @@ const metadataStore = useMetadataStore();
 const { labelInfo } = useComputing();
 const { formRef, rules } = useCollection();
 defineExpose({ formRef, handleSubmitForm });
+
+onMounted(() => {
+  if (props.simplet) {
+    metadataStore.form.smartContract.dropReserve = metadataStore.metadata.length;
+  }
+});
 
 function infoLabel(field: string) {
   return labelInfo(field, 'form.label.collection');
