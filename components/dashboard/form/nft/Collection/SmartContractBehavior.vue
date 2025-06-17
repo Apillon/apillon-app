@@ -13,6 +13,7 @@
       :cols="12"
       :x-gap="32"
     >
+      <n-form-item-gi path="maxSupply" :span="6" :label="labelInfo('maxSupply')" :label-props="{ for: 'maxSupply' }">
         <n-input-number
           v-model:value="metadataStore.form.smartContract.maxSupply"
           :min="0"

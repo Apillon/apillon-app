@@ -111,9 +111,6 @@ const deploymentStore = useDeploymentStore();
 const { t } = useI18n();
 const { rulesWebsite } = useForm();
 
-const { t } = useI18n();
-const { rulesWebsite } = useHosting();
-
 const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
 
