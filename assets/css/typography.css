@@ -145,7 +145,7 @@
   }
 
   .body-lg {
-    @apply text-base;
+    @apply text-base leading-normal;
 
     strong,
     b {
@@ -154,7 +154,7 @@
   }
 
   .body-md {
-    @apply text-sm;
+    @apply text-sm leading-normal;
 
     strong,
     b {
@@ -163,7 +163,7 @@
   }
 
   .body-sm {
-    @apply text-xs;
+    @apply text-xs leading-normal;
 
     strong,
     b {

@@ -19,17 +19,24 @@
     </div>
 
     <!-- Modal - New Simplet -->
-    <SimpletModal v-model:show="showModalNewSimplet" :type="simpletType" :title="$t('simplet.wizard.create')" />
+    <SimpletModal
+      v-if="!collectionStore.modalCreateVisible"
+      v-model:show="simpletStore.modalCreateVisible"
+      :type="simpletType"
+      :title="$t('simplet.wizard.create')"
+    />
+    <NftModal v-if="!simpletStore.modalCreateVisible" v-model:show="collectionStore.modalCreateVisible" simplet />
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
 const { t } = useI18n();
-const simpletStore = useSimpletStore();
 const { simpletsContent } = useSimplet();
 
+const simpletStore = useSimpletStore();
+const collectionStore = useCollectionStore();
+
 const simpletType = ref<number>(SimpletType.AIRDROP);
-const showModalNewSimplet = ref<boolean>(false);
 
 useHead({
   title: t('dashboard.nav.simplets'),
@@ -44,6 +51,6 @@ function openModal(type: number) {
   simpletStore.resetForm();
   simpletType.value = type;
   simpletStore.stepSimpletCreate = SimpletCreateStep.COLLECTION;
-  showModalNewSimplet.value = true;
+  simpletStore.modalCreateVisible = true;
 }
 </script>

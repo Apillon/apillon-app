@@ -37,11 +37,13 @@
 <script lang="ts" setup>
 import { NDropdown } from 'naive-ui';
 
-const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const warningStore = useWarningStore();
 const cloudFunctionStore = useCloudFunctionStore();
+
+const { t } = useI18n();
+const { tableRowCreateTime, tableRowUpdateTime } = useTable();
 const { checkUnfinishedJobs } = useCloudFunctions();
 
 const loadingRedeploy = ref<boolean>(false);
@@ -76,29 +78,8 @@ const createColumns = (): NDataTableColumns<JobInterface> => {
         );
       },
     },
-    {
-      key: 'createTime',
-      title: t('dashboard.created'),
-      minWidth: 120,
-      render(row) {
-        return dateTimeToDateAndTime(row?.createTime || '');
-      },
-    },
-    {
-      key: 'updateTime',
-      title: t('general.updateTime'),
-      render(row) {
-        return dateTimeToDateAndTime(row?.updateTime || '');
-      },
-    },
-    // {
-    //   key: 'endTime',
-    //   title: t('form.label.cloudFunctions.endTime'),
-    //   minWidth: 120,
-    //   render(row) {
-    //     return dateTimeToDateAndTime(row?.endTime || '');
-    //   },
-    // },
+    tableRowCreateTime,
+    tableRowUpdateTime,
     {
       key: 'jobStatus',
       title: t('general.status'),

@@ -14,6 +14,7 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
+const { tableRowCreateTime } = useTable();
 const embeddedWalletStore = useEmbeddedWalletStore();
 
 const createColumns = (): NDataTableColumns<SignatureInterface> => {
@@ -31,7 +32,7 @@ const createColumns = (): NDataTableColumns<SignatureInterface> => {
     {
       key: 'contractAddress',
       title: t('embeddedWallet.table.contractAddress'),
-      render(row) {
+      render(row: SignatureInterface) {
         return h(resolveComponent('TableEllipsis'), { text: row.contractAddress });
       },
     },
@@ -42,14 +43,7 @@ const createColumns = (): NDataTableColumns<SignatureInterface> => {
     //     return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.hashedUsername });
     //   },
     // },
-    {
-      key: 'createTime',
-      title: t('dashboard.created'),
-      minWidth: 120,
-      render(row) {
-        return dateTimeToDate(row?.createTime || '');
-      },
-    },
+    tableRowCreateTime,
     {
       title: t('general.status'),
       key: 'created',

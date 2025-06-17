@@ -5,6 +5,7 @@
         :name="toCamelCase(Feature.SMART_CONTRACTS)"
         :service="ServiceTypeName.SMART_CONTRACTS"
         :guides="serviceGuides"
+        :image="BannerWEBP"
         docs="https://wiki.apillon.io/web3-services/12-web3-smart-contracts.html"
       >
         <template #actions>
@@ -28,6 +29,8 @@
 </template>
 
 <script lang="ts" setup>
+import BannerWEBP from '/assets/images/service/smartContracts.webp';
+
 const { t } = useI18n();
 const dataStore = useDataStore();
 const deployedContractStore = useDeployedContractStore();

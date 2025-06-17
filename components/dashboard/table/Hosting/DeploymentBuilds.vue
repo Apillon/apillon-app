@@ -19,6 +19,7 @@ defineProps({
 });
 
 const { t } = useI18n();
+const { tableRowCreateTime } = useTable();
 const deploymentStore = useDeploymentStore();
 
 const pagination = reactive(createPagination(false));
@@ -33,6 +34,8 @@ const createColumns = (): NDataTableColumns<DeploymentBuildInterface> => {
           'pre',
           {
             style: {
+              margin: '-12px',
+              padding: '12px',
               maxHeight: '400px', // Limit the height
               overflowY: 'auto', // Add vertical scrollbar
               whiteSpace: 'pre-wrap', // Preserve whitespace and wrap text
@@ -49,13 +52,7 @@ const createColumns = (): NDataTableColumns<DeploymentBuildInterface> => {
         return h(resolveComponent('HostingDeploymentBuildStatus'), { status: row.buildStatus }, '');
       },
     },
-    {
-      key: 'createTime',
-      title: t('dashboard.createTime'),
-      render(row: DeploymentBuildInterface) {
-        return h('span', {}, { default: () => dateTimeToDateAndTime(row.createTime || '') });
-      },
-    },
+    tableRowCreateTime,
     {
       key: 'finishedTime',
       title: t('hosting.deploy.build-table.finished-time'),

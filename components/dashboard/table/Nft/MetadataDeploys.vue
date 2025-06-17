@@ -17,6 +17,7 @@ const props = defineProps({
 
 const { t } = useI18n();
 const collectionStore = useCollectionStore();
+const { tableRowCreateTime, tableRowUpdateTime } = useTable();
 
 /** Data: filtered deploys */
 const data = computed<Array<MetadataDeployInterface>>(() => {
@@ -28,29 +29,8 @@ const data = computed<Array<MetadataDeployInterface>>(() => {
 
 const createColumns = (): NDataTableColumns<MetadataDeployInterface> => {
   return [
-    {
-      key: 'createTime',
-      title: t('dashboard.created'),
-      minWidth: 120,
-      render(row: MetadataDeployInterface) {
-        return h(
-          'span',
-          { class: 'text-sm text-body' },
-          { default: () => dateTimeToDateAndTime(row.createTime || '') }
-        );
-      },
-    },
-    {
-      key: 'updateTime',
-      title: t('general.updateTime'),
-      render(row: MetadataDeployInterface) {
-        return h(
-          'span',
-          { class: 'text-sm text-body' },
-          { default: () => dateTimeToDateAndTime(row.updateTime || '') }
-        );
-      },
-    },
+    tableRowCreateTime,
+    tableRowUpdateTime,
     {
       key: 'currentStep',
       title: t('nft.metadata.currentStep'),

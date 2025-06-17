@@ -1,12 +1,18 @@
 <template>
   <n-form ref="formRef" :model="metadataStore.form.smartContract" :rules="rules" @submit.prevent="handleSubmitForm">
     <FormFieldSwitch
+      v-if="!simplet"
       v-model:value="metadataStore.form.smartContract.supplyLimited"
       :text-active="$t('form.supplyTypes.limited')"
       :text-inactive="$t('form.supplyTypes.unlimited')"
     />
-    <n-grid v-show="metadataStore.form.smartContract.supplyLimited" class="items-end" :cols="12" :x-gap="32">
-      <n-form-item-gi path="maxSupply" :span="6" :label="labelInfo('maxSupply')" :label-props="{ for: 'maxSupply' }">
+    <n-grid
+      v-if="!simplet"
+      v-show="metadataStore.form.smartContract.supplyLimited"
+      class="items-end"
+      :cols="12"
+      :x-gap="32"
+    >
         <n-input-number
           v-model:value="metadataStore.form.smartContract.maxSupply"
           :min="0"
@@ -65,8 +71,9 @@
 </template>
 
 <script lang="ts" setup>
-defineProps({
+const props = defineProps({
   hideSubmit: { type: Boolean, default: true },
+  simplet: { type: Boolean, default: false },
 });
 const { t } = useI18n();
 const message = useMessage();
@@ -77,7 +84,10 @@ const { booleanSelect, formRef } = useCollection();
 defineExpose({ formRef, handleSubmitForm });
 
 onMounted(() => {
-  if (metadataStore.form.smartContract.maxSupply === 0) {
+  if (props.simplet) {
+    metadataStore.form.smartContract.supplyLimited = true;
+    metadataStore.form.smartContract.maxSupply = metadataStore.metadata.length;
+  } else if (metadataStore.form.smartContract.maxSupply === 0) {
     metadataStore.form.smartContract.maxSupply = metadataStore.metadata.length;
   }
 });

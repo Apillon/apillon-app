@@ -7,22 +7,23 @@
       <FormNftCollectionSmartContractBase
         ref="formBaseRef"
         :show-network="metadataStore.form.smartContract.chain === undefined"
+        :simplet="simplet"
       />
     </template>
     <template v-else-if="isStep(CollectionFormStep.BEHAVIOR)">
       <h6 class="mt-6">{{ $t('nft.collection.instruction.behavior') }}</h6>
       <p class="mb-6">{{ $t('nft.collection.instruction.behaviorInfo') }}</p>
-      <FormNftCollectionSmartContractBehavior ref="formBehaviorRef" />
+      <FormNftCollectionSmartContractBehavior ref="formBehaviorRef" :simplet="simplet" />
     </template>
     <template v-else-if="isStep(CollectionFormStep.ROYALTIES)">
       <h6 class="mt-6">{{ $t('nft.collection.instruction.royalties') }}</h6>
       <p class="mb-6">{{ $t('nft.collection.instruction.royaltiesInfo') }}</p>
-      <FormNftCollectionSmartContractRoyalties ref="formRoyaltiesRef" />
+      <FormNftCollectionSmartContractRoyalties ref="formRoyaltiesRef" :simplet="simplet" />
     </template>
     <template v-else-if="isStep(CollectionFormStep.DROP)">
       <h6 class="mt-6">{{ $t('nft.collection.instruction.drop') }}</h6>
       <p class="mb-6">{{ $t('nft.collection.instruction.dropInfo') }}</p>
-      <FormNftCollectionSmartContractDrop ref="formDropRef" />
+      <FormNftCollectionSmartContractDrop ref="formDropRef" :simplet="simplet" />
     </template>
   </div>
 </template>
@@ -35,6 +36,7 @@ defineProps({
   hideSubmit: { type: Boolean, default: false },
   showNetwork: { type: Boolean, default: true },
   showIpns: { type: Boolean, default: true },
+  simplet: { type: Boolean, default: false },
 });
 
 const metadataStore = useMetadataStore();

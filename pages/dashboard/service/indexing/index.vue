@@ -1,11 +1,12 @@
 <template>
-  <Dashboard :empty="!dataStore.project.selected || !dataStore.hasIndexers" :loading="pageLoading">
+  <Dashboard :empty="!dataStore.project.selected || !indexerStore.hasIndexers" :loading="pageLoading">
     <template #empty>
       <ServiceEmpty
         docs="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html#indexing-service"
         :name="toCamelCase(ServiceTypeName.INDEXING)"
         :service="ServiceTypeName.INDEXING"
         :guides="serviceGuides"
+        :image="BannerWEBP"
         powered-by="sqd"
       >
         <template #actions>
@@ -39,6 +40,8 @@
 </template>
 
 <script lang="ts" setup>
+import BannerWEBP from '/assets/images/service/rpc.webp';
+
 const { t } = useI18n();
 const dataStore = useDataStore();
 const indexerStore = useIndexerStore();

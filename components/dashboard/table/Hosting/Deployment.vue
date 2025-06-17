@@ -18,6 +18,7 @@ defineProps({
 });
 
 const { t } = useI18n();
+const { tableRowCreateTime } = useTable();
 const deploymentStore = useDeploymentStore();
 
 const pagination = reactive(createPagination(false));
@@ -55,13 +56,7 @@ const createColumns = (): NDataTableColumns<DeploymentInterface> => {
         return '';
       },
     },
-    {
-      key: 'createTime',
-      title: t('dashboard.createTime'),
-      render(row: DeploymentInterface) {
-        return h('span', {}, { default: () => dateTimeToDateAndTime(row.createTime || '') });
-      },
-    },
+    tableRowCreateTime,
   ];
 };
 const columns = createColumns();

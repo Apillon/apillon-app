@@ -23,10 +23,10 @@
     />
   </modal> -->
 
-  <!-- Modal - Delete Simplet -->
+  <!-- Modal - Delete Simplet 
   <ModalDelete v-model:show="showModalDeleteSimplet" :title="$t('simplet.delete')">
     <FormDelete :id="currentRow?.simpletDeploy_uuid" :type="ItemDeleteKey.WEBSITE" @submit-success="() => {}" />
-  </ModalDelete>
+  </ModalDelete>-->
 </template>
 
 <script lang="ts" setup>
@@ -43,13 +43,12 @@ const message = useMessage();
 const authStore = useAuthStore();
 const simpletStore = useSimpletStore();
 
-const { getSimpletType } = useSimplet();
-const { availableColumns, selectedColumns, initTableColumns, handleColumnChange } = useTable(
+const { availableColumns, selectedColumns, tableRowCreateTime, initTableColumns, handleColumnChange } = useTable(
   LsTableColumnsKeys.SIMPLETS
 );
 const pagination = reactive(props.archive ? simpletStore.archive.pagination : simpletStore.pagination);
 
-const showModalDeleteSimplet = ref<boolean>(false);
+// const showModalDeleteSimplet = ref<boolean>(false);
 
 const columns = computed<NDataTableColumns<SimpletInterface>>(() => {
   return [
@@ -94,24 +93,7 @@ const columns = computed<NDataTableColumns<SimpletInterface>>(() => {
         return h(resolveComponent('SimpletStatus'), { status: row.frontendStatus });
       },
     },
-    {
-      title: t('dashboard.created'),
-      key: 'created',
-      render(row: SimpletInterface) {
-        return h('span', {}, { default: () => dateTimeToDate(row.createTime) });
-      },
-    },
-    // {
-    //   key: 'type',
-    //   title: t('general.type'),
-    //   className: [
-    //     { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
-    //     { hidden: !selectedColumns.value.includes('type') },
-    //   ],
-    //   render(row: SimpletInterface) {
-    //     return getSimpletType(row.simplet_uuid);
-    //   },
-    // },
+    tableRowCreateTime,
     {
       key: 'actions',
       align: 'right',

@@ -6,6 +6,7 @@
         :name="toCamelCase(ServiceTypeName.CLOUD_FUNCTIONS)"
         :service="ServiceTypeName.CLOUD_FUNCTIONS"
         :guides="serviceGuides"
+        :image="BannerWEBP"
       >
         <template #actions>
           <Btn size="large" @click="modalCreateCloudFunctionsVisible = true">
@@ -30,6 +31,8 @@
 </template>
 
 <script lang="ts" setup>
+import BannerWEBP from '/assets/images/service/cloudFunctions.webp';
+
 const { t } = useI18n();
 const dataStore = useDataStore();
 const cloudFunctionStore = useCloudFunctionStore();

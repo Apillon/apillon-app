@@ -45,7 +45,9 @@ const { currentRoute } = useRouter();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
+const indexerStore = useIndexerStore();
 const websiteStore = useWebsiteStore();
+const assetHubStore = useAssetHubStore();
 const collectionStore = useCollectionStore();
 const cloudFunctionStore = useCloudFunctionStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
@@ -93,10 +95,14 @@ const hasServices = (routeName: string) => {
   switch (routeName) {
     case 'dashboard':
       return false;
+    case 'dashboard-service-asset-hub':
+      return assetHubStore.hasAssets || assetHubStore.loading;
     case 'dashboard-service-storage':
       return bucketStore.hasBuckets || bucketStore.loading;
     case 'dashboard-service-hosting':
       return websiteStore.hasWebsites || websiteStore.loading;
+    case 'dashboard-service-indexing':
+      return indexerStore.hasIndexers || indexerStore.loading;
     case 'dashboard-service-nft':
       return collectionStore.hasCollections || collectionStore.loading;
     case 'dashboard-service-cloud-functions':

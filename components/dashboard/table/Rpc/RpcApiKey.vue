@@ -29,6 +29,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
+const { tableRowCreateTime } = useTable();
 const rpcApiKeyStore = useRpcApiKeyStore();
 
 const pagination = reactive(createPagination(false));
@@ -60,14 +61,7 @@ const createColumns = (): NDataTableColumns<RpcApiKeyInterface> => {
         return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.uuid });
       },
     },
-    {
-      key: 'createTime',
-      title: t('dashboard.created'),
-      minWidth: 120,
-      render(row) {
-        return dateTimeToDateAndTime(row?.createTime || '');
-      },
-    },
+    tableRowCreateTime,
   ];
 
   if (props.isOwner) {

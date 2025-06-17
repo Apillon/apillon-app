@@ -63,6 +63,7 @@
     "WEBHOOK_ALREADY_EXISTS_FOR_PROJECT": "Webhook already exists",
     "MAX_BUCKETS_REACHED": "Maximum number of buckets is reached",
     "MAX_PROJECTS_REACHED": "Maximum number of projects is reached",
+    "MAX_SIMPLET_BACKEND_COUNT_REACHED": "Maximum number of simplets is reached",
     "BUCKET_ALREADY_MARKED_FOR_DELETION": "Bucket already marked for deletion",
     "NOT_ENOUGH_STORAGE_SPACE": "Your run out of space. Please upgrade your subscription plan.",
     "MAX_USED_STORAGE_REACHED": "Your run out of space. Please upgrade your subscription plan.",

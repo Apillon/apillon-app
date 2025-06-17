@@ -41,6 +41,7 @@ const message = useMessage();
 const authStore = useAuthStore();
 const cloudFunctionStore = useCloudFunctionStore();
 const { deleteItem } = useDelete();
+const { tableRowCreateTime } = useTable();
 
 const modalEditCloudFunctionVisible = ref<boolean>(false);
 
@@ -69,14 +70,7 @@ const createColumns = (): NDataTableColumns<CloudFunctionInterface> => {
         return h(resolveComponent('TableEllipsis'), { text: row.function_uuid }, '');
       },
     },
-    {
-      key: 'createTime',
-      title: t('dashboard.created'),
-      minWidth: 120,
-      render(row) {
-        return dateTimeToDateAndTime(row?.createTime || '');
-      },
-    },
+    tableRowCreateTime,
     {
       key: 'activeJob_id',
       title: t('general.status'),

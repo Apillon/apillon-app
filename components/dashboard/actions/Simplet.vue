@@ -23,33 +23,38 @@
         {{ $t('general.preview') }}
       </Btn>
 
-      <!-- Collection -->
-      <Btn
-        class="locked w-full"
-        size="medium"
-        type="secondary"
-        :to="`/dashboard/service/nft/${simpletStore.active.contract_uuid}`"
-      >
-        {{ $t('nft.collection.preview') }}
-      </Btn>
-
       <!-- Domain -->
-      <BtnDomain :frontend-uuid="simpletStore.active.frontend_uuid" />
+      <BtnDomain
+        v-if="simpletStore.active.frontendStatus === ResourceStatus.ONLINE || websiteStore.active.w3ProductionLink"
+        :frontend-uuid="simpletStore.active.frontend_uuid"
+      />
 
       <!-- SMTP -->
-      <Btn class="locked w-full" size="medium" type="primary" @click="openModalSmtp()">
+      <Btn
+        v-if="simpletStore.backendStatus === ResourceStatus.ONLINE"
+        class="locked w-full"
+        size="medium"
+        type="primary"
+        @click="openModalSmtp()"
+      >
         {{ $t('simplet.wizard.smtp.edit') }}
       </Btn>
 
       <!-- MySQL -->
-      <Btn class="locked w-full" size="medium" type="primary" @click="openModalMysql()">
+      <Btn
+        v-if="simpletStore.backendStatus === ResourceStatus.ONLINE"
+        class="locked w-full"
+        size="medium"
+        type="primary"
+        @click="openModalMysql()"
+      >
         {{ $t('simplet.mysql.edit') }}
       </Btn>
 
       <!-- Redeploy -->
       <Btn
         v-if="
-          simpletStore.active.backendStatus === ResourceStatus.FAILED ||
+          simpletStore.backendStatus === ResourceStatus.FAILED ||
           simpletStore.active.frontendStatus === ResourceStatus.FAILED
         "
         class="locked w-full"
