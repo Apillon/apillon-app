@@ -6,7 +6,7 @@
 
     <slot>
       <n-space v-if="cloudFunctionStore.hasJobs" class="pb-8" :size="32" vertical>
-        <ActionsComputingCloudFunctionsJobs />
+        <ActionsCloudFunctionsJobs />
         <TableComputingCloudFunctionJobs />
       </n-space>
       <div v-else class="flex h-full flex-col items-center justify-center">
@@ -32,7 +32,7 @@
 
       <!-- Modal - Create CloudFunction Job -->
       <modal v-model:show="modalCreateJobVisible" :title="$t('computing.cloudFunctions.job.new')">
-        <FormComputingCloudFunctionsJob
+        <FormCloudFunctionsJob
           :function-uuid="cloudFunctionStore.functionUuid"
           @submit-success="modalCreateJobVisible = false"
           @create-success="onJobCreated"

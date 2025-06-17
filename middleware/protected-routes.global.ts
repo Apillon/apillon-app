@@ -63,12 +63,6 @@ const featureRoutes: Array<FeatureRouteInterface> = [
   },
 
   {
-    regex: /^\/dashboard\/service\/computing/,
-    redirect: '/dashboard',
-    feature: Feature.COMPUTING,
-    permission: Permission.COMPUTING,
-  },
-  {
     regex: /^\/dashboard\/service\/cloud-functions/,
     redirect: '/dashboard',
     feature: Feature.CLOUD_FUNCTIONS,

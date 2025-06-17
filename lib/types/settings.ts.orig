@@ -24,6 +24,9 @@ export enum OauthLinkType {
   GITHUB = 3,
 }
 
+<<<<<<< HEAD
+export enum NotificationType {
+  UNKNOWN = 0,
   WEBSITE_DEPLOYED = 1,
   NFT_METADATA_DEPLOYED = 2,
   NFT_COLLECTION_DEPLOYED = 3,
@@ -31,6 +34,10 @@ export enum OauthLinkType {
   INDEXER_DEPLOYED = 5,
   SMART_CONTRACT_DEPLOYED = 6,
   EMBEDDED_WALLET_GENERATED = 7,
+}
+
+=======
+>>>>>>> develop
 declare global {
   /**
    * API key
@@ -119,7 +126,7 @@ declare global {
   interface SignatureInterface {
     apiKey: string;
     dataHash: string;
-    contractAddress: string | null;
+    hashedUsername: string | null;
     publicAddress: string | null;
     status: number;
     createTime: string;

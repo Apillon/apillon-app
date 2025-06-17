@@ -144,7 +144,6 @@ const Endpoints = {
   collectionTransferOwnership: (collectionUuid: string) => `/nfts/collections/${collectionUuid}/transferOwnership`,
   collectionBurn: (collectionUuid: string) => `/nfts/collections/${collectionUuid}/burn`,
   collectionMint: (collectionUuid: string) => `/nfts/collections/${collectionUuid}/mint`,
-  collectionNestMint: (collectionUuid: string) => `/nfts/collections/${collectionUuid}/nest-mint`,
   collectionNftsMetadata: (collectionUuid: string) => `/nfts/collections/${collectionUuid}/nfts-metadata`,
   collectionIpns: (id: string) => `/nfts/collections/${id}/ipns`,
   collectionActivate: (collectionUuid: string) => `/nfts/collections/${collectionUuid}/activate`,
@@ -214,14 +213,6 @@ const Endpoints = {
   apiKeyRole: (key: number) => `/api-keys/${key}/role`,
   apiKeyRoles: (key: number) => `/api-keys/${key}/roles`,
   apiKeyServiceRoles: (key: number) => `/api-keys/${key}/service-roles`,
-
-  /**
-   * Social
-   */
-  spaces: (uuid?: number | string) => (uuid ? `/social/spaces/${uuid}` : '/social/spaces'),
-  spaceActivate: (uuid: number | string) => `/social/spaces/${uuid}/activate`,
-  posts: (uuid?: number | string) => (uuid ? `/social/posts/${uuid}` : `/social/posts`),
-  postActivate: (uuid: number | string) => `/social/posts/${uuid}/activate`,
 
   /**
    * Simplets

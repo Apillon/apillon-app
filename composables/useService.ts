@@ -47,9 +47,7 @@ export default function useService() {
     nft: ServiceType.NFT,
     smartContracts: ServiceType.SMART_CONTRACTS,
     assetHub: ServiceType.ASSET_HUB,
-    computing: ServiceType.COMPUTING,
     authentication: ServiceType.AUTHENTICATION,
-    social: ServiceType.SOCIAL,
   };
 
   const generateLink = (service: string) => {

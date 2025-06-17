@@ -108,7 +108,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       iconName: 'icon-cloud-functions',
       soon: isMenuItemDisabled(Feature.CLOUD_FUNCTIONS),
       beta: isBetaFeature(Feature.CLOUD_FUNCTIONS),
-      disabled: isMenuItemDisabled(Feature.CLOUD_FUNCTIONS) || !authStore.isUserAllowed(Permission.COMPUTING),
+      disabled: isMenuItemDisabled(Feature.CLOUD_FUNCTIONS),
     },
   ];
 
@@ -143,27 +143,12 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
 
   const utility = [
     {
-      key: 'dashboard-service-computing',
-      label: t('dashboard.nav.computing'),
-      to: 'dashboard-service-computing',
-      iconName: 'icon-computing',
-      soon: isMenuItemDisabled(Feature.COMPUTING),
-      disabled: isMenuItemDisabled(Feature.COMPUTING) || !authStore.isUserAllowed(Permission.COMPUTING),
-    },
-    {
       key: 'dashboard-service-authentication',
       label: t('dashboard.nav.authentication'),
       to: 'dashboard-service-authentication',
       iconName: 'icon-authentication',
       soon: isMenuItemDisabled(Feature.AUTHENTICATION),
       disabled: isMenuItemDisabled(Feature.AUTHENTICATION) || !authStore.isUserAllowed(Permission.AUTHENTICATION),
-    },
-    {
-      key: 'dashboard-service-social',
-      label: t('dashboard.nav.social'),
-      to: 'dashboard-service-social',
-      iconName: 'icon-social',
-      disabled: isMenuItemDisabled(Feature.SOCIAL) || !authStore.isUserAllowed(Permission.SOCIAL),
     },
   ];
 

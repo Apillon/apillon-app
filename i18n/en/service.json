@@ -49,19 +49,6 @@
         }
       ]
     },
-    "computing": {
-      "contractCount": "Number of contracts",
-      "computingTransactionCount": "Number of transactions",
-      "description": "Embrace the future of Web3 off-chain computation. Access the internet, boost performance, fully multichain, and ultimate data security.",
-      "info": "Run decentralized computations without relying on Big Tech. More power, no downtime, no gatekeepers.",
-      "name": "Computing",
-      "usage": ["computing smart contracts", "cross-chain", "secure computing environment", "internet access"],
-      "introduction": [
-        { "title": "Run heavy tasks, skip the costs", "content": "Web3-native computing, no cloud provider needed." },
-        { "title": "Use what you need, pay as you go", "content": "No wasted resources—just flexible computing." },
-        { "title": "Open, transparent, and trustless", "content": "Every task runs on a verifiable, secure network." }
-      ]
-    },
     "embeddedWallet": {
       "description": "Easily create secure and decentralized wallets for your users on any chain. \nWeb3 wallets, fully decentralized, easy integration, multi-chain support.",
       "info": "Turn any app into a Web3 powerhouse. Let users interact with crypto—without even knowing what a wallet is.",
@@ -156,13 +143,6 @@
           "content": "Works right away—connect and start fetching data."
         }
       ]
-    },
-    "social": {
-      "description": "Connect and communicate with freedom. Experience social networking with secure and decentralized chat functionality.",
-      "name": "Social",
-      "postCount": "Number of channels",
-      "spaceCount": "Number of hubs",
-      "usage": ["social media", "real-time chat", "user-friendly UI", "HIGH PRIVACY", "configurable interface"]
     },
     "storage": {
       "bucket": "Web3 storage bucket",

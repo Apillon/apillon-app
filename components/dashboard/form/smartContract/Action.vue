@@ -56,7 +56,7 @@ const props = defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const { address } = useAccount();
-const { labelInfoText } = useComputing();
+const { labelInfoText } = useForm();
 const { getChainConfig } = useSmartContracts();
 const deployedContractStore = useDeployedContractStore();
 

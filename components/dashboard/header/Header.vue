@@ -48,7 +48,6 @@ const bucketStore = useBucketStore();
 const indexerStore = useIndexerStore();
 const websiteStore = useWebsiteStore();
 const assetHubStore = useAssetHubStore();
-const contractStore = useContractStore();
 const collectionStore = useCollectionStore();
 const cloudFunctionStore = useCloudFunctionStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
@@ -102,8 +101,6 @@ const hasServices = (routeName: string) => {
       return bucketStore.hasBuckets || bucketStore.loading;
     case 'dashboard-service-hosting':
       return websiteStore.hasWebsites || websiteStore.loading;
-    case 'dashboard-service-computing':
-      return contractStore.hasContracts || contractStore.loading;
     case 'dashboard-service-indexing':
       return indexerStore.hasIndexers || indexerStore.loading;
     case 'dashboard-service-nft':

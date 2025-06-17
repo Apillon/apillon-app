@@ -29,7 +29,6 @@
 
 <script lang="ts" setup>
 import { dateTimeToDate } from '~/lib/utils/dates';
-import { NotificationType } from '~/lib/types/notification';
 
 defineProps({
   notification: { type: Object as PropType<NotificationInterface>, default: () => {} },

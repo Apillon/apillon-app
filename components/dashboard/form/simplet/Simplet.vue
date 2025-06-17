@@ -90,12 +90,7 @@
         @update:api-key="apiKey => (simpletStore.form.apiKey = apiKey)"
         @update:api-secret="apiSecret => (simpletStore.form.apiSecret = apiSecret)"
       >
-        <n-checkbox
-          v-model:checked="useDifferentDB"
-          class="mb-8"
-          size="medium"
-          :label="labelInfo('useDifferentDB', 'simplet.mysql')"
-        />
+        <n-checkbox v-model:checked="useDifferentDB" class="mb-8" size="medium" :label="labelInfo('useDifferentDB')" />
 
         <FormFieldMySql v-if="useDifferentDB" :form="simpletStore.form.mysql" />
       </FormFieldApiKey>
@@ -113,8 +108,8 @@ const simpletStore = useSimpletStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
 
 const { t } = useI18n();
-const { labelInfo } = useComputing();
-const { ruleApiKey, ruleApiSecret } = useHosting();
+const { labelInfo } = useForm('simplet.mysql');
+const { ruleApiKey, ruleApiSecret } = useForm();
 
 const formRef = ref<NFormInst | null>(null);
 const useDifferentDB = ref<boolean>(false);

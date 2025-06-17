@@ -24,5 +24,5 @@ defineProps({
   read: { type: Boolean, default: false },
   title: { type: String, default: '' },
 });
-const { labelInfoText } = useComputing();
+const { labelInfoText } = useForm();
 </script>

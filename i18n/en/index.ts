@@ -16,7 +16,6 @@ import rpc from './rpc.json';
 import service from './service.json';
 import simplet from './simplet.json';
 import smartContracts from './smartContracts.json';
-import social from './social.json';
 import storage from './storage.json';
 import validations from './validations.json';
 import w3Warn from './w3Warn.json';
@@ -40,7 +39,6 @@ const messages = {
   ...service,
   ...simplet,
   ...smartContracts,
-  ...social,
   ...storage,
   ...validations,
   ...w3Warn,

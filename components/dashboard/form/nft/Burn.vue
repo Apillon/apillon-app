@@ -101,11 +101,7 @@ async function burn() {
     /** Emit events */
     emit('submitSuccess');
   } catch (error) {
-    if (props.collection.collectionType === NFTCollectionType.NESTABLE) {
-      message.error(t('error.NFT_BURN_NESTABLE'));
-    } else {
-      message.error(userFriendlyMsg(error));
-    }
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }
