@@ -25,7 +25,12 @@
       :type="simpletType"
       :title="$t('simplet.wizard.create')"
     />
-    <NftModal v-if="!simpletStore.modalCreateVisible" v-model:show="collectionStore.modalCreateVisible" simplet />
+    <NftModal
+      v-if="!simpletStore.modalCreateVisible"
+      v-model:show="collectionStore.modalCreateVisible"
+      simplet
+      @on-created="onNftCollectionCreated"
+    />
   </Dashboard>
 </template>
 
@@ -52,5 +57,12 @@ function openModal(type: number) {
   simpletType.value = type;
   simpletStore.stepSimpletCreate = SimpletCreateStep.COLLECTION;
   simpletStore.modalCreateVisible = true;
+}
+function onNftCollectionCreated(collection: CollectionInterface) {
+  collectionStore.modalCreateVisible = true;
+  collectionStore.active = collection;
+
+  setTimeout(() => (simpletStore.modalCreateVisible = true), 100);
+  simpletStore.form.collection = collection;
 }
 </script>
