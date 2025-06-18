@@ -55,7 +55,9 @@
       <Btn
         v-if="
           simpletStore.backendStatus === ResourceStatus.FAILED ||
-          simpletStore.active.frontendStatus === ResourceStatus.FAILED
+          simpletStore.active.frontendStatus === ResourceStatus.FAILED ||
+          (simpletStore.backendStatus === ResourceStatus.ONLINE &&
+            simpletStore.active.frontendStatus === ResourceStatus.REQUESTED)
         "
         class="locked w-full"
         size="medium"

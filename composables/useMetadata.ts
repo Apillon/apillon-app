@@ -83,8 +83,8 @@ export default function useNft() {
       percentage: 0,
       size: file.file?.size || 0,
       timestamp: Date.now(),
-      onFinish,
-      onError,
+      onFinish: onFinish || (() => {}),
+      onError: onError || (() => {}),
     };
 
     if (!isEnoughSpaceInStorage([], uploadedFile)) {
@@ -224,24 +224,26 @@ export default function useNft() {
    */
 
   /** Upload image request - add file to list */
-  async function uploadImageRequest({ file }, wrapToFolder = true) {
+  async function uploadImageRequest({ file, onError, onFinish }: UploadCustomRequestOptions, wrapToFolder = true) {
     await sleep(0.01);
-    if (!isImage(file.type)) {
-      message.warning(t('validation.notImage', { name: file.name }));
-      return;
-    } else if (!isEnoughSpaceInStorage(metadataStore.images, file.file)) {
-      message.warning(t('validation.notEnoughSpaceInStorage', { name: file.name }));
-      return;
-    }
-    loadingImages.value = true;
-
     const image = {
       ...file,
       path: wrapToFolder ? `/Images/${file.name}` : file.name,
       percentage: 0,
       size: file.file?.size || 0,
       timestamp: Date.now(),
+      onFinish: onFinish || (() => {}),
+      onError: onError || (() => {}),
     };
+    if (!isImage(file.type)) {
+      message.warning(t('validation.notImage', { name: image.name }));
+      return;
+    } else if (!isEnoughSpaceInStorage(metadataStore.images, image)) {
+      message.warning(t('validation.notEnoughSpaceInStorage', { name: image.name }));
+      return;
+    }
+    loadingImages.value = true;
+
     if (metadataStore.stepMetadata === NftMetadataStep.SINGLE) {
       metadataStore.form.single.image = image.name;
     }

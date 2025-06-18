@@ -1,6 +1,6 @@
 <template>
   <div class="flex h-full flex-col justify-between">
-    <TableInfo :data="data" />
+    <TableInfo :data="data.filter(i => i?.show !== false)" />
   </div>
 </template>
 
@@ -73,6 +73,7 @@ const data = computed(() => {
     },
     {
       label: t('simplet.endpoint'),
+      value: simpletStore.active?.backendUrl || '',
       component: resolveComponent('TableLink'),
       data: {
         link: simpletStore.active?.backendUrl,
@@ -89,14 +90,22 @@ const data = computed(() => {
     {
       label: t('general.website'),
       loading: websiteStore.loading,
+      value: '',
       component: resolveComponent('TableLink'),
       show: !!websiteStore.active?.website_uuid,
       data: {
         text: websiteStore.active.domain || websiteStore.active.name,
-        link:
-          websiteStore.active.domain ||
-          websiteStore.active.w3ProductionLink ||
-          `/dashboard/service/hosting/${websiteStore.active.website_uuid}`,
+        link: `/dashboard/service/hosting/${websiteStore.active.website_uuid}`,
+      },
+    },
+    {
+      label: t('simplet.url'),
+      loading: websiteStore.loading,
+      value: '',
+      component: resolveComponent('TableLink'),
+      show: !!(websiteStore.active.domain || websiteStore.active.w3ProductionLink),
+      data: {
+        link: websiteStore.active.domain || websiteStore.active.w3ProductionLink,
       },
     },
   ];

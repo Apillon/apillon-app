@@ -4,7 +4,7 @@
     <FormFieldUploadImage
       v-else
       ref="uploadRef"
-      :custom-request="e => collection.uploadFileRequest(e, isLogo)"
+      :custom-request="e => uploadFileRequest(e, isLogo)"
       @remove="handleImageRemove"
     >
       <h6 v-if="isLogo" class="mb-1">{{ $t('nft.upload.avatar') }}</h6>
@@ -21,7 +21,7 @@ const props = defineProps({
 });
 
 const metadataStore = useMetadataStore();
-const collection = useCollection();
+const { uploadFileRequest } = useCollection();
 
 function handleImageRemove() {
   if (props.isLogo) {
