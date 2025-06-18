@@ -160,9 +160,12 @@
     },
     "wizard": {
       "collection": {
+        "add": "Don’t have a collection yet? Or thinking of adding a new one?",
+        "addInfo": "Spin up a collection in minutes with our step-by-step wizard.",
         "empty": "To get started, you’ll need at least one NFT collection in Apillon. Each Simplet needs a collection to work with—it’s where the NFTs will be minted, managed, and sent from.",
         "first": "You don’t have any NFT collections yet. To continue, create one in Apillon first.",
         "info": "Each Simplet needs an NFT collection to work with—it’s where the NFTs will be minted, managed, and sent from.",
+        "search": "Search NFT Collection",
         "select": "Select NFT Collection"
       },
       "createStep": {

@@ -108,7 +108,7 @@
         "useIpns": "Dynamic metadata",
         "labelInfo": {
           "adminAddress": "The admin of a collection is able to grant and revoke control of the contract to addresses. You can change this later.",
-          "autoIncrement": "Automatically assigns NFT IDs in sequential order.",
+          "autoIncrement": "Mark YES to let the system assign NFT IDs in correct order for you. Mark NO if you prefer to manually assign each ID and match it with the correct owner.",
           "baseExtension": "",
           "baseUri": "Paste the collection metadata base URI here.",
           "chain": "Select the network where your NFTs will be deployed",

@@ -6,6 +6,7 @@
     trans-key="nft.collection.createStep"
     :title="$t('nft.collection.create')"
     :minimize="Math.max(metadataStore.stepCollectionCreate, metadataStore.stepMetadata) > 1"
+    @reset="onReset"
   >
     <slot>
       <NftMetadataWizard
@@ -117,6 +118,13 @@ onMounted(async () => {
 });
 
 const metadataValid = () => !metadataStore.metadata.some(item => !item.image || !item.name || !item.description);
+
+const onReset = () => {
+  collectionStore.modalCreateVisible = false;
+  metadataStore.stepCollectionCreate = CollectionCreateStep.METADATA;
+  metadataStore.stepMetadata = NftMetadataStep.CHAIN;
+  metadataStore.resetForms();
+};
 
 async function submitFormVisual() {
   if (await formVisualRef.value?.handleSubmitForm()) {

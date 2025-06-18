@@ -3,7 +3,6 @@
     v-if="!$attrs.show && minimize"
     class="card-dark fixed bottom-0 left-1/2 z-10 -mb-[1px] -mr-[1px] max-w-[500px] -translate-x-1/2 cursor-pointer !rounded-b-none !border-yellow"
     size="small"
-    @click="($attrs as Record<string, any>)['onUpdate:show']?.(true)"
   >
     <div class="flex w-full items-center justify-between">
       <small class="inline-block md:w-1/3">{{ title }}</small>
@@ -12,7 +11,15 @@
           {{ $t(`${transKey}.${activeStep}`) }}
         </strong>
       </div>
-      <div class="md:w-1/3"></div>
+      <div class="text-right md:w-1/3">
+        <button v-if="hasReset" class="flex-cc relative z-10 ml-auto p-1" @click="$emit('reset')">
+          <span class="icon-delete text-xl text-pink"></span>
+        </button>
+      </div>
+      <div
+        class="absolute bottom-0 left-0 right-0 top-0"
+        @click="($attrs as Record<string, any>)['onUpdate:show']?.(true)"
+      ></div>
     </div>
     <div
       v-if="progress !== null"
@@ -56,6 +63,7 @@
 </template>
 
 <script lang="ts" setup>
+defineEmits(['reset']);
 defineProps({
   activeStep: { type: Number, default: 0 },
   progress: { type: Number, default: null },
@@ -64,4 +72,7 @@ defineProps({
   transKey: { type: String, default: null },
   minimize: { type: Boolean, default: false },
 });
+
+const { vnode } = getCurrentInstance();
+const hasReset = computed(() => 'onReset' in vnode.props);
 </script>

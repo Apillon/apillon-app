@@ -50,6 +50,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
+const { warning } = useMessage();
 const { isUnique } = useCollection();
 const metadataStore = useMetadataStore();
 
@@ -95,7 +96,7 @@ async function nextStep() {
     const f3 = await submitForm(formDropRef.value);
 
     if (Number(metadataStore.form.smartContract.dropPrice) <= 0) {
-      t('validation.collection.dropPrice');
+      warning(t('validation.collection.dropPrice'));
     } else if (f1 && f2 && f3) {
       metadataStore.stepCollectionCreate = CollectionCreateStep.VISUAL;
     }

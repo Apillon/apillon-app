@@ -5,6 +5,8 @@
     :active-step="simpletStore.stepSimpletCreate"
     trans-key="simplet.wizard.createStep"
     :title="$t('simplet.wizard.create')"
+    :minimize="simpletStore.stepSimpletCreate > SimpletCreateStep.COLLECTION"
+    @reset="onReset"
   >
     <slot>
       <FormSimpletTypeSelect v-if="isStep(SimpletCreateStep.TYPE)" ref="simpletTypeRef" class="mx-auto max-w-lg" />
@@ -87,6 +89,12 @@ watch(
 
 const isStep = (step: SimpletCreateStep) => simpletStore.stepSimpletCreate === step;
 
+const onReset = () => {
+  simpletStore.modalCreateVisible = false;
+  simpletStore.stepSimpletCreate = SimpletCreateStep.COLLECTION;
+  simpletStore.resetForm();
+};
+
 async function submitForm() {
   if (await simpletFormRef.value?.handleSubmit()) {
     simpletStore.stepSimpletCreate = SimpletCreateStep.REVIEW;
@@ -136,33 +144,38 @@ function nextStep() {
 async function deploy() {
   simpletStore.stepSimpletCreate = SimpletCreateStep.DEPLOYING;
 
-  const simpletUuid =
-    simpletStore.templates.find(t => t.name === 'nft-studio')?.simplet_uuid || simpletStore.templates[0].simplet_uuid;
-  const simplet = await createSimplet(simpletUuid);
+  const simplet =
+    simpletStore.templates.find(t => t.name === simpletStore.form.type?.name) || simpletStore.templates[0];
+  const simpletDeployed = await createSimplet(simplet.simplet_uuid);
 
-  simpletStore.stepSimpletCreate = simplet ? SimpletCreateStep.DEPLOYED : SimpletCreateStep.FORM;
+  simpletStore.stepSimpletCreate = simpletDeployed ? SimpletCreateStep.DEPLOYED : SimpletCreateStep.FORM;
 }
 const getSimpletType = (name: string = SimpletName.AIRDROP) => {
   return simpletNames[name as SimpletName];
 };
 
-const prepareVariablesBE = (): EnvVar[] => [
-  { key: 'CLAIM_EXPIRES_IN', value: '168' },
-  { key: 'CLAIM_TYPE', value: getSimpletType(simpletStore.form.type?.name) },
-  { key: 'ADMIN_WALLET', value: simpletStore.form.walletAddress || '' },
-  { key: 'MYSQL_HOST', value: simpletStore.form.mysql.host },
-  { key: 'MYSQL_PORT', value: simpletStore.form.mysql.port },
-  { key: 'MYSQL_DATABASE', value: simpletStore.form.mysql.database },
-  { key: 'MYSQL_USER', value: simpletStore.form.mysql.user },
-  { key: 'MYSQL_PASSWORD', value: simpletStore.form.mysql.password },
-  { key: 'MYSQL_ROOT_PASSWORD', value: simpletStore.form.mysql.password },
-  { key: 'SMTP_HOST', value: simpletStore.form.smtp.host },
-  { key: 'SMTP_PORT', value: simpletStore.form.smtp.port },
-  { key: 'SMTP_USERNAME', value: simpletStore.form.smtp.username },
-  { key: 'SMTP_PASSWORD', value: simpletStore.form.smtp.password },
-  { key: 'SMTP_NAME_FROM', value: simpletStore.form.smtp.senderName },
-  { key: 'SMTP_EMAIL_FROM', value: simpletStore.form.smtp.senderEmail },
-];
+const prepareVariablesBE = (): EnvVar[] =>
+  [
+    { key: 'CLAIM_EXPIRES_IN', value: '168' },
+    { key: 'CLAIM_TYPE', value: getSimpletType(simpletStore.form.type?.name) },
+    { key: 'ADMIN_WALLET', value: simpletStore.form.walletAddress || '' },
+    { key: 'MYSQL_HOST', value: simpletStore.form.mysql.host },
+    { key: 'MYSQL_PORT', value: simpletStore.form.mysql.port },
+    { key: 'MYSQL_DATABASE', value: simpletStore.form.mysql.database },
+    { key: 'MYSQL_USER', value: simpletStore.form.mysql.user },
+    { key: 'MYSQL_PASSWORD', value: simpletStore.form.mysql.password },
+    { key: 'MYSQL_ROOT_PASSWORD', value: simpletStore.form.mysql.password },
+    simpletStore.form.type?.name !== SimpletName.FREE_MINT
+      ? [
+          { key: 'SMTP_HOST', value: simpletStore.form.smtp.host },
+          { key: 'SMTP_PORT', value: simpletStore.form.smtp.port },
+          { key: 'SMTP_USERNAME', value: simpletStore.form.smtp.username },
+          { key: 'SMTP_PASSWORD', value: simpletStore.form.smtp.password },
+          { key: 'SMTP_NAME_FROM', value: simpletStore.form.smtp.senderName },
+          { key: 'SMTP_EMAIL_FROM', value: simpletStore.form.smtp.senderEmail },
+        ]
+      : [],
+  ].flat();
 const prepareVariablesFE = (): EnvVar[] =>
   [
     { key: 'NUXT_PUBLIC_CHAIN_ID', value: simpletStore.form.collection?.chain },
@@ -170,7 +183,6 @@ const prepareVariablesFE = (): EnvVar[] =>
     { key: 'NUXT_PUBLIC_CLAIM_START', value: simpletStore.form.startTime || 0 },
     { key: 'NUXT_PUBLIC_CLAIM_END', value: simpletStore.form.endTime || 0 },
     { key: 'NUXT_PUBLIC_COLLECTION_ADDRESS', value: simpletStore.form.collection?.contractAddress },
-    { key: 'NUXT_PUBLIC_SMTP_HOST', value: simpletStore.form.smtp.host },
     simpletStore.form.collectionLogo
       ? [{ key: 'NUXT_PUBLIC_COLLECTION_LOGO', value: simpletStore.form.collectionLogo }]
       : [],

@@ -77,7 +77,7 @@ export const useSimpletStore = defineStore('simplets', {
       this.resetForm();
     },
     resetForm() {
-      this.form.type = null as Optional<SimpletType>;
+      this.form.type = null as Optional<SimpletTemplateInterface>;
       this.form.collection = null;
       this.form.collectionLogo = undefined;
       this.form.name = '';
