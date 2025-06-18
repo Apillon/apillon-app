@@ -37,7 +37,7 @@
         </div>
         <div class="items-center gap-3 border-b border-bg-lighter p-3 text-body sm:flex">
           <div class="min-w-[12rem]">
-            {{ $t('dashboard.usage.bandwith') }}
+            {{ $t('dashboard.usage.bandwidth') }}
           </div>
           <div class="w-full">
             <PaymentProgress

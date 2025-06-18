@@ -4,9 +4,9 @@ export enum SimpletType {
   POAP = 3,
 }
 export enum SimpletName {
-  AIRDROP = 'airdrop',
-  FREE_MINT = 'free-mint',
-  POAP = 'poap',
+  AIRDROP = 'nft-brand-booster',
+  FREE_MINT = 'nft-wild-west',
+  POAP = 'nft-event-experience',
 }
 
 /** Create SImplet step */

@@ -78,7 +78,7 @@ const metadataStore = useMetadataStore();
 const collectionStore = useCollectionStore();
 
 const { t } = useI18n();
-const { uploadFiles } = useUpload();
+const { generateIpfsLinks, uploadFiles } = useUpload();
 const { isUnique, collectionEndpoint, prepareFormData } = useCollection();
 const { pricing, deployCollection, uploadLogoAndCover } = useMetadata();
 
@@ -178,7 +178,17 @@ async function createCollection() {
 }
 
 async function deployNftCollection(): Promise<CollectionInterface> {
-  const { data } = await $api.post<CollectionResponse>(collectionEndpoint(), prepareFormData());
+  const logo = metadataStore.form.visual.logo;
+  const cover = metadataStore.form.visual.coverImage;
+
+  await generateVisualsLinks([cover, logo]);
+  const logoLink = bucketStore.getUploadedFileByFilename(logo?.file?.name);
+  const coverLink = bucketStore.getUploadedFileByFilename(cover?.file?.name);
+
+  const { data } = await $api.post<CollectionResponse>(
+    collectionEndpoint(),
+    prepareFormData(false, logoLink?.link, coverLink?.link)
+  );
   await uploadLogoAndCover(data.bucket_uuid);
   await deployCollection(data, true);
 
@@ -259,5 +269,28 @@ async function createBucket(name: string) {
 
   const res = await $api.post<BucketResponse>(endpoints.buckets, bodyData);
   return res.data.bucket_uuid;
+}
+
+async function generateVisualsLinks(images: Array<Optional<FileListItemType>>) {
+  const cids = {} as Record<string, UploadedFileInfo>;
+  await Promise.all(
+    images.map(async img => {
+      if (img?.file) {
+        const buffer = await img.file?.arrayBuffer();
+        if (buffer) {
+          const calculatedCID = await calculateCID(Buffer.from(buffer), {
+            cidVersion: 1,
+          });
+          cids[img.file.name] = {
+            CID: calculatedCID,
+            link: null,
+            name: img.file.name,
+            path: img.path,
+          };
+        }
+      }
+    })
+  );
+  await generateIpfsLinks(cids);
 }
 </script>

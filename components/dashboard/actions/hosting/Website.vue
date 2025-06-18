@@ -18,6 +18,14 @@
         <n-button v-if="deploymentStore.deploymentConfig?.id" class="w-full" @click="modalVariablesVisible = true">
           {{ $t('hosting.menu.envVars') }}
         </n-button>
+        <n-button
+          v-if="websiteStore.active?.website_uuid"
+          class="w-full"
+          :loading="deploymentStore.deployLoading"
+          @click="deploymentStore.redeploy(websiteStore.active.website_uuid)"
+        >
+          {{ $t('hosting.deploy.redeploy') }}
+        </n-button>
       </template>
       <Btn
         v-else

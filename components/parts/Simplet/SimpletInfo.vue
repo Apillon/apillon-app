@@ -11,17 +11,24 @@ const websiteStore = useWebsiteStore();
 const deploymentStore = useDeploymentStore();
 const collectionStore = useCollectionStore();
 
-const { simplets, getSimpletType } = useSimplet();
+const { simplets } = useSimplet();
 
 const loadingImages = ref<boolean>(true);
 
 onMounted(async () => {
-  collectionStore.active = await collectionStore.getCollection(simpletStore.active.contract_uuid);
+  collectionStore.active =
+    (await collectionStore.getCollection(simpletStore.active.contract_uuid)) || collectionStore.active;
   loadingImages.value = false;
 });
 
 const adminWallet = computed(() => simpletStore.getBackendVariable('ADMIN_WALLET'));
 const simpletType = computed(() => simpletStore.getBackendVariable('CLAIM_TYPE'));
+
+const getSimpletName = (simplet_uuid: string) => {
+  const simpletName =
+    simpletStore.templates.find(item => item.simplet_uuid === simplet_uuid)?.name || SimpletName.AIRDROP;
+  return t(`simplet.${simpletName}.name`);
+};
 
 const data = computed(() => {
   return [
@@ -38,7 +45,7 @@ const data = computed(() => {
       label: t('general.type'),
       value: simpletType.value
         ? t(`simplet.${simplets[simpletType.value]}.name`)
-        : getSimpletType(simpletStore.active.simplet_uuid),
+        : getSimpletName(simpletStore.active.simplet_uuid),
     },
     {
       label: t('nft.collection.preview'),

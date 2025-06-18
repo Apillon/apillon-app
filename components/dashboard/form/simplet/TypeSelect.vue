@@ -2,14 +2,13 @@
   <div>
     <Headline :title="$t('simplet.wizard.selectType')" />
     <CardSelect
-      v-for="(simplet, key) in simpletsContent"
-      :key="key"
-      :icon="simplet.iconSvg"
-      :icon-class="simplet.icon"
-      :title="simplet.name"
-      :content="simplet.description"
-      :selected="selectedType === Number(simplet.id)"
-      @click="selectedType = Number(simplet.id)"
+      v-for="simplet in simpletStore.templates"
+      :key="simplet.id"
+      :icon="`simplet/${simplet.name}`"
+      :title="t(`simplet.${simplet.name}.name`)"
+      :content="simplet.description || ''"
+      :selected="selectedType?.name === simplet.name"
+      @click="selectedType = simplet"
     />
   </div>
 </template>
@@ -19,7 +18,6 @@ defineExpose({ nextStep });
 const { t } = useI18n();
 const message = useMessage();
 const simpletStore = useSimpletStore();
-const { simpletsContent } = useSimplet();
 
 const selectedType = ref(simpletStore.form.type);
 

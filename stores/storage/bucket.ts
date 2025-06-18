@@ -135,7 +135,8 @@ export const useBucketStore = defineStore('bucket', {
         ...cids,
       };
     },
-    getUploadedFileByFilename(name: string): UploadedFileInfo | undefined {
+    getUploadedFileByFilename(name?: string): UploadedFileInfo | undefined {
+      if (!name) return undefined;
       return Object.values(this.calculatedCids).find(item => (item?.name || '').includes(name));
     },
 

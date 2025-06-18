@@ -82,7 +82,7 @@ export default function useCollection() {
         : t('form.label.nft.addressEvm')
   );
 
-  function prepareFormData(addBaseUri = false) {
+  function prepareFormData(addBaseUri = false, logo?: Optional<string>, cover?: Optional<string>) {
     const chain =
       metadataStore.form.smartContract.chain === EvmChainMainnet.ASTAR &&
       metadataStore.form.smartContract.chainType === ChainType.SUBSTRATE
@@ -91,6 +91,8 @@ export default function useCollection() {
 
     const params: Record<string, string | number | boolean | null | undefined> = {
       chain,
+      logoUrl: logo,
+      bannerUrl: cover,
       project_uuid: dataStore.projectUuid,
       name: metadataStore.form.smartContract.name,
       symbol: metadataStore.form.smartContract.symbol,

@@ -54,6 +54,7 @@
         <select-options
           v-model:value="metadataStore.form.smartContract.isAutoIncrement"
           :options="booleanSelect"
+          :disabled="simplet"
           :input-props="{ id: 'autoIncrement' }"
           :placeholder="$t('general.pleaseSelect')"
           filterable

@@ -22,7 +22,7 @@ type SimpletContentTrans = {
 };
 
 export default function useSimplet() {
-  const { t, te, tm, rt } = useI18n();
+  const { te, tm, rt } = useI18n();
   const simpletStore = useSimpletStore();
 
   let simpletsInterval: any = null as any;
@@ -31,28 +31,17 @@ export default function useSimplet() {
     clearInterval(simpletsInterval);
   });
 
-  const simplets = {
+  const simplets: Record<SimpletType, SimpletName> = {
     [SimpletType.AIRDROP]: SimpletName.AIRDROP,
     [SimpletType.POAP]: SimpletName.POAP,
     [SimpletType.FREE_MINT]: SimpletName.FREE_MINT,
   };
 
-  const getSimpletType = (simplet_uuid: string) => {
-    const simplet = simpletStore.templates.find(item => item.simplet_uuid === simplet_uuid)?.id || SimpletType.AIRDROP;
-    return t(`simplet.${simplets[simplet]}.name`);
+  const simpletNames: Record<SimpletName, SimpletType> = {
+    [SimpletName.AIRDROP]: SimpletType.AIRDROP,
+    [SimpletName.POAP]: SimpletType.POAP,
+    [SimpletName.FREE_MINT]: SimpletType.FREE_MINT,
   };
-
-  const simpletsContent: ServiceTypeItem[] = Object.entries(simplets).map(([id, simplet]) => {
-    return {
-      id,
-      key: simplet,
-      name: t(`simplet.${simplet}.name`),
-      description: t(`simplet.${simplet}.description`),
-      icon: `icon-${simplet}`,
-      iconSvg: Number(id) !== SimpletType.POAP ? `menu/${simplet}` : '',
-      usage: translateItems(`simplet.${simplet}.usage`),
-    };
-  });
 
   function generateContent(simplet: string, BASE = 'simplet') {
     if (te(`${BASE}.${simplet}.content`) || tm(`${BASE}.${simplet}.content`)) {
@@ -109,10 +98,9 @@ export default function useSimplet() {
 
   return {
     simplets,
-    simpletsContent,
+    simpletNames,
     checkUnfinishedSimplets,
     generateContent,
-    getSimpletType,
     translate,
   };
 }

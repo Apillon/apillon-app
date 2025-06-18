@@ -9,8 +9,8 @@
       <CardSelect
         v-for="(collection, key) in collections"
         :key="key"
-        :icon="logoImg(collection.collection_uuid) ? undefined : 'menu/NFTs'"
-        :img="logoImg(collection.collection_uuid) || ''"
+        :icon="collection.logoUrl ? undefined : 'menu/NFTs'"
+        :img="collection.logoUrl || ''"
         :content="`${collection.maxSupply || '∞'} ${$t('nft.tokens')}`"
         :selected="selectedCollection?.collection_uuid === collection.collection_uuid"
         @click="selectedCollection = collection"
@@ -34,16 +34,14 @@
 
 <script setup lang="ts">
 defineExpose({ nextStep });
+
 const { t } = useI18n();
 const message = useMessage();
-
-const bucketStore = useBucketStore();
 const simpletStore = useSimpletStore();
 const metadataStore = useMetadataStore();
 const collectionStore = useCollectionStore();
 
-const selectedCollection = ref<CollectionInterface>();
-const logos = reactive<Record<string, BucketItemInterface | undefined>>({});
+const selectedCollection = ref<CollectionInterface>(collectionStore.active);
 
 const collections = computed(() =>
   collectionStore.items.filter(
@@ -51,25 +49,13 @@ const collections = computed(() =>
       c.drop &&
       c.dropReserve > 0 &&
       c.collectionStatus === CollectionStatus.DEPLOYED &&
-      (simpletStore.form.type !== SimpletType.AIRDROP || c.isAutoIncrement)
+      (simpletStore.form.type?.name !== SimpletName.AIRDROP || c.isAutoIncrement)
   )
 );
 
 onMounted(async () => {
   await collectionStore.getCollections();
-
-  collections.value.forEach(async c => {
-    const files = await bucketStore.fetchDirectoryContent({
-      bucketUuid: c.bucket_uuid,
-      search: 'logo',
-    });
-    logos[c.collection_uuid] = files.find(item => item.type === BucketItemType.FILE && item.name.includes('logo'));
-  });
 });
-
-const logoImg = (uuid: string) => {
-  return uuid in logos ? logos[uuid]?.link : '';
-};
 
 function openModalNft() {
   metadataStore.resetForms();
@@ -78,14 +64,9 @@ function openModalNft() {
 }
 
 function nextStep() {
-  if (selectedCollection.value) {
+  if (selectedCollection.value.collection_uuid) {
     simpletStore.form.collection = selectedCollection.value;
-
-    /** Add logo */
-    const uuid = selectedCollection.value.collection_uuid;
-    if (uuid in logos) {
-      simpletStore.form.collectionLogo = logos[uuid]?.link;
-    }
+    simpletStore.form.collectionLogo = selectedCollection.value.logoUrl;
   } else {
     message.warning(t('simplet.wizard.selectCollection'));
   }

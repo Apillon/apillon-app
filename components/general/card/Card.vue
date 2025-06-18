@@ -16,7 +16,7 @@
     <div v-if="$slots.default" :class="{ 'opacity-60': service.disabled }">
       <slot />
     </div>
-    <div v-if="service.disabled" class="flex-cc filte absolute left-0 top-0 h-full w-full backdrop-blur-sm">
+    <div v-if="service.disabled" class="flex-cc absolute left-0 top-0 h-full w-full backdrop-blur-sm">
       <Tag type="info" filled>
         <template v-if="comingSoon">{{ comingSoon }}</template>
         <template v-else> {{ $t('general.comingSoon') }}</template>

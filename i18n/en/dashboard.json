@@ -263,7 +263,7 @@
       "info": "Customize ready-to-deploy templates built and audited by Apillon."
     },
     "subscription": {
-      "bandwidth": "Bandwith",
+      "bandwidth": "Bandwidth",
       "canceledOn": "Your plan will be canceled on {date}.",
       "creditsLifetime": "Credits Lifetime",
       "forever": "Forever",
@@ -280,7 +280,7 @@
       "wallets": "Embedded Wallets"
     },
     "usage": {
-      "bandwith": "Bandwith",
+      "bandwidth": "Bandwidth",
       "bytesStored": "Bytes stored",
       "description": "",
       "downloads": "Downloads",

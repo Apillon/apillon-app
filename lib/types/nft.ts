@@ -189,9 +189,10 @@ declare global {
    * Collection
    */
   interface CollectionInterface extends BaseObjectInterface {
-    adminAddress: string | null;
+    adminAddress: Optional<string>;
+    bannerUrl: Optional<string>;
     baseExtension: string;
-    baseUri: string;
+    baseUri: Optional<string>;
     bucket_uuid: string;
     chain: number;
     chainType: number;
@@ -199,24 +200,24 @@ declare global {
     collectionType: number;
     collectionStatus: number;
     collection_uuid: string;
-    contractAddress: Address | null;
+    contractAddress: Optional<Address>;
     dropStart: number;
     drop: boolean;
-    ipns_uuid: string;
+    ipns_uuid: Optional<string>;
     isRevokable: boolean;
     isSoulbound: boolean;
     isAutoIncrement: boolean;
+    logoUrl: Optional<string>;
     maxSupply: number;
     dropPrice: number;
     dropReserve: number;
-    royaltiesAddress: string;
+    royaltiesAddress: Optional<string>;
     royaltiesFees: number;
     symbol: string;
-    transactionHash: string | null;
-    updateTime: string;
+    transactionHash: Optional<string>;
     useApillonIpfsGateway: boolean;
     useIpns: boolean;
-    websiteUuid: string | null;
+    websiteUuid: Optional<string>;
   }
 
   interface CollectionResponse extends GeneralResponse<CollectionInterface> {}
@@ -229,7 +230,7 @@ declare global {
   interface TransactionInterface extends GeneralInterface {
     chainId: number;
     id: number;
-    transactionHash: string | null;
+    transactionHash: Optional<string>;
     transactionStatus: number;
     transactionType: number;
   }
@@ -238,7 +239,7 @@ declare global {
 
   interface MintInterface {
     success: boolean;
-    transactionHash: string | null;
+    transactionHash: Optional<string>;
   }
   interface MintResponse extends GeneralResponse<MintInterface> {}
 
@@ -250,7 +251,7 @@ declare global {
     createTime: string;
     currentStep: number;
     imagesSession: string;
-    lastError: string | null;
+    lastError: Optional<string>;
     metadataSession: string;
     updateTime: string;
     useApillonIpfsGateway: number;
@@ -265,7 +266,7 @@ declare global {
   interface AttributeInterface {
     trait_type: string;
     value: string;
-    display_type: string | null;
+    display_type: Optional<string>;
   }
 
   interface AttributesInterface extends Array<AttributeInterface> {}

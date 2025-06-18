@@ -18,7 +18,7 @@ export const useSimpletStore = defineStore('simplets', {
       pagination: createPagination(),
     },
     form: {
-      type: null as Optional<SimpletType>,
+      type: null as Optional<SimpletTemplateInterface>,
       collection: null as Optional<CollectionInterface>,
       collectionLogo: undefined as Optional<string | undefined>,
       name: '',

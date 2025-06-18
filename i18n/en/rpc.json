@@ -21,7 +21,7 @@
       "emptyInfo": "Create your first API key to start using the RPC service.",
       "createFirst": "Create first API key",
       "monthlyUsage": "{used} of {max} monthly calls used",
-      "pleaseUpgrade": "You've already used all 5 million API requests included in Free plan. Please upgrade."
+      "pleaseUpgrade": "You've already used all 5 million API requests included in Free plan."
     },
     "endpoint": {
       "chainName": "Chain name",

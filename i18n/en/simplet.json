@@ -1,6 +1,18 @@
 {
   "simplet": {
-    "airdrop": {
+    "menu": {
+      "archive": "Archive",
+      "list": "Active Simplets",
+      "templates": "Templates"
+    },
+    "mysql": {
+      "edit": "Change MySQL config",
+      "useDifferentDB": "Use a different database",
+      "labelInfo": {
+        "useDifferentDB": "Provide the MySQL connection details, including host, port, username, password, and database name."
+      }
+    },
+    "nft-brand-booster": {
       "name": "NFT Brand Booster",
       "description": "<b>Send NFTs via email or wallets.</b> Build a whitelist, reward the most loyal users, grow your email list in exchange for rewards, or hand-pick who gets the drop.",
       "usage": ["Hosting", "Storage", "NFTs"],
@@ -48,7 +60,7 @@
         }
       ]
     },
-    "free-mint": {
+    "nft-wild-west": {
       "name": "NFT Wild West",
       "description": "<b>First-come-first-served NFTs.</b> Run bold, experimental campaigns. Use memes, mystery, or chaos to go viral - and reward the fastest fingers.",
       "usage": ["Hosting", "Storage", "NFTs"],
@@ -95,19 +107,7 @@
         }
       ]
     },
-    "menu": {
-      "archive": "Archive",
-      "list": "Active Simplets",
-      "templates": "Templates"
-    },
-    "mysql": {
-      "edit": "Change MySQL config",
-      "useDifferentDB": "Use a different database",
-      "labelInfo": {
-        "useDifferentDB": "Provide the MySQL connection details, including host, port, username, password, and database name."
-      }
-    },
-    "poap": {
+    "nft-event-experience": {
       "name": "NFT Event Experience",
       "description": "<b>Easy to claim, fun to keep.</b> Create digital badges for your event attendees. Drop NFTs at the event or online and let people collect proof they attented.",
       "usage": ["Hosting", "Storage", "NFTs"],

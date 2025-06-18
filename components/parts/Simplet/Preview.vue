@@ -61,7 +61,7 @@ onMounted(() => {
   paymentStore.getPriceList();
 
   if (
-    simpletStore.form.type !== SimpletType.FREE_MINT &&
+    simpletStore.form.type?.name !== SimpletName.FREE_MINT &&
     simpletStore.form.smtp.host &&
     simpletStore.form.smtp.host !== 'nft_studio_mail'
   ) {

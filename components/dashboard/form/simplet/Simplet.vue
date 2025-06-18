@@ -53,7 +53,7 @@
         @update:value="ew => (simpletStore.form.embeddedWallet = ew)"
       />
 
-      <n-grid v-if="simpletStore.form.type === SimpletType.POAP" :cols="12" :x-gap="32">
+      <n-grid v-if="simpletStore.form.type?.name === SimpletName.POAP" :cols="12" :x-gap="32">
         <n-form-item-gi
           path="startTime"
           :span="6"

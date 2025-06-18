@@ -75,7 +75,7 @@
             <StorageProgress
               :label="$t('dashboard.subscription.bandwidth')"
               :size="storageStore.info.usedBandwidth"
-              :total-size="storageStore.info.availableBandwidth"
+              :max-size="storageStore.info.availableBandwidth"
               :unit="$t('general.month')"
               wrap
             />
@@ -124,5 +124,10 @@ const showVideo = ref<boolean>(false);
 
 useHead({
   title: t('dashboard.homepage'),
+});
+
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  storageStore.getStorageInfo();
 });
 </script>

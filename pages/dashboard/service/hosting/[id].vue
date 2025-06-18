@@ -63,6 +63,6 @@ onMounted(async () => {
 });
 
 const configId = computed(() => {
-  return storageStore.projectConfig?.id || deploymentStore.deploymentConfig?.id;
+  return deploymentStore.deploymentConfig?.id;
 });
 </script>

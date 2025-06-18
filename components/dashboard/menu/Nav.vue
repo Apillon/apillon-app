@@ -154,22 +154,22 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
 
   const simplets = [
     {
-      key: 'dashboard-simplet-airdrop',
-      label: t('simplet.airdrop.name'),
+      key: 'dashboard-simplet-nft-brand-booster',
+      label: t('simplet.nft-brand-booster.name'),
       iconName: 'icon-nft-mint-airdrop',
-      to: 'dashboard-simplet-airdrop',
+      to: 'dashboard-simplet-nft-brand-booster',
     },
     {
-      key: 'dashboard-simplet-poap',
-      label: t('simplet.poap.name'),
+      key: 'dashboard-simplet-nft-event-experience',
+      label: t('simplet.nft-event-experience.name'),
       iconName: 'icon-poap',
-      to: 'dashboard-simplet-poap',
+      to: 'dashboard-simplet-nft-event-experience',
     },
     {
-      key: 'dashboard-simplet-free-mint',
-      label: t('simplet.free-mint.name'),
+      key: 'dashboard-simplet-nft-wild-west',
+      label: t('simplet.nft-wild-west.name'),
       iconName: 'icon-poap',
-      to: 'dashboard-simplet-free-mint',
+      to: 'dashboard-simplet-nft-wild-west',
     },
   ];
 

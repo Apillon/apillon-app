@@ -18,7 +18,7 @@
     <div v-if="plan.services" class="match-services mb-12">
       <h4>{{ $t('dashboard.subscription.web3Services') }}</h4>
       <PaymentPricingService :name="$t('dashboard.subscription.storage')" :value="plan.services.storage" />
-      <PaymentPricingService :name="$t('dashboard.subscription.bandwidth')" :value="plan.services.bandwith" />
+      <PaymentPricingService :name="$t('dashboard.subscription.bandwidth')" :value="plan.services.bandwidth" />
       <PaymentPricingService :name="$t('dashboard.subscription.wallets')" :value="plan.services.wallets" />
       <PaymentPricingService :name="$t('dashboard.subscription.otherServices')" :value="plan.services.credits" />
     </div>
