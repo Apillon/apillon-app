@@ -1,4 +1,4 @@
-import { useAccount, useConnect, useConnectorClient } from '@wagmi/vue';
+import { useAccount, useConnect, useConnectorClient, type Config } from '@wagmi/vue';
 import { signMessage } from '@wagmi/vue/actions';
 
 export default function useWallet() {
@@ -29,7 +29,7 @@ export default function useWallet() {
 
     try {
       const { message, timestamp } = await authStore.getAuthMsg();
-      const signature = await signMessage($wagmiConfig, { message });
+      const signature = await signMessage($wagmiConfig as Config, { message });
 
       await sleep(200);
 

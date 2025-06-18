@@ -35,6 +35,7 @@ export const wagmiConfig = createConfig({
 });
 
 export default defineNuxtPlugin(nuxtApp => {
+  nuxtApp.provide('wagmiConfig', wagmiConfig);
   nuxtApp.vueApp.use(WagmiPlugin, { config: wagmiConfig });
   nuxtApp.vueApp.use(VueQueryPlugin);
 });

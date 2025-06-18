@@ -7,7 +7,7 @@ defineProps({
   loading: { type: Boolean, default: false },
 });
 
-const { connector: activeConnector, isConnected, isConnecting } = useAccount();
+const { connector: activeConnector, address, isConnected, isConnecting } = useAccount();
 const { refetch } = useConnectorClient();
 const { connect, connectors } = useConnect();
 
@@ -19,6 +19,7 @@ function connectWallet(connector: Connector) {
   connectorLoading.value = connector.id;
   if (isConnected.value) {
     refetch();
+    emit('connected', address.value);
   } else {
     connect({ connector });
   }

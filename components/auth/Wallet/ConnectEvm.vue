@@ -25,7 +25,7 @@
     <p class="mb-8">
       {{ $t('auth.wallet.evm.info') }}
     </p>
-    <AuthWalletEvm :loading="loading" @connected="onWalletConnected" />
+    <AuthWalletEvm :loading="loading" @connected="connectWallet" />
   </modal>
 </template>
 
@@ -57,13 +57,6 @@ function wagmiConnect(connector) {
     refetchWalletClient();
   } else {
     connect({ connector });
-  }
-}
-
-async function onWalletConnected({ address }) {
-  await sleep(200);
-  if (authStore.user.evmWallet !== address) {
-    connectWallet();
   }
 }
 
