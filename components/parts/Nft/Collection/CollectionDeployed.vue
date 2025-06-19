@@ -10,7 +10,15 @@
       <p class="mb-9 mt-2">{{ $t('nft.collection.deployed.nextInfo') }}</p>
 
       <div class="mx-auto grid max-w-4xl gap-2 text-left md:grid-cols-2 md:gap-8">
-        <Card v-for="(type, key) in deployTypes" :key="key" :service="type" dark title-new-line>
+        <Card
+          v-for="(type, key) in deployTypes"
+          :key="key"
+          :service="type"
+          class="cursor-pointer"
+          dark
+          title-new-line
+          @click="openModal(type.id)"
+        >
           <Btn class="w-full" @click="openModal(type.id)">{{ $t('form.deploy') }}</Btn>
         </Card>
       </div>

@@ -35,10 +35,9 @@ const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const storageStore = useStorageStore();
 const collectionStore = useCollectionStore();
+const { checkUnfinishedCollections } = useCollection();
 
 const pageLoading = ref<boolean>(true);
-
-let collectionInterval: any = null as any;
 
 const serviceGuides = [
   {
@@ -78,30 +77,4 @@ onMounted(async () => {
 
   pageLoading.value = false;
 });
-onUnmounted(() => {
-  clearInterval(collectionInterval);
-});
-
-/** Collection polling */
-function checkUnfinishedCollections() {
-  const unfinishedCollection = collectionStore.items.find(
-    collection =>
-      collection.collectionStatus === CollectionStatus.DEPLOY_INITIATED ||
-      collection.collectionStatus === CollectionStatus.DEPLOYING
-  );
-  if (unfinishedCollection === undefined) {
-    return;
-  }
-
-  clearInterval(collectionInterval);
-  collectionInterval = setInterval(async () => {
-    const collections = await collectionStore.fetchCollections(false, false);
-    const collection = collections.find(
-      collection => collection.collection_uuid === unfinishedCollection.collection_uuid
-    );
-    if (!collection || collection.collectionStatus >= CollectionStatus.DEPLOYED) {
-      clearInterval(collectionInterval);
-    }
-  }, 30000);
-}
 </script>

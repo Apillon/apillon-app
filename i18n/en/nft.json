@@ -114,7 +114,7 @@
         "build": "Build NFT website",
         "explorer": "blockchain explorer",
         "goBack": "Go back to NFT Collection",
-        "info": "To display your NFTs and mint them, you need a website. \nUse the Apillon NFT website template and host it on a decentralized network.",
+        "info": "To continue, fork one of the templates on GitHub and customize it as needed. Once ready, deploy it to Apillon hosting—manually or by importing your GitHub repo.",
         "or": "or see its contents in your",
         "title": "Display your NFTs on the internet",
         "view": "View the transaction on",
@@ -127,7 +127,7 @@
         "4": "Review"
       },
       "deployed": {
-        "info": "We're still deploying your images to the blockchain. This may take a few minutes, but we'll notify you once it's done.",
+        "info": "Images are deploying on IPFS. This may take a few minutes, but we'll notify you once it's done.",
         "next": "So what’s next?",
         "nextInfo": "Show your collection to the world by deploying the NFT store website.",
         "skip": "Skip deployment for now - Show me the NFT collection",

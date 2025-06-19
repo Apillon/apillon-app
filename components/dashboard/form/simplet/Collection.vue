@@ -27,11 +27,13 @@
         :icon="collection.logoUrl ? undefined : 'menu/NFTs'"
         :img="collection.logoUrl || ''"
         :content="`${collection.maxSupply || '∞'} ${$t('nft.tokens')}`"
+        :disabled="collection.collectionStatus < CollectionStatus.DEPLOYED"
         :selected="selectedCollection?.collection_uuid === collection.collection_uuid"
         @click="selectedCollection = collection"
       >
         <template #title>
           <span>
+            <Spinner v-if="collection.collectionStatus < CollectionStatus.DEPLOYED" />
             <strong>{{ collection.name }}</strong>
             <small class="capitalize"> ({{ chainIdToName(collection.chain) }})</small>
           </span>
@@ -55,6 +57,7 @@ const message = useMessage();
 const simpletStore = useSimpletStore();
 const metadataStore = useMetadataStore();
 const collectionStore = useCollectionStore();
+const { checkUnfinishedCollections } = useCollection();
 
 const search = ref<string>('');
 const selectedCollection = ref<CollectionInterface>(collectionStore.active);
@@ -64,14 +67,20 @@ const collections = computed(() =>
     c =>
       c.drop &&
       c.dropReserve > 0 &&
-      [CollectionStatus.DEPLOYED, CollectionStatus.DEPLOYED].includes(c.collectionStatus) &&
+      c.collectionStatus <= CollectionStatus.DEPLOYED &&
       (simpletStore.form.type?.name !== SimpletName.AIRDROP || c.isAutoIncrement) &&
       (!search.value || c.name.toLowerCase().includes(search.value.toLowerCase()))
   )
 );
 
 onMounted(async () => {
-  await collectionStore.getCollections();
+  if (collections.value.length) {
+    await collectionStore.getCollections();
+  } else {
+    await collectionStore.fetchCollections();
+  }
+  collectionStore.items[0].collectionStatus = CollectionStatus.DEPLOYING;
+  checkUnfinishedCollections();
 });
 
 function openModalNft() {
@@ -81,7 +90,9 @@ function openModalNft() {
 }
 
 function nextStep() {
-  if (selectedCollection.value.collection_uuid) {
+  if (selectedCollection.value.collectionStatus < CollectionStatus.DEPLOYED) {
+    message.warning(t('simplet.wizard.collection.deploying'));
+  } else if (selectedCollection.value.collection_uuid) {
     simpletStore.form.collection = selectedCollection.value;
     simpletStore.form.collectionLogo = selectedCollection.value.logoUrl;
   } else {

@@ -9,7 +9,7 @@
         { 'mt-8': tabsRef?.renderNameListRef?.value?.length === 1 },
       ]"
     >
-      <n-tab-pane v-if="$slots.default" :name="Tabs.GENERAL" class="mb-4">
+      <n-tab-pane v-if="!$attrs['hide-general'] && $slots.default" :name="Tabs.GENERAL" class="mb-4">
         <slot></slot>
       </n-tab-pane>
       <n-tab-pane v-if="service || category || chain" :name="Tabs.PRICING" class="mb-4 min-h-40">

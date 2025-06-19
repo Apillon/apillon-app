@@ -14,7 +14,7 @@
           <div class="card max-w-64 px-6 py-4">
             <h6 class="mb-2">{{ $t('general.actions') }}</h6>
             <ActionsNftCollection
-              @add-nfts="openModalAddNfts"
+              @add-nfts="$router.push(`/dashboard/service/nft/${collectionStore.active.collection_uuid}/add`)"
               @mint="modalMintCollectionVisible = true"
               @revoke="modalBurnTokensVisible = true"
               @transfer="modalTransferOwnershipVisible = true"
@@ -114,12 +114,6 @@
         />
       </modal>
 
-      <!-- Modal - Add NFT
-      <modal v-model:show="modalAddNftVisible" class="hide-header">
-        <FormNftAmountOption v-if="collectionStore.nftStep === NftCreateStep.AMOUNT" @submit="onAmountSelected" />
-        <FormNftUpload v-else-if="collectionStore.nftStep === NftCreateStep.MULTIPLE" modal />
-      </modal> -->
-
       <ModalTransaction
         v-if="transactionHash"
         :transaction-hash="transactionHash"
@@ -150,7 +144,6 @@ const modalMintCollectionVisible = ref<boolean | null>(false);
 const modalBurnTokensVisible = ref<boolean | null>(false);
 const modalTransferOwnershipVisible = ref<boolean | null>(false);
 const modalSetBaseUriVisible = ref<boolean | null>(false);
-const modalAddNftVisible = ref<boolean | null>(false);
 const transactionHash = ref<string | null>('');
 const tab = ref(collectionStore.active.collectionStatus === CollectionStatus.CREATED ? Tabs.NFTs : Tabs.DEPLOYS);
 
@@ -296,9 +289,5 @@ function checkUnfinishedTransactions() {
       }
     }
   }, 10000);
-}
-
-function openModalAddNfts() {
-  modalAddNftVisible.value = true;
 }
 </script>

@@ -5,17 +5,22 @@ import type { TimeValidator } from 'naive-ui/es/date-picker/src/interface';
 export default function useCollection() {
   const router = useRouter();
   const message = useMessage();
-  const { t, te } = useI18n();
   const dataStore = useDataStore();
   const bucketStore = useBucketStore();
   const paymentStore = usePaymentStore();
   const metadataStore = useMetadataStore();
   const collectionStore = useCollectionStore();
 
+  const { t, te } = useI18n();
   const { isEnoughSpaceInStorage } = useUpload();
 
   const loading = ref<boolean>(false);
   const formRef = ref<NFormInst | null>(null);
+  let collectionInterval: any = null as any;
+
+  onUnmounted(() => {
+    clearInterval(collectionInterval);
+  });
 
   const isChainAvailable = (chainId: number) =>
     paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY) || !enterpriseChainIDs.includes(chainId);
@@ -194,6 +199,29 @@ export default function useCollection() {
     metadataStore.resetMetadata();
   }
 
+  /** Collection polling */
+  function checkUnfinishedCollections() {
+    const unfinishedCollection = collectionStore.items.find(
+      collection =>
+        collection.collectionStatus === CollectionStatus.DEPLOY_INITIATED ||
+        collection.collectionStatus === CollectionStatus.DEPLOYING
+    );
+    if (unfinishedCollection === undefined) {
+      return;
+    }
+
+    clearInterval(collectionInterval);
+    collectionInterval = setInterval(async () => {
+      const collections = await collectionStore.fetchCollections(false, false);
+      const collection = collections.find(
+        collection => collection.collection_uuid === unfinishedCollection.collection_uuid
+      );
+      if (!collection || collection.collectionStatus >= CollectionStatus.DEPLOYED) {
+        clearInterval(collectionInterval);
+      }
+    }, 30000);
+  }
+
   return {
     addressLabel,
     availableNftChains,
@@ -209,6 +237,7 @@ export default function useCollection() {
     loading,
     nftChains,
     substrateChains,
+    checkUnfinishedCollections,
     collectionEndpoint,
     disablePastDate,
     disablePastTime,

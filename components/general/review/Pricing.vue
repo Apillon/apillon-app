@@ -10,10 +10,11 @@
 
     <slot />
 
-    <n-table class="plain my-6 table-fixed" :bordered="false" :single-line="true">
+    <n-table class="plain my-6 table-auto" :bordered="false" :single-line="true">
       <tbody>
         <tr v-for="(price, key) in pricing" :key="key">
-          <td>{{ price.description }}</td>
+          <td v-if="price.description">{{ price.description }}</td>
+          <td v-else class="capitalize">{{ price.name.replaceAll('_', ' ').toLowerCase() }}</td>
           <td class="!text-white">{{ price.currentPrice }} {{ $t('dashboard.credits.credits') }}</td>
         </tr>
       </tbody>

@@ -116,7 +116,6 @@ onMounted(async () => {
   await dataStore.waitOnPromises();
   storageStore.getStorageInfo();
   paymentStore.getPriceList();
-  metadataStore.stepCollectionCreate = CollectionCreateStep.DEPLOYED;
 });
 
 const metadataValid = () => !metadataStore.metadata.some(item => !item.image || !item.name || !item.description);

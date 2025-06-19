@@ -176,6 +176,7 @@ export const usePaymentStore = defineStore('payment', {
       return this.priceList.filter(item => item.service === service);
     },
     async getServicePricesByCategory(category: string): Promise<ProductPriceInterface[]> {
+      await this.getPriceList();
       return this.priceList.filter(item => item.category === category);
     },
 
@@ -189,9 +190,11 @@ export const usePaymentStore = defineStore('payment', {
     findServicePrice(serviceName: string): ProductPriceInterface | undefined {
       return this.priceList.find(item => item.name === serviceName);
     },
-    async filterServicePrice(serviceNames: string[]): Promise<ProductPriceInterface[]> {
-      await this.getPriceList();
-      return await this.priceList.filter(item => serviceNames.includes(item.name));
+    filterServicePrice(serviceNames: string[]): ProductPriceInterface[] {
+      return this.priceList.filter(item => serviceNames.includes(item.name));
+    },
+    filterServicePriceByCategory(serviceName: string): ProductPriceInterface[] {
+      return this.priceList.filter(item => item.name === serviceName);
     },
 
     /**

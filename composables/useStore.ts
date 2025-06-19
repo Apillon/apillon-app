@@ -17,29 +17,27 @@ export default function useStore() {
   const rpcApiKeyStore = useRpcApiKeyStore();
   const rpcEndpointStore = useRpcEndpointStore();
   const settingsStore = useSettingsStore();
+  const simpletStore = useSimpletStore();
   const storageStore = useStorageStore();
   const websiteStore = useWebsiteStore();
 
   function clearAll() {
+    cloudFunctionStore.resetData();
     dataStore.resetData();
+    deployedContractStore.resetData();
     embeddedWalletStore.resetData();
-    clearComputing();
+    paymentStore.resetData();
+    settingsStore.resetData();
+    simpletStore.resetData();
     clearIndexer();
     clearNft();
-    clearPayments();
     clearRpc();
-    clearSettings();
-    clearSmartContracts();
     clearStorage();
   }
 
   function clearNft() {
     collectionStore.resetData();
     metadataStore.resetData();
-  }
-
-  function clearComputing() {
-    cloudFunctionStore.resetData();
   }
 
   function clearHosting() {
@@ -53,21 +51,9 @@ export default function useStore() {
     indexerDeploymentsStore.resetData();
   }
 
-  function clearPayments() {
-    paymentStore.resetData();
-  }
-
   function clearRpc() {
     rpcApiKeyStore.reset();
     rpcEndpointStore.reset();
-  }
-
-  function clearSettings() {
-    settingsStore.resetData();
-  }
-
-  function clearSmartContracts() {
-    deployedContractStore.resetData();
   }
 
   function clearStorage() {
@@ -84,7 +70,5 @@ export default function useStore() {
     clearAll,
     clearStorage,
     clearHosting,
-    clearNft,
-    clearSettings,
   };
 }

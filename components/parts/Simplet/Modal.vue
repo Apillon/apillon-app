@@ -65,7 +65,7 @@ const simpletTypeRef = useTemplateRef('simpletTypeRef');
 const simpletCollectionRef = useTemplateRef('simpletCollectionRef');
 const simpletFormRef = useTemplateRef('simpletFormRef');
 
-const totalCredits = 150;
+const totalCredits = sumCredits(paymentStore.filterServicePrice([PriceServiceName.SIMPLET_NFT_STUDIO_DEPLOY]));
 const progress = computed(() => Math.min(100, 20 * (simpletStore.stepSimpletCreate - 1)));
 
 onMounted(async () => {

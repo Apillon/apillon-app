@@ -63,6 +63,10 @@
         </n-layout-sider>
       </n-layout>
     </div>
+
+    <div v-if="$slots.footer" ref="footerRef" class="-mx-4 sm:-mx-8">
+      <slot name="footer"> </slot>
+    </div>
   </div>
 </template>
 
@@ -87,15 +91,19 @@ const { isMd, isXl } = useScreen();
 
 /** Heading height */
 const headingRef = ref<HTMLElement>();
+const footerRef = ref<HTMLElement>();
 
 const calcHeaderHeight = () => (headingRef.value?.clientHeight || 96) + 56;
+const calcFooterHeight = () => Number(footerRef.value?.clientHeight || 0);
+
 const headingHeight = ref<number>(calcHeaderHeight());
+const footerHeight = ref<number>(calcFooterHeight());
 
 const scrollStyle = computed(() => ({
-  maxHeight: `calc(100dvh - ${headingHeight.value}px)`,
+  maxHeight: `calc(100dvh - ${headingHeight.value}px - ${footerHeight.value}px)`,
 }));
 const heightScreen = computed(() => ({
-  height: `calc(100dvh - ${headingHeight.value}px)`,
+  height: `calc(100dvh - ${headingHeight.value}px - ${footerHeight.value}px)`,
 }));
 
 /** Delay animation */
@@ -121,6 +129,7 @@ function setLoadingAnimation(isLoading: boolean) {
   setTimeout(() => {
     loadingAnimation.value = isLoading;
     headingHeight.value = calcHeaderHeight();
+    footerHeight.value = calcFooterHeight();
   }, delay);
 }
 

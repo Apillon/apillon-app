@@ -26,8 +26,6 @@
 </template>
 
 <script setup lang="ts">
-import { NftMetadataStep } from '~/lib/types/nft';
-
 const emits = defineEmits(['nextStep']);
 const collectionStore = useCollectionStore();
 const nextStep = ref<number>();

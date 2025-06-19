@@ -7,7 +7,7 @@
     <template #right>
       <ReviewPricing
         class="mt-8 md:!w-1/2"
-        :pricing="pricing"
+        :pricing="paymentStore.filterServicePrice([PriceServiceName.SIMPLET_NFT_STUDIO_DEPLOY])"
         :deploy-text="$t('simplet.wizard.create')"
         @deploy="$emit('deploy')"
       />
@@ -23,18 +23,6 @@ const paymentStore = usePaymentStore();
 const simpletStore = useSimpletStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
 
-const pricing = computed<ProductPriceInterface[]>(() => {
-  const prices: ProductPriceInterface[] = [];
-
-  const priceSimplet = paymentStore.findServicePrice(PriceServiceName.SIMPLET);
-  if (priceSimplet) prices.push(priceSimplet);
-
-  return prices;
-});
-
-const ewIntergationName = (uuid?: string | null) =>
-  embeddedWalletStore.items.find(c => c.integration_uuid === uuid)?.title || '';
-
 const data = ref<Record<string, string | boolean>[]>([
   { label: t('form.label.simplet.name'), value: simpletStore.form.name },
   { label: t('form.label.description'), value: simpletStore.form.description },
@@ -42,7 +30,7 @@ const data = ref<Record<string, string | boolean>[]>([
   { label: t('form.label.simplet.walletAddress'), value: simpletStore.form.walletAddress || '' },
   {
     label: t('form.label.embeddedWallet.integration'),
-    value: ewIntergationName(simpletStore.form.embeddedWallet),
+    value: embeddedWalletStore.items.find(c => c.integration_uuid === simpletStore.form.embeddedWallet)?.title || '',
     show: !!simpletStore.form.embeddedWallet,
   },
   {

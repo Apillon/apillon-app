@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import { NftMetadataStep, type FormSingleNft } from '~/lib/types/nft';
 
 export const useMetadataStore = defineStore('metadata', {
   state: () => ({
@@ -68,6 +67,9 @@ export const useMetadataStore = defineStore('metadata', {
   },
   actions: {
     resetData() {
+      this.stepCollectionCreate = CollectionCreateStep.METADATA;
+      this.stepMetadata = NftMetadataStep.CHAIN;
+      this.stepSmartContract = CollectionFormStep.BASE;
       this.resetMetadata();
     },
     resetMetadata() {

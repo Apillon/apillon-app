@@ -70,6 +70,7 @@ export const useSimpletStore = defineStore('simplets', {
       this.items = [] as SimpletInterface[];
       this.templates = [] as SimpletTemplateInterface[];
       this.search = '';
+      this.stepSimpletCreate = SimpletCreateStep.COLLECTION;
       this.archive.items = [] as SimpletInterface[];
       this.archive.pagination.page = 1;
       this.archive.pagination.itemCount = 0;

@@ -86,12 +86,18 @@ const { vnode } = getCurrentInstance();
 const hasReset = computed(() => 'onReset' in vnode.props);
 const modalResetVisible = ref<boolean>(false);
 
+const checkIfFinished = () => {
+  if (props.finished && !attrs.show && hasReset) {
+    emit('reset');
+  }
+};
+
 watch(
   () => props.finished,
-  finished => {
-    if (finished && !attrs.show && hasReset) {
-      emit('reset');
-    }
-  }
+  _ => checkIfFinished()
+);
+watch(
+  () => attrs.show,
+  _ => checkIfFinished()
 );
 </script>

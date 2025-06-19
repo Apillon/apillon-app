@@ -7,14 +7,11 @@
       size="medium"
       :loading="loadingBucket"
       @click="openBucket(collectionStore.active.bucket_uuid)"
-    >
-      <span class="icon-storage mr-2 text-xl"></span>
-      <span>{{ $t('nft.openBucket') }}</span>
+      >{{ $t('nft.openBucket') }}
     </n-button>
 
     <!-- Refresh -->
     <n-button class="w-full" size="medium" :loading="collectionStore.loading" @click="refresh">
-      <span class="icon-refresh mr-2 text-xl"></span>
       {{ $t('general.refresh') }}
     </n-button>
 
@@ -36,22 +33,6 @@
       {{ $t('nft.addIpnsInfo') }}
     </n-popconfirm>
 
-    <!-- Add NFT -->
-    <n-button
-      v-if="
-        (collectionStore.active.collection_uuid && collectionStore.active.useIpns !== false) ||
-        collectionStore.active.collectionStatus === CollectionStatus.CREATED
-      "
-      class="w-full"
-      size="medium"
-      :loading="loadingBucket"
-      :disabled="!allowAddMetadata"
-      @click="emit('addNfts')"
-    >
-      <span class="icon-add mr-2 text-xl text-primary"></span>
-      <span class="text-primary">{{ $t('nft.add') }}</span>
-    </n-button>
-
     <!-- Mint -->
     <n-button
       v-if="collectionStore.active.chainType === ChainType.EVM"
@@ -60,7 +41,6 @@
       :disabled="authStore.isAdmin() || actionsDisabled"
       @click="emit('mint')"
     >
-      <span class="icon-nft mr-2 text-xl"></span>
       {{ $t('nft.collection.mint') }}
     </n-button>
 
@@ -85,6 +65,23 @@
       {{ $t('nft.collection.setBaseUri') }}
     </n-button>
 
+    <!-- Add NFT -->
+    <Btn
+      v-if="
+        (collectionStore.active.collection_uuid && collectionStore.active.useIpns !== false) ||
+        collectionStore.active.collectionStatus === CollectionStatus.CREATED
+      "
+      class="w-full"
+      inner-class="flex gap-2 items-center"
+      size="medium"
+      :loading="loadingBucket"
+      :disabled="!allowAddMetadata"
+      @click="emit('addNfts')"
+    >
+      <span class="icon-add text-xl"></span>
+      <span>{{ $t('nft.add') }}</span>
+    </Btn>
+
     <!-- Burn -->
     <n-button
       v-if="collectionStore.active.isRevokable"
@@ -95,7 +92,6 @@
       ghost
       @click="emit('revoke')"
     >
-      <span class="icon-delete mr-2 text-xl text-pink"></span>
       {{ $t('nft.collection.revoke') }}
     </n-button>
   </n-space>

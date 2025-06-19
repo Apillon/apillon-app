@@ -123,6 +123,8 @@ export enum NftMetadataStep {
   ENDPOINT_PREVIEW = 9,
   JSON = 10,
   JSON_PREVIEW = 11,
+  DEPLOYING = 99,
+  DEPLOYED = 100,
 }
 
 /** NFTs metadata field */

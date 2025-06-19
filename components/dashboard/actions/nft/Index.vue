@@ -8,7 +8,6 @@
     <n-space size="large">
       <!-- Refresh collections -->
       <n-button
-        size="medium"
         :loading="archive ? collectionStore.archive.loading : collectionStore.loading"
         @click="collectionStore.fetchCollections(archive)"
       >
@@ -17,15 +16,16 @@
       </n-button>
 
       <!-- Create new collection -->
-      <n-button
+      <Btn
         v-if="collectionStore.hasCollections"
-        size="medium"
+        inner-class="flex gap-2 items-center"
+        type="primary"
         :disabled="authStore.isAdmin()"
         @click="openModalCreateCollection()"
       >
-        <span class="icon-create-folder mr-2 text-xl text-primary"></span>
-        <span class="text-primary">{{ $t('nft.collection.new') }}</span>
-      </n-button>
+        <span class="icon-add text-xl"></span>
+        <span> {{ $t('nft.collection.new') }} </span>
+      </Btn>
     </n-space>
   </n-space>
 </template>
