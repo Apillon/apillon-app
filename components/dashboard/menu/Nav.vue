@@ -41,13 +41,13 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
     disabled: isMenuItemDisabled(Feature.PROJECT),
   };
   const services = [
-    {
-      key: 'dashboard-service',
-      label: t('dashboard.nav.services'),
-      to: 'dashboard-service',
-      color: 'yellow',
-      svgIcon: 'menu/home-gear',
-    },
+    // {
+    //   key: 'dashboard-service',
+    //   label: t('dashboard.nav.services'),
+    //   to: 'dashboard-service',
+    //   color: 'yellow',
+    //   svgIcon: 'menu/home-gear',
+    // },
     {
       key: 'dashboard-simplets',
       label: t('dashboard.nav.simplets'),

@@ -97,6 +97,10 @@
           "name": "NFTs",
           "description": null
         },
+        "SIMPLETS": {
+          "name": "Simplets",
+          "description": null
+        },
         "STORAGE": {
           "name": "Web3 Storage",
           "description": null
@@ -257,6 +261,10 @@
       "write": "Write permissions",
       "execute": "Execute permissions",
       "insufficient": "You don't have permissions to create or edit this item."
+    },
+    "reset": {
+      "info": "This will reset your current progress. Are you sure you want to continue?",
+      "title": "Reset progress"
     },
     "solution": {
       "customEvm": "Custom EVM",

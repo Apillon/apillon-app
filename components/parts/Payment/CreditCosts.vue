@@ -55,7 +55,8 @@
           <tr v-for="(price, key) in shownPrices" :key="key">
             <td>
               <NuxtIcon :name="getIconName(price)" class="float-left mr-3 text-2xl text-white" filled />
-              <span>{{ price.description }} </span>
+              <span v-if="price.description">{{ price.description }} </span>
+              <span v-else class="capitalize">{{ price.name.replaceAll('_', ' ').toLowerCase() }}</span>
             </td>
             <td class="text-right">
               <strong class="text-white"> {{ price.currentPrice }} {{ $t('dashboard.credits.credits') }} </strong>
@@ -245,10 +246,12 @@ function getIconName(service: ProductPriceInterface) {
       return 'menu/computing';
     case ServiceTypeName.EMBEDDED_WALLET:
       return 'icon/wallet';
-    case ServiceTypeName.SMART_CONTRACTS:
-      return `logo/${extractChainFromCategory(service.category, 'CONTRACT')}`;
     case ServiceTypeName.NFT:
       return `logo/${extractChainFromCategory(service.category, ServiceTypeName.NFT)}`;
+    case ServiceTypeName.SMART_CONTRACTS:
+      return `logo/${extractChainFromCategory(service.category, 'CONTRACT')}`;
+    case ServiceTypeName.SIMPLETS:
+      return 'dashboard/simplet';
   }
 
   return 'icon/change';

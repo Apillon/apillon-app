@@ -6,7 +6,6 @@
 
 <script lang="ts" setup>
 import { NButton } from 'naive-ui';
-import type { PriceServiceName } from '#imports';
 
 const emit = defineEmits(['click']);
 const props = defineProps({

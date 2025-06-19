@@ -27,7 +27,11 @@
             </template>
             <template v-else> {{ item.value }}</template>
 
-            <Btn class="float-right text-white-primary no-underline" type="link" @click="$emit('back')">
+            <Btn
+              class="float-right text-white-primary no-underline hover:text-primary"
+              type="link"
+              @click="$emit('back')"
+            >
               <span class="icon-edit align-sub text-xl" />
             </Btn>
           </td>

@@ -3,11 +3,13 @@
     <Headline
       class="!mb-6"
       :title="$t('simplet.wizard.collection.select')"
-      :content="collections.length ? $t('simplet.wizard.collection.info') : $t('simplet.wizard.collection.empty')"
+      :content="
+        collections.length || search ? $t('simplet.wizard.collection.info') : $t('simplet.wizard.collection.empty')
+      "
     />
 
     <Spinner v-if="collectionStore.loading" />
-    <template v-else-if="collections.length">
+    <template v-else-if="collections.length || search">
       <hr class="my-5 border-bg-lighter" />
       <div class="my-6">
         <h6 class="mb-2">{{ $t('simplet.wizard.collection.add') }}</h6>

@@ -30,10 +30,10 @@
         </div>
       </div>
       <hr class="my-6 w-full border-bg-lighter" />
-      <div class="my-6">
+      <div v-if="showRefundable" class="my-6">
         <n-checkbox v-model:checked="nonRefundable" :label="t('nft.collection.review.nonRefundable')" />
       </div>
-      <Btn size="large" type="primary" :disabled="!nonRefundable" @click="$emit('deploy')">
+      <Btn size="large" type="primary" :disabled="showRefundable && !nonRefundable" @click="$emit('deploy')">
         <template v-if="deployText"> {{ deployText }} </template>
         <template v-else>
           {{ $t('nft.collection.review.createCollection') }}
@@ -52,6 +52,7 @@ const props = defineProps({
   info: { type: String, default: '' },
   deployText: { type: String, default: '' },
   pricing: { type: Array<ProductPriceInterface>, default: [] },
+  showRefundable: { type: Boolean, default: false },
 });
 const { t } = useI18n();
 const paymentStore = usePaymentStore();

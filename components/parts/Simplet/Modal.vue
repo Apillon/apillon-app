@@ -6,6 +6,7 @@
     trans-key="simplet.wizard.createStep"
     :title="$t('simplet.wizard.create')"
     :minimize="simpletStore.stepSimpletCreate > SimpletCreateStep.COLLECTION"
+    :finished="simpletStore.stepSimpletCreate === SimpletCreateStep.DEPLOYED"
     @reset="onReset"
   >
     <slot>

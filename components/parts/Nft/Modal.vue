@@ -6,6 +6,7 @@
     trans-key="nft.collection.createStep"
     :title="$t('nft.collection.create')"
     :minimize="Math.max(metadataStore.stepCollectionCreate, metadataStore.stepMetadata) > 1"
+    :finished="metadataStore.stepCollectionCreate === CollectionCreateStep.DEPLOYED"
     @reset="onReset"
   >
     <slot>
@@ -115,6 +116,7 @@ onMounted(async () => {
   await dataStore.waitOnPromises();
   storageStore.getStorageInfo();
   paymentStore.getPriceList();
+  metadataStore.stepCollectionCreate = CollectionCreateStep.DEPLOYED;
 });
 
 const metadataValid = () => !metadataStore.metadata.some(item => !item.image || !item.name || !item.description);

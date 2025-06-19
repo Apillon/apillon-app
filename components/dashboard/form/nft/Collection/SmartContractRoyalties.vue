@@ -25,6 +25,7 @@
           :max="100"
           :input-props="{ id: 'royaltiesFees' }"
           :placeholder="$t('general.typeHere')"
+          :show-button="false"
           clearable
         >
           <template #suffix>%</template>

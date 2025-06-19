@@ -16,8 +16,11 @@
           :max="10000000000"
           :step="0.00001"
           :input-props="{ id: 'dropPrice' }"
+          :show-button="false"
           clearable
-        />
+        >
+          <template #suffix>{{ chainCurrency(metadataStore.form.smartContract.chain) }}</template>
+        </n-input-number>
       </n-form-item-gi>
 
       <!--  Collection Drop start -->
@@ -46,6 +49,7 @@
           :min="0"
           :step="1"
           :input-props="{ id: 'dropReserve' }"
+          :show-button="false"
           clearable
         />
       </n-form-item-gi>

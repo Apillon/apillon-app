@@ -1,5 +1,5 @@
 <template>
-  <Dashboard :loading="false">
+  <Dashboard :loading="simpletStore.loading">
     <template #heading>
       <HeaderSimplets />
     </template>
@@ -45,6 +45,7 @@ const { t } = useI18n();
 
 const simpletStore = useSimpletStore();
 const collectionStore = useCollectionStore();
+const metadataStore = useMetadataStore();
 
 const simpletType = ref<SimpletTemplateInterface>();
 
@@ -53,6 +54,7 @@ useHead({
 });
 
 onMounted(() => {
+  metadataStore.stepCollectionCreate = CollectionCreateStep.METADATA;
   simpletStore.fetchSimplets();
   simpletStore.fetchSimpletTemplates();
 });

@@ -31,6 +31,10 @@ export default defineNuxtRouteMiddleware(to => {
     return;
   }
 
+  const config = useRuntimeConfig();
+  console.debug('API URL:', config.public.apiUrl);
+  $api.setBaseUrl(config.public.apiUrl);
+
   authStore.initUser();
   if (authStore.jwt) {
     /** Redirect auth routes */

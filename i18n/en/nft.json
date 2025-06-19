@@ -542,13 +542,13 @@
     },
     "website": {
       "autoDeploy": {
-        "name": "NFT Studio Autodeploy",
-        "description": "This option will automatically deploy your NFT store to our hosting and you can immediately start using it.",
+        "name": "NFT store autodeploy",
+        "description": "This will automatically deploy your NFT store to Apillon hosting. No setup needed - just go live with the template.",
         "usage": ["No code", "Plug & Play"]
       },
       "build": {
         "name": "Build your own store",
-        "description": "Get access to pre-made templates on Github, customise it and utilise our Github CI flow for automatic build and deploy process.",
+        "description": "Use pre-made templates on GitHub to customize your store. Follow the CI flow to build and deploy it with your own setup.",
         "usage": ["Code required", "Customize", "CI/CD"]
       }
     },
