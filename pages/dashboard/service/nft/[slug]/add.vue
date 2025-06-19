@@ -71,7 +71,7 @@ const collectionUuid = ref<string>(`${params?.slug}`);
 const totalCredits = computed(() => sumCredits(pricing.value));
 
 onBeforeMount(() => {
-  metadataStore.stepMetadata = NftMetadataStep.DEPLOYED;
+  metadataStore.stepMetadata = NftMetadataStep.NEW;
 });
 onMounted(async () => {
   if (!params?.slug) router.push({ name: 'dashboard-service-nft' });

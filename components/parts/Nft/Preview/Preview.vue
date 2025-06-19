@@ -111,11 +111,7 @@ const createColumns = (): DataTableColumns<Record<string, string>> => {
       title: '',
       align: 'right',
       render(row) {
-        return h(
-          NButton,
-          { size: 'small', type: 'error', ghost: true, onClick: () => removeNft(row?.id || 0) },
-          h('span', { class: 'icon-delete text-lg' }, '')
-        );
+        return h(resolveComponent('BtnDelete'), { onClick: () => removeNft(row?.id || 0) });
       },
     },
   ];
