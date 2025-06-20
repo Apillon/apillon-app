@@ -67,6 +67,7 @@ const collections = computed(() =>
     c =>
       c.drop &&
       c.dropReserve > 0 &&
+      c.collectionStatus > 0 &&
       c.collectionStatus <= CollectionStatus.DEPLOYED &&
       (simpletStore.form.type?.name !== SimpletName.AIRDROP || c.isAutoIncrement) &&
       (!search.value || c.name.toLowerCase().includes(search.value.toLowerCase()))
@@ -79,7 +80,6 @@ onMounted(async () => {
   } else {
     await collectionStore.fetchCollections();
   }
-  collectionStore.items[0].collectionStatus = CollectionStatus.DEPLOYING;
   checkUnfinishedCollections();
 });
 

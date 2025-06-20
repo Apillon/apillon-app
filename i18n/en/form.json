@@ -174,6 +174,7 @@
         "integration": "Embedded wallet Integration",
         "whitelistedDomains": "Whitelisted Domains",
         "labelInfo": {
+          "integration": "The embedded wallet will only be added to the Simplet if you select this option.",
           "whitelistedDomains": "Prevent third-parties from using your integration by restricting access to allowed domains \n- Authorize all domains with * \n  Example: *.apillon.io accepts all .apillon.io sites \n- Authorize local URLs with localhost:&lt;port&gt; \n- Separate domains by commas"
         }
       },
@@ -216,7 +217,10 @@
         "endTime": "End time",
         "name": "Simplet name",
         "startTime": "Start time",
-        "walletAddress": "Wallet address"
+        "walletAddress": "Wallet address",
+        "labelInfo": {
+          "walletAddress": "Where the NFTs will come from. Enter the wallet address that will power this Simplet."
+        }
       },
       "smtp": {
         "host": "SMTP Host",

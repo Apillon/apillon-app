@@ -112,6 +112,10 @@ export const useSimpletStore = defineStore('simplets', {
       return this.backend?.environmentVariables?.find(v => v.key === key)?.value;
     },
 
+    findTemplate(name?: string): SimpletTemplateInterface | undefined {
+      return this.templates.find(t => t.name === name);
+    },
+
     /**
      * Fetch wrappers
      */

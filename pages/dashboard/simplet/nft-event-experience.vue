@@ -1,5 +1,5 @@
 <template>
-  <Dashboard :loading="false">
+  <Dashboard :loading="pageLoading">
     <template #heading>
       <HeaderSimplet :name="$t('simplet.nft-event-experience.name')" />
     </template>
@@ -13,5 +13,13 @@ const { t } = useI18n();
 
 useHead({
   title: t('simplet.nft-event-experience.name'),
+});
+
+const simpletStore = useSimpletStore();
+const pageLoading = ref<boolean>(true);
+
+onMounted(async () => {
+  await simpletStore.getSimpletTemplates();
+  pageLoading.value = false;
 });
 </script>

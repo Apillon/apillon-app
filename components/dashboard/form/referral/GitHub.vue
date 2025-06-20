@@ -81,10 +81,9 @@ const rules: NFormRules = {
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
-  const message = useMessage();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
+      // errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else if (!referralStore.github_id) {
       window.open(
         'https://github.com/login/oauth/authorize?client_id=' +

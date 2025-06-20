@@ -56,7 +56,6 @@ defineProps({
   hideSubmit: { type: Boolean, default: false },
 });
 const { t } = useI18n();
-const message = useMessage();
 const metadataStore = useMetadataStore();
 
 const { rulesCollection, labelInfo } = useForm();
@@ -66,12 +65,6 @@ defineExpose({ formRef, handleSubmitForm });
 // Submit
 async function handleSubmitForm(e?: Event | MouseEvent): Promise<boolean> {
   e?.preventDefault();
-  return !(
-    await formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
-      if (errors) {
-        errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
-      }
-    })
-  )?.warnings;
+  return !(await formRef.value?.validate())?.warnings;
 }
 </script>

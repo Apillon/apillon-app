@@ -83,9 +83,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   const message = useMessage();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
-    } else {
+    if (!errors) {
       // window.open(
       //   'https://github.com/login/oauth/authorize?client_id=d0482598d8adbd8adffa&redirect_uri=http://localhost:3000/dashboard/referral',
       //   '_self'

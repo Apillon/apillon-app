@@ -124,7 +124,7 @@ onMounted(async () => {
   if (props.isSimplet) {
     await simpletStore.getSimpletTemplates();
 
-    const repoSimplet = simpletStore.templates.find(t => t.name === 'nft-studio') || simpletStore.templates[0];
+    const repoSimplet = simpletStore.findTemplate(simpletStore.form.type?.name) || simpletStore.templates[0];
     if (repoSimplet) {
       websiteStore.form.repoId = repoSimplet.id;
       websiteStore.form.repoName = repoSimplet.name;
@@ -140,7 +140,7 @@ function handleSubmit(e: Event | MouseEvent) {
 
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || t('general.error'))));
+      // errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || t('general.error'))));
     } else if (dataStore.projectUuid && websiteStore.active) {
       const bodyData = {
         projectUuid: dataStore.projectUuid,

@@ -86,10 +86,7 @@ function handleSubmit(e: Event | MouseEvent | null) {
   formData.captcha = formCaptcha.value;
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || '')));
-    } else {
-      /** Request password change */
+    if (!errors) {
       await passwordChangeRequest();
     }
   });

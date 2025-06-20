@@ -70,9 +70,7 @@ watch(
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
-    } else {
+    if (!errors) {
       await updateThreshold();
     }
   });

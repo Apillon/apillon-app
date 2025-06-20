@@ -141,8 +141,6 @@ async function handleSubmitForm(e?: Event | MouseEvent) {
         if (!metadataStore.hasImages) {
           message.warning(t('validation.nft.image') || 'Error');
         }
-
-        errors?.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
       } else {
         createSingleNft(metadataStore.form.single);
       }

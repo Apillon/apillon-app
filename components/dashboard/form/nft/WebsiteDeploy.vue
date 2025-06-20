@@ -72,9 +72,7 @@ const rules: NFormRules = {
 async function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || t('general.error'))));
-    } else {
+    if (!errors) {
       deployNftWebsite();
     }
   });

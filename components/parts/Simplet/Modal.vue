@@ -145,8 +145,7 @@ function nextStep() {
 async function deploy() {
   simpletStore.stepSimpletCreate = SimpletCreateStep.DEPLOYING;
 
-  const simplet =
-    simpletStore.templates.find(t => t.name === simpletStore.form.type?.name) || simpletStore.templates[0];
+  const simplet = simpletStore.findTemplate(simpletStore.form.type?.name) || simpletStore.templates[0];
   const simpletDeployed = await createSimplet(simplet.simplet_uuid);
 
   simpletStore.stepSimpletCreate = simpletDeployed ? SimpletCreateStep.DEPLOYED : SimpletCreateStep.FORM;
@@ -191,8 +190,6 @@ const prepareVariablesFE = (): EnvVar[] =>
 
 async function createSimplet(simpletUuid: string) {
   try {
-    const embeddedWallet = await getEmbeddedWallet(simpletStore.form.embeddedWallet);
-
     const bodyData = {
       project_uuid: dataStore.projectUuid,
       name: simpletStore.form.name,
@@ -200,7 +197,7 @@ async function createSimplet(simpletUuid: string) {
       apillonApiKey: simpletStore.form?.apiKey,
       apillonApiSecret: simpletStore.form?.apiSecret,
       nftCollection_uuid: simpletStore.form.collection?.collection_uuid,
-      walletIntegration_uuid: embeddedWallet,
+      walletIntegration_uuid: simpletStore.form.embeddedWallet,
       backendVariables: prepareVariablesBE(),
       frontendVariables: prepareVariablesFE(),
     };
@@ -214,26 +211,5 @@ async function createSimplet(simpletUuid: string) {
     message.error(userFriendlyMsg(e));
   }
   return null;
-}
-
-async function getEmbeddedWallet(integrationUuid?: string | null): Promise<string> {
-  if (integrationUuid) return integrationUuid;
-
-  const embeddedWallet = await createEmbeddedWallet();
-  return embeddedWallet?.integration_uuid || '';
-}
-
-async function createEmbeddedWallet() {
-  try {
-    const bodyData = {
-      title: `Embedded wallet: ${simpletStore.form.name}`,
-      description: `Embedded wallet: ${simpletStore.form.description}`,
-      project_uuid: dataStore.projectUuid,
-    };
-    const { data } = await $api.post<EmbeddedWalletResponse>(endpoints.embeddedWalletIntegration, bodyData);
-    return data;
-  } catch (error: ApiError | any) {
-    message.error(userFriendlyMsg(error));
-  }
 }
 </script>

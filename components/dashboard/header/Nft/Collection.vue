@@ -7,7 +7,9 @@
     filter-by-chain
   >
     <div class="flex items-end gap-1">
-      <small class="inline-block pb-1 leading-normal">{{ $t('dashboard.nav.nft') }}</small>
+      <NuxtLink :to="{ name: 'dashboard-service-nft' }">
+        <small class="inline-block pb-1 leading-normal">{{ $t('dashboard.nav.nft') }}</small>
+      </NuxtLink>
       <h3 v-if="metadataStore.form.smartContract.chain">
         <span>/</span>
         {{ $t('nft.collection.title') }}:

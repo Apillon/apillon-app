@@ -91,9 +91,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     formErrors.value = !!errors;
-    if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
-    } else {
+    if (!errors) {
       cloudFunctionStore.variablesNew = [...cloudFunctionStore.variablesNew, ...formData.value];
       emit('submitSuccess');
     }

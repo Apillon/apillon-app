@@ -170,10 +170,7 @@ async function handleSubmit(e?: Event | MouseEvent) {
       repoSelected.value = true;
     }
   } else {
-    const validation = await formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
-      errors?.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
-    });
-
+    const validation = await formRef.value?.validate();
     if (props.hideSubmit) {
       return !validation?.warnings;
     } else {

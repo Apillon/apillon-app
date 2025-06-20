@@ -104,10 +104,6 @@ onMounted(() => {});
 
 async function handleSubmit(e?: Event | MouseEvent): Promise<boolean> {
   e?.preventDefault();
-
-  const validation = await formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
-    errors?.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
-  });
-  return !validation?.warnings;
+  return !(await formRef.value?.validate())?.warnings;
 }
 </script>

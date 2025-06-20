@@ -34,7 +34,7 @@
     </div>
 
     <!-- Modal - New Simplet -->
-    <SimpletModal v-model:show="showModalNewSimplet" :type="simpletId" :title="$t('simplet.wizard.create')" />
+    <SimpletModal v-model:show="showModalNewSimplet" :type="simpletTemplate" :title="$t('simplet.wizard.create')" />
   </div>
 </template>
 
@@ -42,8 +42,16 @@
 const props = defineProps({
   simpletId: { type: Number, default: SimpletType.AIRDROP },
 });
+
+const simpletStore = useSimpletStore();
 const { simplets, generateContent } = useSimplet();
 
 const showModalNewSimplet = ref<boolean>(false);
+const simpletTemplate = ref<SimpletTemplateInterface>();
+
 const content = generateContent(simplets[props.simpletId]);
+
+onMounted(async () => {
+  simpletTemplate.value = simpletStore.findTemplate(simplets[props.simpletId]);
+});
 </script>

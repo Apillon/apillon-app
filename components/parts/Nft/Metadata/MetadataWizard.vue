@@ -31,21 +31,15 @@
 import { useTemplateRef } from 'vue';
 
 defineExpose({ back, nextStep });
+const { t } = useI18n();
+const { warning } = useMessage();
 const metadataStore = useMetadataStore();
-const { createNftDataAsync } = useMetadata();
+const { allImagesUploaded, hasRequiredMetadata, missingImages, createNftDataAsync } = useMetadata();
 
 const step = ref(metadataStore.stepMetadata);
 
 const formSingleRef = useTemplateRef('formSingleRef');
 const submitFormSingle = async () => (formSingleRef.value ? await formSingleRef.value.handleSubmitForm() : false);
-
-async function submitSingle() {
-  const formSingleSubmitted = await submitFormSingle();
-  if (formSingleSubmitted) {
-    step.value += 1;
-    metadataStore.stepMetadata = step.value;
-  }
-}
 
 function back() {
   switch (metadataStore.stepMetadata) {
@@ -55,8 +49,8 @@ function back() {
     case NftMetadataStep.NEW:
       step.value = NftMetadataStep.CHAIN;
       break;
-    case NftMetadataStep.SINGLE:
     case NftMetadataStep.CSV:
+    case NftMetadataStep.SINGLE:
     case NftMetadataStep.ENDPOINT:
     case NftMetadataStep.JSON:
       step.value = NftMetadataStep.NEW;
@@ -67,14 +61,25 @@ function back() {
   }
   metadataStore.stepMetadata = step.value;
 }
-function nextStep() {
+async function nextStep() {
   switch (metadataStore.stepMetadata) {
     case NftMetadataStep.SINGLE:
-      submitSingle();
+      if (await submitFormSingle()) {
+        step.value += 1;
+        metadataStore.stepMetadata = step.value;
+      }
       break;
     case NftMetadataStep.CSV:
-      createNftDataAsync();
-      step.value += 1;
+      if (!metadataStore.hasCsvFile) {
+        warning(t('nft.validation.fileInvalid'));
+      } else if (!hasRequiredMetadata.value) {
+        warning(t('nft.validation.csvMissingAttributes'));
+      } else if (!allImagesUploaded.value) {
+        warning(t('nft.validation.imagesMissing') + ' ' + missingImages.value);
+      } else {
+        createNftDataAsync();
+        step.value += 1;
+      }
       break;
     case NftMetadataStep.CHAIN:
       step.value = NftMetadataStep.NEW;

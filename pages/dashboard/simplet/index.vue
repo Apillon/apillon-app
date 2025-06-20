@@ -53,8 +53,12 @@ useHead({
   title: t('dashboard.nav.simplets'),
 });
 
-onMounted(() => {
+onBeforeMount(() => {
+  metadataStore.stepMetadata = NftMetadataStep.CHAIN;
   metadataStore.stepCollectionCreate = CollectionCreateStep.METADATA;
+});
+
+onMounted(() => {
   simpletStore.fetchSimplets();
   simpletStore.fetchSimpletTemplates();
 });

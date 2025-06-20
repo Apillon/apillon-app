@@ -124,7 +124,7 @@ function handleSubmit(e: MouseEvent | null) {
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       formErrors.value = true;
-      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
+      // errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
       authStore.saveEmail(formData.email);
       await signupWithEmail();

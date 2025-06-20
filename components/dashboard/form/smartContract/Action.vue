@@ -108,7 +108,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e?.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
+      // errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else if (props.read) {
       execRead(props.fn.name);
     } else if (props.owner) {

@@ -1,9 +1,5 @@
 <template>
-  <n-form-item
-    path="embeddedWallet"
-    :label="$t('form.label.embeddedWallet.integration')"
-    :label-props="{ for: 'embeddedWallet' }"
-  >
+  <n-form-item path="embeddedWallet" :label="labelInfo('integration')" :label-props="{ for: 'embeddedWallet' }">
     <n-select
       v-bind="$attrs"
       :loading="embeddedWalletStore.loading"
@@ -17,8 +13,8 @@
 <script lang="ts" setup>
 import type { SelectOption } from 'naive-ui';
 
-const emit = defineEmits(['update:value']);
 const embeddedWalletStore = useEmbeddedWalletStore();
+const { labelInfo } = useForm('form.label.embeddedWallet');
 const items = ref<SelectOption[]>([]);
 
 onMounted(async () => {
@@ -28,7 +24,6 @@ onMounted(async () => {
       value: item.integration_uuid,
       label: item.title,
     }));
-    emit('update:value', items.value[0].value);
   }
 });
 </script>

@@ -25,7 +25,10 @@
             <img v-if="beta" src="/icons/beta.svg" alt="Beta" class="ml-2 inline-block h-5 w-14" />
           </h3>
           <template v-else>
-            <small v-if="serviceName">{{ serviceName }}</small>
+            <NuxtLink v-if="back && serviceName" :to="back">
+              <small>{{ serviceName }}</small>
+            </NuxtLink>
+            <small v-else-if="serviceName">{{ serviceName }}</small>
             <h5>
               <span v-if="serviceName">/</span>
               {{ name }}

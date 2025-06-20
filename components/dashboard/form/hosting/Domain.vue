@@ -128,7 +128,7 @@ function handleSubmit(e: Event | MouseEvent) {
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
+      // errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else if (props.domain || website.value?.ipnsProduction) {
       warningStore.showSpendingWarning(serviceName, () => updateWebsiteDomain());
     } else {

@@ -58,10 +58,6 @@ defineExpose({ formRef, handleSubmitForm });
 // Submit
 async function handleSubmitForm(e?: Event | MouseEvent): Promise<boolean> {
   e?.preventDefault();
-  return !(
-    await formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
-      errors?.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
-    })
-  )?.warnings;
+  return !(await formRef.value?.validate())?.warnings;
 }
 </script>

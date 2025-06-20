@@ -35,11 +35,7 @@
       </n-form-item>
 
       <!-- Admin Wallet Address -->
-      <n-form-item
-        path="walletAddress"
-        :label="$t('form.label.simplet.walletAddress')"
-        :label-props="{ for: 'walletAddress' }"
-      >
+      <n-form-item path="walletAddress" :label="label('walletAddress')" :label-props="{ for: 'walletAddress' }">
         <FormFieldWalletAddress
           v-model:value="simpletStore.form.walletAddress"
           :placeholder="$t('form.placeholder.simplet.walletAddress')"
@@ -50,6 +46,7 @@
       <FormFieldEmbeddedWallet
         v-if="embeddedWalletStore.hasEmbeddedWallets"
         v-model:value="simpletStore.form.embeddedWallet"
+        clearable
         @update:value="ew => (simpletStore.form.embeddedWallet = ew)"
       />
 
@@ -101,7 +98,6 @@
 <script lang="ts" setup>
 defineExpose({ handleSubmit });
 
-const message = useMessage();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const simpletStore = useSimpletStore();
@@ -109,6 +105,7 @@ const embeddedWalletStore = useEmbeddedWalletStore();
 
 const { t } = useI18n();
 const { labelInfo } = useForm('simplet.mysql');
+const { labelInfo: label } = useForm('form.label.simplet');
 const { ruleApiKey, ruleApiSecret } = useForm();
 
 const formRef = ref<NFormInst | null>(null);
@@ -123,10 +120,6 @@ const rules = computed(() => ({
   ],
   apiKey: ruleApiKey(simpletStore.form),
   apiSecret: ruleApiSecret(simpletStore.form),
-  embeddedWallet: {
-    required: embeddedWalletStore.hasEmbeddedWallets,
-    message: t('validation.embeddedWallet.integrationRequired'),
-  },
   ['mysql.host']: { required: useDifferentDB.value, message: t('validation.mysqlRequired') },
   ['mysql.database']: { required: useDifferentDB.value, message: t('validation.mysqlRequired') },
   ['mysql.user']: { required: useDifferentDB.value, message: t('validation.mysqlRequired') },
@@ -145,9 +138,6 @@ onMounted(() => {
 async function handleSubmit(e?: Event | MouseEvent): Promise<boolean> {
   e?.preventDefault();
 
-  const validation = await formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
-    errors?.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
-  });
-  return !validation?.warnings;
+  return !(await formRef.value?.validate())?.warnings;
 }
 </script>

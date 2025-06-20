@@ -186,9 +186,7 @@ const renderOption = ({ node, option }) =>
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
-    } else {
+    if (!errors) {
       const priceServiceName = generatePriceServiceName(
         ServiceTypeName.NFT,
         props.collection.chain,
