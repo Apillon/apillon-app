@@ -21,14 +21,14 @@
         v-if="simpletStore.hasSimplets"
         size="medium"
         :disabled="authStore.isAdmin()"
-        @click="modalCreateVisible = true"
+        @click="simpletStore.modalCreateVisible = true"
       >
         <span class="text-primary">{{ $t('simplet.create') }}</span>
       </n-button>
     </n-space>
   </n-space>
 
-  <SimpletModal v-model:show="modalCreateVisible" />
+  <SimpletModal v-model:show="simpletStore.modalCreateVisible" :title="$t('simplet.wizard.create')" />
 </template>
 
 <script lang="ts" setup>
@@ -38,7 +38,6 @@ defineProps({
 
 const authStore = useAuthStore();
 const simpletStore = useSimpletStore();
-const modalCreateVisible = ref<boolean>(false);
 
 onMounted(() => {
   simpletStore.resetForm();

@@ -1,5 +1,7 @@
 <template>
   <ModalFullScreen
+    v-if="!collectionStore.modalCreateVisible"
+    v-bind="$attrs"
     :progress="progress"
     :steps="SimpletCreateStep"
     :active-step="simpletStore.stepSimpletCreate"
@@ -46,6 +48,13 @@
       </div>
     </template>
   </ModalFullScreen>
+
+  <NftModal
+    v-if="!simpletStore.modalCreateVisible"
+    v-model:show="collectionStore.modalCreateVisible"
+    simplet
+    @on-created="onNftCollectionCreated"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -58,6 +67,7 @@ const authStore = useAuthStore();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const simpletStore = useSimpletStore();
+const collectionStore = useCollectionStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
 
 const { simpletNames } = useSimplet();
@@ -140,6 +150,14 @@ function nextStep() {
       simpletStore.stepSimpletCreate += 1;
       break;
   }
+}
+
+function onNftCollectionCreated(collection: CollectionInterface) {
+  collectionStore.modalCreateVisible = false;
+  collectionStore.active = collection;
+
+  simpletStore.form.collection = collection;
+  setTimeout(() => (simpletStore.modalCreateVisible = true), 100);
 }
 
 async function deploy() {
