@@ -4,6 +4,7 @@ export const useCollectionStore = defineStore('collection', {
   state: () => ({
     active: {} as CollectionInterface,
     items: [] as CollectionInterface[],
+    nfts: [] as MetadataItem[],
     loading: false,
     metadataDeploys: [] as MetadataDeployInterface[],
     modalCreateVisible: false,
@@ -42,6 +43,7 @@ export const useCollectionStore = defineStore('collection', {
     resetData() {
       this.active = {} as CollectionInterface;
       this.items = [] as CollectionInterface[];
+      this.nfts = [] as MetadataItem[];
       this.search = '';
       this.transaction = [] as TransactionInterface[];
       this.archive.items = [] as CollectionInterface[];
@@ -194,7 +196,6 @@ export const useCollectionStore = defineStore('collection', {
 
     async fetchMetadataDeploys(collectionUuid?: string): Promise<MetadataDeployInterface[]> {
       try {
-        const params = parseArguments(PARAMS_ALL_ITEMS);
         const res = await $api.get<MetadataDeploysResponse>(
           endpoints.collectionNftsMetadata(collectionUuid || this.collectionUuid),
           parseArguments({ ...PARAMS_ALL_ITEMS })
@@ -220,7 +221,7 @@ export const useCollectionStore = defineStore('collection', {
       if (!dataStore.projectUuid) return [];
 
       try {
-        const res = await $api.get<GeneralResponse<boolean>>(endpoints.collectionsQuota, {
+        const res = await $api.get<BooleanResponse>(endpoints.collectionsQuota, {
           project_uuid: dataStore.projectUuid,
         });
         this.quotaReached = res.data;

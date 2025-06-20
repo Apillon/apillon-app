@@ -82,6 +82,7 @@ onMounted(async () => {
   await dataStore.waitOnPromises();
   paymentStore.getPriceList();
   simpletStore.getSimpletTemplates();
+  simpletStore.getSimpletQuota();
   embeddedWalletStore.getEmbeddedWallets();
 });
 

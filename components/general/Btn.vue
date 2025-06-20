@@ -87,7 +87,7 @@ const btnClass = computed(() => {
     {
       'w-full': props.type !== 'link' && props.size === 'large',
       'min-w-40': ['primary', 'secondary'].includes(props.type) && props.size === 'small',
-      underline: props.type === 'link',
+      'underline transition-colors duration-300 hover:text-primary': props.type === 'link',
       'font-bold': props.type !== 'link',
       'pointer-events-none pointer-default': props.disabled || props.loading,
       'opacity-60 !text-disabled hover:!text-disabled': props.disabled,

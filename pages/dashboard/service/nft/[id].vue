@@ -8,7 +8,7 @@
       <n-space class="pb-8" :size="32" vertical>
         <div class="flex gap-8">
           <div class="card-light flex-1 rounded-lg px-6 py-4">
-            <NftCollectionInfo />
+            <NftCollectionInfo :base-uri-link="collectionBaseUri" />
           </div>
 
           <div class="card max-w-64 px-6 py-4">
@@ -62,7 +62,7 @@
               <div v-if="collectionStore.active.collectionStatus === CollectionStatus.CREATED">
                 <p class="my-4">{{ $t('nft.transaction.empty') }}</p>
                 <!-- Add NFT -->
-                <n-button @click="openModalAddNfts">
+                <n-button @click="$router.push(`/dashboard/service/nft/${collectionStore.active.collection_uuid}/add`)">
                   <span class="icon-add mr-2 text-xl text-primary"></span>
                   <span class="text-primary">{{ $t('nft.add') }}</span>
                 </n-button>
@@ -134,6 +134,8 @@ enum Tabs {
 const { t } = useI18n();
 const router = useRouter();
 const { params } = useRoute();
+const dataStore = useDataStore();
+const ipfsStore = useIpfsStore();
 const storageStore = useStorageStore();
 const paymentStore = usePaymentStore();
 const metadataStore = useMetadataStore();
@@ -153,6 +155,7 @@ let transactionInterval: any = null as any;
 
 /** Collection UUID from route */
 const collectionUuid = ref<string>(`${params?.id}`);
+const collectionBaseUri = ref<string>();
 
 useHead({
   title: t('dashboard.nav.nft'),
@@ -166,11 +169,13 @@ onMounted(async () => {
   /** Reset state if user opens different collection */
   if (collectionUuid.value !== collectionStore.active?.collection_uuid) {
     metadataStore.resetMetadata();
+    collectionStore.nfts = [];
   }
 
   if (!currentCollection?.collection_uuid) {
     router.push({ name: 'dashboard-service-nft' });
   } else {
+    loadBaseUri(currentCollection.baseUri);
     await collectionStore.getMetadataDeploys(currentCollection.collection_uuid);
     await collectionStore.getCollectionTransactions(currentCollection.collection_uuid);
     collectionStore.active = currentCollection;
@@ -197,6 +202,19 @@ watch(
     }
   }
 );
+
+async function loadBaseUri(url?: Optional<string>) {
+  if (!url) return;
+  const parsed = new URL(removeLastSlash(url));
+  const parts = parsed.pathname.split('/');
+
+  if (parts.length) {
+    const ipfsLink = await ipfsStore.fetchIpfsLink(dataStore.projectUuid, parts[parts.length - 1], IpfsType.IPNS);
+    if (ipfsLink?.link) {
+      collectionBaseUri.value = ipfsLink.link;
+    }
+  }
+}
 
 function onNftMinted(hash: string) {
   modalMintCollectionVisible.value = false;

@@ -119,7 +119,7 @@ export const useRpcApiKeyStore = defineStore('rpc-api-key', {
       await dataStore.waitOnPromises(false);
       if (!dataStore.projectUuid) return;
       try {
-        const res = await $api.get<RpcApiKeysQuotaResponse>(endpoints.rpcApiKeysQuotaReached());
+        const res = await $api.get<BooleanResponse>(endpoints.rpcApiKeysQuotaReached());
         this.quotaReached = res.data;
       } catch (error: ApiError | any) {
         this.quotaReached = undefined;

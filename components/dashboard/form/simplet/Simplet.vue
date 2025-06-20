@@ -1,10 +1,5 @@
 <template>
-  <div class="pb-8">
-    <!-- Permissions Error Notification -->
-    <Notification v-if="isFormDisabled" type="error" class="mb-8 w-full">
-      {{ $t('dashboard.permissions.insufficient') }}
-    </Notification>
-
+  <Form class="pb-8" :disabled="simpletStore.quotaReached">
     <Headline :title="$t('simplet.wizard.setData')" :content="$t('simplet.wizard.info')" />
 
     <n-form
@@ -92,7 +87,7 @@
         <FormFieldMySql v-if="useDifferentDB" :form="simpletStore.form.mysql" />
       </FormFieldApiKey>
     </n-form>
-  </div>
+  </Form>
 </template>
 
 <script lang="ts" setup>
@@ -127,7 +122,7 @@ const rules = computed(() => ({
 }));
 
 const isFormDisabled = computed<boolean>(() => {
-  return dataStore.isProjectUser;
+  return dataStore.isProjectUser || simpletStore.quotaReached;
 });
 
 onMounted(() => {

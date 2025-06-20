@@ -225,6 +225,7 @@ const Endpoints = {
   simpletBackend: (uuid?: number | string) => (uuid ? `/deploy/backends/${uuid}` : '/deploy/backends/'),
   simpletBackendDetails: (uuid: number | string) => `/deploy/backends/${uuid}/details`,
   simpletBackendRedeploy: (uuid: number | string) => `/deploy/backends/${uuid}/redeploy`,
+  simpletQuotaReached: (projectUuid: string) => `/simplets/deployed/projects/${projectUuid}/quota-reached`,
 
   /** Oauth links */
   oauthLinks: '/users/oauth-links/',

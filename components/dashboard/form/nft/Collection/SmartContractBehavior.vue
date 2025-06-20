@@ -17,7 +17,7 @@
         <n-input-number
           v-model:value="metadataStore.form.smartContract.maxSupply"
           :min="0"
-          :max="NFT_MAX_SUPPLY"
+          :max="metadataStore.metadata.length || NFT_MAX_SUPPLY"
           :disabled="!metadataStore.form.smartContract.supplyLimited"
           :input-props="{ id: 'maxSupply' }"
           :placeholder="t('form.placeholder.collectionMaxSupply')"
@@ -78,7 +78,6 @@ const props = defineProps({
   simplet: { type: Boolean, default: false },
 });
 const { t } = useI18n();
-const message = useMessage();
 const metadataStore = useMetadataStore();
 
 const { rulesCollection: rules, labelInfo } = useForm();

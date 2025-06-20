@@ -21,6 +21,9 @@
 </template>
 
 <script lang="ts" setup>
+const props = defineProps({
+  baseUriLink: { type: String, default: null },
+});
 const { t } = useI18n();
 const bucketStore = useBucketStore();
 const collectionStore = useCollectionStore();
@@ -63,7 +66,11 @@ const data = computed(() => {
     {
       label: t('nft.collection.baseUri'),
       value: collectionStore.active.baseUri,
-      copy: true,
+      component: resolveComponent('TableLink'),
+      data: {
+        link: props.baseUriLink || collectionStore.active.baseUri,
+        text: collectionStore.active.baseUri,
+      },
     },
   ];
 });

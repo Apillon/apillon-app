@@ -167,7 +167,7 @@ async function submitResetPassword() {
   loading.value = true;
 
   try {
-    const res = await $api.post<PasswordResetResponse>(endpoints.passwordReset, {
+    const res = await $api.post<BooleanResponse>(endpoints.passwordReset, {
       password: formData.value.password,
       token: props.token || query.token || authStore.jwt,
     });

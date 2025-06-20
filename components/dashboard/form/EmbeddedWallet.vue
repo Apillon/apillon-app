@@ -1,18 +1,5 @@
 <template>
-  <div v-if="integrationUuid && !embeddedWallet" class="relative pb-10 pt-20">
-    <Spinner />
-  </div>
-  <div v-else>
-    <Notification v-if="dataStore.isProjectUser" type="error" class="mb-8 w-full">
-      {{ $t('dashboard.permissions.insufficient') }}
-    </Notification>
-    <Notification v-else-if="isFormDisabled" type="warning" class="mb-4">
-      {{ $t('project.quotaReached') }},
-      <NuxtLink class="text-yellow" :to="{ name: 'dashboard-payments' }" @click="$emit('close')">
-        {{ $t('project.upgradePlan') }} </NuxtLink
-      >.
-    </Notification>
-
+  <Form :loading="!!integrationUuid && !embeddedWallet" :disabled="isFormDisabled">
     <n-form
       ref="formRef"
       :model="formData"
@@ -70,7 +57,7 @@
         </Btn>
       </n-form-item>
     </n-form>
-  </div>
+  </Form>
 </template>
 
 <script lang="ts" setup>
@@ -85,7 +72,6 @@ const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess', 'cl
 const props = defineProps({
   integrationUuid: { type: String, default: '' },
 });
-
 const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();

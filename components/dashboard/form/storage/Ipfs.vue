@@ -51,16 +51,11 @@ type FormIpfs = {
   cid: string;
   type: string | null;
 };
-enum IpfsType {
-  CID = 'CID',
-  IPNS = 'IPNS',
-}
 
 defineProps({
   size: { type: String as PropType<Size>, default: 'medium' },
 });
 
-const message = useMessage();
 const { t } = useI18n();
 const dataStore = useDataStore();
 const ipfsStore = useIpfsStore();

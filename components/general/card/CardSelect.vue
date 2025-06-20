@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative my-6 flex w-full cursor-pointer gap-4 rounded-md border p-4 text-sm hover:cursor-pointer"
+    class="relative my-3 flex w-full cursor-pointer gap-4 rounded-md border p-4 text-sm transition-colors duration-300 hover:border-white"
     :class="[
       selected ? 'border-yellow' : disabled ? 'border-bodyDark' : 'border-bg-lighter',
       { '!cursor-default opacity-60': disabled },

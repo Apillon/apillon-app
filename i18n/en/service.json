@@ -184,6 +184,7 @@
     "edit": "Edit service",
     "info": "Launch a service, receive API keys and start building your next dapp.",
     "new": "New service",
+    "quotaReached": "Quota has been reached. To create more services",
     "used": "Web3 services used"
   }
 }

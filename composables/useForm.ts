@@ -113,7 +113,10 @@ export default function useForm(base = 'form.label.collection') {
     );
   }
   function validateMaxSupply(_: FormItemRule, value: number): boolean {
-    return value <= NFT_MAX_SUPPLY && (metadataStore.form.smartContract.supplyLimited ? value > 0 : true);
+    return (
+      value <= NFT_MAX_SUPPLY &&
+      (metadataStore.form.smartContract.supplyLimited ? value > 0 && value <= metadataStore.metadata.length : true)
+    );
   }
   function validateDropStart(_: FormItemRule, value: number): boolean {
     return metadataStore.form.smartContract.dropPrice === 0 || value > Date.now();

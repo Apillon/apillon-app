@@ -9,6 +9,7 @@ export const useSimpletStore = defineStore('simplets', {
     loading: false,
     modalCreateVisible: false,
     pagination: createPagination(),
+    quotaReached: undefined as boolean | undefined,
     search: '',
     stepSimpletCreate: SimpletCreateStep.COLLECTION,
     archive: {
@@ -69,6 +70,7 @@ export const useSimpletStore = defineStore('simplets', {
       this.backend = {} as SimpletBackendInterface;
       this.items = [] as SimpletInterface[];
       this.templates = [] as SimpletTemplateInterface[];
+      this.quotaReached = undefined;
       this.search = '';
       this.stepSimpletCreate = SimpletCreateStep.COLLECTION;
       this.archive.items = [] as SimpletInterface[];
@@ -141,19 +143,22 @@ export const useSimpletStore = defineStore('simplets', {
       }
       return this.items;
     },
-
     async getSimplet(simpletUuid: string) {
       if (this.active?.simplet_uuid === simpletUuid && !isCacheExpired(LsCacheKeys.SIMPLET)) {
         return this.active;
       }
       return await this.fetchSimplet(simpletUuid);
     },
-
     async getBackend(backendUuid: string) {
       if (this.backend?.backend_uuid === backendUuid && !isCacheExpired(LsCacheKeys.SIMPLET_BACKEND)) {
         return this.backend;
       }
       return await this.fetchBackend(backendUuid);
+    },
+    async getSimpletQuota() {
+      if (this.quotaReached === undefined) {
+        await this.fetchSimpletQuota();
+      }
     },
 
     /**
@@ -252,6 +257,19 @@ export const useSimpletStore = defineStore('simplets', {
         window.$message.error(userFriendlyMsg(e));
       }
       return this.backend;
+    },
+
+    async fetchSimpletQuota() {
+      const dataStore = useDataStore();
+      await dataStore.waitOnPromises(false);
+      if (!dataStore.projectUuid) return;
+      try {
+        const res = await $api.get<SimpletQuotaResponse>(endpoints.simpletQuotaReached(dataStore.projectUuid));
+        this.quotaReached = res.data.quotaReached;
+      } catch (error: ApiError | any) {
+        this.quotaReached = undefined;
+        window.$message.error(userFriendlyMsg(error));
+      }
     },
   },
 

@@ -301,7 +301,7 @@ export const useDataStore = defineStore('data', {
 
     async fetchProjectsQuota() {
       try {
-        const res = await $api.get<ProjectsQuotaResponse>(endpoints.projectsQuota);
+        const res = await $api.get<BooleanResponse>(endpoints.projectsQuota);
         this.project.quotaReached = res.data;
       } catch (error: any) {
         this.project.quotaReached = undefined;

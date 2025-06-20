@@ -66,6 +66,11 @@ export enum FileUploadSessionStatus {
   VALIDATION_FAILED = 4,
 }
 
+export enum IpfsType {
+  CID = 'CID',
+  IPNS = 'IPNS',
+}
+
 declare global {
   type UploadedFileInfo = {
     CID: string | null;
@@ -272,7 +277,6 @@ declare global {
   interface FileDetailsResponse extends GeneralResponse<FileInterface> {}
   interface FileUploadRequestResponse extends GeneralResponse<FileUploadRequestInterface> {}
   interface FilesUploadRequestResponse extends GeneralResponse<S3FilesUploadRequestInterface> {}
-  interface FileUploadSessionResponse extends GeneralResponse<boolean> {}
   interface FileUploadsResponse extends GeneralItemsResponse<FileUploadInterface> {}
   interface FileUploadSessionsResponse extends GeneralItemsResponse<FileUploadSessionInterface> {}
   interface SessionDetailsResponse extends GeneralItemsResponse<FileUploadInterface> {}

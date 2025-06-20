@@ -96,7 +96,7 @@ async function passwordChangeRequest() {
   loading.value = true;
 
   try {
-    const res = await $api.post<PasswordResetRequestResponse>(endpoints.passwordResetRequest, formData);
+    const res = await $api.post<BooleanResponse>(endpoints.passwordResetRequest, formData);
 
     if (res.data) {
       message.success(t('form.success.requestPasswordChange'));

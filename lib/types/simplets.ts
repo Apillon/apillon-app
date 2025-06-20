@@ -110,4 +110,5 @@ declare global {
     tableName: string;
   }
   interface SimpletBackendResponse extends GeneralResponse<SimpletBackendInterface> {}
+  interface SimpletQuotaResponse extends GeneralResponse<{ quotaReached: boolean }> {}
 }

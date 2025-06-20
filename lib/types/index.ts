@@ -86,6 +86,7 @@ declare global {
     id: string;
     status: number;
   };
+  type BooleanResponse = GeneralResponse<boolean>;
   type SuccessResponse = GeneralResponse<{ success: boolean }>;
 
   interface DeleteResponse {
