@@ -179,6 +179,7 @@ async function createCollection() {
 
     metadataStore.stepCollectionCreate = CollectionCreateStep.DEPLOYED;
 
+    paymentStore.fetchCredits();
     emit('onCreated', collection);
   } catch (error) {
     message.error(userFriendlyMsg(error));

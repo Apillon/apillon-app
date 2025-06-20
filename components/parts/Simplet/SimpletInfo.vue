@@ -38,7 +38,7 @@ const data = computed(() => {
     },
     {
       label: t('simplet.uuid'),
-      value: simpletStore.active.simplet_uuid,
+      value: simpletStore.active.simpletDeploy_uuid,
       copy: true,
     },
     {

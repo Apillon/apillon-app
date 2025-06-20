@@ -140,6 +140,7 @@
     "INVALID_EVM_ADDRESS": "Invalid EVM address, please enter a valid EVM address",
     "INVALID_SUBSTRATE_ADDRESS": "Invalid Substrate address, please enter a valid Substrate address",
     "MAX_COLLECTIONS_REACHED": "Max collections reached",
+    "WALLET_CREATION_FAILED": "Wallet creation failed. Please try again or contact support if the issue persists.",
     "MAX_NUMBER_OF_EMBEDDED_WALLET_INTEGRATIONS_REACHED": "Max number of Embedded Wallet integrations reached",
     "CREDIT_BALANCE_TOO_LOW": "Credit balance too low",
     "COMPUTING_ACCOUNT_ADDRESS_NOT_PRESENT": "Account address is missing",

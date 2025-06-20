@@ -52,7 +52,7 @@
 const props = defineProps({
   type: { type: Object as PropType<SimpletTemplateInterface>, default: null },
 });
-const { t } = useI18n();
+const { t, te } = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
@@ -206,6 +206,15 @@ async function createSimplet(simpletUuid: string) {
     simpletStore.active = data.data;
     message.success(t('simplet.wizard.deployingInfo'));
 
+    if (data.errors?.length) {
+      data.errors.forEach(e => {
+        if (te(`errors.${e}`)) {
+          message.warning(t(`errors.${e}`));
+        }
+      });
+    }
+
+    paymentStore.fetchCredits();
     return data;
   } catch (e) {
     message.error(userFriendlyMsg(e));
