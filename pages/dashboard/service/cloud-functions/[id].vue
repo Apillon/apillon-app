@@ -7,7 +7,7 @@
     <slot>
       <n-space v-if="cloudFunctionStore.hasJobs" class="pb-8" :size="32" vertical>
         <ActionsCloudFunctionsJobs />
-        <TableComputingCloudFunctionJobs />
+        <TableCloudFunctionsJobs />
       </n-space>
       <div v-else class="flex h-full flex-col items-center justify-center">
         <n-space size="large" class="mb-8 self-end">

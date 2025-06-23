@@ -2,6 +2,7 @@
   <Heading
     :back="{ name: 'dashboard-service-cloud-functions' }"
     docs="https://wiki.apillon.io/web3-services/8-web3-cloud-functions.html"
+    hide-details
   >
     <div>
       <h2>{{ cloudFunctionStore.active.name }}</h2>
@@ -16,16 +17,11 @@
       <MenuCloudFunction />
     </template>
   </Heading>
-
-  <W3Warn v-model:show="modalW3WarnVisible">
-    {{ $t('w3Warn.computing.new') }}
-  </W3Warn>
 </template>
 
 <script lang="ts" setup>
 const config = useRuntimeConfig();
 const cloudFunctionStore = useCloudFunctionStore();
-const modalW3WarnVisible = ref<boolean>(false);
 
 const subdomain = computed(() =>
   cloudFunctionStore.active?.endpointUrl || config.public.ENV === AppEnv.DEV

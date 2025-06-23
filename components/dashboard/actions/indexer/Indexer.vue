@@ -12,10 +12,10 @@
       </n-button>
 
       <!-- Create new indexer -->
-      <n-button size="medium" :disabled="authStore.isAdmin()" @click="showModalNewIndexer = true">
-        <span class="icon-file mr-2 text-xl text-primary"></span>
-        <span class="text-primary">{{ $t('indexer.new') }}</span>
-      </n-button>
+      <Btn inner-class="flex gap-2 items-center" :disabled="authStore.isAdmin()" @click="showModalNewIndexer = true">
+        <span class="icon-add text-xl"></span>
+        <span>{{ $t('indexer.new') }}</span>
+      </Btn>
     </n-space>
   </n-space>
   <!-- Modal - Create Indexer -->

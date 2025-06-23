@@ -3,13 +3,13 @@
     v-if="baseUri"
     :bordered="false"
     :columns="columns"
-    :data="nftStore.items"
-    :loading="nftStore.loading"
-    :pagination="nftStore.pagination"
+    :data="nfts"
+    :loading="loading"
+    :pagination="pagination"
     :row-key="rowKey"
     remote
-    @update:page="(page: number) => handlePageChange(page, nftStore.pagination.pageSize)"
-    @update:page-size="(pageSize: number) => handlePageChange(nftStore.pagination.page, pageSize)"
+    @update:page="(page: number) => handlePageChange(page, pagination.pageSize)"
+    @update:page-size="(pageSize: number) => handlePageChange(pagination.page, pageSize)"
   />
 </template>
 
@@ -18,23 +18,24 @@ const props = defineProps({
   baseUri: { type: String, default: null },
   total: { type: Number, default: 0 },
 });
+const message = useMessage();
 
-const nftStore = useNftStore();
+const uri = new URL(props.baseUri);
+const loading = ref<boolean>(false);
+const nfts = ref<MetadataItem[]>([]);
+const pagination = reactive(createPagination());
 
 onMounted(() => {
-  const parsedUri = new URL(props.baseUri);
-  nftStore.baseUri = parsedUri.origin + parsedUri.pathname;
-  nftStore.token = parsedUri.search;
-  nftStore.pagination.itemCount = props.total;
+  pagination.itemCount = props.total;
   handlePageChange();
 });
 
 const createColumns = (): NDataTableColumns<MetadataItem> => {
-  return (nftStore.items.length ? Object.keys(nftStore.items[0]) : []).map(key => {
+  return (nfts.value.length ? Object.keys(nfts.value[0]) : []).map(key => {
+    const col = { key: key, title: key };
     if (key === 'image') {
       return {
-        key: key,
-        title: key,
+        ...col,
         minWidth: 90,
         render(row: MetadataItem) {
           return h('img', { src: row.image, class: 'max-h-16  mx-auto', alt: row.image, title: row.name }, {});
@@ -43,9 +44,7 @@ const createColumns = (): NDataTableColumns<MetadataItem> => {
     }
     if (key === 'attributes') {
       return {
-        key: key,
-        title: key,
-        minWidth: 120,
+        ...col,
         render(row: MetadataItem) {
           return h(
             'pre',
@@ -56,25 +55,43 @@ const createColumns = (): NDataTableColumns<MetadataItem> => {
       };
     }
 
-    return {
-      key: key,
-      title: key,
-      minWidth: 140,
-    };
+    return col;
   });
 };
 
-const rowKey = (row: MetadataItem) => row.name;
 const columns = ref(createColumns());
+const rowKey = (row: MetadataItem) => row.name;
+const loadMetadata = async (url: string): Promise<MetadataItem> => await (await fetch(url)).json();
 
 /** On page change, load data */
 async function handlePageChange(page: number = 1, limit: number = PageSize.SM) {
-  if (!nftStore.loading) {
-    await nftStore.fetchNFTs(page, limit);
-
-    nftStore.pagination.page = page;
-    nftStore.pagination.pageSize = limit;
+  if (!loading.value) {
+    nfts.value = await fetchNFTs(page, limit);
+    pagination.page = page;
+    pagination.pageSize = limit;
   }
   columns.value = createColumns();
+}
+
+async function fetchNFTs(page = 1, limit = PageSize.SM): Promise<MetadataItem[]> {
+  loading.value = true;
+  try {
+    const data: Record<number, MetadataItem> = {};
+    await Promise.all(
+      Array.from({ length: limit }).map(async (v, i) => {
+        const id = (page - 1) * limit + i + 1;
+        if (id <= Number(pagination.itemCount || 0)) {
+          data[id] = await loadMetadata(`${uri.origin}${uri.pathname}${id}.json/${uri.search}`).catch();
+        }
+      })
+    );
+    loading.value = false;
+    return Object.values(data).filter(d => !!d);
+  } catch (error: any) {
+    /** Show error message */
+    message.error(userFriendlyMsg(error));
+  }
+  loading.value = false;
+  return [];
 }
 </script>

@@ -15,10 +15,10 @@
         {{ $t('general.refresh') }}
       </n-button>
 
-      <n-button size="medium" @click="showModalNewEmbeddedWallet = true">
-        <span class="icon-create-folder mr-2 text-xl text-primary"></span>
-        <span class="text-primary">{{ $t('embeddedWallet.createNew') }}</span>
-      </n-button>
+      <Btn inner-class="flex gap-2 items-center" @click="showModalNewEmbeddedWallet = true">
+        <span class="icon-add text-xl"></span>
+        <span>{{ $t('embeddedWallet.createNew') }}</span>
+      </Btn>
     </n-space>
   </n-space>
 

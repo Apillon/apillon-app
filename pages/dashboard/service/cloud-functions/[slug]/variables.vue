@@ -7,7 +7,7 @@
     <slot>
       <n-space v-if="cloudFunctionStore.hasVariables" class="pb-8" :size="32" vertical>
         <ActionsCloudFunctionsEnvironment />
-        <TableComputingCloudFunctionVariables v-if="cloudFunctionStore.hasVariables" />
+        <TableCloudFunctionsVariables v-if="cloudFunctionStore.hasVariables" />
       </n-space>
       <n-space v-else class="pb-8" :size="32" vertical>
         <div class="flex h-full items-center justify-center">

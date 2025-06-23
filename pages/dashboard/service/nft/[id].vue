@@ -142,7 +142,6 @@ enum Tabs {
 const { t } = useI18n();
 const router = useRouter();
 const { params } = useRoute();
-const nftStore = useNftStore();
 const dataStore = useDataStore();
 const ipfsStore = useIpfsStore();
 const bucketStore = useBucketStore();
@@ -179,7 +178,6 @@ onMounted(async () => {
   /** Reset state if user opens different collection */
   if (collectionUuid.value !== collectionStore.active?.collection_uuid) {
     metadataStore.resetMetadata();
-    nftStore.items = [];
   }
 
   if (!currentCollection?.collection_uuid) {

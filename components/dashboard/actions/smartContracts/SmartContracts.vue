@@ -27,14 +27,15 @@
       </n-button>
 
       <!-- Create new collection -->
-      <n-button
-        size="medium"
+      <Btn
+        inner-class="flex gap-2 items-center"
+        type="primary"
         :disabled="authStore.isAdmin()"
         @click="router.push({ name: 'dashboard-service-smart-contracts-new' })"
       >
-        <span class="icon-file mr-2 text-xl text-primary"></span>
-        <span class="text-primary">{{ $t('smartContracts.new') }}</span>
-      </n-button>
+        <span class="icon-add text-xl"></span>
+        <span>{{ $t('smartContracts.new') }}</span>
+      </Btn>
     </n-space>
   </n-space>
 </template>

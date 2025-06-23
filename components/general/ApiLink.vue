@@ -5,7 +5,7 @@
     </h5>
     <TableEllipsis
       class="max-w-sm rounded-lg bg-white px-4 py-[10px] !text-black lg:max-w-md xl:max-w-lg xxl:max-w-none"
-      color="text-black"
+      color="!text-black"
       :text="url"
     />
   </div>

@@ -6,7 +6,7 @@
     <slot>
       <n-space v-if="cloudFunctionStore.hasCloudFunctions" class="pb-8" :size="32" vertical>
         <ActionsCloudFunctions archive />
-        <TableComputingCloudFunctions :functions="cloudFunctionStore.archive" archive />
+        <TableCloudFunctions :functions="cloudFunctionStore.archive" archive />
       </n-space>
       <Empty
         v-else

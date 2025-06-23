@@ -13,7 +13,7 @@
             :src="createThumbnailUrl(metadataStore.form.visual.logo)"
             class="absolute left-6 top-20 mt-2 h-28 w-28 rounded-full object-cover object-center"
           />
-          <div v-else class="absolute left-6 top-10 h-28 w-28 rounded-full bg-bg-dark" />
+          <div v-else class="absolute left-6 top-20 h-28 w-28 rounded-full bg-bg-dark" />
         </div>
       </ReviewTable>
     </template>
@@ -30,9 +30,6 @@
 </template>
 
 <script setup lang="ts">
-import { chainCurrency } from '~/lib/utils/chain';
-import { timestampToDateAndTime } from '~/lib/utils/dates';
-
 defineEmits(['back', 'deploy']);
 const { t } = useI18n();
 const paymentStore = usePaymentStore();

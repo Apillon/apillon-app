@@ -15,13 +15,11 @@
       />
     </div>
 
-    <template #info>
-      <div class="mb-3">
-        <n-button size="medium" @click="showModalEditEmbeddedWallet = true">
-          <span class="icon-edit mr-2 text-xl text-primary"></span>
-          <span class="text-primary">{{ $t('embeddedWallet.editIntegration') }}</span>
-        </n-button>
-      </div>
+    <template #links>
+      <n-button size="medium" @click="showModalEditEmbeddedWallet = true">
+        <span class="icon-edit mr-2 text-xl text-primary"></span>
+        <span class="text-primary">{{ $t('embeddedWallet.editIntegration') }}</span>
+      </n-button>
 
       <!-- Modal - Create wallet -->
       <modal v-model:show="showModalEditEmbeddedWallet" :title="$t('embeddedWallet.edit')">

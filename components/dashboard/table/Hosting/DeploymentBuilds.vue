@@ -32,15 +32,7 @@ const createColumns = (): NDataTableColumns<DeploymentBuildInterface> => {
       renderExpand: rowData => {
         return h(
           'pre',
-          {
-            style: {
-              margin: '-12px',
-              padding: '12px',
-              maxHeight: '400px', // Limit the height
-              overflowY: 'auto', // Add vertical scrollbar
-              whiteSpace: 'pre-wrap', // Preserve whitespace and wrap text
-            },
-          },
+          { class: 'p-3 -m-3 text-sm overflow-y-auto max-h-96 whitespace-pre-wrap scrollable' },
           rowData.logs || ''
         );
       },

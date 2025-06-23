@@ -1,5 +1,5 @@
 <template>
-  <div v-if="chainId" class="flex items-center gap-2">
+  <div v-if="chainId" class="inline-flex items-center gap-2">
     <NuxtIcon
       :name="`logo/${getChainIconName(chainId)}`"
       class="inline-flex text-xl"

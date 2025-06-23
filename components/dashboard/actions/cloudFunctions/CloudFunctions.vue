@@ -16,15 +16,15 @@
       </n-button>
 
       <!-- Create new cloudFunction -->
-      <n-button
+      <Btn
         v-if="cloudFunctionStore.hasCloudFunctions && !archive"
-        size="medium"
+        inner-class="flex gap-2 items-center"
         :disabled="authStore.isAdmin()"
         @click="modalCreateCloudFunctionVisible = true"
       >
-        <span class="icon-create-folder mr-2 text-xl text-primary"></span>
-        <span class="text-primary">{{ $t('computing.cloudFunctions.new') }}</span>
-      </n-button>
+        <span class="icon-add text-xl"></span>
+        <span>{{ $t('computing.cloudFunctions.new') }}</span>
+      </Btn>
     </n-space>
   </n-space>
 

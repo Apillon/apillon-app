@@ -8,7 +8,6 @@
     <n-space size="large">
       <!-- Refresh collections -->
       <n-button
-        size="medium"
         :loading="archive ? simpletStore.archive.loading : simpletStore.loading"
         @click="simpletStore.fetchSimplets(1, PAGINATION_LIMIT, archive)"
       >
@@ -17,14 +16,15 @@
       </n-button>
 
       <!-- Create new collection -->
-      <n-button
+      <Btn
         v-if="simpletStore.hasSimplets"
-        size="medium"
+        inner-class="flex gap-2 items-center"
         :disabled="authStore.isAdmin()"
         @click="simpletStore.modalCreateVisible = true"
       >
-        <span class="text-primary">{{ $t('simplet.create') }}</span>
-      </n-button>
+        <span class="icon-add text-xl"></span>
+        <span>{{ $t('simplet.create') }}</span>
+      </Btn>
     </n-space>
   </n-space>
 

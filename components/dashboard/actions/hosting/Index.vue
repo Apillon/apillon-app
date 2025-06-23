@@ -5,10 +5,14 @@
     </div>
 
     <n-space size="large">
-      <n-button :disabled="authStore.isAdmin()" @click="showModalNewWebsite = true">
-        <span class="icon-add mr-2 text-xl text-primary"></span>
-        <span class="text-primary">{{ $t('hosting.website.add') }}</span>
+      <n-button :loading="websiteStore.loading" @click="websiteStore.fetchWebsites(archive)">
+        <span class="icon-refresh mr-2 text-xl"></span>
+        {{ $t('general.refresh') }}
       </n-button>
+      <Btn inner-class="flex gap-2 items-center" :disabled="authStore.isAdmin()" @click="showModalNewWebsite = true">
+        <span class="icon-add text-xl"></span>
+        <span>{{ $t('hosting.website.add') }}</span>
+      </Btn>
     </n-space>
   </n-space>
 

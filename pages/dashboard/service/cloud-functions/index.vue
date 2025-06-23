@@ -24,7 +24,7 @@
     <slot>
       <n-space class="pb-8" :size="32" vertical>
         <ActionsCloudFunctions />
-        <TableComputingCloudFunctions :functions="cloudFunctionStore.items" />
+        <TableCloudFunctions :functions="cloudFunctionStore.items" />
       </n-space>
     </slot>
   </Dashboard>
