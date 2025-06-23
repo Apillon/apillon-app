@@ -234,6 +234,7 @@ async function createSimplet(simpletUuid: string) {
     }
 
     paymentStore.fetchCredits();
+    simpletStore.quotaReached = undefined;
     return data;
   } catch (e) {
     message.error(userFriendlyMsg(e));

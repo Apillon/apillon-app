@@ -14,8 +14,6 @@
 </template>
 
 <script lang="ts" setup>
-import { CodeBlock } from 'vuejs-code-block';
-
 const props = defineProps({
   baseUri: { type: String, default: null },
   total: { type: Number, default: 0 },

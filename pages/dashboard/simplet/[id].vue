@@ -20,11 +20,13 @@
 </template>
 
 <script lang="ts" setup>
-const { t } = useI18n();
 const router = useRouter();
-const { params } = useRoute();
 const simpletStore = useSimpletStore();
 const websiteStore = useWebsiteStore();
+
+const { t } = useI18n();
+const { params } = useRoute();
+const { checkUnfinishedSimplet } = useSimplet();
 
 const pageLoading = ref<boolean>(true);
 
@@ -44,12 +46,17 @@ onMounted(async () => {
   }
   pageLoading.value = false;
 
+  loadSimpletData();
+  checkUnfinishedSimplet(loadSimpletData);
+});
+
+const loadSimpletData = async () => {
   if (simpletStore.active.frontend_uuid) {
-    await websiteStore.getWebsite(simpletStore.active.frontend_uuid);
+    websiteStore.getWebsite(simpletStore.active.frontend_uuid);
   }
 
   if (simpletStore.active.backend_uuid) {
-    await simpletStore.getBackend(simpletStore.active.backend_uuid);
+    simpletStore.getBackend(simpletStore.active.backend_uuid);
   }
-});
+};
 </script>

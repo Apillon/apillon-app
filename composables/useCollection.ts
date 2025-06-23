@@ -16,10 +16,16 @@ export default function useCollection() {
 
   const loading = ref<boolean>(false);
   const formRef = ref<NFormInst | null>(null);
+
+  /** Polling */
   let collectionInterval: any = null as any;
+  const collectionsInterval: any = null as any;
+  let transactionInterval: any = null as any;
 
   onUnmounted(() => {
     clearInterval(collectionInterval);
+    clearInterval(collectionsInterval);
+    clearInterval(transactionInterval);
   });
 
   const isChainAvailable = (chainId: number) =>
@@ -199,7 +205,7 @@ export default function useCollection() {
     metadataStore.resetMetadata();
   }
 
-  /** Collection polling */
+  /** Polling */
   function checkUnfinishedCollections() {
     const unfinishedCollection = collectionStore.items.find(
       collection =>
@@ -221,6 +227,51 @@ export default function useCollection() {
       }
     }, 30000);
   }
+  function checkUnfinishedCollection() {
+    if (collectionStore.active.collectionStatus === CollectionStatus.CREATED) {
+      return;
+    }
+    if (collectionStore.active.collectionStatus >= CollectionStatus.DEPLOYED) {
+      clearInterval(collectionInterval);
+      return;
+    }
+
+    clearInterval(collectionInterval);
+    collectionInterval = setInterval(async () => {
+      const collection = await collectionStore.fetchCollection(collectionStore.active.collection_uuid);
+      if (!collection || collection.collectionStatus >= CollectionStatus.DEPLOYED) {
+        if (collection) {
+          collectionStore.active = collection;
+          await collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid, false);
+        }
+        clearInterval(collectionInterval);
+        checkUnfinishedTransactions();
+      }
+    }, 10000);
+  }
+  function checkUnfinishedTransactions() {
+    const unfinishedTransaction = collectionStore.transaction.find(
+      transaction => transaction.transactionStatus < TransactionStatus.CONFIRMED
+    );
+    if (unfinishedTransaction === undefined) {
+      clearInterval(transactionInterval);
+      return;
+    }
+
+    clearInterval(transactionInterval);
+    transactionInterval = setInterval(async () => {
+      const transactions = await collectionStore.fetchCollectionTransactions(
+        collectionStore.active.collection_uuid,
+        false
+      );
+      const transaction = transactions.find(transaction => transaction.id === unfinishedTransaction.id);
+      if (!transaction || transaction.transactionStatus >= TransactionStatus.CONFIRMED) {
+        clearInterval(transactionInterval);
+        collectionStore.active =
+          (await collectionStore.fetchCollection(collectionStore.active.collection_uuid)) || collectionStore.active;
+      }
+    }, 10000);
+  }
 
   return {
     addressLabel,
@@ -238,6 +289,8 @@ export default function useCollection() {
     nftChains,
     substrateChains,
     checkUnfinishedCollections,
+    checkUnfinishedCollection,
+    checkUnfinishedTransactions,
     collectionEndpoint,
     disablePastDate,
     disablePastTime,

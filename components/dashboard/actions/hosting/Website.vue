@@ -15,9 +15,9 @@
         <n-button v-if="!websiteStore.active.isSimplet" class="w-full" @click="showUpdateModal">
           {{ $t('hosting.deploy.updateConfig') }}
         </n-button>
-        <n-button v-if="deploymentStore.deploymentConfig?.id" class="w-full" @click="modalVariablesVisible = true">
+        <!-- <n-button v-if="deploymentStore.deploymentConfig?.id" class="w-full" @click="modalVariablesVisible = true">
           {{ $t('hosting.menu.envVars') }}
-        </n-button>
+        </n-button> -->
         <n-button
           v-if="websiteStore.active?.website_uuid"
           class="w-full"

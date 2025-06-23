@@ -150,6 +150,7 @@ const storageStore = useStorageStore();
 const paymentStore = usePaymentStore();
 const metadataStore = useMetadataStore();
 const collectionStore = useCollectionStore();
+const { checkUnfinishedCollection, checkUnfinishedTransactions } = useCollection();
 
 const pageLoading = ref<boolean>(true);
 const loadingBucket = ref<boolean>(true);
@@ -165,10 +166,6 @@ const transactionHash = ref<string | null>('');
 const logoImage = ref<Optional<string> | undefined>();
 const coverImage = ref<Optional<string> | undefined>();
 const tab = ref(collectionStore.active.collectionStatus === CollectionStatus.CREATED ? Tabs.NFTs : Tabs.DEPLOYS);
-
-/** Polling */
-let collectionInterval: any = null as any;
-let transactionInterval: any = null as any;
 
 useHead({
   title: t('dashboard.nav.nft'),
@@ -198,13 +195,9 @@ onMounted(async () => {
     storageStore.getStorageInfo();
     paymentStore.getPriceList();
 
-    checkIfCollectionUnfinished();
+    checkUnfinishedCollection();
     checkUnfinishedTransactions();
   }
-});
-onUnmounted(() => {
-  clearInterval(transactionInterval);
-  clearInterval(collectionInterval);
 });
 
 /** Watch collectionStatus, if status changed from Created to Initiated, start polling */
@@ -212,7 +205,7 @@ watch(
   () => collectionStore.active?.collectionStatus,
   (status, oldStatus) => {
     if (status === CollectionStatus.DEPLOY_INITIATED && oldStatus === CollectionStatus.CREATED) {
-      checkIfCollectionUnfinished();
+      checkUnfinishedCollection();
     }
   }
 );
@@ -299,59 +292,5 @@ function onNftTransferred() {
 function onBaseUriChanged(collection: CollectionInterface) {
   modalSetBaseUriVisible.value = false;
   collectionStore.active = collection;
-}
-
-/** Collection polling */
-function checkIfCollectionUnfinished() {
-  if (collectionStore.active.collectionStatus === CollectionStatus.CREATED) {
-    return;
-  }
-  if (collectionStore.active.collectionStatus >= CollectionStatus.DEPLOYED) {
-    clearInterval(collectionInterval);
-    return;
-  }
-
-  clearInterval(collectionInterval);
-  collectionInterval = setInterval(async () => {
-    const collection = await collectionStore.fetchCollection(collectionUuid.value);
-    if (!collection || collection.collectionStatus >= CollectionStatus.DEPLOYED) {
-      if (collection) {
-        collectionStore.active = collection;
-        await collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid, false);
-      }
-      clearInterval(collectionInterval);
-
-      /** On collection deploy, start transaction polling */
-      checkUnfinishedTransactions();
-    }
-  }, 10000);
-}
-
-/** Transactions polling */
-function checkUnfinishedTransactions() {
-  const unfinishedTransaction = collectionStore.transaction.find(
-    transaction => transaction.transactionStatus < TransactionStatus.CONFIRMED
-  );
-  if (unfinishedTransaction === undefined) {
-    clearInterval(transactionInterval);
-    return;
-  }
-
-  clearInterval(transactionInterval);
-  transactionInterval = setInterval(async () => {
-    const transactions = await collectionStore.fetchCollectionTransactions(
-      collectionStore.active.collection_uuid,
-      false
-    );
-    const transaction = transactions.find(transaction => transaction.id === unfinishedTransaction.id);
-    if (!transaction || transaction.transactionStatus >= TransactionStatus.CONFIRMED) {
-      clearInterval(transactionInterval);
-
-      const newCollection = await collectionStore.fetchCollection(collectionUuid.value);
-      if (newCollection) {
-        collectionStore.active = newCollection;
-      }
-    }
-  }, 10000);
 }
 </script>

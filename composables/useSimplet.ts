@@ -25,6 +25,7 @@ export default function useSimplet() {
   const { te, tm, rt } = useI18n();
   const simpletStore = useSimpletStore();
 
+  let simpletInterval: any = null as any;
   let simpletsInterval: any = null as any;
 
   onUnmounted(() => {
@@ -74,12 +75,28 @@ export default function useSimplet() {
   }
 
   /** Simplet polling */
+  const isSimpletStatusFinished = (simplet?: SimpletInterface) =>
+    !simplet?.simpletDeploy_uuid || Math.min(simplet.backendStatus, simplet.frontendStatus) >= ResourceStatus.ONLINE;
+
+  function checkUnfinishedSimplet(onFinish: Func = () => {}) {
+    if (isSimpletStatusFinished(simpletStore.active)) {
+      clearInterval(simpletInterval);
+      return;
+    }
+
+    simpletInterval = setInterval(async () => {
+      const simplet = await simpletStore.fetchSimplet(simpletStore.active.simpletDeploy_uuid);
+      if (isSimpletStatusFinished(simplet)) {
+        simpletStore.active = simplet || simpletStore.active;
+        clearInterval(simpletInterval);
+        onFinish();
+      }
+    }, 10000);
+  }
   function checkUnfinishedSimplets(archive = false) {
     clearInterval(simpletsInterval);
 
-    const unfinishedSimplet = simpletStore.items.find(
-      simplet => Math.min(simplet.backendStatus, simplet.frontendStatus) < ResourceStatus.ONLINE
-    );
+    const unfinishedSimplet = simpletStore.items.find(simplet => !isSimpletStatusFinished(simplet));
     if (unfinishedSimplet === undefined) return;
 
     simpletsInterval = setInterval(async () => {
@@ -90,7 +107,7 @@ export default function useSimplet() {
         false
       );
       const simplet = simplets.find(simplet => simplet.simpletDeploy_uuid === unfinishedSimplet.simpletDeploy_uuid);
-      if (!simplet || Math.min(simplet.backendStatus, simplet.frontendStatus) >= ResourceStatus.ONLINE) {
+      if (isSimpletStatusFinished(simplet)) {
         clearInterval(simpletsInterval);
       }
     }, 10000);
@@ -99,6 +116,7 @@ export default function useSimplet() {
   return {
     simplets,
     simpletNames,
+    checkUnfinishedSimplet,
     checkUnfinishedSimplets,
     generateContent,
     translate,

@@ -73,7 +73,7 @@
       <FormSimpletSmtp ref="simpletFormSmtpRef" class="mx-auto max-w-lg" />
 
       <template #footer>
-        <Btn class="float-right" type="primary" @click="submitFormSmtp()">
+        <Btn class="float-right" type="primary" :loading="loadingSmtp" @click="submitFormSmtp()">
           {{ $t('simplet.wizard.smtp.edit') }}
         </Btn>
       </template>
@@ -88,8 +88,8 @@
       </div>
 
       <template #footer>
-        <Btn class="float-right" type="primary" @click="submitFormMysql()">
-          {{ $t('simplet.wizard.smtp.edit') }}
+        <Btn class="float-right" type="primary" :loading="loadingMysql" @click="submitFormMysql()">
+          {{ $t('simplet.mysql.edit') }}
         </Btn>
       </template>
     </ModalFullScreen>
@@ -105,6 +105,8 @@ const websiteStore = useWebsiteStore();
 const simpletFormSmtpRef = useTemplateRef('simpletFormSmtpRef');
 
 const formRef = ref<NFormInst | null>(null);
+const loadingSmtp = ref<boolean>(false);
+const loadingMysql = ref<boolean>(false);
 const modalSmtpVisible = ref<boolean>(false);
 const modalMysqlVisible = ref<boolean>(false);
 
@@ -137,6 +139,7 @@ function openModalMysql() {
 
 async function submitFormSmtp() {
   if (await simpletFormSmtpRef.value?.handleSubmit()) {
+    loadingSmtp.value = true;
     try {
       const bodyData = {
         project_uuid: dataStore.projectUuid,
@@ -149,29 +152,31 @@ async function submitFormSmtp() {
           { key: 'SMTP_EMAIL_FROM', value: simpletStore.form.smtp.senderEmail },
         ],
       };
-      const { data } = await $api.post<SimpletResponse>(
+      const { data } = await $api.post<SimpletBackendResponse>(
         endpoints.simpletBackendRedeploy(simpletStore.active.backend_uuid),
         bodyData
       );
+      simpletStore.backend = data;
+      modalSmtpVisible.value = false;
       message.success(t('simplet.wizard.redeployingInfo'));
     } catch (e) {
       message.error(userFriendlyMsg(e));
     }
+    loadingSmtp.value = false;
   }
 }
 
 async function submitFormMysql(e?: Event | MouseEvent) {
   e?.preventDefault();
-  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      // errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
-    } else {
+  formRef.value?.validate(async errors => {
+    if (!errors) {
       await updateMysql();
     }
   });
 }
 
 async function updateMysql() {
+  loadingMysql.value = true;
   try {
     const bodyData = {
       project_uuid: dataStore.projectUuid,
@@ -184,14 +189,17 @@ async function updateMysql() {
         { key: 'MYSQL_ROOT_PASSWORD', value: simpletStore.form.mysql.password },
       ],
     };
-    const { data } = await $api.post<SimpletResponse>(
+    const { data } = await $api.post<SimpletBackendResponse>(
       endpoints.simpletBackendRedeploy(simpletStore.active.backend_uuid),
       bodyData
     );
+    simpletStore.backend = data;
+    modalMysqlVisible.value = false;
     message.success(t('simplet.wizard.redeployingInfo'));
   } catch (e) {
     message.error(userFriendlyMsg(e));
   }
+  loadingMysql.value = false;
 }
 
 async function redeploy(uuid: string) {
