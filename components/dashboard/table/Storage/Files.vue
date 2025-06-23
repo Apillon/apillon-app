@@ -1,6 +1,6 @@
 <template>
   <div class="pb-8">
-    <DataTable
+    <n-data-table
       ref="tableRef"
       v-bind="$attrs"
       v-model:checked-row-keys="checkedRowKeys"

@@ -41,7 +41,7 @@
 
 <script lang="ts" setup>
 import type { DataTableColumns } from 'naive-ui';
-import { NButton, NInput } from 'naive-ui';
+import { NInput } from 'naive-ui';
 import { PAGINATION_LIMIT } from '~/lib/values/general.values';
 
 const { imageByName } = useMetadata();

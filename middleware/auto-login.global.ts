@@ -32,7 +32,6 @@ export default defineNuxtRouteMiddleware(to => {
   }
 
   const config = useRuntimeConfig();
-  console.debug('API URL:', config.public.apiUrl);
   $api.setBaseUrl(config.public.apiUrl);
 
   authStore.initUser();

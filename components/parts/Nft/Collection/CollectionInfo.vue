@@ -1,16 +1,16 @@
 <template>
   <div class="flex h-full flex-col justify-between">
     <div class="relative mb-9 min-h-32 w-full flex-auto rounded-lg bg-bg-lighter">
-      <Spinner v-if="loadingImages" />
+      <Spinner v-if="loading" />
       <template v-else>
         <Image
           v-if="coverImage"
-          :src="coverImage.link"
+          :src="coverImage"
           class="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 rounded-lg object-cover object-center"
         />
         <Image
-          v-if="logo"
-          :src="logo.link"
+          v-if="logoImage"
+          :src="logoImage"
           class="absolute left-6 top-10 h-28 w-28 rounded-full object-cover object-center"
         />
         <div v-else class="absolute left-6 top-10 h-28 w-28 rounded-full bg-bg-dark" />
@@ -23,29 +23,12 @@
 <script lang="ts" setup>
 const props = defineProps({
   baseUriLink: { type: String, default: null },
+  coverImage: { type: String, default: null },
+  logoImage: { type: String, default: null },
+  loading: { type: Boolean, default: false },
 });
 const { t } = useI18n();
-const bucketStore = useBucketStore();
 const collectionStore = useCollectionStore();
-
-const loadingImages = ref<boolean>(true);
-const logo = ref<BucketItemInterface | undefined>();
-const coverImage = ref<BucketItemInterface | undefined>();
-
-onMounted(async () => {
-  await bucketStore.fetchDirectoryContent({
-    bucketUuid: collectionStore.active.bucket_uuid,
-    ...PARAMS_ALL_ITEMS,
-  });
-
-  logo.value = bucketStore.folder.items.find(item => item.type === BucketItemType.FILE && item.name.includes('logo'));
-  coverImage.value = bucketStore.folder.items.find(
-    item => item.type === BucketItemType.FILE && item.name.includes('cover')
-  );
-
-  await sleep(10);
-  loadingImages.value = false;
-});
 
 const data = computed(() => {
   return [

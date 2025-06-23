@@ -8,7 +8,12 @@
       <n-space class="pb-8" :size="32" vertical>
         <div class="flex gap-8">
           <div class="card-light flex-1 rounded-lg px-6 py-4">
-            <NftCollectionInfo :base-uri-link="collectionBaseUri" />
+            <NftCollectionInfo
+              :base-uri-link="collectionBaseUri"
+              :cover-image="coverImage || ''"
+              :logo-image="logoImage || ''"
+              :loading="loadingBucket"
+            />
           </div>
 
           <div class="card max-w-64 px-6 py-4">
@@ -61,13 +66,16 @@
             <slot>
               <div v-if="collectionStore.active.collectionStatus === CollectionStatus.CREATED">
                 <p class="my-4">{{ $t('nft.transaction.empty') }}</p>
-                <!-- Add NFT -->
                 <n-button @click="$router.push(`/dashboard/service/nft/${collectionStore.active.collection_uuid}/add`)">
                   <span class="icon-add mr-2 text-xl text-primary"></span>
                   <span class="text-primary">{{ $t('nft.add') }}</span>
                 </n-button>
               </div>
-              <!-- Links to NFT templates -->
+              <TableNftNfts
+                v-else-if="collectionBaseUri && collectionMaxSupply"
+                :base-uri="collectionBaseUri"
+                :total="collectionMaxSupply"
+              />
               <NftPreviewFinish
                 v-else-if="collectionStore.active.chainType === ChainType.EVM && !collectionStore.active.websiteUuid"
                 :chain="collectionStore.active.chain"
@@ -134,28 +142,33 @@ enum Tabs {
 const { t } = useI18n();
 const router = useRouter();
 const { params } = useRoute();
+const nftStore = useNftStore();
 const dataStore = useDataStore();
 const ipfsStore = useIpfsStore();
+const bucketStore = useBucketStore();
 const storageStore = useStorageStore();
 const paymentStore = usePaymentStore();
 const metadataStore = useMetadataStore();
 const collectionStore = useCollectionStore();
 
 const pageLoading = ref<boolean>(true);
+const loadingBucket = ref<boolean>(true);
 const modalMintCollectionVisible = ref<boolean | null>(false);
 const modalBurnTokensVisible = ref<boolean | null>(false);
 const modalTransferOwnershipVisible = ref<boolean | null>(false);
 const modalSetBaseUriVisible = ref<boolean | null>(false);
+
+const collectionUuid = ref<string>(`${params?.id}`);
+const collectionBaseUri = ref<string>();
+const collectionMaxSupply = ref<number>(0);
 const transactionHash = ref<string | null>('');
+const logoImage = ref<Optional<string> | undefined>();
+const coverImage = ref<Optional<string> | undefined>();
 const tab = ref(collectionStore.active.collectionStatus === CollectionStatus.CREATED ? Tabs.NFTs : Tabs.DEPLOYS);
 
 /** Polling */
 let collectionInterval: any = null as any;
 let transactionInterval: any = null as any;
-
-/** Collection UUID from route */
-const collectionUuid = ref<string>(`${params?.id}`);
-const collectionBaseUri = ref<string>();
 
 useHead({
   title: t('dashboard.nav.nft'),
@@ -169,13 +182,14 @@ onMounted(async () => {
   /** Reset state if user opens different collection */
   if (collectionUuid.value !== collectionStore.active?.collection_uuid) {
     metadataStore.resetMetadata();
-    collectionStore.nfts = [];
+    nftStore.items = [];
   }
 
   if (!currentCollection?.collection_uuid) {
     router.push({ name: 'dashboard-service-nft' });
   } else {
     loadBaseUri(currentCollection.baseUri);
+    loadBucket(currentCollection);
     await collectionStore.getMetadataDeploys(currentCollection.collection_uuid);
     await collectionStore.getCollectionTransactions(currentCollection.collection_uuid);
     collectionStore.active = currentCollection;
@@ -205,13 +219,45 @@ watch(
 
 async function loadBaseUri(url?: Optional<string>) {
   if (!url) return;
-  const parsed = new URL(removeLastSlash(url));
-  const parts = parsed.pathname.split('/');
-
+  const parts = removeLastSlash(url).split('/');
   if (parts.length) {
-    const ipfsLink = await ipfsStore.fetchIpfsLink(dataStore.projectUuid, parts[parts.length - 1], IpfsType.IPNS);
-    if (ipfsLink?.link) {
-      collectionBaseUri.value = ipfsLink.link;
+    const type = url.includes('ipns') ? IpfsType.IPNS : IpfsType.CID;
+    const projectUuid = await dataStore.getProjectUuid();
+    const ipfsLink = await ipfsStore.fetchIpfsLink(projectUuid, parts[parts.length - 1], type);
+    collectionBaseUri.value = ipfsLink?.link;
+  }
+}
+
+async function loadBucket(collection: CollectionInterface) {
+  collectionMaxSupply.value = collection.maxSupply;
+  if (!collection.bucket_uuid) return;
+
+  if (collection.maxSupply > 0 && collection.logoUrl && collection.bannerUrl) {
+    coverImage.value = collection.bannerUrl;
+    logoImage.value = collection.logoUrl;
+  } else {
+    const bucketFiles = await bucketStore.fetchDirectoryContent({
+      bucketUuid: collection.bucket_uuid,
+    });
+    loadingBucket.value = false;
+
+    logoImage.value =
+      collection.logoUrl ||
+      bucketFiles.find(item => item.type === BucketItemType.FILE && item.name.includes('logo'))?.link;
+    coverImage.value =
+      collection.bannerUrl ||
+      bucketFiles.find(item => item.type === BucketItemType.FILE && item.name.includes('cover'))?.link;
+
+    const metadataFolder = bucketFiles.find(
+      item => item.type === BucketItemType.DIRECTORY && item.name.includes('Metadata')
+    );
+    if (metadataFolder && collection.maxSupply === 0) {
+      await bucketStore.fetchDirectoryContent({
+        bucketUuid: collection.bucket_uuid,
+        folderUuid: metadataFolder.uuid,
+        limit: 1,
+      });
+      collectionMaxSupply.value = Number(bucketStore.folder.pagination.itemCount || 0);
     }
   }
 }
