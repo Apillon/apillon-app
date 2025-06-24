@@ -11,22 +11,12 @@
     :row-props="rowProps"
     remote
     @update:page="(page: number) => handlePageChange(page, pagination.pageSize)"
-    @update:page-size="(pz: number) => (pagination.pageSize = pz)"
+    @update:page-size="(pz: number) => handlePageChange(pagination.page, pz)"
   />
 
-  <!-- Modal - Edit simplet
-  <modal v-model:show="showModalEditSimplet" :title="$t('simplet.edit')">
-    <FormSimplet
-      v-if="currentRow?.simpletDeploy_uuid"
-      :simplet-uuid="currentRow.simpletDeploy_uuid"
-      @submit-success="showModalEditSimplet = false"
-    />
-  </modal> -->
-
-  <!-- Modal - Delete Simplet 
-  <ModalDelete v-model:show="showModalDeleteSimplet" :title="$t('simplet.delete')">
-    <FormDelete :id="currentRow?.simpletDeploy_uuid" :type="ItemDeleteKey.WEBSITE" @submit-success="() => {}" />
-  </ModalDelete>-->
+  <ModalDelete v-model:show="modalDeleteVisible" :title="$t('simplet.delete')">
+    <FormDelete :id="currentRow.simpletDeploy_uuid" :type="ItemDeleteKey.SIMPLET" @submit-success="onDeleted" />
+  </ModalDelete>
 </template>
 
 <script lang="ts" setup>
@@ -48,7 +38,9 @@ const { availableColumns, selectedColumns, tableRowCreateTime, initTableColumns,
 );
 const pagination = reactive(props.archive ? simpletStore.archive.pagination : simpletStore.pagination);
 
-// const showModalDeleteSimplet = ref<boolean>(false);
+const modalDeleteVisible = ref<boolean>(false);
+const rowKey = (row: SimpletInterface) => row.simpletDeploy_uuid;
+const currentRow = ref<SimpletInterface>(simpletStore.items[0] || simpletStore.archive.items[0]);
 
 const columns = computed<NDataTableColumns<SimpletInterface>>(() => {
   return [
@@ -129,8 +121,6 @@ const columns = computed<NDataTableColumns<SimpletInterface>>(() => {
     },
   ];
 });
-const rowKey = (row: SimpletInterface) => row.simpletDeploy_uuid;
-const currentRow = ref<SimpletInterface>();
 
 /** On row click */
 const rowProps = (row: SimpletInterface) => {
@@ -147,7 +137,7 @@ const rowProps = (row: SimpletInterface) => {
 
 const dropdownOptions = [
   {
-    key: 'simpletView',
+    key: 'view',
     label: t('general.view'),
     props: {
       onClick: () => {
@@ -157,18 +147,18 @@ const dropdownOptions = [
       },
     },
   },
-  // {
-  //   key: 'simpletDelete',
-  //   label: t('general.archive'),
+  {
+    key: 'delete',
+    label: t('general.archive'),
 
-  //   disabled: authStore.isAdmin(),
-  //   props: {
-  //     class: '!text-pink',
-  //     onClick: () => {
-  //       showModalDeleteSimplet.value = true;
-  //     },
-  //   },
-  // },
+    disabled: authStore.isAdmin(),
+    props: {
+      class: '!text-pink',
+      onClick: () => {
+        modalDeleteVisible.value = true;
+      },
+    },
+  },
 ];
 
 const dropdownOptionsArchive = [
@@ -207,13 +197,21 @@ async function handlePageChange(page: number = 1, limit: number = PAGINATION_LIM
   p.pageSize = limit;
 }
 
+async function onDeleted() {
+  modalDeleteVisible.value = false;
+  simpletStore.items = simpletStore.items.filter(
+    item => item.simpletDeploy_uuid !== currentRow.value.simpletDeploy_uuid
+  );
+
+  sessionStorage.removeItem(LsCacheKeys.SIMPLETS);
+  sessionStorage.removeItem(LsCacheKeys.SIMPLETS_ARCHIVED);
+}
+
 /**
  * Restore simplet
  * */
 async function restoreSimplet() {
-  if (!currentRow.value?.simpletDeploy_uuid) return;
   simpletStore.loading = true;
-
   try {
     await $api.patch<SimpletResponse>(endpoints.simpletActivate(currentRow.value.simpletDeploy_uuid));
 

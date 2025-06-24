@@ -6,8 +6,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { ItemDeleteType } from '~/composables/useDelete';
-
 const emit = defineEmits(['submitSuccess']);
 const props = defineProps({
   id: { type: [String, Number], default: null },

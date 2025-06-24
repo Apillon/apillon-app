@@ -6,8 +6,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { ItemDelete } from '~/composables/useDelete';
-
 const emit = defineEmits(['submitSuccess']);
 const props = defineProps({
   items: { type: Array<ItemDelete>, required: true },

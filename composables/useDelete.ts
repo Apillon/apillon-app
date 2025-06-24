@@ -2,14 +2,12 @@ export type ItemDelete =
   | ApiKeyInterface
   | BucketInterface
   | BucketItemInterface
-  | ChatInterface
   | CloudFunctionInterface
   | CollectionInterface
-  | ContractInterface
   | IpnsInterface
   | JobInterface
-  | PostInterface
   | ServiceInterface
+  | SimpletInterface
   | SmartContractInterface
   | RpcApiKeyInterface
   | RpcEndpointInterface
@@ -21,18 +19,16 @@ export enum ItemDeleteKey {
   BUCKET_CONTENT = 'bucketContent',
   CLOUD_FUNCTION = 'cloudFunction',
   COLLECTION = 'collection',
-  CONTRACT = 'contract',
   DIRECTORY = 'directory',
   DOMAIN = 'domain',
   FILE = 'file',
   IPNS = 'ipns',
   JOB = 'job',
-  POST = 'post',
   RPC_API_KEY = 'rpcApiKey',
   RPC_ENDPOINT = 'rpcEndpoint',
   SERVICE = 'service',
+  SIMPLET = 'simplet',
   SMART_CONTRACT = 'smartContract',
-  SPACE = 'space',
   WEBSITE = 'website',
 }
 export type ItemDeleteType = `${ItemDeleteKey}`;
@@ -77,8 +73,6 @@ export default function useDelete() {
         return endpoints.cloudFunctions(`${id}`);
       case ItemDeleteKey.COLLECTION:
         return endpoints.collections(`${id}`);
-      case ItemDeleteKey.CONTRACT:
-        return endpoints.contracts(`${id}`);
       case ItemDeleteKey.DIRECTORY:
         return endpoints.directory(`${id}`);
       case ItemDeleteKey.DOMAIN:
@@ -89,14 +83,12 @@ export default function useDelete() {
         return endpoints.ipns(bucketStore.selected, `${id}`);
       case ItemDeleteKey.JOB:
         return endpoints.acurastJobs(`${id}`);
-      case ItemDeleteKey.POST:
-        return endpoints.posts(`${id}`);
       case ItemDeleteKey.SERVICE:
         return endpoints.services(`${id}`);
+      case ItemDeleteKey.SIMPLET:
+        return endpoints.simpletDeployed(`${id}`);
       case ItemDeleteKey.SMART_CONTRACT:
         return endpoints.smartContractsDeployed(`${id}`);
-      case ItemDeleteKey.SPACE:
-        return endpoints.spaces(`${id}`);
       case ItemDeleteKey.WEBSITE:
         return endpoints.websites(`${id}`);
       case ItemDeleteKey.RPC_API_KEY:
@@ -156,8 +148,6 @@ export default function useDelete() {
         return endpoints.cloudFunctions((item as CloudFunctionInterface).function_uuid);
       case ItemDeleteKey.COLLECTION:
         return endpoints.collections((item as CollectionInterface).collection_uuid);
-      case ItemDeleteKey.CONTRACT:
-        return endpoints.contracts((item as ContractInterface).contract_uuid);
       case ItemDeleteKey.DIRECTORY:
         return endpoints.directory((item as BucketItemInterface).uuid);
       case ItemDeleteKey.FILE:
@@ -166,14 +156,12 @@ export default function useDelete() {
         return endpoints.ipns(bucketStore.selected, (item as IpnsInterface).ipns_uuid);
       case ItemDeleteKey.JOB:
         return endpoints.acurastJobs((item as JobInterface).job_uuid);
-      case ItemDeleteKey.POST:
-        return endpoints.posts((item as PostInterface).post_uuid);
       case ItemDeleteKey.SERVICE:
         return endpoints.services((item as ServiceInterface).service_uuid);
+      case ItemDeleteKey.SIMPLET:
+        return endpoints.simpletDeployed((item as SimpletInterface).simpletDeploy_uuid);
       case ItemDeleteKey.SMART_CONTRACT:
         return endpoints.smartContractsDeployed((item as SmartContractInterface).contract_uuid);
-      case ItemDeleteKey.SPACE:
-        return endpoints.spaces((item as ChatInterface).space_uuid);
       case ItemDeleteKey.WEBSITE:
         return endpoints.websites((item as WebsiteInterface).website_uuid);
       case 'rpcApiKey':
@@ -196,18 +184,14 @@ export default function useDelete() {
       return ItemDeleteKey.BUCKET;
     } else if ('collection_uuid' in item) {
       return ItemDeleteKey.COLLECTION;
-    } else if ('contract_uuid' in item && 'contractAbi_id' in item) {
-      return ItemDeleteKey.CONTRACT;
     } else if ('function_uuid' in item) {
       return ItemDeleteKey.CLOUD_FUNCTION;
     } else if ('job_uuid' in item) {
       return ItemDeleteKey.JOB;
-    } else if ('post_uuid' in item) {
-      return ItemDeleteKey.POST;
+    } else if ('simpletDeploy_uuid' in item) {
+      return ItemDeleteKey.SIMPLET;
     } else if ('contract_uuid' in item) {
       return ItemDeleteKey.SMART_CONTRACT;
-    } else if ('space_uuid' in item) {
-      return ItemDeleteKey.SPACE;
     } else if ('website_uuid' in item) {
       return ItemDeleteKey.WEBSITE;
     } else if ('type' in item) {
