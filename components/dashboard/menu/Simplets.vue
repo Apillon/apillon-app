@@ -17,10 +17,10 @@ const menuOptions: NMenuOption[] = [
     label: t('simplet.menu.list'),
     path: '/dashboard/simplet/list',
   },
-  // {
-  //   key: 'dashboard-simplet-archive',
-  //   label: t('simplet.menu.archive'),
-  //   path: '/dashboard/simplet/archive',
-  // },
+  {
+    key: 'dashboard-simplet-archive',
+    label: t('simplet.menu.archive'),
+    path: '/dashboard/simplet/archive',
+  },
 ];
 </script>

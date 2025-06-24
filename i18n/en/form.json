@@ -455,11 +455,13 @@
       "restored": {
         "bucket": "Bucket has been restored",
         "chat": "Hub has been restored",
+        "cloudFunction": "Cloud Function has been restored",
         "collection": "NFT collection has been restored",
         "contract": "Contract has been restored",
         "directory": "Folder has been restored",
         "file": "File has been restored",
         "post": "Channel has been restored",
+        "simplet": "Simplet has been restored",
         "smartContract": "Smart Contract has been restored",
         "website": "Website has been restored"
       },

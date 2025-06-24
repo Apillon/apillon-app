@@ -15,16 +15,17 @@
   />
 
   <!-- Modal - Edit CloudFunction -->
-  <modal
-    v-if="currentRow?.function_uuid"
-    v-model:show="modalEditCloudFunctionVisible"
-    :title="$t('computing.cloudFunctions.new')"
-  >
+  <modal v-model:show="modalEditCloudFunctionVisible" :title="$t('computing.cloudFunctions.new')">
     <FormCloudFunctions
-      :function-uuid="currentRow?.function_uuid"
+      :function-uuid="currentRow.function_uuid"
       @submit-success="modalEditCloudFunctionVisible = false"
     />
   </modal>
+
+  <!-- Modal - Delete -->
+  <ModalDelete v-model:show="modalDeleteVisible" :title="$t('computing.cloudFunctions.delete')">
+    <FormDelete :id="currentRow.function_uuid" :type="ItemDeleteKey.CLOUD_FUNCTION" @submit-success="onDeleted" />
+  </ModalDelete>
 </template>
 
 <script lang="ts" setup>
@@ -40,10 +41,12 @@ const router = useRouter();
 const message = useMessage();
 const authStore = useAuthStore();
 const cloudFunctionStore = useCloudFunctionStore();
-const { deleteItem } = useDelete();
 const { tableRowCreateTime } = useTable();
 
+const modalDeleteVisible = ref<boolean>(false);
 const modalEditCloudFunctionVisible = ref<boolean>(false);
+const currentRow = ref<CloudFunctionInterface>(props.functions[0]);
+const rowKey = (row: CloudFunctionInterface) => row.function_uuid;
 
 const createColumns = (): NDataTableColumns<CloudFunctionInterface> => {
   return [
@@ -103,8 +106,6 @@ const createColumns = (): NDataTableColumns<CloudFunctionInterface> => {
   ];
 };
 const columns = createColumns();
-const rowKey = (row: CloudFunctionInterface) => row.function_uuid;
-const currentRow = ref<CloudFunctionInterface>();
 
 /** Data: filtered cloudFunctions */
 const data = computed<CloudFunctionInterface[]>(() => {
@@ -137,19 +138,18 @@ const dropdownOptions = computed(() => {
       disabled: authStore.isAdmin(),
       props: {
         onClick: () => {
-          if (currentRow.value) {
-            modalEditCloudFunctionVisible.value = true;
-          }
+          modalEditCloudFunctionVisible.value = true;
         },
       },
     },
     {
-      key: 'computingDelete',
+      key: 'delete',
       label: t('general.archive'),
       disabled: authStore.isAdmin(),
       props: {
+        class: '!text-pink',
         onClick: () => {
-          deleteCloudFunction();
+          modalDeleteVisible.value = true;
         },
       },
     },
@@ -184,15 +184,14 @@ const rowProps = (row: CloudFunctionInterface) => {
 /**
  * cloudFunction delete
  * */
-async function deleteCloudFunction() {
-  if (currentRow.value && (await deleteItem(ItemDeleteKey.CLOUD_FUNCTION, currentRow.value.function_uuid))) {
-    cloudFunctionStore.items = cloudFunctionStore.items.filter(
-      item => item.function_uuid !== currentRow.value?.function_uuid
-    );
+async function onDeleted() {
+  modalDeleteVisible.value = false;
+  cloudFunctionStore.items = cloudFunctionStore.items.filter(
+    item => item.function_uuid !== currentRow.value?.function_uuid
+  );
 
-    sessionStorage.removeItem(LsCacheKeys.CLOUD_FUNCTIONS);
-    sessionStorage.removeItem(LsCacheKeys.CLOUD_FUNCTIONS_ARCHIVE);
-  }
+  sessionStorage.removeItem(LsCacheKeys.CLOUD_FUNCTIONS);
+  sessionStorage.removeItem(LsCacheKeys.CLOUD_FUNCTIONS_ARCHIVE);
 }
 
 /**

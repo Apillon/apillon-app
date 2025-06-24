@@ -13,6 +13,11 @@
       (pz: number) => ((archive ? collectionStore.archive.pagination : collectionStore.pagination).pageSize = pz)
     "
   />
+
+  <!-- Modal - Delete -->
+  <ModalDelete v-model:show="modalDeleteVisible" :title="$t('nft.collection.delete')">
+    <FormDelete :id="currentRow.collection_uuid" :type="ItemDeleteKey.COLLECTION" @submit-success="onDeleted" />
+  </ModalDelete>
 </template>
 
 <script lang="ts" setup>
@@ -29,10 +34,13 @@ const router = useRouter();
 const message = useMessage();
 const authStore = useAuthStore();
 const collectionStore = useCollectionStore();
-const { deleteItem } = useDelete();
 const { availableColumns, selectedColumns, initTableColumns, handleColumnChange } = useTable(
   LsTableColumnsKeys.NFT_COLLECTION
 );
+
+const modalDeleteVisible = ref<boolean>(false);
+const rowKey = (row: CollectionInterface) => row.collection_uuid;
+const currentRow = ref<CollectionInterface>(props.collections[0]);
 
 /** Data: filtered collections */
 const data = computed<Array<CollectionInterface>>(() => {
@@ -191,8 +199,6 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
     },
   ];
 });
-const rowKey = (row: CollectionInterface) => row.collection_uuid;
-const currentRow = ref<CollectionInterface>(props.collections[0]);
 
 const dropdownOptions = [
   {
@@ -206,12 +212,13 @@ const dropdownOptions = [
     },
   },
   {
-    key: 'collectionDelete',
+    key: 'delete',
     label: t('general.archive'),
     disabled: authStore.isAdmin(),
     props: {
+      class: '!text-pink',
       onClick: () => {
-        deleteCollection();
+        modalDeleteVisible.value = true;
       },
     },
   },
@@ -251,15 +258,14 @@ function maxSupply(maxSupply: number) {
   return maxSupply > 0 ? maxSupply : '∞';
 }
 
-async function deleteCollection() {
-  if (await deleteItem(ItemDeleteKey.COLLECTION, currentRow.value.collection_uuid)) {
-    collectionStore.items = collectionStore.items.filter(
-      item => item.collection_uuid !== currentRow.value.collection_uuid
-    );
+async function onDeleted() {
+  modalDeleteVisible.value = false;
+  collectionStore.items = collectionStore.items.filter(
+    item => item.collection_uuid !== currentRow.value.collection_uuid
+  );
 
-    sessionStorage.removeItem(LsCacheKeys.COLLECTIONS);
-    sessionStorage.removeItem(LsCacheKeys.COLLECTION_ARCHIVE);
-  }
+  sessionStorage.removeItem(LsCacheKeys.COLLECTIONS);
+  sessionStorage.removeItem(LsCacheKeys.COLLECTION_ARCHIVE);
 }
 
 /**

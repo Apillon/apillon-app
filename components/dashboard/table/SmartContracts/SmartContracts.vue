@@ -13,6 +13,10 @@
     @update:page="(page: number) => handlePageChange(page, deployedContractStore.pagination.pageSize)"
     @update:page-size="(pageSize: number) => handlePageChange(1, pageSize)"
   />
+  <!-- Modal - Delete -->
+  <ModalDelete v-model:show="modalDeleteVisible" :title="$t('smartContracts.delete')">
+    <FormDelete :id="currentRow.contract_uuid" :type="ItemDeleteKey.SMART_CONTRACT" @submit-success="onDeleted" />
+  </ModalDelete>
 </template>
 
 <script lang="ts" setup>
@@ -29,12 +33,11 @@ const router = useRouter();
 const message = useMessage();
 const authStore = useAuthStore();
 const deployedContractStore = useDeployedContractStore();
-
-const { deleteItem } = useDelete();
 const { availableColumns, selectedColumns, initTableColumns, handleColumnChange } = useTable(
   LsTableColumnsKeys.SMART_CONTRACTS
 );
 
+const modalDeleteVisible = ref<boolean>(false);
 const rowKey = (row: DeployedContractInterface) => row.contract_uuid;
 const currentRow = ref<DeployedContractInterface>(props.contracts[0]);
 
@@ -189,8 +192,9 @@ const dropdownOptions = [
     label: t('general.archive'),
     disabled: authStore.isAdmin(),
     props: {
+      class: '!text-pink',
       onClick: () => {
-        deleteSmartContract();
+        modalDeleteVisible.value = true;
       },
     },
   },
@@ -242,14 +246,12 @@ async function handlePageChange(page: number = 1, limit: number = PAGINATION_LIM
   }
 }
 
-async function deleteSmartContract() {
-  if (currentRow.value && (await deleteItem(ItemDeleteKey.SMART_CONTRACT, currentRow.value.contract_uuid))) {
-    deployedContractStore.items = deployedContractStore.items.filter(
-      item => item.contract_uuid !== currentRow.value?.contract_uuid
-    );
-
-    sessionStorage.removeItem(LsCacheKeys.SMART_CONTRACTS_DEPLOYED_ARCHIVED);
-  }
+async function onDeleted() {
+  modalDeleteVisible.value = false;
+  deployedContractStore.items = deployedContractStore.items.filter(
+    item => item.contract_uuid !== currentRow.value?.contract_uuid
+  );
+  sessionStorage.removeItem(LsCacheKeys.SMART_CONTRACTS_DEPLOYED_ARCHIVED);
 }
 
 async function restoreSmartContract() {
