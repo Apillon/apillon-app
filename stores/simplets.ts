@@ -200,7 +200,7 @@ export const useSimpletStore = defineStore('simplets', {
           page,
           search: store.search,
           project_uuid: dataStore.projectUuid,
-          status: isArchive ? SqlModelStatus.ARCHIVED : undefined,
+          status: isArchive ? SqlModelStatus.DELETED : undefined,
         });
         const { data } = await $api.get<SimpletsResponse>(endpoints.simpletDeployed(), params);
         store.items = data.items;

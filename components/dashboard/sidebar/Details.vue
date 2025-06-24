@@ -59,6 +59,7 @@ defineProps({
   filterByService: { type: Boolean, default: false },
   showCreateCollection: { type: Boolean, default: false },
 });
-const tab = ref(Tabs.GENERAL);
+const attrs = useAttrs();
+const tab = ref(attrs['hide-general'] ? Tabs.PRICING : Tabs.GENERAL);
 const tabsRef = ref();
 </script>

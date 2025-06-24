@@ -100,7 +100,7 @@ const columns = computed<NDataTableColumns<SimpletInterface>>(() => {
             trigger: 'click',
           },
           {
-            default: () => h(resolveComponent('BtnActions')),
+            default: () => h(resolveComponent('BtnActions'), { class: props.archive ? 'hidden' : '' }),
           }
         );
       },
