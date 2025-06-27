@@ -65,10 +65,10 @@ const data = computed(() => {
     },
     {
       label: t('simplet.backendStatus'),
-      value: simpletStore.backendStatus,
+      value: simpletStore.active.backendStatus,
       component: resolveComponent('SimpletStatus'),
       data: {
-        status: simpletStore.backendStatus,
+        status: simpletStore.active.backendStatus,
       },
     },
     {

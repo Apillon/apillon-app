@@ -31,7 +31,7 @@
 
       <!-- SMTP -->
       <Btn
-        v-if="simpletStore.backendStatus === ResourceStatus.ONLINE"
+        v-if="simpletStore.active.backendStatus === ResourceStatus.ONLINE"
         class="locked w-full"
         size="medium"
         type="primary"
@@ -42,7 +42,7 @@
 
       <!-- MySQL -->
       <Btn
-        v-if="simpletStore.backendStatus === ResourceStatus.ONLINE"
+        v-if="simpletStore.active.backendStatus === ResourceStatus.ONLINE"
         class="locked w-full"
         size="medium"
         type="primary"
@@ -54,9 +54,9 @@
       <!-- Redeploy -->
       <Btn
         v-if="
-          simpletStore.backendStatus === ResourceStatus.FAILED ||
+          simpletStore.active.backendStatus === ResourceStatus.FAILED ||
           simpletStore.active.frontendStatus === ResourceStatus.FAILED ||
-          (simpletStore.backendStatus === ResourceStatus.ONLINE &&
+          (simpletStore.active.backendStatus === ResourceStatus.ONLINE &&
             simpletStore.active.frontendStatus === ResourceStatus.REQUESTED)
         "
         class="locked w-full"

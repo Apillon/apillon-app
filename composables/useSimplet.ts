@@ -85,7 +85,7 @@ export default function useSimplet() {
     }
 
     simpletInterval = setInterval(async () => {
-      const simplet = await simpletStore.fetchSimplet(simpletStore.active.simpletDeploy_uuid);
+      const simplet = await simpletStore.fetchSimplet(simpletStore.active.simpletDeploy_uuid, false);
       if (isSimpletStatusFinished(simplet)) {
         simpletStore.active = simplet || simpletStore.active;
         clearInterval(simpletInterval);

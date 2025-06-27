@@ -48,9 +48,6 @@ export const useSimpletStore = defineStore('simplets', {
     },
   }),
   getters: {
-    backendStatus(state): number {
-      return Math.max(state.active?.backendStatus || 0, state.backend?.backendStatus || 0);
-    },
     hasTemplates(state): boolean {
       return Array.isArray(state.templates) && state.templates.length > 0;
     },
@@ -221,10 +218,10 @@ export const useSimpletStore = defineStore('simplets', {
       return store.items;
     },
 
-    async fetchSimplet(simpletUuid: string | undefined) {
+    async fetchSimplet(simpletUuid: string | undefined, showLoader = true) {
       if (!simpletUuid) return;
 
-      this.loading = true;
+      this.loading = showLoader;
       try {
         const { data } = await $api.get<SimpletResponse>(endpoints.simpletDeployed(simpletUuid));
         this.active = data;
