@@ -133,7 +133,7 @@
           "type": "",
           "uri": "Paste the collection metadata base URI here.",
           "useGateway": "Collection base URI points to IPFS. If this checkbox is checked, base URI will point to CID on Apillon private gateway, which provide better performance. Otherwise base URI points to: ipfs://[CID], and gateway needs to be handled manually.",
-          "useIpns": "When this option is selected, the IPNS will be created. This option will allow you to add more NFTs to your collection later."
+          "useIpns": "When this option is selected, an IPNS record will be created. This option will allow you to add more NFTs to your collection later."
         }
       },
       "contract": {
@@ -174,7 +174,7 @@
         "integration": "Embedded wallet Integration",
         "whitelistedDomains": "Whitelisted Domains",
         "labelInfo": {
-          "integration": "The embedded wallet will only be added to the Simplet if you select this option.",
+          "integration": "The embedded wallet login option will be added to the Simplet if you select this option.",
           "whitelistedDomains": "Prevent third-parties from using your integration by restricting access to allowed domains \n- Authorize all domains with * \n  Example: *.apillon.io accepts all .apillon.io sites \n- Authorize local URLs with localhost:&lt;port&gt; \n- Separate domains by commas"
         }
       },
@@ -219,7 +219,7 @@
         "startTime": "Start time",
         "walletAddress": "Wallet address",
         "labelInfo": {
-          "walletAddress": "Where the NFTs will come from. Enter the wallet address that will power this Simplet."
+          "walletAddress": "This wallet will have access to login as the administrator and manage the Simplet's users."
         }
       },
       "smtp": {
@@ -347,7 +347,7 @@
       "simplet": {
         "name": "Just for your eyes—helps you keep things organized.",
         "description": "Optional. Add a note for future-you (or teammates) to remember what this setup is for.",
-        "walletAddress": "Where the NFTs will come from. Enter the wallet address that will power this Simplet."
+        "walletAddress": "This wallet will have access to login as the administrator and manage the Simplet's users."
       },
       "smtp": {
         "host": "Your mail server host (e.g. smtp.yourdomain.com)",
