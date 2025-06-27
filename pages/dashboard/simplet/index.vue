@@ -4,8 +4,6 @@
       <HeaderSimplets />
     </template>
     <div class="pb-8">
-      <p class="mb-2 max-w-lg">{{ $t('simplet.templates') }}</p>
-
       <div class="grid gap-4 lg:grid-cols-3">
         <Card
           v-for="(simplet, key) in simpletStore.templates"
