@@ -33,7 +33,7 @@ const simpletLink = computed(() =>
 );
 
 function openSimplet() {
-  simpletStore.resetWizard();
+  setTimeout(() => simpletStore.resetWizard(), 300);
   router.push(simpletLink.value);
 }
 </script>

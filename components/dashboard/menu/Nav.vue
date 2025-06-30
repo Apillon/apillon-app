@@ -49,7 +49,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
     //   svgIcon: 'menu/home-gear',
     // },
     {
-      key: 'dashboard-simplets',
+      key: 'dashboard-simplet',
       label: t('dashboard.nav.simplets'),
       to: 'dashboard-simplet',
       color: 'blue',

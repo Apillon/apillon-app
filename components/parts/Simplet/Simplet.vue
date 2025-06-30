@@ -14,7 +14,7 @@
         <div class="mt-5 flex justify-between gap-4">
           <small>{{ $t('dashboard.credits.pricing') }}</small>
           <div class="flex flex-col gap-1 text-right text-xs">
-            <strong>150 credits for setup</strong>
+            <strong>100 credits for setup</strong>
             <NuxtLink :to="{ name: 'dashboard-price-list' }">{{ $t('dashboard.credits.checkPricing') }}</NuxtLink>
           </div>
         </div>
@@ -22,7 +22,7 @@
       <div class="card relative p-6">
         <h6>{{ $t('simplet.deploy') }}</h6>
         <div class="mt-5 flex flex-col gap-4">
-          <Btn class="w-full" type="secondary" href="https://github.com/Apillon/nft-studio-template">
+          <Btn class="w-full" type="secondary" href="https://github.com/Apillon/nft-studio">
             <span class="icon-github mr-2"></span>
             <strong> {{ $t('simplet.viewCode') }}</strong>
           </Btn>

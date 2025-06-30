@@ -33,7 +33,10 @@ function routeNameToKey(name: string) {
 }
 
 function removeIdOrSlug(text: string) {
-  return text.replace(/(-id|-slug|-archive|-deployed|-new|-airdrop).*/g, '');
+  return text.replace(
+    /(-id|-slug|-archive|-deployed|-new|-airdrop|-list|-nft-brand-booster|-nft-wild-west|-nft-event-experience).*/g,
+    ''
+  );
 }
 
 /**

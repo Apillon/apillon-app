@@ -109,6 +109,10 @@ const useDifferentDB = ref<boolean>(false);
 const rules = computed(() => ({
   name: ruleRequired(t('validation.simplet.nameRequired')),
   description: ruleDescription(t('validation.descriptionTooLong')),
+  embeddedWallet: {
+    required: embeddedWalletStore.hasEmbeddedWallets,
+    message: t('validation.embeddedWallet.integrationRequired'),
+  },
   walletAddress: [
     ruleRequired(t('validation.simplet.walletAddressRequired')),
     ruleWalletAddress(t('validation.evmWalletAddress')),
@@ -122,7 +126,7 @@ const rules = computed(() => ({
 }));
 
 const isFormDisabled = computed<boolean>(() => {
-  return dataStore.isProjectUser || simpletStore.quotaReached;
+  return dataStore.isProjectUser || !!simpletStore.quotaReached;
 });
 
 onMounted(() => {

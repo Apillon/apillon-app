@@ -55,7 +55,7 @@
           "subtitle": "How to deploy:",
           "content": [
             "Frontend: Use Apillon GitHub integration for a quick auto-deploy directly from the [Apillon's Web3 Hosting](/dashboard/service/hosting). You can also run it locally or host it with any provider.",
-            "Backend: Use Phala Docker for a secure auto-deploy. You can also run it locally or with Docker—just configure your NFT and email setup [(see instructions on GitHub)](https://github.com/Apillon/nft-studio-simplet)"
+            "Backend: Use Phala Docker for a secure auto-deploy. You can also run it locally or with Docker—just configure your NFT and email setup [(see instructions on GitHub)](https://github.com/Apillon/nft-studio)"
           ]
         }
       ]
@@ -102,7 +102,7 @@
           "subtitle": "How to deploy:",
           "content": [
             "Frontend: Use Apillon GitHub integration for a quick auto-deploy directly from the [Apillon's Web3 Hosting](/dashboard/service/hosting). You can also run it locally or host it with any provider.",
-            "Backend: Use Phala Docker for a secure auto-deploy. You can also run it locally or with Docker—just configure your NFT and email setup [(see instructions on GitHub)](https://github.com/Apillon/nft-studio-simplet)"
+            "Backend: Use Phala Docker for a secure auto-deploy. You can also run it locally or with Docker—just configure your NFT and email setup [(see instructions on GitHub)](https://github.com/Apillon/nft-studio)"
           ]
         }
       ]
@@ -145,7 +145,7 @@
           "subtitle": "What gets auto-deployed:",
           "content": [
             "Frontend: Use Apillon GitHub integration for a quick auto-deploy directly from the [Apillon's Web3 Hosting](/dashboard/service/hosting). You can also run it locally or host it with any provider.",
-            "Backend: Use Phala Docker for a secure auto-deploy. You can also run it locally or with Docker—just configure your NFT and email setup [(see instructions on GitHub)](https://github.com/Apillon/nft-studio-simplet)"
+            "Backend: Use Phala Docker for a secure auto-deploy. You can also run it locally or with Docker—just configure your NFT and email setup [(see instructions on GitHub)](https://github.com/Apillon/nft-studio)"
           ]
         }
       ]
@@ -164,7 +164,7 @@
         "addInfo": "Spin up a collection in minutes with our step-by-step wizard.",
         "created": "You created Collection",
         "createdInfo": "After NFT Collection is deployed, you can create a Simplet that will help you manage your NFT distribution.",
-        "createdContinue": "Continue to simple",
+        "createdContinue": "Continue to simplet",
         "deploying": "Your NFT collection is still deploying. Please wait until the deployment is complete before proceeding.",
         "empty": "To get started, you’ll need at least one NFT collection in Apillon. Each Simplet needs a collection to work with — it’s where the NFTs will be minted, managed, and sent from.",
         "first": "You don’t have any NFT collections yet. To continue, create one in Apillon first.",
