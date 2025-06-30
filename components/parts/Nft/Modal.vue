@@ -35,8 +35,12 @@
         v-else-if="metadataStore.stepCollectionCreate === CollectionCreateStep.DEPLOYING"
         class="min-h-full"
       />
+      <NftCollectionDeployedSimplet
+        v-else-if="metadataStore.stepCollectionCreate === CollectionCreateStep.DEPLOYED && simplet"
+        @continue="$emit('onCreated', collectionStore.active)"
+      />
       <NftCollectionDeployed
-        v-else-if="metadataStore.stepCollectionCreate === CollectionCreateStep.DEPLOYED && !simplet"
+        v-else-if="metadataStore.stepCollectionCreate === CollectionCreateStep.DEPLOYED"
         class="mx-auto max-w-5xl"
       />
     </slot>
@@ -65,7 +69,7 @@
 <script lang="ts" setup>
 import { useTemplateRef } from 'vue';
 
-const emit = defineEmits(['onCreated']);
+defineEmits(['onCreated']);
 defineProps({
   simplet: { type: Boolean, default: false },
 });
@@ -175,12 +179,9 @@ async function createCollection() {
     collectionStore.active = collection;
     collectionStore.items.push(collection);
     collectionStore.resetCache();
-    metadataStore.form.single.collectionUuid = collection.collection_uuid;
-
-    metadataStore.stepCollectionCreate = CollectionCreateStep.DEPLOYED;
-
     paymentStore.fetchCredits();
-    emit('onCreated', collection);
+    metadataStore.form.single.collectionUuid = collection.collection_uuid;
+    metadataStore.stepCollectionCreate = CollectionCreateStep.DEPLOYED;
   } catch (error) {
     message.error(userFriendlyMsg(error));
     metadataStore.stepCollectionCreate = CollectionCreateStep.REVIEW;

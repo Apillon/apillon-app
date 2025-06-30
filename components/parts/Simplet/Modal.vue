@@ -34,12 +34,12 @@
       <SimpletDeployed v-else-if="isStep(SimpletCreateStep.DEPLOYED)" class="mx-auto max-w-5xl" />
     </slot>
     <template v-if="simpletStore.stepSimpletCreate < SimpletCreateStep.REVIEW" #footer>
-      <div class="flex w-full items-center justify-between gap-4 px-10 py-3">
+      <div class="flex w-full items-center justify-between gap-4 md:px-10 md:py-3">
         <p>
           <strong>{{ $t('nft.collection.review.totalCosts') }}: </strong>
           <span>{{ totalCredits }} {{ $t('dashboard.credits.credits') }}</span>
         </p>
-        <div class="flex items-center gap-2">
+        <div class="flex flex-wrap items-center justify-end gap-2 sm:flex-nowrap">
           <Btn v-if="!isStep(SimpletCreateStep.TYPE)" class="min-w-40" type="secondary" @click="back">
             {{ $t('general.back') }}
           </Btn>
@@ -139,8 +139,7 @@ function nextStep() {
       }
       break;
     case SimpletCreateStep.COLLECTION:
-      simpletCollectionRef.value?.nextStep();
-      if (simpletStore.form.collection?.collection_uuid) {
+      if (simpletCollectionRef.value?.nextStep() && simpletStore.form.collection?.collection_uuid) {
         simpletStore.stepSimpletCreate += 1;
       }
       break;

@@ -8,8 +8,7 @@
       "
     />
 
-    <Spinner v-if="collectionStore.loading" />
-    <template v-else-if="collections.length || search">
+    <template v-if="collections.length || collectionStore.loading || search">
       <hr class="my-5 border-bg-lighter" />
       <div class="my-6">
         <h6 class="mb-2">{{ $t('simplet.wizard.collection.add') }}</h6>
@@ -19,26 +18,34 @@
             <strong class="underline">{{ $t('dashboard.createHere') }}</strong>
           </Btn>
         </p>
-        <FormFieldSearch v-model:value="search" :placeholder="$t('simplet.wizard.collection.search')" />
+        <div class="flex gap-4">
+          <FormFieldSearch v-model:value="search" :placeholder="$t('simplet.wizard.collection.search')" />
+          <n-button :loading="collectionStore.loading" @click="collectionStore.fetchCollections()">
+            <span class="icon-refresh text-xl"></span>
+          </n-button>
+        </div>
       </div>
-      <CardSelect
-        v-for="(collection, key) in collections"
-        :key="key"
-        :icon="collection.logoUrl ? undefined : 'menu/NFTs'"
-        :img="collection.logoUrl || ''"
-        :content="`${collection.maxSupply || '∞'} ${$t('nft.tokens')}`"
-        :disabled="collection.collectionStatus < CollectionStatus.DEPLOYED"
-        :selected="selectedCollection?.collection_uuid === collection.collection_uuid"
-        @click="selectedCollection = collection"
-      >
-        <template #title>
-          <span>
-            <Spinner v-if="collection.collectionStatus < CollectionStatus.DEPLOYED" />
-            <strong>{{ collection.name }}</strong>
-            <small class="capitalize"> ({{ chainIdToName(collection.chain) }})</small>
-          </span>
-        </template>
-      </CardSelect>
+      <Spinner v-if="collectionStore.loading" />
+      <template v-else>
+        <CardSelect
+          v-for="(collection, key) in collections"
+          :key="key"
+          :icon="collection.logoUrl ? undefined : 'menu/NFTs'"
+          :img="collection.logoUrl || ''"
+          :content="`${collection.maxSupply || '∞'} ${$t('nft.tokens')}`"
+          :disabled="collection.collectionStatus < CollectionStatus.DEPLOYED"
+          :selected="selectedCollection?.collection_uuid === collection.collection_uuid"
+          @click="selectedCollection = collection"
+        >
+          <template #title>
+            <span>
+              <Spinner v-if="collection.collectionStatus < CollectionStatus.DEPLOYED" />
+              <strong>{{ collection.name }}</strong>
+              <small class="capitalize"> ({{ chainIdToName(collection.chain) }})</small>
+            </span>
+          </template>
+        </CardSelect>
+      </template>
     </template>
     <Notification v-else type="error" alert>
       {{ $t('simplet.wizard.collection.first') }}
@@ -89,14 +96,16 @@ function openModalNft() {
   setTimeout(() => (collectionStore.modalCreateVisible = true), 100);
 }
 
-function nextStep() {
+function nextStep(): boolean {
   if (selectedCollection.value.collectionStatus < CollectionStatus.DEPLOYED) {
     message.warning(t('simplet.wizard.collection.deploying'));
   } else if (selectedCollection.value.collection_uuid) {
     simpletStore.form.collection = selectedCollection.value;
     simpletStore.form.collectionLogo = selectedCollection.value.logoUrl;
+    return true;
   } else {
     message.warning(t('simplet.wizard.selectCollection'));
   }
+  return false;
 }
 </script>

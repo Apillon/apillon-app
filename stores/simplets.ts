@@ -67,13 +67,17 @@ export const useSimpletStore = defineStore('simplets', {
       this.backend = {} as SimpletBackendInterface;
       this.items = [] as SimpletInterface[];
       this.templates = [] as SimpletTemplateInterface[];
-      this.quotaReached = undefined;
       this.search = '';
-      this.stepSimpletCreate = SimpletCreateStep.COLLECTION;
       this.archive.items = [] as SimpletInterface[];
       this.archive.pagination.page = 1;
       this.archive.pagination.itemCount = 0;
       this.archive.search = '';
+      this.resetWizard();
+    },
+    resetWizard() {
+      this.modalCreateVisible = false;
+      this.quotaReached = undefined;
+      this.stepSimpletCreate = SimpletCreateStep.COLLECTION;
       this.resetForm();
     },
     resetForm() {

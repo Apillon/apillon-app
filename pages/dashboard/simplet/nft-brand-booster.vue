@@ -4,7 +4,7 @@
       <HeaderSimplet :name="$t('simplet.nft-brand-booster.name')" />
     </template>
 
-    <Simplet v-if="!pageLoading" :simplet-id="SimpletType.AIRDROP" />
+    <Simplet :simplet-id="SimpletType.AIRDROP" />
   </Dashboard>
 </template>
 

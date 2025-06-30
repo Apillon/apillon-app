@@ -8,12 +8,12 @@
       <span class="absolute right-0 top-0 p-1 text-xs">&#128471;&#xFE0E;</span>
       <div class="flex w-full items-center justify-between">
         <small class="inline-block md:w-1/3">{{ title }}</small>
-        <div class="flex items-center gap-4 text-xs">
+        <div class="hidden items-center gap-4 text-xs sm:flex">
           <strong v-if="$te(`${transKey}.${activeStep}`)" class="text-yellow">
             {{ $t(`${transKey}.${activeStep}`) }}
           </strong>
         </div>
-        <div class="ml-[16%] text-center md:w-1/6">
+        <div class="w-1/4 text-center sm:ml-[16%] md:w-1/6">
           <BtnDelete v-if="hasReset" class="z-10" size="small" @click="modalResetVisible = true" />
         </div>
         <div
@@ -41,7 +41,7 @@
           <small class="inline-block md:w-1/6">{{ title }}</small>
           <div>
             <slot name="header-center">
-              <div v-if="steps" class="flex items-center gap-4 text-xs">
+              <div v-if="steps" class="hidden items-center gap-4 text-xs sm:flex">
                 <template v-for="(step, key) in enumValues(steps).filter(s => $te(`${transKey}.${s}`))" :key="key">
                   <span v-if="key" class="card-border w-3"></span>
                   <strong :class="step === activeStep ? 'text-yellow' : 'text-disabled'">

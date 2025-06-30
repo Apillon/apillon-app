@@ -1,7 +1,7 @@
 <template>
   <ReviewLayout>
     <template #left>
-      <ReviewTable :data="data" :info="$t('nft.collection.review.info')" class="md:w-1/2" @back="$emit('back')">
+      <ReviewTable :data="data" :info="$t('nft.collection.review.info')" class="w-full md:w-1/2" @back="$emit('back')">
         <div class="relative mb-20 mt-6 min-h-36 w-full flex-auto rounded-lg bg-bg-lighter">
           <Image
             v-if="metadataStore.form.visual.coverImage"
@@ -20,7 +20,7 @@
 
     <template #right>
       <ReviewPricing
-        class="mt-8 md:!w-1/2"
+        class="mt-8 w-full md:!w-1/2"
         :pricing="pricing"
         :deploy-text="$t('nft.collection.review.createCollection')"
         @deploy="$emit('deploy')"

@@ -1,5 +1,5 @@
 <template>
-  <Dashboard :loading="simpletStore.loading">
+  <Dashboard :loading="pageLoading">
     <template #heading>
       <HeaderSimplets />
     </template>
@@ -22,7 +22,6 @@
       </div>
     </div>
 
-    <!-- Modal - New Simplet -->
     <SimpletModal
       v-model:show="simpletStore.modalCreateVisible"
       :type="simpletType"
@@ -38,6 +37,7 @@ const simpletStore = useSimpletStore();
 const metadataStore = useMetadataStore();
 const collectionStore = useCollectionStore();
 
+const pageLoading = ref<boolean>(true);
 const simpletType = ref<SimpletTemplateInterface>();
 
 useHead({
@@ -49,9 +49,10 @@ onBeforeMount(() => {
   metadataStore.stepCollectionCreate = CollectionCreateStep.METADATA;
 });
 
-onMounted(() => {
+onMounted(async () => {
   simpletStore.fetchSimplets();
-  simpletStore.fetchSimpletTemplates();
+  await simpletStore.fetchSimpletTemplates();
+  pageLoading.value = false;
 });
 
 const parseSimplet = (simplet: SimpletTemplateInterface): ServiceTypeItem => ({

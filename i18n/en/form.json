@@ -228,7 +228,10 @@
         "username": "SMTP Username",
         "password": "SMTP Password",
         "sender": "Sender name (from)",
-        "email": "Sender email (from)"
+        "email": "Sender email (from)",
+        "labelInfo": {
+          "host": "The default SMTP host is nft_studio_mail, change this if you want to use your own SMTP host."
+        }
       },
       "website": {
         "description": "Website description",

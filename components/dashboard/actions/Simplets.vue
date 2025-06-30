@@ -6,7 +6,6 @@
     </div>
 
     <n-space size="large">
-      <!-- Refresh collections -->
       <n-button
         :loading="archive ? simpletStore.archive.loading : simpletStore.loading"
         @click="simpletStore.fetchSimplets(1, PAGINATION_LIMIT, archive)"
@@ -15,9 +14,7 @@
         {{ $t('general.refresh') }}
       </n-button>
 
-      <!-- Create new collection -->
       <Btn
-        v-if="simpletStore.hasSimplets"
         inner-class="flex gap-2 items-center"
         :disabled="authStore.isAdmin()"
         @click="simpletStore.modalCreateVisible = true"

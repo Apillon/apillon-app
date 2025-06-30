@@ -1,12 +1,17 @@
 <template>
   <ReviewLayout>
     <template #left>
-      <ReviewTable class="md:w-1/2" :data="data" :info="$t('hosting.website.review.info')" @back="$emit('back')" />
+      <ReviewTable
+        class="w-full md:w-1/2"
+        :data="data"
+        :info="$t('hosting.website.review.info')"
+        @back="$emit('back')"
+      />
     </template>
 
     <template #right>
       <ReviewPricing
-        class="mt-8 md:!w-1/2"
+        class="mt-8 w-full md:!w-1/2"
         :pricing="pricing"
         :deploy-text="$t('hosting.website.create')"
         @deploy="$emit('deploy')"

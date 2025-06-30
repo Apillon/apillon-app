@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <template>
   <n-grid class="items-end" :cols="12" :x-gap="16">
-    <n-form-item-gi path="mysql.host" :span="9" :label="$t('form.label.mysql.host')" :label-props="{ for: 'host' }">
+    <n-form-item-gi path="mysql.host" :span="9" :label="labelInfo('host')" :label-props="{ for: 'host' }">
       <n-input
         v-model:value="form.host"
         :input-props="{ id: 'host' }"
@@ -60,4 +60,5 @@ type FormMySql = {
 defineProps({
   form: { type: Object as PropType<FormMySql>, required: true },
 });
+const { labelInfo } = useForm('form.label.embeddedWallet');
 </script>

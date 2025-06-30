@@ -23,6 +23,7 @@
     "50012008": "Mint reserve supply out of stock!",
     "50012011": "Content encryption failed",
     "50012012": "Burning NFT failed.",
+    "50021006": "Max number of Embedded Wallet integrations reached",
     "500004": "API key is invalid.",
     "BAD_REQUEST": "There is a problem with this request. Please come back later when we fixed that problem.",
     "INVALID_PATH": "Invalid path",

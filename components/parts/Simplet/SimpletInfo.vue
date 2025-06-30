@@ -103,7 +103,10 @@ const data = computed(() => {
       loading: websiteStore.loading,
       value: '',
       component: resolveComponent('TableLink'),
-      show: !!(websiteStore.active.domain || websiteStore.active.w3ProductionLink),
+      show:
+        !!(websiteStore.active.domain || websiteStore.active.w3ProductionLink) &&
+        simpletStore.active.backendStatus === ResourceStatus.ONLINE &&
+        simpletStore.active.frontendStatus === ResourceStatus.ONLINE,
       data: {
         link: websiteStore.active.domain || websiteStore.active.w3ProductionLink,
       },
