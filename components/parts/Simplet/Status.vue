@@ -17,6 +17,7 @@ function getStatus(status: number): TagType {
     case ResourceStatus.FAILED:
       return 'error';
     case ResourceStatus.DEPLOYING:
+    case ResourceStatus.RESTARTING:
       return 'info';
     case ResourceStatus.ONLINE:
       return 'success';

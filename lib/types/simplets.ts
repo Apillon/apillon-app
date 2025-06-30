@@ -26,6 +26,9 @@ export enum ResourceStatus {
   STOPPED = 3,
   SHUT_DOWN = 4,
   FAILED = 5,
+  STOPPING = 6,
+  SHUTTING_DOWN = 7,
+  RESTARTING = 8,
 }
 
 declare global {
