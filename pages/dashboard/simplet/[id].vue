@@ -47,7 +47,7 @@ onMounted(async () => {
   pageLoading.value = false;
 
   loadSimpletData();
-  checkUnfinishedSimplet(loadSimpletData);
+  checkUnfinishedSimplet(() => loadSimpletData());
 });
 
 const loadSimpletData = async () => {
