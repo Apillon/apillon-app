@@ -224,6 +224,10 @@ export default function useCollection() {
       );
       if (!collection || collection.collectionStatus >= CollectionStatus.DEPLOYED) {
         clearInterval(collectionInterval);
+
+        if (collectionStore.active?.collection_uuid === collection?.collection_uuid) {
+          collectionStore.active = collection;
+        }
       }
     }, 30000);
   }

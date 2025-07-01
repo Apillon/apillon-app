@@ -100,7 +100,7 @@ const columns = computed<NDataTableColumns<SimpletInterface>>(() => {
             trigger: 'click',
           },
           {
-            default: () => h(resolveComponent('BtnActions'), { class: props.archive ? 'hidden' : '' }),
+            default: () => h(resolveComponent('BtnActions')),
           }
         );
       },
@@ -163,7 +163,7 @@ const dropdownOptions = [
 
 const dropdownOptionsArchive = [
   {
-    key: 'hostingRestore',
+    key: 'restore',
     label: t('general.restore'),
     disabled: authStore.isAdmin(),
     props: {

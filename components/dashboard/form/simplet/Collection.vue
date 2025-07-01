@@ -98,6 +98,11 @@ function openModalNft() {
 
 function nextStep(): boolean {
   if (selectedCollection.value.collectionStatus < CollectionStatus.DEPLOYED) {
+    selectedCollection.value =
+      collectionStore.items.find(c => c.collection_uuid === selectedCollection.value.collection_uuid) ||
+      selectedCollection.value;
+  }
+  if (selectedCollection.value.collectionStatus < CollectionStatus.DEPLOYED) {
     message.warning(t('simplet.wizard.collection.deploying'));
   } else if (selectedCollection.value.collection_uuid) {
     simpletStore.form.collection = selectedCollection.value;

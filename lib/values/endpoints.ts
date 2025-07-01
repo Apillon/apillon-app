@@ -218,7 +218,7 @@ const Endpoints = {
    * Simplets
    */
   simplets: (uuid?: number | string) => (uuid ? `/simplets/${uuid}` : '/simplets'),
-  simpletActivate: (uuid: number | string) => `/simplets/${uuid}/activate`,
+  simpletActivate: (uuid: number | string) => `/simplets/deployed/${uuid}/activate`,
   simpletDeploy: (uuid: number | string) => `/simplets/${uuid}/deploy`,
   simpletDeployed: (uuid?: number | string) => (uuid ? `/simplets/deployed/${uuid}` : `/simplets/deployed/`),
   simpletRedeploy: (uuid: number | string) => `/simplets/deployed/${uuid}/redeploy`,

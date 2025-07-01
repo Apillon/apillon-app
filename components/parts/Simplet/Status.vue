@@ -15,6 +15,7 @@ defineProps({
 function getStatus(status: number): TagType {
   switch (status) {
     case ResourceStatus.FAILED:
+    case ResourceStatus.ERROR:
       return 'error';
     case ResourceStatus.DEPLOYING:
     case ResourceStatus.RESTARTING:
