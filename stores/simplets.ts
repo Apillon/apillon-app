@@ -7,6 +7,7 @@ export const useSimpletStore = defineStore('simplets', {
     items: [] as SimpletInterface[],
     templates: [] as SimpletTemplateInterface[],
     loading: false,
+    loadingBackend: false,
     modalCreateVisible: false,
     pagination: createPagination(),
     quotaReached: undefined as boolean | undefined,
@@ -245,6 +246,7 @@ export const useSimpletStore = defineStore('simplets', {
     async fetchBackend(backendUuid: string | undefined) {
       if (!backendUuid) return;
 
+      this.loadingBackend = true;
       try {
         const { data } = await $api.get<SimpletBackendResponse>(endpoints.simpletBackend(backendUuid));
         this.backend = data;
@@ -257,6 +259,7 @@ export const useSimpletStore = defineStore('simplets', {
         /** Show error message */
         window.$message.error(userFriendlyMsg(e));
       }
+      this.loadingBackend = false;
       return this.backend;
     },
 

@@ -8,9 +8,7 @@
 const { t } = useI18n();
 const simpletStore = useSimpletStore();
 const websiteStore = useWebsiteStore();
-const deploymentStore = useDeploymentStore();
 const collectionStore = useCollectionStore();
-
 const { simplets } = useSimplet();
 
 const loadingImages = ref<boolean>(true);
@@ -35,22 +33,26 @@ const data = computed(() => {
     {
       label: t('form.label.simplet.name'),
       value: simpletStore.active.name,
+      loading: simpletStore.loading,
     },
     {
       label: t('simplet.uuid'),
       value: simpletStore.active.simpletDeploy_uuid,
       copy: true,
+      loading: simpletStore.loading,
     },
     {
       label: t('general.type'),
       value: simpletType.value
         ? t(`simplet.${simplets[simpletType.value]}.name`)
         : getSimpletName(simpletStore.active.simplet_uuid),
+      loading: simpletStore.loadingBackend,
     },
     {
       label: t('nft.collection.preview'),
       value: collectionStore.active?.name,
       component: resolveComponent('TableLink'),
+      loading: collectionStore.loading,
       show: !!collectionStore.active?.name,
       data: {
         text: collectionStore.active?.name,
@@ -60,13 +62,14 @@ const data = computed(() => {
     {
       label: t('form.label.collection.adminAddress'),
       value: adminWallet.value || '',
-      loading: deploymentStore.loading,
+      loading: simpletStore.loadingBackend,
       copy: true,
     },
     {
       label: t('simplet.backendStatus'),
       value: simpletStore.active.backendStatus,
       component: resolveComponent('SimpletStatus'),
+      loading: simpletStore.loading,
       data: {
         status: simpletStore.active.backendStatus,
       },
@@ -75,6 +78,7 @@ const data = computed(() => {
       label: t('simplet.endpoint'),
       value: simpletStore.active?.backendUrl || '',
       component: resolveComponent('TableLink'),
+      loading: simpletStore.loading,
       data: {
         link: simpletStore.active?.backendUrl,
       },
@@ -83,15 +87,16 @@ const data = computed(() => {
       label: t('simplet.frontendStatus'),
       value: simpletStore.active.frontendStatus,
       component: resolveComponent('SimpletStatus'),
+      loading: simpletStore.loading,
       data: {
         status: simpletStore.active.frontendStatus,
       },
     },
     {
       label: t('general.website'),
-      loading: websiteStore.loading,
       value: '',
       component: resolveComponent('TableLink'),
+      loading: websiteStore.loading,
       show: !!websiteStore.active?.website_uuid,
       data: {
         text: websiteStore.active.domain || websiteStore.active.name,
@@ -100,9 +105,9 @@ const data = computed(() => {
     },
     {
       label: t('simplet.url'),
-      loading: websiteStore.loading || simpletStore.active.frontendStatus === ResourceStatus.DEPLOYING,
       value: '',
       component: resolveComponent('TableLink'),
+      loading: websiteStore.loading || simpletStore.active.frontendStatus === ResourceStatus.DEPLOYING,
       show: !!(websiteStore.active.domain || websiteStore.active.w3ProductionLink),
       data: {
         link: websiteStore.active.domain || websiteStore.active.w3ProductionLink,
