@@ -213,7 +213,7 @@ async function onDeleted() {
 async function restoreSimplet() {
   simpletStore.loading = true;
   try {
-    await $api.patch<SimpletResponse>(endpoints.simpletActivate(currentRow.value.simpletDeploy_uuid));
+    await $api.post<SimpletResponse>(endpoints.simpletActivate(currentRow.value.simpletDeploy_uuid));
 
     simpletStore.archive.items = simpletStore.archive.items.filter(
       item => item.simpletDeploy_uuid !== currentRow.value?.simpletDeploy_uuid

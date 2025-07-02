@@ -1,6 +1,6 @@
 <template>
   <div class="flex h-full flex-col justify-between">
-    <TableInfo :data="data.filter(i => i?.show !== false)" />
+    <TableInfo :data="data" />
   </div>
 </template>
 
@@ -100,7 +100,7 @@ const data = computed(() => {
     },
     {
       label: t('simplet.url'),
-      loading: websiteStore.loading,
+      loading: websiteStore.loading || simpletStore.active.frontendStatus === ResourceStatus.DEPLOYING,
       value: '',
       component: resolveComponent('TableLink'),
       show: !!(websiteStore.active.domain || websiteStore.active.w3ProductionLink),

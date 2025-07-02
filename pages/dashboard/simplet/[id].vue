@@ -50,6 +50,15 @@ onMounted(async () => {
   checkUnfinishedSimplet(() => loadSimpletData());
 });
 
+watch(
+  () => simpletStore.active.frontendStatus,
+  (status, oldStatus) => {
+    if (status === ResourceStatus.ONLINE && oldStatus === ResourceStatus.DEPLOYING) {
+      loadSimpletData();
+    }
+  }
+);
+
 const loadSimpletData = async () => {
   if (simpletStore.active.frontend_uuid) {
     websiteStore.getWebsite(simpletStore.active.frontend_uuid);
