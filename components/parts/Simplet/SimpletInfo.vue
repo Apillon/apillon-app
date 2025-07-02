@@ -96,7 +96,7 @@ const data = computed(() => {
       label: t('general.website'),
       value: '',
       component: resolveComponent('TableLink'),
-      loading: websiteStore.loading,
+      loading: simpletStore.loading || websiteStore.loading,
       show: !!websiteStore.active?.website_uuid,
       data: {
         text: websiteStore.active.domain || websiteStore.active.name,
@@ -107,7 +107,10 @@ const data = computed(() => {
       label: t('simplet.url'),
       value: '',
       component: resolveComponent('TableLink'),
-      loading: websiteStore.loading || simpletStore.active.frontendStatus === ResourceStatus.DEPLOYING,
+      loading:
+        simpletStore.loading ||
+        websiteStore.loading ||
+        Number(simpletStore.active.frontendStatus) < ResourceStatus.ONLINE,
       show: !!(websiteStore.active.domain || websiteStore.active.w3ProductionLink),
       data: {
         link: websiteStore.active.domain || websiteStore.active.w3ProductionLink,

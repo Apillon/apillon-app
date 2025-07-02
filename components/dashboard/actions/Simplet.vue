@@ -206,8 +206,8 @@ async function updateMysql() {
 
 async function redeploy(uuid: string) {
   try {
-    const { data } = await $api.post<SimpletResponse>(endpoints.simpletRedeploy(uuid));
-    simpletStore.active = data;
+    const { data } = await $api.post<SimpletCreateResponse>(endpoints.simpletRedeploy(uuid));
+    simpletStore.active = data.data;
     message.success(t('simplet.wizard.redeployingInfo'));
   } catch (e) {
     message.error(userFriendlyMsg(e));
