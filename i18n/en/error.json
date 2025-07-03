@@ -158,6 +158,7 @@
     "MISSING_ARGUMENT": "Missing required argument. Please ensure all necessary inputs are provided.",
     "UNEXPECTED_ARGUMENT": "Unexpected argument provided. Please remove any unnecessary inputs and try again.",
     "TRANSACTION_FOR_TRANSFER_ALREADY_EXISTS": "Contract has already been transferred.",
+    "TRIAL_EXPIRED": "Trial period has expired. Please upgrade your plan to continue using the service.",
     "REVIEW_ALREADY_SUBMITTED": "Review has already been submitted.",
     "USER_NOT_ELIGIBLE": "User is not eligible for airdrop.",
     "fileDownload": "Download failed. Something went wrong during the download.",
