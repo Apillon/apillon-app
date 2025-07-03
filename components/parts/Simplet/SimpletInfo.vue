@@ -100,7 +100,9 @@ const data = computed(() => {
       show: !!websiteStore.active?.website_uuid,
       data: {
         text: websiteStore.active.domain || websiteStore.active.name,
-        link: `/dashboard/service/hosting/${websiteStore.active.website_uuid}`,
+        link: !!websiteStore.active.website_uuid
+          ? `/dashboard/service/hosting/${websiteStore.active.website_uuid}`
+          : '',
       },
     },
     {
