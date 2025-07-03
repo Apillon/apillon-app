@@ -18,10 +18,12 @@
       </Btn>
 
       <!-- Domain -->
-      <BtnDomain
+      <template
         v-if="simpletStore.active.frontendStatus === ResourceStatus.ONLINE || websiteStore.active.w3ProductionLink"
-        :frontend-uuid="simpletStore.active.frontend_uuid"
-      />
+      >
+        <BtnDomain :frontend-uuid="simpletStore.active.frontend_uuid" />
+        <BtnDns />
+      </template>
 
       <!-- SMTP -->
       <Btn
