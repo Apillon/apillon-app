@@ -1,9 +1,9 @@
 <template>
-  <div v-if="link" class="flex justify-between">
+  <div v-if="link" class="flex justify-between text-body">
     <div>
-      <span v-if="prefix" class="mr-1 text-white whitespace-nowrap">{{ prefix }}:</span>
+      <span v-if="prefix" class="mr-1 whitespace-nowrap text-white">{{ prefix }}:</span>
       <a :href="link" target="_blank">
-        <n-ellipsis class="align-bottom break-all" :class="color" :line-clamp="1">
+        <n-ellipsis class="break-all align-bottom text-blue underline" :class="color" :line-clamp="1">
           <span class="break-all" :class="{ 'text-xs': textOrLink.length > 100 }">
             {{ textOrLink }}
           </span>
@@ -14,8 +14,8 @@
       </a>
     </div>
 
-    <button class="ml-2" @click="copyToClipboard(textOrLink)">
-      <span class="icon-copy" :class="color"></span>
+    <button class="ml-2" @click="copyToClipboard(link)">
+      <span class="icon-copy text-white-primary" :class="color"></span>
     </button>
   </div>
 </template>
@@ -25,7 +25,7 @@ const props = defineProps({
   prefix: { type: String, default: '' },
   link: { type: String, default: '' },
   text: { type: String, default: '' },
-  color: { type: String, default: 'text-body' },
+  color: { type: String, default: '' },
   tooltip: { type: String, default: undefined },
 });
 

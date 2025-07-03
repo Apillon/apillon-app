@@ -11,12 +11,10 @@
     >
       <span></span>
     </n-progress>
-    <div class="flex justify-between mt-1 text-xs">
+    <div class="mt-1 flex justify-between text-xs">
       <span class="inline-block"> {{ formatBytes(size) }} </span>
 
-      <span v-if="labelTotal" class="inline-block">
-        {{ formatBytes(totalSize) }} {{ labelTotal }}
-      </span>
+      <span v-if="labelTotal" class="inline-block"> {{ formatBytes(totalSize) }} {{ labelTotal }} </span>
       <span v-else class="inline-block">
         {{ formatBytes(totalSize) }}
         <span class="lowercase">{{ $t('dashboard.total') }}</span>
@@ -26,6 +24,8 @@
 </template>
 
 <script lang="ts" setup>
+import { storagePercentage, formatBytes } from '~/lib/utils/storage';
+
 defineProps({
   size: { type: Number, default: 0 },
   totalSize: { type: Number, default: 0 },

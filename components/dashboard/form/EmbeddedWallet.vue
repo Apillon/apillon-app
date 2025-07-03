@@ -1,18 +1,5 @@
 <template>
-  <div v-if="integrationUuid && !embeddedWallet" class="mt-20">
-    <Spinner />
-  </div>
-  <div v-else>
-    <Notification v-if="dataStore.isProjectUser" type="error" class="w-full mb-8">
-      {{ $t('dashboard.permissions.insufficient') }}
-    </Notification>
-    <Notification v-else-if="isFormDisabled" type="warning" class="mb-4">
-      {{ $t('project.quotaReached') }},
-      <NuxtLink class="text-yellow" :to="{ name: 'dashboard-payments' }" @click="$emit('close')">
-        {{ $t('project.upgradePlan') }} </NuxtLink
-      >.
-    </Notification>
-
+  <Form :loading="!!integrationUuid && !embeddedWallet" :disabled="isFormDisabled">
     <n-form
       ref="formRef"
       :model="formData"
@@ -22,11 +9,7 @@
       @submit.prevent="handleSubmit"
     >
       <!--  EmbeddedWallet title -->
-      <n-form-item
-        path="title"
-        :label="$t('form.label.embeddedWallet.title')"
-        :label-props="{ for: 'title' }"
-      >
+      <n-form-item path="title" :label="$t('form.label.embeddedWallet.title')" :label-props="{ for: 'title' }">
         <n-input
           v-model:value="formData.title"
           :input-props="{ id: 'title' }"
@@ -54,7 +37,7 @@
       <n-form-item
         path="whitelistedDomains"
         :label-props="{ for: 'whitelistedDomains' }"
-        :label="labelInfo('whitelistedDomains', 'form.label.embeddedWallet') as string"
+        :label="labelInfo('whitelistedDomains')"
       >
         <n-input
           v-model:value="formData.whitelistedDomains"
@@ -68,19 +51,13 @@
       <!--  Form submit -->
       <n-form-item :show-feedback="false" :show-label="false">
         <input type="submit" class="hidden" :value="$t('form.continue')" />
-        <Btn
-          type="primary"
-          class="w-full mt-2"
-          :loading="loading"
-          :disabled="isFormDisabled"
-          @click="handleSubmit"
-        >
+        <Btn type="primary" class="mt-2 w-full" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
           <span v-if="integrationUuid"> {{ $t('form.save') }} </span>
           <span v-else>{{ $t('form.continue') }}</span>
         </Btn>
       </n-form-item>
     </n-form>
-  </div>
+  </Form>
 </template>
 
 <script lang="ts" setup>
@@ -95,13 +72,11 @@ const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess', 'cl
 const props = defineProps({
   integrationUuid: { type: String, default: '' },
 });
-
 const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
-const warningStore = useWarningStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
-const { labelInfo } = useComputing();
+const { labelInfo } = useForm('form.label.embeddedWallet');
 
 const loading = ref<boolean>(false);
 const embeddedWallet = ref<EmbeddedWalletInterface | null>(null);
@@ -134,9 +109,7 @@ function validateDomains(_: FormItemRule, value: string): boolean {
 }
 
 const isFormDisabled = computed<boolean>(() => {
-  return (
-    dataStore.isProjectUser || (embeddedWalletStore.quotaReached === true && !props.integrationUuid)
-  );
+  return dataStore.isProjectUser || (embeddedWalletStore.quotaReached === true && !props.integrationUuid);
 });
 
 onMounted(async () => {
@@ -156,13 +129,11 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      // errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else if (props.integrationUuid) {
       updateEmbeddedWallet();
     } else {
-      createEmbeddedWallet();      
+      createEmbeddedWallet();
     }
   });
 }
@@ -179,10 +150,7 @@ async function createEmbeddedWallet() {
       whitelistedDomains: formData.value.whitelistedDomains?.trim().replaceAll('\n', ','),
       project_uuid,
     };
-    const res = await $api.post<EmbeddedWalletResponse>(
-      endpoints.embeddedWalletIntegration,
-      bodyData
-    );
+    const res = await $api.post<EmbeddedWalletResponse>(endpoints.embeddedWalletIntegration, bodyData);
     embeddedWalletStore.items.unshift(res.data);
 
     message.success(t('form.success.created.embeddedWallet'));
@@ -212,10 +180,7 @@ async function updateEmbeddedWallet() {
       description: formData.value.description,
       whitelistedDomains: formData.value.whitelistedDomains?.replaceAll('\n', ','),
     };
-    const res = await $api.patch<EmbeddedWalletResponse>(
-      endpoints.embeddedWallets(props.integrationUuid),
-      bodyData
-    );
+    const res = await $api.patch<EmbeddedWalletResponse>(endpoints.embeddedWallets(props.integrationUuid), bodyData);
     embeddedWalletStore.items.forEach(item => {
       if (item.integration_uuid === res.data.integration_uuid) {
         Object.assign(item, res.data);

@@ -1,9 +1,9 @@
 <template>
-  <div class="relative flex flex-col min-h-screen h-full py-16">
+  <div class="relative flex h-full min-h-screen flex-col py-16">
     <div class="container">
       <AuthHeader />
     </div>
-    <div class="container flex items-center md:flex-auto relative z-1">
+    <div class="container relative z-1 flex items-center md:flex-auto">
       <slot />
     </div>
     <div class="container">

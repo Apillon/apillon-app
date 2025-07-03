@@ -5,7 +5,7 @@
     </template>
     <slot>
       <n-space v-if="websiteStore.hasWebsiteArchive" class="pb-8" :size="32" vertical>
-        <ActionsHosting archive />
+        <ActionsHosting v-if="websiteStore.hasWebsiteArchive" archive />
         <TableHosting :websites="websiteStore.archive" archive />
       </n-space>
       <Empty
@@ -24,15 +24,13 @@
       </W3Warn>
 
       <!-- Modal - Create Website -->
-      <modal v-model:show="showModalNewWebsite" :title="$t('hosting.website.new')">
-        <FormHostingWebsite />
-      </modal>
+      <HostingModal v-model:show="showModalNewWebsite" :title="$t('hosting.website.new')" />
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t } = useI18n();
 const dataStore = useDataStore();
 const storageStore = useStorageStore();
 const websiteStore = useWebsiteStore();
@@ -42,32 +40,16 @@ const pageLoading = ref<boolean>(true);
 const showModalNewWebsite = ref<boolean | null>(false);
 
 useHead({
-  title: $i18n.t('dashboard.nav.hosting'),
+  title: t('dashboard.nav.hosting'),
 });
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await storageStore.getStorageInfo();
-      await websiteStore.getWebsiteArchive();
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  await storageStore.getStorageInfo();
+  await websiteStore.getWebsiteArchive();
 
-      pageLoading.value = false;
-    });
-  }, 100);
+  pageLoading.value = false;
 });
-
-/**
- * On createNewWebsite click
- * If W3Warn has already been shown, show modal create new website, otherwise show warn first
- * */
-function createNewWebsite() {
-  if (localStorage.getItem(LsW3WarnKeys.HOSTING_NEW) || !$i18n.te('w3Warn.hosting.upload')) {
-    showModalNewWebsite.value = true;
-  } else {
-    modalW3WarnVisible.value = true;
-    showModalNewWebsite.value = null;
-  }
-}
 
 /** When user close W3Warn, allow him to create new website */
 function onModalW3WarnHide() {

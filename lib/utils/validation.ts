@@ -1,4 +1,5 @@
 import type { FormItemRule } from 'naive-ui';
+import { isAddress } from 'viem';
 import { checkAddress } from '@polkadot/util-crypto';
 
 export function ruleRequired(errMsg: string) {
@@ -20,6 +21,12 @@ export function ruleNaturalNumber(errMsg: string) {
     message: errMsg,
   };
 }
+export function ruleWalletAddress(errMsg: string) {
+  return {
+    validator: validateEvmAddress,
+    message: errMsg,
+  };
+}
 
 /**
  * Custom validations
@@ -30,7 +37,7 @@ export function validateRequiredCheckbox(_: FormItemRule, value: boolean | null)
 }
 
 /** Validate dropdown if it is selected */
-export function validateRequiredDropdown(_: FormItemRule, value: String | null): boolean {
+export function validateRequiredDropdown(_: FormItemRule, value: string | null): boolean {
   if (value) {
     return value.length !== 0;
   } else {
@@ -40,7 +47,7 @@ export function validateRequiredDropdown(_: FormItemRule, value: String | null):
 
 /** Validate Ethereum address */
 export function validateEvmAddress(_: FormItemRule, value: string | null): boolean {
-  return !!value && /^0x[a-fA-F0-9]{40}$/i.test(value);
+  return !!value && isAddress(value);
 }
 export function substrateAddressValidate(
   _: FormItemRule,
@@ -52,6 +59,7 @@ export function substrateAddressValidate(
 
     return isValid;
   } catch (e: any) {
+    console.error(e);
     return false;
   }
 }
@@ -69,4 +77,12 @@ export function validatePercent(_: FormItemRule, value: number | string | null):
 }
 export function validateBoolean(_: FormItemRule, value: number | string | null): boolean {
   return value !== null && value !== undefined;
+}
+
+// API key
+export function validateApiKey(value: number | string | null, apiSecret: string | null | undefined): boolean {
+  return !apiSecret || !!value;
+}
+export function validateApiSecret(value: number | string | null, apiKey: string | null | undefined): boolean {
+  return !apiKey || !!value;
 }

@@ -1,19 +1,26 @@
 import { moonbeam, moonbaseAlpha } from '@wagmi/vue/chains';
 import { http, createConfig, WagmiPlugin, createStorage } from '@wagmi/vue';
 import { VueQueryPlugin } from '@tanstack/vue-query';
-import { metaMask, coinbaseWallet, walletConnect } from '@wagmi/vue/connectors';
+import type { MetaMaskParameters, CoinbaseWalletParameters } from '@wagmi/vue/connectors';
+import { metaMask, coinbaseWallet } from '@wagmi/vue/connectors';
+
+const metaMaskConfig: MetaMaskParameters = {
+  dappMetadata: {
+    name: 'Apillon Metamask wallet',
+    url: 'https://app.apillon.io',
+  },
+};
+const coinbaseConfig: CoinbaseWalletParameters = {
+  appName: 'Apillon Coinbase wallet',
+  appLogoUrl: '/favicon.png',
+  version: '4',
+};
 
 export const wagmiConfig = createConfig({
   chains: [moonbeam, moonbaseAlpha],
   connectors: [
-    metaMask({
-      dappMetadata: {
-        name: 'Apillon Metamask wallet',
-        url: 'https://app.apillon.io',
-        iconUrl: '/favicon.png',
-      },
-    }),
-    coinbaseWallet({ appName: 'Apillon Coinbase wallet', appLogoUrl: '/favicon.png' }),
+    metaMask(metaMaskConfig),
+    coinbaseWallet(coinbaseConfig),
     // walletConnect({
     //   projectId: 'fefd3005e5f3b8fd2e73de5333eeccf9',
     //   showQrModal: true,
@@ -28,6 +35,7 @@ export const wagmiConfig = createConfig({
 });
 
 export default defineNuxtPlugin(nuxtApp => {
+  nuxtApp.provide('wagmiConfig', wagmiConfig);
   nuxtApp.vueApp.use(WagmiPlugin, { config: wagmiConfig });
   nuxtApp.vueApp.use(VueQueryPlugin);
 });

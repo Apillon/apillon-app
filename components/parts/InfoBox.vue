@@ -1,5 +1,5 @@
 <template>
-  <div class="flex p-2 border border-bg-lighter">
+  <div class="flex border border-bg-lighter p-2">
     <span class="icon-info mt-1"></span>
     <p class="ml-2 whitespace-break-spaces">
       {{ content }}

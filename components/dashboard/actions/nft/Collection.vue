@@ -2,20 +2,17 @@
   <n-space class="w-full lg:min-w-52" size="large" vertical>
     <!-- Open Bucket -->
     <n-button
-      v-if="collectionStore.active.bucket_uuid"
+      v-if="collectionStore.active.bucket_uuid && !collectionStore.isUnique"
       class="w-full"
-      size="small"
+      size="medium"
       :loading="loadingBucket"
       @click="openBucket(collectionStore.active.bucket_uuid)"
-    >
-      <span class="icon-storage mr-2 text-xl"></span>
-      <span>{{ t('nft.openBucket') }}</span>
+      >{{ $t('nft.openBucket') }}
     </n-button>
 
     <!-- Refresh -->
-    <n-button class="w-full" size="small" :loading="collectionStore.loading" @click="refresh">
-      <span class="icon-refresh mr-2 text-xl"></span>
-      {{ t('general.refresh') }}
+    <n-button class="w-full" size="medium" :loading="collectionStore.loading" @click="refresh">
+      {{ $t('general.refresh') }}
     </n-button>
 
     <!-- Add IPNS -->
@@ -31,87 +28,80 @@
     >
       <template #icon> <IconInfo /> </template>
       <template #trigger>
-        <n-button class="w-full" size="small">{{ t('nft.addIpns') }}</n-button>
+        <n-button class="w-full" size="medium">{{ $t('nft.addIpns') }}</n-button>
       </template>
-      {{ t('nft.addIpnsInfo') }}
+      {{ $t('nft.addIpnsInfo') }}
     </n-popconfirm>
 
-    <!-- Add NFT -->
-    <n-button
-      v-if="
-        (collectionStore.active.collection_uuid && collectionStore.active.useIpns !== false) ||
-        collectionStore.active.collectionStatus === CollectionStatus.CREATED
-      "
-      class="w-full"
-      size="small"
-      :loading="loadingBucket"
-      :disabled="!allowAddMetadata"
-      @click="emit('addNfts')"
-    >
-      <span class="icon-add mr-2 text-xl text-primary"></span>
-      <span class="text-primary">{{ t('nft.add') }}</span>
-    </n-button>
-
     <!-- Mint -->
-    <n-button class="w-full" size="small" :disabled="authStore.isAdmin() || actionsDisabled" @click="emit('mint')">
-      <span class="icon-nft mr-2 text-xl"></span>
-      {{ t('nft.collection.mint') }}
-    </n-button>
     <n-button
-      v-if="collectionStore.active?.collectionType === NFTCollectionType.NESTABLE"
+      v-if="collectionStore.active.chainType === ChainType.EVM"
       class="w-full"
-      size="small"
+      size="medium"
       :disabled="authStore.isAdmin() || actionsDisabled"
-      @click="emit('nestMint')"
+      @click="emit('mint')"
     >
-      <span class="icon-nft mr-2 text-xl"></span>
-      <span class="inline-block w-full">{{ t('nft.collection.nestMint') }}</span>
+      {{ $t('nft.collection.mint') }}
     </n-button>
 
     <!-- Transfer ownership -->
     <n-button
       v-if="!collectionStore.active.adminAddress"
       class="w-full"
-      size="small"
+      size="medium"
       :disabled="authStore.isAdmin() || actionsDisabled"
       @click="emit('transfer')"
     >
-      {{ t('nft.collection.transfer') }}
+      {{ $t('nft.collection.transfer') }}
     </n-button>
 
     <!-- Change base URI -->
     <n-button
       class="w-full"
-      size="small"
+      size="medium"
       :disabled="authStore.isAdmin() || actionsDisabled"
       @click="emit('setBaseUri')"
     >
-      {{ t('nft.collection.setBaseUri') }}
+      {{ $t('nft.collection.setBaseUri') }}
     </n-button>
+
+    <!-- Add NFT -->
+    <Btn
+      v-if="
+        (collectionStore.active.collection_uuid && collectionStore.active.useIpns !== false) ||
+        collectionStore.active.collectionStatus === CollectionStatus.CREATED
+      "
+      class="w-full"
+      inner-class="flex gap-2 items-center"
+      size="medium"
+      :loading="loadingBucket"
+      :disabled="!allowAddMetadata"
+      @click="emit('addNfts')"
+    >
+      <span class="icon-add text-xl"></span>
+      <span>{{ $t('nft.add') }}</span>
+    </Btn>
 
     <!-- Burn -->
     <n-button
       v-if="collectionStore.active.isRevokable"
       class="w-full"
-      size="small"
+      size="medium"
       type="error"
       :disabled="authStore.isAdmin() || actionsDisabled"
       ghost
       @click="emit('revoke')"
     >
-      <span class="icon-delete mr-2 text-xl text-pink"></span>
-      {{ t('nft.collection.revoke') }}
+      {{ $t('nft.collection.revoke') }}
     </n-button>
   </n-space>
 </template>
 
 <script lang="ts" setup>
-import { CollectionStatus, NFTCollectionType } from '~/lib/types/nft';
-
 defineProps({
   env: { type: Number, default: 0 },
 });
-const emit = defineEmits(['addNfts', 'mint', 'nestMint', 'revoke', 'transfer', 'setBaseUri']);
+const emit = defineEmits(['addNfts', 'mint', 'revoke', 'transfer', 'setBaseUri']);
 
 const message = useMessage();
 const authStore = useAuthStore();

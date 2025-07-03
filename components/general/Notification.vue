@@ -1,28 +1,25 @@
 <template>
   <div
-    class="inline-block py-2 px-5 border-l-4 w-full bg-bg-dark text-sm"
+    class="card-dark flex gap-2 rounded-lg p-3 text-sm text-white-secondary hover:border-bg-lighter"
     :class="notificationClass"
   >
-    <span v-if="!hideIcon" :class="iconClass"></span>
-    <slot />
+    <NuxtIcon v-if="!hideIcon && alert" name="icon/alert" class="text-xl" filled />
+    <span v-else-if="!hideIcon" class="text-xl" :class="iconClass"></span>
+    <div>
+      <slot />
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 const props = defineProps({
-  type: {
-    type: String,
-    validator: (value: string) => ['info', 'error', 'warning', 'success'].includes(value),
-    default: 'success',
-  },
+  type: { type: String as PropType<TagType>, default: 'success' },
   hideIcon: { type: Boolean, default: false },
+  alert: { type: Boolean, default: false },
 });
-
-const $style = useCssModule();
 
 const notificationClass = computed(() => {
   return [
-    $style.notification,
     {
       'border-blue': props.type === 'info',
       'border-yellow': props.type === 'warning',
@@ -34,7 +31,6 @@ const notificationClass = computed(() => {
 
 const iconClass = computed(() => {
   return [
-    $style.icon,
     {
       'text-blue icon-info': props.type === 'info',
       'text-yellow icon-info': props.type === 'warning',
@@ -44,9 +40,3 @@ const iconClass = computed(() => {
   ];
 });
 </script>
-
-<style lang="postcss" module>
-.icon {
-  @apply mr-2 align-middle text-xl;
-}
-</style>

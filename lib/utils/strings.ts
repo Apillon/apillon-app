@@ -43,6 +43,8 @@ export function equalsIgnoreCase(str1?: string, str2?: string) {
     }) === 0
   );
 }
+export const toCamelCase = (str: string = '') =>
+  str.toLowerCase().replace(/([-_][a-z])/g, group => group.toUpperCase().replace('-', '').replace('_', ''));
 
 /**
  * Return values separated by dash. If values are same, return only one value
@@ -54,11 +56,7 @@ export function getOneOrRange(val1: number | string, val2: number | string) {
   return val1 + '-' + val2;
 }
 
-export function getFormattedPrice(
-  val = 0,
-  moreOptions?: Intl.NumberFormatOptions,
-  locale = 'en-US'
-) {
+export function getFormattedPrice(val = 0, moreOptions?: Intl.NumberFormatOptions, locale = 'en-US') {
   const formatter = new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: 'USD',
@@ -124,11 +122,33 @@ export function truncateCid(source: string, partLength: number = 4): string {
 
 export function hideSecret(source: string, partLength: number = 4): string {
   return source && source.length > partLength
-    ? '•'.repeat(source.length - partLength) +
-        source.slice(source.length - partLength, source.length)
+    ? '•'.repeat(source.length - partLength) + source.slice(source.length - partLength, source.length)
     : source;
 }
 
 export function toStr(s?: any) {
   return s ? s.toString() : '';
 }
+
+// Generate a secure unique password for the database
+export const generatePassword = (length = 16) => {
+  const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]{}|;:,.<>?';
+  let password = '';
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charset.length);
+    password += charset[randomIndex];
+  }
+  return password;
+};
+
+export const transformLinks = (str: string) => {
+  return str.replace(/\[(.*?)\]\((.*?)\)/gi, (expr, text) => {
+    try {
+      const [_, link] = expr.substring(1, expr.length - 1).split('](');
+      return text && link ? `<a href="${link}" class="link">${text}</a>` : expr;
+    } catch (e: any) {
+      console.error(e);
+      return expr;
+    }
+  });
+};

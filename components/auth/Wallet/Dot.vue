@@ -7,7 +7,7 @@
           :class="{ 'cursor-pointer': wallet.installed }"
           @click="onSelect(wallet)"
         >
-          <NuxtIcon v-if="wallet.icon" :name="wallet.icon" class="text-xl mr-2" filled />
+          <NuxtIcon v-if="wallet.icon" :name="wallet.icon" class="mr-2 text-xl" filled />
           <Image
             v-else-if="wallet.image"
             :src="wallet.image"
@@ -16,7 +16,7 @@
             width="20"
             height="20"
           />
-          <div v-else class="w-5 h-5 mr-2"></div>
+          <div v-else class="mr-2 h-5 w-5"></div>
 
           <div class="flex-1">
             {{ wallet.title }}
@@ -38,10 +38,7 @@
           class="overflow-auto md:overflow-hidden"
         >
           <transition name="slide-down" appear>
-            <n-table
-              v-if="authStore.wallet.accounts && authStore.wallet.accounts.length > 0"
-              class="text-left"
-            >
+            <n-table v-if="authStore.wallet.accounts && authStore.wallet.accounts.length > 0" class="text-left">
               <thead>
                 <tr>
                   <th>{{ $t('general.name') }}:</th>
@@ -61,9 +58,7 @@
                   </td>
                   <td>
                     <Btn
-                      v-if="
-                        authStore.jwt && authStore.user.wallet === account.address && disconnect
-                      "
+                      v-if="authStore.jwt && authStore.user.wallet === account.address && disconnect"
                       type="error"
                       :loading="loading && authStore.wallet.address === account.address"
                       @click="emit('remove', account)"
@@ -98,6 +93,8 @@
 </template>
 
 <script lang="ts" setup>
+import { getWallets } from '~/lib/wallet/wallets';
+
 defineProps({
   actionText: { type: String, default: '' },
   loading: { type: Boolean, default: false },

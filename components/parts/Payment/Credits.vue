@@ -1,16 +1,15 @@
 <template>
-  <div v-if="dataStore.hasProjects" class="relative sm:min-w-[8rem]">
+  <div v-if="dataStore.hasProjects" class="relative whitespace-nowrap">
     <div :class="{ 'opacity-0': paymentStore.loading }">
       <component
         :is="!dataStore.isProjectUser ? NuxtLink : 'span'"
         :to="!dataStore.isProjectUser ? { name: 'dashboard-payments' } : undefined"
       >
-        <span class="inline-block icon-credits text-blue text-xl align-text-top"></span>
-        <strong class="inline-block text-blue ml-2 mr-1">
-          {{ formatNumber(paymentStore.credit.balance || 0) }}
-        </strong>
-        <span class="text-bodyDark hidden sm:inline-block">
-          {{ $t('dashboard.credits.available') }}
+        <span class="inline-block whitespace-nowrap text-blue">
+          <span class="icon-credits inline-block align-text-top text-xl"></span>
+          <strong class="ml-2 mr-1 inline-block text-xs">
+            {{ formatNumber(paymentStore.credit.balance || 0) }}
+          </strong>
         </span>
       </component>
     </div>
@@ -19,15 +18,14 @@
 </template>
 
 <script lang="ts" setup>
+import { formatNumber } from '~/lib/utils/helpers';
+
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const NuxtLink = resolveComponent('NuxtLink');
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await paymentStore.getCredits();
-    });
-  }, 500);
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  await paymentStore.getCredits();
 });
 </script>

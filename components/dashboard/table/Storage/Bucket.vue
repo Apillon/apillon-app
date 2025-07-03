@@ -2,7 +2,7 @@
   <n-space class="pb-8" :size="32" vertical>
     <ActionsStorage @on-bucket-delete="deleteBucket" />
 
-    <n-data-table
+    <DataTable
       ref="tableRef"
       v-bind="$attrs"
       v-model:checked-row-keys="checkedRowKeys"
@@ -22,10 +22,7 @@
 
   <!-- Modal - Edit bucket -->
   <modal v-model:show="showModalEditBucket" :title="$t('storage.bucket.edit')">
-    <FormStorageBucket
-      :bucket-uuid="currentRow.bucket_uuid"
-      @submit-success="showModalEditBucket = false"
-    />
+    <FormStorageBucket :bucket-uuid="currentRow.bucket_uuid" @submit-success="showModalEditBucket = false" />
   </modal>
 
   <!-- Modal - Destroy bucket -->
@@ -49,39 +46,75 @@
 
 <script lang="ts" setup>
 import type { DataTableRowKey } from 'naive-ui';
-import { NButton, NDropdown, NEllipsis } from 'naive-ui';
+import { NDropdown, NEllipsis } from 'naive-ui';
 
 const props = defineProps({
   buckets: { type: Array<BucketInterface>, default: [] },
   deleted: { type: Boolean, default: false },
 });
 
-const $i18n = useI18n();
 const router = useRouter();
 const message = useMessage();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const storageStore = useStorageStore();
+
+const { t, te } = useI18n();
+const { tableRowCreateTime } = useTable();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.BUCKET_DELETE);
 
 const showModalEditBucket = ref<boolean>(false);
 const showModalDestroyBucket = ref<boolean | null>(false);
 const checkedRowKeys = ref<Array<string | number>>([]);
 const bucketsToDelete = ref<BucketInterface[]>([]);
-const TableEllipsis = resolveComponent('TableEllipsis');
 
 /** Data: filtered buckets */
 const data = computed<Array<BucketInterface>>(() => {
   return (
     props.buckets.filter(
       item =>
-        (bucketStore.filter.bucketType === null ||
-          item.bucketType === bucketStore.filter.bucketType) &&
+        (bucketStore.filter.bucketType === null || item.bucketType === bucketStore.filter.bucketType) &&
         item.name.toLowerCase().includes(bucketStore.filter.search.toLowerCase())
     ) || []
   );
 });
+
+const dropdownOptions = [
+  {
+    key: 'storageEdit',
+    label: t('storage.edit'),
+    disabled: dataStore.isProjectUser,
+    props: {
+      onClick: () => {
+        showModalEditBucket.value = true;
+      },
+    },
+  },
+  {
+    key: 'storageDelete',
+    label: t('general.delete'),
+    disabled: authStore.isAdmin(),
+    props: {
+      onClick: () => {
+        deleteBucket(true);
+      },
+    },
+  },
+];
+
+const dropdownDeletedOptions = [
+  {
+    key: 'storageRestore',
+    label: t('general.restore'),
+    disabled: authStore.isAdmin(),
+    props: {
+      onClick: () => {
+        restoreBucket();
+      },
+    },
+  },
+];
 
 const createColumns = (): NDataTableColumns<BucketInterface> => {
   return [
@@ -91,7 +124,7 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
     },
     {
       key: 'name',
-      title: $i18n.t('storage.bucket.name'),
+      title: t('storage.bucket.name'),
       className: props.deleted ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h('strong', {}, { default: () => row.name });
@@ -99,25 +132,25 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
     },
     {
       key: 'type',
-      title: $i18n.t('storage.bucket.type'),
+      title: t('storage.bucket.type'),
       className: props.deleted ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
-        if (row.bucketType > 0 && $i18n.te(`storage.type.${row.bucketType}`)) {
-          return h('span', {}, { default: () => $i18n.t(`storage.type.${row.bucketType}`) });
+        if (row.bucketType > 0 && te(`storage.type.${row.bucketType}`)) {
+          return h('span', {}, { default: () => t(`storage.type.${row.bucketType}`) });
         }
         return '';
       },
     },
     {
       key: 'bucket_uuid',
-      title: $i18n.t('storage.bucket.uuid'),
+      title: t('storage.bucket.uuid'),
       render(row: BucketInterface) {
-        return h(TableEllipsis, { text: row.bucket_uuid }, '');
+        return h(resolveComponent('TableEllipsis'), { text: row.bucket_uuid }, '');
       },
     },
     {
       key: 'used',
-      title: $i18n.t('storage.used'),
+      title: t('storage.used'),
       className: props.deleted ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return (
@@ -130,12 +163,13 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
     },
     {
       key: 'description',
-      title: $i18n.t('storage.bucket.description'),
+      title: t('storage.bucket.description'),
       className: props.deleted ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.description });
       },
     },
+    tableRowCreateTime,
     {
       key: 'actions',
       title: '',
@@ -149,12 +183,7 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
             trigger: 'click',
           },
           {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
+            default: () => h(resolveComponent('BtnActions')),
           }
         );
       },
@@ -182,42 +211,6 @@ const rowProps = (row: BucketInterface) => {
     },
   };
 };
-
-const dropdownOptions = [
-  {
-    key: 'storageEdit',
-    label: $i18n.t('storage.edit'),
-    disabled: dataStore.isProjectUser,
-    props: {
-      onClick: () => {
-        showModalEditBucket.value = true;
-      },
-    },
-  },
-  {
-    key: 'storageDelete',
-    label: $i18n.t('general.delete'),
-    disabled: authStore.isAdmin(),
-    props: {
-      onClick: () => {
-        deleteBucket(true);
-      },
-    },
-  },
-];
-
-const dropdownDeletedOptions = [
-  {
-    key: 'storageRestore',
-    label: $i18n.t('general.restore'),
-    disabled: authStore.isAdmin(),
-    props: {
-      onClick: () => {
-        restoreBucket();
-      },
-    },
-  },
-];
 
 /**
  * On deleteBucket click
@@ -264,12 +257,10 @@ async function restoreBucket() {
   bucketStore.loading = true;
 
   try {
-    const response = await $api.patch<BucketResponse>(
-      endpoints.bucketRestore(currentRow.value.bucket_uuid)
-    );
+    const response = await $api.patch<BucketResponse>(endpoints.bucketRestore(currentRow.value.bucket_uuid));
     removeDeletedBucketFromList(response.data.bucket_uuid);
 
-    message.success($i18n.t('form.success.restored.bucket'));
+    message.success(t('form.success.restored.bucket'));
   } catch (error) {
     window.$message.error(userFriendlyMsg(error));
   }

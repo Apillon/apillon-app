@@ -32,8 +32,11 @@ function routeNameToKey(name: string) {
   return props.sliceName ? removeIdOrSlug(name) : name;
 }
 
-function removeIdOrSlug(text) {
-  return text.replace(/(-id|-slug|-archive|-deployed|-new).*/g, '');
+function removeIdOrSlug(text: string) {
+  return text.replace(
+    /(-id|-slug|-archive|-deployed|-new|-airdrop|-list|-nft-brand-booster|-nft-wild-west|-nft-event-experience).*/g,
+    ''
+  );
 }
 
 /**
@@ -73,14 +76,16 @@ function renderMenuExtra(option: NMenuOption) {
 }
 
 function renderMenuIcon(option: NMenuOption) {
+  const colorClass = option?.color === 'yellow' ? 'text-yellow' : option?.color === 'blue' ? 'text-blue' : '';
+
   if ('svgIcon' in option) {
     return h(
       resolveComponent('NuxtIcon'),
-      { name: option.svgIcon, class: `text-xl mx-2 ${iconClass(option.svgIcon)}` },
+      { name: option.svgIcon, class: `text-xl mx-2 ${colorClass} ${iconClass(option.svgIcon)}` },
       ''
     );
   } else if ('iconName' in option) {
-    return h('span', { class: iconClass(option.iconName) }, '');
+    return h('span', { class: `${colorClass} ${iconClass(option.iconName)}` }, '');
   }
   return null;
 }

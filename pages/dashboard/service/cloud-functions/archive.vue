@@ -5,8 +5,8 @@
     </template>
     <slot>
       <n-space v-if="cloudFunctionStore.hasCloudFunctions" class="pb-8" :size="32" vertical>
-        <ActionsComputingCloudFunctions archive />
-        <TableComputingCloudFunctions :functions="cloudFunctionStore.archive" archive />
+        <ActionsCloudFunctions archive />
+        <TableCloudFunctions :functions="cloudFunctionStore.archive" archive />
       </n-space>
       <Empty
         v-else
@@ -33,13 +33,10 @@ useHead({
   title: t('dashboard.nav.cloudFunctions'),
 });
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await cloudFunctionStore.getCloudFunctions();
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  await cloudFunctionStore.getCloudFunctions();
 
-      pageLoading.value = false;
-    });
-  }, 100);
+  pageLoading.value = false;
 });
 </script>

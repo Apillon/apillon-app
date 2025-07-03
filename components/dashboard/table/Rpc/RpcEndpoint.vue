@@ -6,10 +6,7 @@
     :columns="columns"
     :data="data"
     :loading="rpcEndpointStore.loading"
-    :pagination="{
-      pageSize: PAGINATION_LIMIT,
-      prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
-    }"
+    :pagination="pagination"
     :row-key="rowKey"
     :row-props="rowProps"
   />
@@ -28,12 +25,12 @@ const props = defineProps({
   allowFavoriteCheck: { type: Boolean, default: false },
 });
 
-const $i18n = useI18n();
 const { t } = useI18n();
 const rpcEndpointStore = useRpcEndpointStore();
 const rpcApiKeyStore = useRpcApiKeyStore();
 const router = useRouter();
 const loadedId = ref<number | null>(null);
+const pagination = reactive(createPagination(false));
 
 const extractDomain = (url?: string) => {
   if (!url) {
@@ -234,7 +231,7 @@ async function addRpcEndpoint(chainName: string, networkName: string, networkId:
 
     const res = await $api.post<RpcFavoriteEndpointResponse>(endpoints.rpcUrl(), bodyData);
 
-    message.success($i18n.t('form.success.created.rpcEndpoint'));
+    message.success(t('form.success.created.rpcEndpoint'));
 
     const endpoint = rpcEndpointStore.items.find(item => item.name === chainName && item.networkName === networkName);
     if (endpoint) {
@@ -250,7 +247,7 @@ async function addRpcEndpoint(chainName: string, networkName: string, networkId:
 const dropdownOptions = [
   {
     key: 'delete',
-    label: $i18n.t('general.delete'),
+    label: t('general.delete'),
     props: {
       class: '!text-pink',
       onClick: () => {

@@ -15,15 +15,15 @@
         <div class="mb-2 flex items-center justify-center text-body">
           <p>{{ $t('nft.collection.createToDisplay') }}&nbsp;</p>
           <a href="https://github.com/Apillon/nft-template-vue/fork" target="_blank">
-            <Btn type="builders" size="tiny"> Vue </Btn>
+            <Btn type="builders" size="tiny">{{ $t('nft.collection.websiteDeploy.vue') }}</Btn>
           </a>
           <p>,&nbsp;</p>
           <a href="https://github.com/Apillon/nft-template-react/fork" target="_blank">
-            <Btn type="builders" size="tiny"> React </Btn>
+            <Btn type="builders" size="tiny">{{ $t('nft.collection.websiteDeploy.react') }}</Btn>
           </a>
           <p>&nbsp;{{ $t('general.or') }}&nbsp;</p>
           <a href="https://github.com/Apillon/nft-template/fork" target="_blank">
-            <Btn type="builders" size="tiny"> javascript template </Btn>
+            <Btn type="builders" size="tiny">{{ $t('nft.collection.websiteDeploy.plain_js') }}</Btn>
           </a>
           <p>.</p>
         </div>
@@ -85,14 +85,12 @@
       {{ $t('w3Warn.nft.new') }}
     </W3Warn>
     <modal v-model:show="modalDeployWebsiteVisible" :title="$t('nft.collection.created.deploy')">
-      <FormNftWebsiteDeploy @submit-success="handleSubmit" />
+      <FormNftWebsiteDeploy @submit-success="onWebsiteDeployed" />
     </modal>
   </div>
 </template>
 
 <script setup lang="ts">
-import { transactionLink } from '~/lib/utils/chain';
-
 defineProps({
   showFooter: { type: Boolean, default: false },
   chain: { type: Number, default: 0 },
@@ -114,9 +112,8 @@ const backLink = computed(() =>
     : { name: 'dashboard-service-nft' }
 );
 
-const handleSubmit = (website: WebsiteInterface) => {
+const onWebsiteDeployed = (website: WebsiteInterface) => {
   modalDeployWebsiteVisible.value = false;
-  collectionStore.websiteDeployForm = {} as WebsiteDeployForm;
   deployedWebsite.value = website;
 };
 </script>

@@ -1,54 +1,46 @@
 <template>
-  <Dashboard :loading="pageLoading">
+  <Dashboard :empty="!dataStore.project.selected || !indexerStore.hasIndexers" :loading="pageLoading">
+    <template #empty>
+      <ServiceEmpty
+        docs="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html#indexing-service"
+        :name="toCamelCase(ServiceTypeName.INDEXING)"
+        :service="ServiceTypeName.INDEXING"
+        :guides="serviceGuides"
+        :image="BannerWEBP"
+        powered-by="sqd"
+      >
+        <template #actions>
+          <Btn size="large" @click="modalIndexerVisible = true">
+            {{ $t('indexer.new') }}
+          </Btn>
+        </template>
+        <IndexerSpendingWarning v-model:show="modalIndexerVisible" :title="$t('indexer.new')">
+          <FormIndexer @submit-success="modalIndexerVisible = false" />
+        </IndexerSpendingWarning>
+      </ServiceEmpty>
+    </template>
     <template #heading>
-      <Heading>
-        <slot>
-          <h1 class="inline-block">
-            {{ $t('dashboard.nav.indexing') }}
-            <img src="/icons/beta.svg" alt="Beta" class="ml-2 inline-block h-5 w-14" />
-          </h1>
-        </slot>
-        <template #info>
-          <n-space size="large">
-            <BtnDocumentation
-              size="small"
-              href="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html#indexing-service"
-              hover-lighter
-            />
-            <ModalCreditCosts :service="ServiceTypeName.INDEXING" />
-          </n-space>
+      <Heading :service="ServiceTypeName.INDEXING">
+        <h3 class="inline-block">
+          {{ $t('dashboard.nav.indexing') }}
+          <img src="/icons/beta.svg" alt="Beta" class="ml-2 inline-block h-5 w-14" />
+        </h3>
+        <template #details>
+          <IndexerInstructions />
         </template>
       </Heading>
     </template>
     <slot>
-      <div class="pb-8">
-        <n-collapse
-          v-if="indexerStore.hasIndexers"
-          class="-mt-4 mb-4 border-b-1 border-bg-lighter pb-4"
-          accordion
-          @update:expanded-names="onUpdateAccordion"
-        >
-          <n-collapse-item>
-            <template #header>
-              <span class="icon-info mr-2 text-xl"></span>
-              {{ instructionsVisible ? $t('general.instructions.hide') : $t('general.instructions.show') }}
-            </template>
-            <IndexerInstructions />
-          </n-collapse-item>
-        </n-collapse>
-        <IndexerInstructions v-else class="border-b-1 border-bg-lighter pb-8" />
-
-        <n-space v-if="indexerStore.hasIndexers || indexerStore.search || indexerStore.loading" :size="32" vertical>
-          <ActionsIndexer />
-          <TableIndexer />
-        </n-space>
-      </div>
+      <n-space class="pb-8" :size="32" vertical>
+        <ActionsIndexer />
+        <TableIndexer />
+      </n-space>
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-import { ServiceTypeName } from '~/lib/types/service';
+import BannerWEBP from '/assets/images/service/rpc.webp';
 
 const { t } = useI18n();
 const dataStore = useDataStore();
@@ -58,16 +50,21 @@ useHead({
   title: t('dashboard.nav.indexing'),
 });
 const pageLoading = ref<boolean>(true);
-const instructionsVisible = ref<boolean>(false);
+const modalIndexerVisible = ref<boolean>(false);
 
-onMounted(() => {
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    await indexerStore.getIndexers();
-    pageLoading.value = false;
-  });
+const serviceGuides = [
+  {
+    title: 'Stop wrestling with blockchain data: SQD indexing makes it easy',
+    content:
+      'Discover SQD’s indexing service — a developer-first solution on the Apillon platform to simplify blockchain data access and power your…',
+    link: 'https://blog.apillon.io/stop-wrestling-with-blockchain-data-sqd-indexing-makes-it-easy-4034bc8a89bb/',
+  },
+];
+
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  await indexerStore.getIndexers();
+
+  pageLoading.value = false;
 });
-
-function onUpdateAccordion(expandedNames: Array<string | number>) {
-  instructionsVisible.value = expandedNames.length > 0;
-}
 </script>

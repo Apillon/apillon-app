@@ -1,7 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderBucket />
+      <HeaderStorageBucket />
     </template>
     <slot>
       <TableStorageTrash v-if="fileStore.hasDeletedFiles" />
@@ -21,13 +21,13 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t } = useI18n();
 const fileStore = useFileStore();
 const { pageLoading, initBucket } = useStorage();
 const showModalW3Warn = ref<boolean>(false);
 
 useHead({
-  title: $i18n.t('dashboard.nav.storage'),
+  title: t('dashboard.nav.storage'),
 });
 
 onMounted(() => {

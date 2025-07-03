@@ -77,9 +77,7 @@ onMounted(async () => {
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
-    } else {
+    if (!errors) {
       const priceServiceName = generatePriceServiceName(
         ServiceTypeName.NFT,
         props.collection.chain,
@@ -101,11 +99,7 @@ async function burn() {
     /** Emit events */
     emit('submitSuccess');
   } catch (error) {
-    if (props.collection.collectionType === NFTCollectionType.NESTABLE) {
-      message.error(t('error.NFT_BURN_NESTABLE'));
-    } else {
-      message.error(userFriendlyMsg(error));
-    }
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

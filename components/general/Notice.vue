@@ -19,8 +19,6 @@ const props = defineProps({
   },
 });
 
-const $style = useCssModule();
-
 const notificationClass = computed(() => {
   return [
     {

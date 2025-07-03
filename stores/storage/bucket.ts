@@ -128,6 +128,36 @@ export const useBucketStore = defineStore('bucket', {
       }
     },
 
+    /** CID actions */
+    addCids(cids: Record<string, UploadedFileInfo>) {
+      this.calculatedCids = {
+        ...this.calculatedCids,
+        ...cids,
+      };
+    },
+    getUploadedFileByFilename(name?: string): UploadedFileInfo | undefined {
+      if (!name) return undefined;
+      return Object.values(this.calculatedCids).find(item => (item?.name || '').includes(name));
+    },
+
+    populateCids(directoryContent: BucketItemInterface[]) {
+      return directoryContent.map(file => {
+        if (file.CID || file.link) {
+          // If CID is already present, return the file
+          return file;
+        }
+
+        const cidInfo = this.calculatedCids[file.uuid];
+        if (cidInfo) {
+          file.CID = cidInfo.CID;
+          file.link = cidInfo.link;
+          return file;
+        }
+
+        return file;
+      });
+    },
+
     /**
      * Fetch wrappers
      */
@@ -166,11 +196,9 @@ export const useBucketStore = defineStore('bucket', {
      */
     async fetchBuckets(statusDeleted = false) {
       const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
-      this.loading = true;
+      if (!dataStore.projectUuid) return null;
 
+      this.loading = true;
       try {
         const params = parseArguments(PARAMS_ALL_ITEMS);
         params.project_uuid = dataStore.projectUuid;
@@ -228,31 +256,6 @@ export const useBucketStore = defineStore('bucket', {
       return {} as BucketInterface;
     },
 
-    addCids(cids: Record<string, UploadedFileInfo>) {
-      this.calculatedCids = {
-        ...this.calculatedCids,
-        ...cids,
-      };
-    },
-
-    populateCids(directoryContent: BucketItemInterface[]) {
-      return directoryContent.map(file => {
-        if (file.CID || file.link) {
-          // If CID is already present, return the file
-          return file;
-        }
-
-        const cidInfo = this.calculatedCids[file.uuid];
-        if (cidInfo) {
-          file.CID = cidInfo.CID;
-          file.link = cidInfo.link;
-          return file;
-        }
-
-        return file;
-      });
-    },
-
     async fetchDirectoryContent(arg: FetchDirectoryParams = {}) {
       this.folder.loading = arg.loader !== undefined ? arg.loader : true;
 
@@ -306,8 +309,7 @@ export const useBucketStore = defineStore('bucket', {
   },
   persist: {
     key: SessionKeys.BUCKET_STORE,
-    storage: persistedState.localStorage,
-    paths: ['calculatedCids', 'itemsMainnet', 'itemsTestnet'],
-    // debug: true,
-  } as any,
+    storage: piniaPluginPersistedstate.sessionStorage(),
+    pick: ['calculatedCids'],
+  },
 });

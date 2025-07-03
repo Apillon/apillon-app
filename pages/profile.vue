@@ -1,11 +1,7 @@
 <template>
   <Dashboard :loading="authStore.loadingProfile">
     <template #heading>
-      <Heading>
-        <slot>
-          <h1>{{ $t('profile.mySettings') }}</h1>
-        </slot>
-
+      <Heading :headline="$t('profile.mySettings')">
         <template #submenu>
           <MenuProfile />
         </template>
@@ -15,7 +11,7 @@
       <n-space class="pb-8" :size="32" vertical>
         <!-- Discord -->
         <template v-if="isFeatureEnabled(Feature.DISCORD, authStore.getUserRoles())">
-          <div class="card-light p-8 flex gap-8 justify-between mobile:flex-wrap">
+          <div class="card-light flex justify-between gap-8 p-8 mobile:flex-wrap">
             <div class="md:max-w-lg">
               <template v-if="discordLink">
                 <h3 class="mb-2">{{ $t('profile.discord.titleConnected') }}</h3>
@@ -43,16 +39,16 @@
 </template>
 
 <script lang="ts" setup>
-import colors from '~/tailwind.colors';
+import { colors } from '~/tailwind.config';
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
 const settingsStore = useSettingsStore();
 const loadingDiscord = ref<boolean>(false);
 
 useHead({
-  title: $i18n.t('profile.mySettings'),
+  title: t('profile.mySettings'),
 });
 
 onMounted(async () => {
@@ -63,8 +59,7 @@ const discordLink = computed(() => {
   return (
     (settingsStore.hasOauthLinks &&
       settingsStore.oauthLinks.find(
-        (link: OauthLinkInterface) =>
-          link.user_uuid === authStore.userUuid && link.type === OauthLinkType.DISCORD
+        (link: OauthLinkInterface) => link.user_uuid === authStore.userUuid && link.type === OauthLinkType.DISCORD
       )) ||
     null
   );
@@ -87,7 +82,7 @@ async function discordDisconnect() {
     await $api.post(endpoints.discordDisconnect);
 
     removeDiscordFromOauthList(discordLink.value?.externalUserId);
-    message.success($i18n.t('profile.discord.disconnected'));
+    message.success(t('profile.discord.disconnected'));
   } catch (error) {
     /** Show error message */
     message.error(userFriendlyMsg(error));
@@ -98,8 +93,6 @@ async function discordDisconnect() {
 function removeDiscordFromOauthList(externalUserId?: string) {
   if (!externalUserId) return;
 
-  settingsStore.oauthLinks = settingsStore.oauthLinks.filter(
-    item => item.externalUserId !== externalUserId
-  );
+  settingsStore.oauthLinks = settingsStore.oauthLinks.filter(item => item.externalUserId !== externalUserId);
 }
 </script>

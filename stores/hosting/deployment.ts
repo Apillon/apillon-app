@@ -8,13 +8,13 @@ export const useDeploymentStore = defineStore('deployment', {
     buildsLoading: false,
     builds: [] as DeploymentBuildInterface[],
     buildWebsiteUuid: '',
+    deploymentConfig: {} as DeploymentConfigInterface,
+    production: [] as DeploymentInterface[],
+    staging: [] as DeploymentInterface[],
     variables: [] as DeploymentConfigVariable[],
     variableForm: {} as DeploymentConfigVariable & {
       prevKey?: string;
     },
-    production: [] as DeploymentInterface[],
-    staging: [] as DeploymentInterface[],
-    deploymentConfig: undefined as DeploymentConfigInterface | undefined,
   }),
   getters: {
     hasProductionDeployments(state): boolean {
@@ -30,14 +30,16 @@ export const useDeploymentStore = defineStore('deployment', {
       return Array.isArray(state.variables) && state.variables.length > 0;
     },
     hasDeploymentConfigLoaded(state): boolean {
-      return !!state.deploymentConfig;
+      return !!state.deploymentConfig?.id;
     },
   },
   actions: {
     resetData() {
       this.active = {} as DeploymentInterface;
-      this.staging = [] as DeploymentInterface[];
+      this.builds = [] as DeploymentBuildInterface[];
+      this.deploymentConfig = {} as DeploymentConfigInterface;
       this.production = [] as DeploymentInterface[];
+      this.staging = [] as DeploymentInterface[];
       this.variables = [] as DeploymentConfigVariable[];
     },
     revertVariableChanges() {
@@ -143,7 +145,7 @@ export const useDeploymentStore = defineStore('deployment', {
 
         sessionStorage.setItem(LsCacheKeys.DEPLOYMENT_CONFIG, Date.now().toString());
       } catch (error: any) {
-        this.deploymentConfig = undefined;
+        this.deploymentConfig = {} as DeploymentConfigInterface;
         window.$message.error(userFriendlyMsg(error));
       }
 
@@ -182,7 +184,7 @@ export const useDeploymentStore = defineStore('deployment', {
         this.buildWebsiteUuid = websiteUuid;
 
         sessionStorage.setItem(LsCacheKeys.DEPLOYMENT_BUILD, Date.now().toString());
-      } catch (error) {
+      } catch (error: ApiError | any) {
         this.builds = [] as DeploymentBuildInterface[];
         window.$message.error(userFriendlyMsg(error));
       } finally {

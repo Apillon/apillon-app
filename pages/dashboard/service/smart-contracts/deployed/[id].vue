@@ -4,22 +4,18 @@
       <HeaderSmartContract>
         <template #title>
           <div>
-            <h1>
+            <h3 class="md:whitespace-nowrap">
               {{ deployedContractStore.active.name }}
-              <small class="text-body text-sm ml-2">
-                {{
-                  t(
-                    `dashboard.service.smartContracts.type.${deployedContractStore.active.contractVersion.contract.contractType}`
-                  )
-                }}
+              <small class="ml-2 text-sm text-body">
+                {{ t(`smartContracts.type.${deployedContractStore.active.contractVersion.contract.contractType}`) }}
               </small>
-              <small class="text-body text-sm ml-2">
-                {{ t(`nft.chain.${deployedContractStore.active.chain}`) }}
+              <small class="ml-2 text-sm text-body">
+                {{ $t(`nft.evmChain.${deployedContractStore.active.chain}`) }}
               </small>
-            </h1>
+            </h3>
             <TableLink
               class="text-sm"
-              :prefix="t('dashboard.service.smartContracts.table.contractAddress')"
+              :prefix="t('smartContracts.table.contractAddress')"
               :text="deployedContractStore.active.contractAddress"
               :link="contractLink(deployedContractStore.active.contractAddress, deployedContractStore.active.chain)"
             />
@@ -33,7 +29,7 @@
               {{ $t('auth.wallet.disconnect.wallet') }}
             </p>
           </div>
-          <SmartContractsBtnSubmit v-else size="small" />
+          <SmartContractsBtnSubmit v-else />
         </slot>
       </HeaderSmartContract>
     </template>
@@ -43,16 +39,16 @@
         <div class="mb-8 flex flex-col gap-x-8 md:flex-row">
           <div class="max-w-[550px] flex-1">
             <h4>
-              {{ $t('dashboard.service.smartContracts.infoSection.title') }}
+              {{ $t('smartContracts.infoSection.title') }}
             </h4>
-            <p class="">{{ $t('dashboard.service.smartContracts.infoSection.p') }}</p>
+            <p class="">{{ $t('smartContracts.infoSection.p') }}</p>
             <div class="mt-4 flex border border-bg-lighter p-4">
               <span class="icon-info mr-2"></span>
               <p v-if="isContractTransferred">
-                {{ $t('dashboard.service.smartContracts.infoSection.infoTransferred') }}
+                {{ $t('smartContracts.infoSection.infoTransferred') }}
               </p>
               <p v-else>
-                {{ $t('dashboard.service.smartContracts.infoSection.info') }}
+                {{ $t('smartContracts.infoSection.info') }}
               </p>
             </div>
           </div>
@@ -60,18 +56,13 @@
             <img src="~/assets/images/solution/smart-contracts.png" alt="" />
           </div>
         </div>
-        <Btn v-if="isContractTransferring" class="w-full max-w-xs" :disabled="true">
-          <span class="flex items-center gap-2">
-            <AnimationTyping />
-            {{ SmartContractStatus[contractStatus] }}
-          </span>
-        </Btn>
+        <SmartContractsStatus v-if="isContractTransferring" :status="contractStatus" />
         <FormSmartContractAction
           v-else-if="isConnected && !isContractTransferred && fnTransferOwnership"
           class="max-w-sm"
           :fn="fnTransferOwnership"
           :args="[address as string]"
-          :btn-text="$t('dashboard.service.smartContracts.infoSection.takeOwnershipBtn')"
+          :btn-text="$t('smartContracts.infoSection.takeOwnershipBtn')"
           owner
         />
         <FormSmartContractAction
@@ -82,10 +73,10 @@
             '0x7b765e0e932d348852a6f810bfa1ab891e259123f02db8cdcde614c570223357',
             deployedContractStore.active.deployerAddress,
           ]"
-          :btn-text="$t('dashboard.service.smartContracts.infoSection.takeOwnershipBtn') + ' renounce'"
+          :btn-text="$t('smartContracts.infoSection.takeOwnershipBtn') + ' renounce'"
           owner
         />
-        <SmartContractsBtnSubmit v-else-if="!isConnected" size="small" />
+        <SmartContractsBtnSubmit v-else-if="!isConnected" />
       </div>
 
       <div class="mb-4 mt-8 flex flex-wrap gap-4 border-t border-bg-lighter pt-8 sm:flex-nowrap">
@@ -98,31 +89,31 @@
           "
         >
           <h2 class="mb-6">
-            {{ $t('dashboard.service.smartContracts.functions.write') }}
+            {{ $t('smartContracts.functions.write') }}
           </h2>
           <div class="flex h-full flex-wrap gap-x-4 rounded-lg bg-black lg:flex-nowrap">
             <SmartContractsPanelFunctions
               v-if="ownerFunctions?.length"
               :functions="ownerFunctions"
-              :title="$t('dashboard.service.smartContracts.functions.writeOverApillon')"
+              :title="$t('smartContracts.functions.writeOverApillon')"
               owner
             />
             <SmartContractsPanelFunctions
               v-if="writeFunctions?.length"
               :functions="writeFunctions"
-              :title="$t('dashboard.service.smartContracts.functions.writeFromDapp')"
+              :title="$t('smartContracts.functions.writeFromDapp')"
             />
           </div>
         </div>
         <div class="w-full sm:w-1/2 lg:w-1/3">
           <h2 class="mb-6">
-            {{ $t('dashboard.service.smartContracts.functions.read') }}
+            {{ $t('smartContracts.functions.read') }}
           </h2>
 
           <SmartContractsPanelFunctions
             bg-class="bg-bg-lighter"
             :functions="readFunctions"
-            :title="$t('dashboard.service.smartContracts.functions.readFromDapp')"
+            :title="$t('smartContracts.functions.readFromDapp')"
             read
           />
         </div>
@@ -177,18 +168,17 @@ function disconnectWallet() {
   disconnect();
 }
 
-onMounted(() => {
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    const currentSmartContract = await deployedContractStore.getDeployedContract(contractUuid.value);
+onMounted(async () => {
+  await dataStore.waitOnPromises();
 
-    if (!currentSmartContract?.contract_uuid) {
-      router.push({ name: 'dashboard-service-smart-contracts' });
-    } else {
-      deployedContractStore.active = currentSmartContract;
-      initFunctions();
-      pageLoading.value = false;
-    }
-  });
+  const currentSmartContract = await deployedContractStore.getDeployedContract(contractUuid.value);
+  if (!currentSmartContract?.contract_uuid) {
+    router.push({ name: 'dashboard-service-smart-contracts' });
+  } else {
+    deployedContractStore.active = currentSmartContract;
+    initFunctions();
+    pageLoading.value = false;
+  }
 });
 
 watch(
@@ -231,23 +221,3 @@ function initFunctions() {
   });
 }
 </script>
-
-<style lang="postcss" scoped>
-:deep(.n-collapse-item__header-main) {
-  justify-content: space-between;
-}
-:deep(.n-card > .n-card__content) {
-  @apply p-4 pl-6;
-}
-:deep(.n-card.n-card--bordered) {
-  @apply border-none;
-}
-:deep(.n-card .n-collapse-item__content-wrapper) {
-  @apply mt-4;
-
-  &::before {
-    content: '';
-    @apply absolute left-0 right-0 top-12 border-t border-bg-lighter;
-  }
-}
-</style>

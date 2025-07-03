@@ -1,11 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <Heading>
-        <slot>
-          <h1>{{ $t('dashboard.nav.authentication') }}</h1>
-        </slot>
-
+      <Heading :headline="$t('dashboard.nav.authentication')">
         <template #info>
           <n-space :size="32" align="center">
             <!-- API Keys -->
@@ -13,7 +9,7 @@
               v-if="dataStore.hasServicesByType(ServiceType.AUTHENTICATION)"
               :to="{ name: 'dashboard-api-keys' }"
             >
-              <n-button size="small">
+              <n-button>
                 <span class="icon-acess mr-2 text-xl"></span>
                 {{ $t('dashboard.pageMenu.apiKeys') }}
               </n-button>
@@ -21,7 +17,7 @@
 
             <ModalCreditCosts :service="ServiceTypeName.AUTHENTICATION" />
 
-            <IconInfo v-if="$i18n.te('w3Warn.auth.new')" @click="modalW3WarnVisible = true" />
+            <IconInfo v-if="$te('w3Warn.auth.new')" @click="modalW3WarnVisible = true" />
           </n-space>
         </template>
       </Heading>
@@ -96,15 +92,16 @@
       </div>
       <Empty
         v-else
-        :title="$t('dashboard.service.authentication.emptyTitle')"
-        :info="$t('dashboard.service.authentication.emptyInfo')"
+        :title="$t('service.authentication.emptyTitle')"
+        :info="$t('service.authentication.emptyInfo')"
         icon="storage/empty"
       >
         <FormService
+          v-if="dataStore.project.selected"
           class="mt-4 min-w-[13rem] pr-4 sm:pr-8"
           :service-type="ServiceType.AUTHENTICATION"
           default-service-name="Authentication service"
-          :btn-text="$t('dashboard.service.authentication.emptyBtn')"
+          :btn-text="$t('service.authentication.emptyBtn')"
         />
       </Empty>
     </slot>
@@ -114,22 +111,19 @@
 <script lang="ts" setup>
 import { ServiceType, ServiceTypeName } from '~/lib/types/service';
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const router = useRouter();
 const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.AUTH_NEW);
 
 useHead({
-  title: $i18n.t('dashboard.nav.authentication'),
+  title: t('dashboard.nav.authentication'),
 });
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await dataStore.getServices();
-      pageLoading.value = false;
-    });
-  }, 100);
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  await dataStore.getServices();
+  pageLoading.value = false;
 });
 </script>

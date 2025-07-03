@@ -28,10 +28,7 @@ class Api {
     const q = !query ? '' : '?' + queryString.stringify(query, { arrayFormat: 'bracket' });
     const requestData = { method: 'GET', query: q };
 
-    const response = await fetch(
-      APISettings.basePath + path + q,
-      this.onRequest(requestData, requestOptions)
-    );
+    const response = await fetch(APISettings.basePath + path + q, this.onRequest(requestData, requestOptions));
     return this.onResponse<T>(response);
   }
 
@@ -117,6 +114,7 @@ class Api {
       ];
       if (
         (response.status === 401 && !loginMsgs.includes(error.message || '')) ||
+        (response.status === 400 && error.message === UserError.USER_AUTH_TOKEN_IS_INVALID) ||
         (response.status === 500 && error.message === UserError.AUTH_TOKEN_EXPIRED) ||
         (response.status === 500 && error.message === UserError.INVALID_SIGNATURE) ||
         (response.status === 500 && error.message === UserError.JWT_TOKEN_EXPIRED) ||

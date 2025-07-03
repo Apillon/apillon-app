@@ -46,8 +46,6 @@ export enum SubstrateChain {
   KILT = 2,
   PHALA = 4,
   POLKADOT = 5,
-  SUBSOCIAL = 6,
-  XSOCIAL = 7,
   ASTAR = 8,
   ACURAST = 9,
   UNIQUE = 11,
@@ -65,7 +63,6 @@ export enum SubstrateChainPrefix {
 /** NFT Collection type */
 export enum NFTCollectionType {
   GENERIC = 1,
-  NESTABLE = 2,
 }
 
 /** NFT Collection status */
@@ -96,34 +93,84 @@ export enum TransactionType {
   NEST_MINT_NFT = 6,
 }
 
-/** NFT create steps */
-export enum NftAmount {
-  SINGLE = 1,
-  MULTIPLE = 2,
-}
-/** NFT create steps */
-export enum NftCreateStep {
-  AMOUNT = 1,
-  SINGLE = 2,
-  MULTIPLE = 3,
-  PREVIEW = 4,
-  DEPLOY = 5,
-}
-/** Multiple NFTs upload steps */
-export enum NftUploadStep {
-  FILE = 1,
-  IMAGES = 2,
-  PREVIEW = 3,
-  ATTRIBUTES = 4,
+/** NFT create collection step */
+export enum CollectionCreateStep {
+  METADATA = 1,
+  SMART_CONTRACT = 2,
+  VISUAL = 3,
+  REVIEW = 4,
+  DEPLOYING = 5,
+  DEPLOYED = 6,
 }
 
-export enum PrepareCollectionMetadataStep {
+export enum CollectionFormStep {
+  BASE = 1,
+  BEHAVIOR = 2,
+  ROYALTIES = 3,
+  DROP = 4,
+}
+
+/** NFT Metadata steps */
+export enum NftMetadataStep {
+  CHAIN = 1,
+  METADATA = 2,
+  NEW = 3,
+  SINGLE = 4,
+  SINGLE_PREVIEW = 5,
+  CSV = 6,
+  CSV_PREVIEW = 7,
+  ENDPOINT = 8,
+  ENDPOINT_PREVIEW = 9,
+  JSON = 10,
+  JSON_PREVIEW = 11,
+  DEPLOYING = 99,
+  DEPLOYED = 100,
+}
+
+/** NFTs metadata field */
+export enum MetadataFieldRequired {
+  NAME = 'name',
+  DESCRIPTION = 'description',
+  IMAGE = 'image',
+}
+export enum MetadataProperties {
+  ID = 'id',
+  NAME = 'name',
+  DESCRIPTION = 'description',
+  EXTERNAL_URL = 'external_url',
+  IMAGE = 'image',
+  IMAGE_DATA = 'image_data',
+  ATTRIBUTES = 'attributes',
+  BACKGROUND_COLOR = 'background_color',
+  ANIMATION_URL = 'animation_url',
+  YOUTUBE_URL = 'youtube_url',
+}
+
+export enum TraitTypes {
+  STRING = 'string',
+  DATE = 'date',
+  NUMBER = 'number',
+  BOOST_NUMBER = 'boost_number',
+  BOOST_PERCENTAGE = 'boost_percentage',
+}
+
+export enum MetadataDeployStatus {
   UPLOAD_IMAGES_TO_IPFS = 1,
   UPDATE_JSONS_ON_S3 = 2,
   UPLOAD_METADATA_TO_IPFS = 3,
   PUBLISH_TO_IPNS = 4,
   METADATA_SUCCESSFULLY_PREPARED = 10,
 }
+
+export type FormSingleNft = {
+  image: string;
+  id: number;
+  collectionUuid: string;
+  name: string;
+  description: string;
+  copies: number;
+  attributes: AttributeInterface[];
+};
 
 declare global {
   /** Papa parser */
@@ -144,9 +191,10 @@ declare global {
    * Collection
    */
   interface CollectionInterface extends BaseObjectInterface {
-    adminAddress: string | null;
+    adminAddress: Optional<string>;
+    bannerUrl: Optional<string>;
     baseExtension: string;
-    baseUri: string;
+    baseUri: Optional<string>;
     bucket_uuid: string;
     chain: number;
     chainType: number;
@@ -154,35 +202,29 @@ declare global {
     collectionType: number;
     collectionStatus: number;
     collection_uuid: string;
-    contractAddress: Address | null;
+    contractAddress: Optional<Address>;
     dropStart: number;
     drop: boolean;
-    ipns_uuid: string;
+    ipns_uuid: Optional<string>;
     isRevokable: boolean;
     isSoulbound: boolean;
     isAutoIncrement: boolean;
+    logoUrl: Optional<string>;
     maxSupply: number;
     dropPrice: number;
     dropReserve: number;
-    royaltiesAddress: string;
+    royaltiesAddress: Optional<string>;
     royaltiesFees: number;
     symbol: string;
-    transactionHash: string | null;
-    updateTime: string;
+    transactionHash: Optional<string>;
     useApillonIpfsGateway: boolean;
     useIpns: boolean;
-    websiteUuid: string | null;
+    websiteUuid: Optional<string>;
   }
 
   interface CollectionResponse extends GeneralResponse<CollectionInterface> {}
   interface CollectionUpdateResponse extends GeneralResponse<CollectionInterface> {}
   interface CollectionsResponse extends GeneralItemsResponse<CollectionInterface> {}
-
-  interface WebsiteDeployForm {
-    apiKey: string;
-    apiSecret: string;
-    type: NftWebsiteType;
-  }
 
   /**
    * Transaction
@@ -190,7 +232,7 @@ declare global {
   interface TransactionInterface extends GeneralInterface {
     chainId: number;
     id: number;
-    transactionHash: string | null;
+    transactionHash: Optional<string>;
     transactionStatus: number;
     transactionType: number;
   }
@@ -199,7 +241,7 @@ declare global {
 
   interface MintInterface {
     success: boolean;
-    transactionHash: string | null;
+    transactionHash: Optional<string>;
   }
   interface MintResponse extends GeneralResponse<MintInterface> {}
 
@@ -211,7 +253,7 @@ declare global {
     createTime: string;
     currentStep: number;
     imagesSession: string;
-    lastError: string | null;
+    lastError: Optional<string>;
     metadataSession: string;
     updateTime: string;
     useApillonIpfsGateway: number;
@@ -226,8 +268,10 @@ declare global {
   interface AttributeInterface {
     trait_type: string;
     value: string;
-    display_type: string;
+    display_type: Optional<string>;
   }
 
   interface AttributesInterface extends Array<AttributeInterface> {}
+
+  type MetadataItem = Record<string | MetadataProperties, string | number> & { attributes?: AttributeInterface[] };
 }

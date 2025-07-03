@@ -1,5 +1,3 @@
 <template>
-  <span
-    class="p-[2px] icon-check align-middle text-md bg-green text-bg-light rounded-full !font-bold"
-  ></span>
+  <span class="icon-check text-md rounded-full bg-green p-[2px] font-bold text-bg-light"></span>
 </template>

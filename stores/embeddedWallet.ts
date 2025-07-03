@@ -7,7 +7,7 @@ export const useEmbeddedWalletStore = defineStore('embeddedWallet', {
     items: [] as EmbeddedWalletInterface[],
     loading: false,
     search: '',
-    quotaReached: undefined as Boolean | undefined,
+    quotaReached: undefined as boolean | undefined,
     signature: {
       items: [] as SignatureInterface[],
       loading: false,
@@ -99,7 +99,7 @@ export const useEmbeddedWalletStore = defineStore('embeddedWallet', {
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.EMBEDDED_WALLETS, Date.now().toString());
-      } catch (error) {
+      } catch (error: ApiError | any) {
         this.items = [] as EmbeddedWalletInterface[];
         this.search = '';
         /** Show error message */
@@ -112,16 +112,14 @@ export const useEmbeddedWalletStore = defineStore('embeddedWallet', {
     async fetchEmbeddedWallet(integrationUuid: string) {
       this.loading = true;
       try {
-        const res = await $api.get<EmbeddedWalletResponse>(
-          endpoints.embeddedWallets(integrationUuid)
-        );
+        const res = await $api.get<EmbeddedWalletResponse>(endpoints.embeddedWallets(integrationUuid));
         this.loading = false;
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.EMBEDDED_WALLET, Date.now().toString());
 
         return res.data;
-      } catch (error) {
+      } catch (error: ApiError | any) {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       } finally {
@@ -146,7 +144,7 @@ export const useEmbeddedWalletStore = defineStore('embeddedWallet', {
         sessionStorage.setItem(LsCacheKeys.EMBEDDED_WALLET_INFO, Date.now().toString());
 
         return res.data;
-      } catch (error) {
+      } catch (error: ApiError | any) {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       } finally {
@@ -164,16 +162,13 @@ export const useEmbeddedWalletStore = defineStore('embeddedWallet', {
           search: this.signature.search,
         });
 
-        const res = await $api.get<SignaturesResponse>(
-          endpoints.embeddedWalletSignatures(integrationUuid),
-          params
-        );
+        const res = await $api.get<SignaturesResponse>(endpoints.embeddedWalletSignatures(integrationUuid), params);
         this.signature.items = res.data.items;
         this.signature.pagination.itemCount = res.data.total;
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.EMBEDDED_WALLET_SIGNATURES, Date.now().toString());
-      } catch (error) {
+      } catch (error: ApiError | any) {
         this.signature.items = [] as SignatureInterface[];
         this.signature.pagination.itemCount = 0;
         /** Show error message */

@@ -23,10 +23,7 @@ export const useSmartContractStore = defineStore('smartContract', {
     },
 
     async getSmartContract(contractUuid: string) {
-      if (
-        this.active?.contract_uuid === contractUuid &&
-        !isCacheExpired(LsCacheKeys.SMART_CONTRACT)
-      ) {
+      if (this.active?.contract_uuid === contractUuid && !isCacheExpired(LsCacheKeys.SMART_CONTRACT)) {
         return this.active;
       }
       return await this.fetchSmartContract(contractUuid);
@@ -38,10 +35,7 @@ export const useSmartContractStore = defineStore('smartContract', {
     async fetchSmartContracts(showLoader: boolean = true) {
       this.loading = showLoader;
       try {
-        const res = await $api.get<SmartContractsResponse>(
-          endpoints.smartContracts(),
-          PARAMS_ALL_ITEMS
-        );
+        const res = await $api.get<SmartContractsResponse>(endpoints.smartContracts(), PARAMS_ALL_ITEMS);
         this.items = res.data.items;
 
         /** Save timestamp to SS */

@@ -14,11 +14,7 @@
       @submit.prevent="handleSubmit"
     >
       <!--  Project name -->
-      <n-form-item
-        path="name"
-        :label="$t('form.label.projectName')"
-        :label-props="{ for: 'projectName' }"
-      >
+      <n-form-item path="name" :label="$t('form.label.projectName')" :label-props="{ for: 'projectName' }">
         <n-input
           v-model:value="formData.name"
           :input-props="{ id: 'projectName' }"
@@ -36,27 +32,33 @@
         <n-input
           v-model:value="formData.description"
           type="textarea"
+          rows="4"
           :input-props="{ id: 'projectDescription' }"
           :placeholder="$t('form.placeholder.projectDescription')"
         />
       </n-form-item>
 
+      <p>
+        <span class="text-placeholder">{{ $t('dashboard.onboarding.modal.credits.reward') }}: </span>
+        <span class="inline-block whitespace-nowrap text-blue">
+          <span class="icon-credits mx-2 inline-block align-text-top text-xl"></span>
+          <strong class="text-xs"> 1200 </strong>
+        </span>
+      </p>
+      <slot />
+
       <!--  Project submit -->
-      <n-form-item>
-        <input type="submit" class="hidden" :value="$t('form.login')" />
+      <n-form-item :show-feedback="false">
+        <input type="submit" class="hidden" :value="$t('form.createNewProject')" />
         <Btn
+          class="mt-2 w-full"
+          size="large"
           type="primary"
-          class="w-full mt-2"
           :loading="loading"
           :disabled="dataStore.project.quotaReached === true"
           @click="handleSubmit"
         >
-          <template v-if="dataStore.hasProjects">
-            {{ $t('form.createNewProject') }}
-          </template>
-          <template v-else>
-            {{ $t('form.startFirstProject') }}
-          </template>
+          {{ $t('form.createNewProject') }}
         </Btn>
       </n-form-item>
     </n-form>
@@ -69,7 +71,7 @@ type FormProject = {
   description: string | null;
 };
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const { clearAll } = useStore();
@@ -94,7 +96,7 @@ const rules: NFormRules = {
   name: [
     {
       required: true,
-      message: $i18n.t('validation.projectNameRequired'),
+      message: t('validation.projectNameRequired'),
       trigger: 'input',
     },
   ],
@@ -105,11 +107,7 @@ const rules: NFormRules = {
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
-    } else {
+    if (!errors) {
       await createProject();
     }
   });
@@ -119,14 +117,15 @@ async function createProject() {
   emit('submitActive', true);
 
   try {
-    const res = await $api.post<CreateProjectResponse>(endpoints.projects, formData.value);
+    const { data } = await $api.post<CreateProjectResponse>(endpoints.projects, formData.value);
 
-    if (res.data) {
+    if (data) {
       /** Clear all stored data */
       clearAll();
 
       /** Set new project as current project */
-      dataStore.setCurrentProject(res.data.project_uuid);
+      dataStore.setCurrentProject(data.project_uuid);
+      dataStore.project.items.unshift(data);
 
       emit('submitSuccess');
       emit('submitActive', false);

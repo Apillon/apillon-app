@@ -1,0 +1,181 @@
+{
+  "hosting": {
+    "add-ipns": {
+      "bucket-label": "Choose bucket",
+      "bucket-placeholder": "Bucket",
+      "folder-label": "Choose IPNS record folder",
+      "folder-placeholder": "Folder"
+    },
+    "deploy": {
+      "connectRepo": "Connect Github repository to website",
+      "infoEmpty": "Connect Github repository to enable Continuous Deployment for this website",
+      "new": "New deployment configuration",
+      "redeploy": "Redeploy",
+      "save": "Save deployment configuration",
+      "success": "Deployment configuration saved successfully",
+      "unlink": "Unlink repository",
+      "update": "Update deployment configuration",
+      "updated": "Deployment configuration updated successfully",
+      "updateConfig": "Update config",
+      "env-vars": {
+        "title": "Environment variables",
+        "key": "Key",
+        "value": "Value",
+        "save": "Save",
+        "revert": "Revert",
+        "success-save": "Environment variables have been saved successfully",
+        "add-new": "Add new",
+        "new-title": "New environment variable",
+        "key-placeholder": "Enter key",
+        "value-placeholder": "Enter value",
+        "error-empty": "Variable key and value can't be empty"
+      },
+      "build-table": {
+        "finished-time": "Finished at",
+        "build-status": "Build status",
+        "status": {
+          "1": "PENDING",
+          "2": "IN PROGRESS",
+          "3": "COMPLETED",
+          "4": "FAILED"
+        }
+      }
+    },
+    "deployment": {
+      "env": {
+        "1": "Staging",
+        "2": "Production",
+        "3": "Direct to production"
+      },
+      "status": {
+        "0": "Initiated",
+        "1": "Deploying",
+        "2": "In review",
+        "3": "Approved",
+        "10": "Successful",
+        "100": "Failed",
+        "101": "Rejected"
+      }
+    },
+    "domain": {
+      "add": "Add domain",
+      "configure": "DNS Records",
+      "domainStatus": "Domain status",
+      "edit": "Edit domain",
+      "editDisabled": "Website domain can be changed every 15 minutes. ",
+      "preview": "Domain preview",
+      "refreshStatus": "Refresh domain status",
+      "remove": "Remove domain",
+      "setup": "Setup domain",
+      "update": "Update domain",
+      "useIpns": "Use IPNS",
+      "labelInfo": {
+        "useIpns": "IPNS is a feature of the IPFS that allows a consistent address to be used even when the content changes. This means you can share the same address, and any updates to the content won't require a new address."
+      },
+      "status": {
+        "0": "Not Connected",
+        "1": "OK",
+        "2": "Domain has CDN",
+        "10": "Invalid, domain is not pointing to Apillon IP"
+      }
+    },
+    "github": {
+      "browseAll": "Browse all templates",
+      "connect": "Connect GitHub",
+      "connected": "GitHub connected",
+      "connectedNotice": "You have successfully connected your GitHub account.",
+      "disconnect": "Disconnect GitHub",
+      "disconnectQuestion": "Are you sure you want to disconnect your GitHub account?",
+      "disconnectedNotice": "You have successfully disconnected your GitHub account.",
+      "import": "Import existing Git Repository",
+      "importInfo": "Connect your GitHub account to see your repositories and deploy a project.",
+      "options": "GitHub options",
+      "template": "Start with our template",
+      "templateInfo": "Use an Apillon pre-made template to fork a repository on GitHub and connect it to CI/CD."
+    },
+    "menu": {
+      "archive": "Website Archive",
+      "preview": "Upload",
+      "staging": "Preview",
+      "deployments": "Deployments",
+      "production": "Production",
+      "website": "Websites",
+      "envVars": "Environment variables"
+    },
+    "review": {
+      "confirm": "Proceed with Website Deployment, I'll wait",
+      "content": [
+        "Deployments of websites on the Free Plan undergo security checks to prevent phishing attempts and other malicious activities. While we typically review websites promptly, please note that it may take up to 24 hours. Once approved, your website will be accessible through our IPFS gateway.",
+        "Consider upgrading to one of our paid plans for immediate deployment without the security check delay."
+      ],
+      "title": "Free Plan Website Review by Apillon",
+      "upgrade": "Upgrade Now"
+    },
+    "upload": {
+      "directory": "Upload folder",
+      "dragAndDrop": "Drag & drop (up to 100 files)",
+      "files": "Upload files and folders"
+    },
+    "website": {
+      "add": "Add website",
+      "addFirst": "Add first website",
+      "branchDeployments": "Branch deployments",
+      "create": "Create website",
+      "description": "Website description",
+      "delete": "Delete website",
+      "deleteConfirm": "Are you sure that you want to delete selected website?",
+      "deployed": "Yay, your website is live and waiting for content.",
+      "deployedInfo": "Upload your files with the CLI or drag & drop them when you're ready.",
+      "deploying": "Deploying your website",
+      "deployingInfo": "We’re building and making it live — hang tight!",
+      "deployments": "See deployments",
+      "domain": "Domain name",
+      "edit": "Edit website",
+      "infoNew": "Deploy your static website over CLI or drag&drop files manually.",
+      "infoNewGithub": "Deploy your static website over CLI.",
+      "infoEdit": "",
+      "name": "Website name",
+      "new": "Create new website",
+      "update": "Update website",
+      "uuid": "Website UUID",
+      "selectType": "Select Website Type",
+      "basicType": "Blank website",
+      "basicTypeDescription": "Deploy your static website over API/CLI or drag & drop files manually",
+      "githubType": "Import GitHub repo",
+      "githubTypeDescription": "Connect your GitHub repo - we will build and deploy your project automatically.",
+      "createStep": {
+        "1": "Select",
+        "2": "Data",
+        "3": "Review"
+      },
+      "review": {
+        "info": "Give your website a final review before creating."
+      },
+      "source": {
+        "apillon": "Website",
+        "github": "GitHub CI/CD",
+        "nft": "NFT template",
+        "title": "Type"
+      }
+    },
+    "clearAll": "Clear all",
+    "clearAllFiles": "Do you want to remove all files?",
+    "clearAllWarn": "With this action you will erase all files. To deploy new version to preview, you will have to upload whole website.",
+    "deployProd": "Deploy to production",
+    "deployStage": "Deploy to staging",
+    "deploymentStatus": "Deployment status",
+    "ipfsLink": "IPFS link",
+    "ipns": "IPNS",
+    "ipnsAddress": "IPNS Address",
+    "ipnsLink": "IPNS link",
+    "ipnsInfo": "It may take up to 5 minutes for the changes to become visible after the deployment has been completed.",
+    "management": "Hosting management",
+    "productionEmpty": "Deploy files from staging to production",
+    "size": "Size",
+    "stagingEmpty": "Upload files and deploy them to staging",
+    "web3Hosting": "Web3 hosting",
+    "web3HostingArchive": "Web3 hosting Archive",
+    "web3HostingArchiveInfo": "You don't have any website in Archive.",
+    "web3HostingEnable": "Enable Web3 hosting to host your website."
+  }
+}

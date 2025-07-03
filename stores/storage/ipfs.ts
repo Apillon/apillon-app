@@ -19,11 +19,7 @@ export const useIpfsStore = defineStore('ipfs', {
      * Fetch wrappers
      */
     async getIpfsInfo(projectUuid: string): Promise<IpfsInterface> {
-      if (
-        !this.hasIpfs ||
-        isCacheExpired(LsCacheKeys.IPFS) ||
-        this.info.project_uuid !== projectUuid
-      ) {
+      if (!this.hasIpfs || isCacheExpired(LsCacheKeys.IPFS) || this.info.project_uuid !== projectUuid) {
         return await this.fetchIpfsInfo(projectUuid);
       }
       return this.info;
@@ -33,6 +29,7 @@ export const useIpfsStore = defineStore('ipfs', {
      * API calls
      */
     async fetchIpfsInfo(project_uuid: string): Promise<IpfsInterface> {
+      if (!project_uuid) return {} as IpfsInterface;
       try {
         const res = await $api.get<IpfsResponse>(endpoints.ipfsInfo, {
           project_uuid,
@@ -53,7 +50,7 @@ export const useIpfsStore = defineStore('ipfs', {
       return {} as IpfsInterface;
     },
 
-    async fetchIpfsLink(project_uuid: string, cid: string, type: string): Promise<IpfsLink | null> {
+    async fetchIpfsLink(project_uuid: string, cid: string, type: string): Promise<Optional<IpfsLink>> {
       if (!cid || !project_uuid) return null;
       try {
         const res = await $api.get<IpfsLinkResponse>(endpoints.ipfsLink, {

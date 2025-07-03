@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col items-center justify-center px-6 py-4 mx-auto md:max-w-2xl"
+    class="mx-auto flex flex-col items-center justify-center px-6 py-4 md:max-w-2xl"
     :style="small ? {} : { minHeight: 'calc(100dvh - 270px)' }"
   >
     <div v-if="icon" class="mb-8">

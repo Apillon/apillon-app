@@ -1,30 +1,18 @@
 <template>
   <n-space class="pb-8" :size="12" vertical>
     <n-space justify="space-between">
-      <div class="w-[45vw] sm:w-[30vw] lg:w-[20vw] max-w-xs">
-        <!-- <n-input
-          v-model:value="fileStore.search"
-          type="text"
-          name="search"
-          size="small"
-          :placeholder="$t('storage.file.search')"
-          clearable
-        >
-          <template #prefix>
-            <span class="icon-search text-2xl"></span>
-          </template>
-        </n-input> -->
+      <div class="w-[45vw] max-w-xs sm:w-[30vw] lg:w-[20vw]">
+        <!-- 
+        <FormFieldSearch v-model:value="fileStore.search" :placeholder="$t('storage.file.search')" /> 
+          -->
       </div>
       <n-space>
         <!-- Refresh -->
         <n-button
-          size="small"
           :loading="loading"
-          @click="
-            getFiles(fileStore.session.pagination.page, fileStore.session.pagination.pageSize)
-          "
+          @click="getFiles(fileStore.session.pagination.page, fileStore.session.pagination.pageSize)"
         >
-          <span class="icon-refresh text-xl mr-2"></span>
+          <span class="icon-refresh mr-2 text-xl"></span>
           {{ $t('general.refresh') }}
         </n-button>
 
@@ -33,7 +21,6 @@
           v-model:value="fileStatus"
           :options="fileStatuses"
           class="w-[45vw] sm:w-[30vw] lg:w-[20vw] max-w-xs"
-          size="small"
           :placeholder="$t('form.placeholder.fileStatus')"
           filterable
           clearable
@@ -41,7 +28,7 @@
         />-->
       </n-space>
     </n-space>
-    <n-data-table
+    <DataTable
       remote
       :bordered="false"
       :columns="columns"
@@ -68,20 +55,10 @@ import { useDebounceFn } from '@vueuse/core';
 const { t } = useI18n();
 const dataStore = useDataStore();
 const fileStore = useFileStore();
+const { tableRowCreateTime, tableRowUpdateTime } = useTable();
 
 const loading = ref<boolean>(false);
 const currentRow = ref<FileUploadSessionInterface>({} as FileUploadSessionInterface);
-
-/** File status
-const fileStatus = ref<number | undefined>();
-const fileStatuses = ref<Array<SelectOption>>(
-  enumValues(FileUploadSessionStatus).map(value => {
-    return {
-      value,
-      label: FileUploadSessionStatus[value],
-    };
-  })
-); */
 
 /** Columns */
 const createColumns = (): NDataTableColumns<FileUploadSessionInterface> => {
@@ -108,20 +85,8 @@ const createColumns = (): NDataTableColumns<FileUploadSessionInterface> => {
       title: t('storage.numOfUploadedFiles'),
       key: 'numOfUploadedFiles',
     },
-    {
-      key: 'createTime',
-      title: t('dashboard.createTime'),
-      render(row: FileUploadSessionInterface) {
-        return h('span', {}, { default: () => dateTimeToDateAndTime(row.createTime || '') });
-      },
-    },
-    {
-      key: 'updateTime',
-      title: t('general.updateTime'),
-      render(row: FileUploadSessionInterface) {
-        return h('span', {}, { default: () => dateTimeToDateAndTime(row.updateTime || '') });
-      },
-    },
+    tableRowCreateTime,
+    tableRowUpdateTime,
     {
       title: t('storage.sessionStatus'),
       key: 'sessionStatus',
@@ -145,16 +110,13 @@ function rowProps(row: FileUploadSessionInterface) {
 /**
  * Load data on mounted
  */
-onMounted(() => {
+onMounted(async () => {
   fileStore.search = '';
   loading.value = true;
 
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await fileStore.getFileSessions();
-      loading.value = false;
-    });
-  }, 100);
+  await dataStore.waitOnPromises();
+  await fileStore.getFileSessions();
+  loading.value = false;
 });
 
 /** Search files */

@@ -1,59 +1,44 @@
 <template>
-  <Dashboard :loading="pageLoading">
-    <template #heading>
-      <Heading>
-        <slot>
-          <h1>{{ $t('dashboard.nav.storage') }}</h1>
-        </slot>
-
-        <template #info>
-          <n-space :size="32" align="center">
-            <StorageProgress
-              :key="storageStore.info.usedStorage"
-              :size="storageStore.info.usedStorage"
-              :max-size="storageStore.info.availableStorage"
-            />
-            <IconInfo @click="showModalW3Warn = true" />
-          </n-space>
-        </template>
-
-        <template #submenu>
-          <MenuStorage />
-        </template>
-      </Heading>
-    </template>
-    <slot>
-      <TableStorageBucket v-if="bucketStore.hasBuckets" :buckets="bucketStore.items" />
-      <Empty
-        v-else
-        :title="$t('storage.bucket.noActiveService')"
-        :info="$t('storage.bucket.attachService')"
-        icon="storage/empty"
+  <Dashboard :loading="pageLoading" :empty="!dataStore.project.selected || !bucketStore.hasBuckets">
+    <template #empty>
+      <ServiceEmpty
+        docs="https://wiki.apillon.io/web3-services/2-web3-storage.html"
+        :name="ServiceTypeName.STORAGE.toLowerCase()"
+        :service="ServiceTypeName.STORAGE"
+        :guides="serviceGuides"
+        :image="BannerWEBP"
       >
-        <Btn type="primary" @click="createNewBucket">
-          {{ $t('storage.bucket.new') }}
-        </Btn>
-      </Empty>
+        <template #actions>
+          <Btn size="large" type="primary" @click="createNewBucket">
+            {{ $t('storage.bucket.new') }}
+          </Btn>
+        </template>
+      </ServiceEmpty>
+    </template>
+    <template #heading>
+      <HeaderStorage />
+    </template>
 
-      <W3Warn v-model:show="showModalW3Warn" @submit="onModalW3WarnHide">
-        {{ $t('w3Warn.bucket.new') }}
-      </W3Warn>
-
-      <!-- Modal - Create bucket -->
-      <modal v-model:show="showModalNewBucket" :title="$t('project.newBucket')">
-        <FormStorageBucket
-          @submit-success="showModalNewBucket = false"
-          @create-success="onBucketCreated"
-        />
-      </modal>
-    </slot>
+    <TableStorageBucket :buckets="bucketStore.items" />
   </Dashboard>
+
+  <W3Warn v-model:show="showModalW3Warn" @submit="onModalW3WarnHide">
+    {{ $t('w3Warn.bucket.new') }}
+  </W3Warn>
+
+  <!-- Modal - Create bucket -->
+  <modal v-model:show="showModalNewBucket" :title="$t('project.newBucket')">
+    <FormStorageBucket @submit-success="showModalNewBucket = false" @create-success="onBucketCreated" />
+  </modal>
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+import BannerWEBP from '/assets/images/storage/file.webp';
+
+const { t } = useI18n();
 const router = useRouter();
 const dataStore = useDataStore();
+const ipfsStore = useIpfsStore();
 const bucketStore = useBucketStore();
 const storageStore = useStorageStore();
 const pageLoading = ref<boolean>(true);
@@ -61,17 +46,38 @@ const showModalW3Warn = ref<boolean>(false);
 const showModalNewBucket = ref<boolean | null>(false);
 
 useHead({
-  title: $i18n.t('dashboard.nav.storage'),
+  title: t('dashboard.nav.storage'),
 });
 
-onMounted(() => {
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    await storageStore.getStorageInfo();
-    await bucketStore.getBuckets();
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  await storageStore.getStorageInfo();
+  await bucketStore.getBuckets();
+  ipfsStore.getIpfsInfo(dataStore.projectUuid);
 
-    pageLoading.value = false;
-  });
+  pageLoading.value = false;
 });
+
+const serviceGuides = [
+  {
+    title: 'Upload files to IPFS with Apillon for free',
+    content:
+      'Get free and easy IPFS upload and store your files in a more efficient and distributed way on the Apillon platform.',
+    link: 'https://blog.apillon.io/upload-files-to-ipfs-with-apillon-for-free-703003cf7e5/',
+  },
+  {
+    title: 'FAQ: Apillon Web3 Storage',
+    content:
+      'Find answers to your questions on the Apillon Web3 Storage service, how to store files on a decentralized network, and more.',
+    link: 'https://blog.apillon.io/faq-apillon-web3-storage-c99a9b0e8b12/',
+  },
+  {
+    title: 'Apillon Recipe #4 — NFT metadata storage',
+    content:
+      'In round four of cooking Web3 with Apillon, you will find why the storage of NFT metadata matters and how to bring it to a decentralized…',
+    link: 'https://blog.apillon.io/apillon-recipe-4-nft-metadata-storage-71da4fe7c60f/',
+  },
+];
 
 /**
  * On createNewBucket click

@@ -2,10 +2,11 @@
   <n-modal v-bind="$attrs" ref="modalRef" :mask-closable="false">
     <n-card
       class="!max-w-xl"
-      :title="title || $t(`dashboard.delete`)"
+      :title="title || $t(`general.delete`)"
       :bordered="false"
       role="dialog"
       aria-modal="true"
+      size="large"
     >
       <template #header-extra>
         <button type="button" class="n-base-close n-card__close" @click="closeModal">
@@ -33,7 +34,6 @@
 </template>
 
 <script lang="ts" setup>
-import { NModal } from 'naive-ui';
 defineProps({
   title: { type: String, default: null },
 });

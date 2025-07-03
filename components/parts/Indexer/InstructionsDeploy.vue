@@ -1,10 +1,10 @@
 <template>
-  <div class="d-flex flex-column pb-8 max-w-4xl">
+  <div class="d-flex flex-column max-w-4xl pb-8">
     <h4>{{ $t('indexer.instructions.deployYourIndexer') }}</h4>
     <p v-html="$t('indexer.instructions.instruction1')"></p>
     <p>{{ $t('indexer.instructions.instruction2') }}</p>
 
-    <div class="card-lighter p-8 mt-4 mb-6">
+    <div class="card-lighter mb-6 mt-4 p-8">
       <n-space :size="16" vertical>
         <div class="flex items-center gap-2">
           <IconNumber class="" :number="1" active />
@@ -13,52 +13,44 @@
         <CliCommand command="npm install -g @apillon/cli" title="Install the CLI globally" list />
       </n-space>
 
-      <hr class="border-bg my-6" />
+      <hr class="my-6 border-bg" />
 
       <n-space :size="16" vertical>
         <div class="flex items-center gap-2">
           <IconNumber class="" :number="2" active />
           <h4>{{ $t('indexer.instructions.step2') }}</h4>
         </div>
-        <p class="text-white text-xs font-bold">
+        <p class="text-xs font-bold text-white">
           {{ $t('indexer.instructions.chooseTemplate') }}
         </p>
-        <ul class="list-disc ml-4 text-xs">
+        <ul class="ml-4 list-disc text-xs">
           <li class="mb-2">
-            <a
-              class="link"
-              href="https://github.com/subsquid-labs/squid-substrate-template"
-              target="_blank"
-            >
+            <a class="link" href="https://github.com/subsquid-labs/squid-substrate-template" target="_blank">
               {{ $t('indexer.instructions.substrateTemplate') }}
             </a>
           </li>
           <li>
-            <a
-              class="link"
-              href="https://github.com/subsquid-labs/squid-evm-templates"
-              target="_blank"
-            >
+            <a class="link" href="https://github.com/subsquid-labs/squid-evm-templates" target="_blank">
               {{ $t('indexer.instructions.evmTemplates') }}
             </a>
           </li>
         </ul>
       </n-space>
 
-      <hr class="border-bg my-6" />
+      <hr class="my-6 border-bg" />
 
       <n-space :size="16" vertical>
         <div class="flex items-center gap-2">
           <IconNumber class="" :number="3" active />
           <h4>{{ $t('indexer.instructions.step3') }}</h4>
         </div>
-        <p class="text-white text-xs font-bold">
-          Explore <a class="link" href="https://docs.sqd.dev/" target="_blank">the docs</a> to learn
-          how to customize your squid
+        <p class="text-xs font-bold text-white">
+          Explore <a class="link" href="https://docs.sqd.dev/" target="_blank">the docs</a> to learn how to customize
+          your squid
         </p>
       </n-space>
 
-      <hr class="border-bg my-6" />
+      <hr class="my-6 border-bg" />
 
       <n-space class="mb-6" :size="16" vertical>
         <div class="flex items-center gap-2">
@@ -72,9 +64,7 @@
         />
       </n-space>
 
-      <Btn size="large" :loading="loading" @click="deployFinished">{{
-        $t('indexer.instructions.btnFinish')
-      }}</Btn>
+      <Btn size="large" :loading="loading" @click="deployFinished">{{ $t('indexer.instructions.btnFinish') }}</Btn>
     </div>
   </div>
 </template>
@@ -96,7 +86,7 @@ async function deployFinished() {
 
   loading.value = false;
   if (!indexer) {
-    router.push({ name: 'dashboard-service-indexer' });
+    router.push({ name: 'dashboard-service-indexing' });
     return;
   }
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col flex-grow">
+  <div class="flex flex-grow flex-col">
     <div class="flex flex-col gap-2">
       <h4>
         {{ $t('rpc.apiKey.headline') }}
@@ -7,15 +7,15 @@
       <p>
         {{ $t('rpc.apiKey.description') }}
       </p>
-      <div class="text-body flex flex-row gap-4">
-        {{ $t('rpc.apiKey.powered') }}
+      <div class="flex flex-row gap-4 text-body">
+        {{ $t('general.poweredBy') }}
         <img src="/assets/images/rpc/Dwellir.png" class="h-6 w-auto object-contain" alt="Dwellir" />
       </div>
     </div>
 
     <ul class="mt-6 flex-grow overflow-y-auto">
       <li v-for="(benefit, keyB) in benefits" :key="keyB" class="my-2">
-        <NuxtIcon name="icon/success" class="inline-block float-left mr-2 text-2xl text-green" />
+        <NuxtIcon name="icon/success" class="float-left mr-2 inline-block text-2xl text-green" />
         <span>
           <strong v-if="benefit.bolded">{{ benefit.bolded }}</strong>
           {{ benefit.text }}

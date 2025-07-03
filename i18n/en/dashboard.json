@@ -1,0 +1,356 @@
+{
+  "dashboard": {
+    "apiKey": {
+      "apiKey": "API key",
+      "apiKeySecret": "API key secret",
+      "authentication": "Authentication",
+      "authorization": "Authentication",
+      "delete": "Delete API key",
+      "details": "API key details",
+      "generate": "Generate new key",
+      "secretSaved": "I've saved API key's secret",
+      "title": "API Keys",
+      "update": "Update API key",
+      "service": {
+        "authentication": "Authentication service",
+        "computing": "Computing service",
+        "contracts": "Contracts service",
+        "hosting": "Hosting service",
+        "nft": "NFT service",
+        "rpc": "RPC Service",
+        "storage": "Storage service",
+        "wallet": "Wallet service",
+        "indexing": "Indexing service"
+      }
+    },
+    "clipboard": {
+      "copied": "Text has been copied to clipboard",
+      "copy": "Copy to clipboard",
+      "copyApiKey": "Copy API key to clipboard",
+      "copyCid": "Copy CID",
+      "copyLink": "Copy link",
+      "copyUuid": "Copy UUID",
+      "error": "Failed to copy"
+    },
+    "credits": {
+      "amount": "Amount",
+      "bonus": "Bonus credits",
+      "buy": "Buy",
+      "buyWithCrypto": "Buy with Crypto",
+      "buyWithCreditCard": "Buy with Credit Card",
+      "buyWithDot": "Buy with DOT",
+      "available": "available",
+      "category": "Category",
+      "checkPrice": "Check price",
+      "checkPricing": "Check pricing",
+      "confirmPrices": "I understand",
+      "cost": "Cost",
+      "credit": "credit",
+      "credits": "credits",
+      "creditsAmount": "Credit amount",
+      "creditCosts": "Service costs",
+      "currentCredits": "Current credits",
+      "date": "Date and time",
+      "description": "Description",
+      "direction": "Direction",
+      "disabled": "Due to limitations set by our payment provider, this payment is disabled",
+      "filterByChain": "Filter by chain",
+      "filterByService": "Filter by service",
+      "getMore": "Get more",
+      "included": "Can be used for:",
+      "name": "Name",
+      "notEnoughCredits": "Not enough credits",
+      "packages": "Credit packages",
+      "pricing": "Pricing",
+      "pricingNotification": "Pricing notification",
+      "product_id": "Product ID",
+      "service": "Service",
+      "serviceDescription": "Service description",
+      "serviceStorage": "Web3 Storage",
+      "title": "Credits",
+      "transactions": "Credit transactions",
+      "threshold": "Credit notification threshold",
+      "yourFunds": "Your funds",
+      "includedServices": ["All Web3 services", "All prebuilt solutions", "All smart contracts"],
+      "services": {
+        "ACURAST": {
+          "name": "Cloud functions",
+          "description": null
+        },
+        "COMPUTING": {
+          "name": "Web3 Computing",
+          "description": null
+        },
+        "CONTRACTS": {
+          "name": "Smart contracts",
+          "description": null
+        },
+        "HOSTING": {
+          "name": "Web3 Hosting",
+          "description": null
+        },
+        "IDENTITY": {
+          "name": "Web3 Identity",
+          "description": null
+        },
+        "NFT": {
+          "name": "NFTs",
+          "description": null
+        },
+        "SIMPLETS": {
+          "name": "Simplets",
+          "description": null
+        },
+        "STORAGE": {
+          "name": "Web3 Storage",
+          "description": null
+        },
+        "WALLET": {
+          "name": "Embedded Wallet",
+          "description": null
+        },
+        "INDEXING": {
+          "name": "Indexing",
+          "description": null
+        }
+      }
+    },
+    "refreshModal": {
+      "title": "Deployment Status",
+      "refresh": "refresh",
+      "subtitle": "Uploading script file to IPFS"
+    },
+    "invoice": {
+      "client": "Client",
+      "currency": "Currency",
+      "invoices": "Credit purchases",
+      "referenceTable": "Reference",
+      "subtotalAmount": "Subtotal",
+      "totalAmount": "Total",
+      "date": "Date and time"
+    },
+    "nav": {
+      "access": "Access",
+      "authentication": "Authentication",
+      "assetManagement": "Asset Management & Development",
+      "apiKeys": "API Keys",
+      "analytics": "Analytics",
+      "assetHub": "Asset hub",
+      "billing": "Billing & usage",
+      "configuration": "Configuration",
+      "computing": "Computing",
+      "cloudFunctions": "Cloud Functions",
+      "coreWeb3Infrastructure": "Core Web3 Infrastructure",
+      "explore": "Explore",
+      "hosting": "Hosting",
+      "nft": "NFTs",
+      "projectOverview": "Project overview",
+      "projectSettings": "Project settings",
+      "services": "Web3 Services",
+      "smartContracts": "Smart Contracts",
+      "smartContractDetails": "Smart Contract Details",
+      "simplets": "Simplets",
+      "rpc": "RPC Service",
+      "utility": "Utility",
+      "solutions": "Pre-built Solutions (Simplets)",
+      "storage": "Storage",
+      "embeddedWallet": "Embedded Wallet",
+      "indexing": "Indexing"
+    },
+    "onboarding": {
+      "banner": {
+        "content": "Take a few moments to explore Apillon with our CPO as your guide.",
+        "title": "Getting around the platform",
+        "token": "$NCTR Token",
+        "tokenInfo": "Save on services and vote on future platform upgrades."
+      },
+      "modal": {
+        "credits": {
+          "title": "Wow, free credits!",
+          "info": "The credits unlock once you start a project.",
+          "content": "Not ready yet? No worries! Feel free to look around first. \nYour credits will be here when you’re ready to build.",
+          "start": "Your starter budget",
+          "lookAround": "Look around the platform",
+          "project": "Start a project",
+          "reward": "For a fresh start, you’ll receive"
+        },
+        "token": {
+          "reward": "credits applied",
+          "title": "Yay, free credits granted!",
+          "info": "Your 1200 credits are now unlocked. \nTime to explore, test and build with Apillon’s services.",
+          "nctr": "Holding $NCTR token?",
+          "content": "Enjoy builder discounts and a governance voting power on Apillon’s next upgrades."
+        },
+        "info": "Web3, simplified and user-friendly. Build and customize your product while we handle the heavy lifting behind the scenes.",
+        "notification": "Apillon is optimized for desktop devices. You can still build on mobile, but you'll move faster on a bigger screen."
+      },
+      "services": {
+        "hosting": {
+          "title": "Host a website",
+          "content": "Set up and launch a Web3-ready website—fast, secure, and hassle-free."
+        },
+        "nft": {
+          "title": "Manage your own NFT collection",
+          "content": "Create and manage your own NFT collection, hosted on your own setup."
+        },
+        "storage": {
+          "title": "Store metadata",
+          "content": "Securely store and manage metadata for NFTs, digital assets, and more."
+        },
+        "embedded-wallet": {
+          "title": "Use a simple login for your dapp",
+          "content": "Let users log in via embedded wallets, without browser extensions."
+        },
+        "cloud-functions": {
+          "title": "Automate your backend processes ",
+          "content": "Handle Web3 automation without managing a server or writing backend code."
+        },
+        "smart-contracts": {
+          "title": "Put smart contracts to work",
+          "content": "Set up smart contracts to run tasks on-chain, so you don’t have to."
+        }
+      },
+      "codingRequired": "Coding required",
+      "noCode": "No code",
+      "servicesTitle": "What do you want to achieve today?",
+      "welcome": "Welcome to Apillon"
+    },
+    "pageMenu": {
+      "access": "Access",
+      "accountManagement": "Account management",
+      "apiKeys": "API Keys",
+      "billing": "Billing",
+      "charts": "Charts",
+      "credentials": "Credentials & API Keys",
+      "credits": "Credits",
+      "destroy": "Destroy",
+      "history": "History",
+      "methods": "Methods",
+      "payments": "Overview",
+      "priceList": "Price list",
+      "profile": "Profile",
+      "projectSettings": "Project settings",
+      "usage": "Usage",
+      "usersPermissions": "Users & permissions"
+    },
+    "payment": {
+      "buyCredits": "Buy credits",
+      "costs": "Costs",
+      "changePlan": "Change plan",
+      "comparePlans": "Compare plans",
+      "currentPlan": "Current plan",
+      "expiresOn": "Expires on:",
+      "decline": "Decline",
+      "managePlan": "Manage billing",
+      "notEnoughCredits": "You don't have enough credits. Please, buy more credits to proceed",
+      "proceed": "Proceed",
+      "selectPlan": "Select plan",
+      "spendingAlert": "Spending ALERT!",
+      "title": "Payment",
+      "upgrade": "Upgrade",
+      "upgradePlan": "Upgrade plan",
+      "stripe": {
+        "credits": "Successfully acquired {credits} credits.",
+        "error": "Failed to subscribe",
+        "subscription": "Successfully subscribed to a {plan} plan."
+      }
+    },
+    "permissions": {
+      "notOwner": "Only project owner can perform this action.",
+      "read": "Read permissions",
+      "write": "Write permissions",
+      "execute": "Execute permissions",
+      "insufficient": "You don't have permissions to create or edit this item."
+    },
+    "reset": {
+      "info": "This will reset your current progress. Are you sure you want to continue?",
+      "title": "Reset progress"
+    },
+    "solution": {
+      "customEvm": "Custom EVM",
+      "info": "Customize ready-to-deploy templates built and audited by Apillon."
+    },
+    "subscription": {
+      "bandwidth": "Bandwidth",
+      "canceledOn": "Your plan will be canceled on {date}.",
+      "creditsLifetime": "Credits Lifetime",
+      "forever": "Forever",
+      "free": "Free",
+      "lifetime": "Lifetime",
+      "monthly": "Monthly",
+      "nextBilling": "Next billing cycle on {date}.",
+      "otherServices": "Free credits for other services",
+      "packages": "Subscription packages",
+      "perMonth": "per month",
+      "storage": "Storage",
+      "web3Services": "Web3 services",
+      "plusTaxes": "+taxes",
+      "wallets": "Embedded Wallets"
+    },
+    "usage": {
+      "bandwidth": "Bandwidth",
+      "bytesStored": "Bytes stored",
+      "description": "",
+      "downloads": "Downloads",
+      "hosting": "Web3 hosting",
+      "storage": "Web3 storage",
+      "title": "Project usage",
+      "upgrade": "Increase quotas"
+    },
+    "youTube": {
+      "chapters": "Content shortcuts",
+      "demo": "Live demo",
+      "play": "Play now",
+      "title": "Getting around the platform"
+    },
+    "adminMode": "You are in ADMIN mode!",
+    "attached": "Attached",
+    "attachService": "Attach service",
+    "attachNewService": "Attach new service",
+    "billing": "Billing and Usage",
+    "changePayment": "Change payment",
+    "clientLibraries": "Client Libraries",
+    "created": "Created",
+    "createHere": "Create here",
+    "createTime": "Created at",
+    "currentlyNotAvailable": "Currently not available. We will do our best to add this feature soon.",
+    "dashboard": "Dashboard",
+    "date": "Date",
+    "deletedAt": "Deleted at",
+    "demoVideo": "Demo video",
+    "details": "See details",
+    "discord": "Discord",
+    "email": "Email",
+    "emailMethodConfiguration": "Email method configuration",
+    "env": "Environment",
+    "expiration": "Expiration",
+    "gotIt": "Got it, thanks!",
+    "goToApiManagement": "Go to central API management",
+    "guides": "Guides",
+    "homepage": "Project overview",
+    "introduction": "Introduction",
+    "inviteTeamMember": "Invite team member",
+    "learnMoreAboutServices": "Learn more about services",
+    "manageRoles": "Manage roles",
+    "name": "Name",
+    "projectResources": "Project resources",
+    "readDocs": "Read the Docs",
+    "role": "Role",
+    "searchDocs": "Search the docs",
+    "secret": "Secret",
+    "secrets": "Secrets",
+    "startBuilding": "Start building now",
+    "supported": "Supported",
+    "total": "Total",
+    "tutorials": "Tutorials",
+    "user": "User",
+    "viewInvoice": "View Invoice",
+    "value": "Value",
+    "viewDocumentation": "View Docs",
+    "visibleColumns": "Visible columns",
+    "wiki": "Wiki",
+    "w3Warn": "W3 warn",
+    "oasisSignatures": "Signatures",
+    "quickLinks": "Quick links"
+  }
+}

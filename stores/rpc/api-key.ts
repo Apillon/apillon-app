@@ -13,7 +13,7 @@ export const useRpcApiKeyStore = defineStore('rpc-api-key', {
       project_uuid: undefined as string | undefined,
     },
     dwellirId: null as string | null,
-    quotaReached: undefined as Boolean | undefined,
+    quotaReached: undefined as boolean | undefined,
   }),
   getters: {
     hasRpcApiKeys(state): boolean {
@@ -66,23 +66,18 @@ export const useRpcApiKeyStore = defineStore('rpc-api-key', {
     },
 
     async getRpcApiKeyUsagePerChain() {
-      if (
-        this.usagePerChain === undefined ||
-        isCacheExpired(LsCacheKeys.RPC_API_KEY_USAGE_PER_CHAIN)
-      ) {
+      if (this.usagePerChain === undefined || isCacheExpired(LsCacheKeys.RPC_API_KEY_USAGE_PER_CHAIN)) {
         await this.fetchRpcApiKeyUsagePerChain();
       }
       return this.usagePerChain;
     },
 
     async fetchRpcApiKeyUsage(showLoader: boolean = true) {
-      this.loading = showLoader;
       const dataStore = useDataStore();
+      await dataStore.waitOnPromises(false);
+      if (!dataStore.projectUuid) return;
 
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
-
+      this.loading = showLoader;
       if (this.selectedId) {
         try {
           const res = await $api.get<RpcApiKeyUsageResponse>(
@@ -91,19 +86,19 @@ export const useRpcApiKeyStore = defineStore('rpc-api-key', {
           this.usage = res.data;
 
           sessionStorage.setItem(LsCacheKeys.RPC_API_KEY_USAGE, Date.now().toString());
-        } catch (error) {}
+        } catch (e: ApiError | any) {
+          console.error(e);
+        }
       }
       this.loading = false;
     },
 
     async fetchRpcApiKeyUsagePerChain(showLoader: boolean = true) {
-      this.loading = showLoader;
       const dataStore = useDataStore();
+      await dataStore.waitOnPromises(false);
+      if (!dataStore.projectUuid) return;
 
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
-
+      this.loading = showLoader;
       if (this.selectedId) {
         try {
           const res = await $api.get<RpcApiKeyUsagePerChainResponse>(
@@ -112,29 +107,31 @@ export const useRpcApiKeyStore = defineStore('rpc-api-key', {
           this.usagePerChain = res.data;
 
           sessionStorage.setItem(LsCacheKeys.RPC_API_KEY_USAGE_PER_CHAIN, Date.now().toString());
-        } catch (error) {}
+        } catch (e: ApiError | any) {
+          console.error(e);
+        }
       }
       this.loading = false;
     },
 
     async fetchApiKeyQuota() {
+      const dataStore = useDataStore();
+      await dataStore.waitOnPromises(false);
+      if (!dataStore.projectUuid) return;
       try {
-        const res = await $api.get<RpcApiKeysQuotaResponse>(endpoints.rpcApiKeysQuotaReached());
+        const res = await $api.get<BooleanResponse>(endpoints.rpcApiKeysQuotaReached());
         this.quotaReached = res.data;
-      } catch (error) {
+      } catch (error: ApiError | any) {
         this.quotaReached = undefined;
         window.$message.error(userFriendlyMsg(error));
       }
     },
     async fetchApiKeys(showLoader: boolean = true): Promise<RpcApiKeyInterface[]> {
-      this.loading = showLoader;
-
       const dataStore = useDataStore();
+      await dataStore.waitOnPromises(false);
+      if (!dataStore.projectUuid) return [];
 
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
-
+      this.loading = showLoader;
       try {
         const params: Record<string, string | number> = {
           project_uuid: dataStore.projectUuid,
@@ -154,7 +151,8 @@ export const useRpcApiKeyStore = defineStore('rpc-api-key', {
         sessionStorage.setItem(LsCacheKeys.RPC_API_KEYS, Date.now().toString());
 
         return res.data.items;
-      } catch (error) {
+      } catch (e: ApiError | any) {
+        console.error(e);
         dataStore.promises.rpcApiKeys = null;
 
         this.items = [] as Array<RpcApiKeyInterface>;

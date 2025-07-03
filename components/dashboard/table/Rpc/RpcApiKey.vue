@@ -6,38 +6,36 @@
     :columns="columns"
     :data="tableData"
     :loading="rpcApiKeyStore.loading"
-    :pagination="{
-      pageSize: PAGINATION_LIMIT,
-      prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
-    }"
+    :pagination="pagination"
     :row-key="rowKey"
     :row-props="rowProps"
   />
 
-  <modal v-model:show="modalEditRpcKeyVisible" :title="$t('dashboard.service.edit')">
+  <modal v-model:show="modalEditRpcKeyVisible" :title="$t('service.edit')">
     <FormRpcApiKey :id="currentRow?.id" @submit-success="onRpcApiKeyUpdated" />
   </modal>
 
   <!-- Modal - Delete API key -->
-  <ModalDelete v-model:show="modalDeleteRpcKey" :title="$t('dashboard.service.delete')">
+  <ModalDelete v-model:show="modalDeleteRpcKey" :title="$t('service.delete')">
     <FormDelete :id="currentRow?.id" type="rpcApiKey" @submit-success="onRpcApiKeyDeleted" />
   </ModalDelete>
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NEllipsis, type DropdownOption } from 'naive-ui';
+import { NDropdown, NEllipsis, type DropdownOption } from 'naive-ui';
 
 const props = defineProps({
   isOwner: { type: Boolean, default: false },
 });
 
 const { t } = useI18n();
+const { tableRowCreateTime } = useTable();
 const rpcApiKeyStore = useRpcApiKeyStore();
 
+const pagination = reactive(createPagination(false));
+
 const tableData = computed(() => {
-  return rpcApiKeyStore.items.filter(item =>
-    item.name.toLowerCase().includes(rpcApiKeyStore.search.toLowerCase())
-  );
+  return rpcApiKeyStore.items.filter(item => item.name.toLowerCase().includes(rpcApiKeyStore.search.toLowerCase()));
 });
 
 const createColumns = (): NDataTableColumns<RpcApiKeyInterface> => {
@@ -63,14 +61,7 @@ const createColumns = (): NDataTableColumns<RpcApiKeyInterface> => {
         return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.uuid });
       },
     },
-    {
-      key: 'createTime',
-      title: t('dashboard.created'),
-      minWidth: 120,
-      render(row) {
-        return dateTimeToDateAndTime(row?.createTime || '');
-      },
-    },
+    tableRowCreateTime,
   ];
 
   if (props.isOwner) {
@@ -86,12 +77,7 @@ const createColumns = (): NDataTableColumns<RpcApiKeyInterface> => {
             trigger: 'click',
           },
           {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
+            default: () => h(resolveComponent('BtnActions')),
           }
         );
       },
@@ -148,7 +134,9 @@ const dropdownOptions = computed(() => {
 
 function onRpcApiKeyDeleted() {
   modalDeleteRpcKey.value = false;
-  currentRow.value && rpcApiKeyStore.deleteItem(currentRow.value.id);
+  if (currentRow.value) {
+    rpcApiKeyStore.deleteItem(currentRow.value.id);
+  }
 }
 
 watch(modalEditRpcKeyVisible, newValue => {

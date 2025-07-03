@@ -14,8 +14,16 @@ export const PARAMS_ALL_ITEMS = {
 
 export enum PageSize {
   SM = 10,
-  BASE = PAGINATION_LIMIT,
+  BASE = 20,
   LG = 50,
+}
+
+export enum OauthTypes {
+  GOOGLE = 'google',
+}
+export enum OauthActionTypes {
+  LOGIN = 'login',
+  REGISTER = 'register',
 }
 
 export const LS_KEYS = {
@@ -29,6 +37,10 @@ export const SessionKeys = {
   ASSET_HUB: 'al_asset_hub',
   BUCKET_STORE: 'al_bucket_store',
   CREDITS_MSG: 'al_credits_msg',
+  METADATA_STORE: 'al_metadata_store',
+  OAUTH_ACTION: 'al_oauth_action',
+  SETTINGS_STORE: 'al_settings_store',
+  SIMPLETS_STORE: 'al_simplets_store',
   SUBSCRIPTION_MSG: 'al_subscription_msg',
   WEBSITE_REVIEW: 'al_website_review',
 };
@@ -40,10 +52,11 @@ export const LsAnalyticsKeys = {
 export const LsTableColumnsKeys = {
   ASSET_HUB: 'al_table_asset_hub',
   FILES: 'al_table_files_columns',
+  HOSTING: 'al_table_hosting_columns',
   IPNS: 'al_table_ipns_columns',
   NFT_COLLECTION: 'al_table_nft_collection_columns',
+  SIMPLETS: 'al_table_simplets',
   SMART_CONTRACTS: 'al_table_smart_contracts',
-  SOCIAL_POST: 'al_table_social_channel',
 };
 
 export const LsW3WarnKeys = {
@@ -59,7 +72,6 @@ export const LsW3WarnKeys = {
   HOSTING_DEPLOY: 'al_w3warn_hosting_deploy',
   HOSTING_DELETE: 'al_w3warn_hosting_delete',
   NFT_NEW: 'al_w3warn_nft_new',
-  SOCIAL_NEW: 'al_w3warn_social_new',
 };
 
 export const LsCacheKeys = {
@@ -80,10 +92,6 @@ export const LsCacheKeys = {
   COLLECTION_METADATA: 'al_cache_collection_metadata',
   COLLECTION_TRANSACTIONS: 'al_cache_collection_transactions',
   COLLECTION_QUOTA: 'al_cache_collection_quota',
-  COMPUTING_TRANSACTIONS: 'al_cache_computing_transactions',
-  CONTRACT: 'al_cache_contract',
-  CONTRACTS: 'al_cache_contracts',
-  CONTRACT_ARCHIVE: 'al_cache_contract_archive',
   CLOUD_FUNCTION: 'al_cache_cloud_function',
   CLOUD_FUNCTIONS: 'al_cache_cloud_functions',
   CLOUD_FUNCTIONS_ARCHIVE: 'al_cache_cloud_functions_archive',
@@ -113,6 +121,7 @@ export const LsCacheKeys = {
   IPNS_ITEM: 'al_cache_ipns_item',
   JOB: 'al_cache_job',
   JOBS: 'al_cache_jobs',
+  NOTIFICATIONS: 'al_cache_notifications',
   OAUTH_LINKS: 'al_cache_oauth_links',
   PRICE_LIST: 'al_cache_price_list',
   POST: 'al_cache_post',
@@ -141,6 +150,10 @@ export const LsCacheKeys = {
   WEBSITE: 'al_cache_website',
   WEBSITES: 'al_cache_websites',
   WEBSITE_ARCHIVE: 'al_cache_website_archive',
+  SIMPLET: 'al_cache_simplet',
+  SIMPLET_BACKEND: 'al_cache_simplet_backend',
+  SIMPLETS: 'al_cache_simplets',
+  SIMPLETS_ARCHIVED: 'al_cache_simplets_archived',
   SMART_CONTRACT: 'al_cache_smart_contract',
   SMART_CONTRACTS: 'al_cache_smart_contracts',
   SMART_CONTRACT_DEPLOYED: 'al_smart_contract_deployed',
@@ -178,37 +191,3 @@ export function CreateUserRoles(): Array<SelectOption> {
     };
   });
 }
-
-/**
- * Referral
- */
-export const referralCountries = [
-  { label: 'Austria', value: 'Austria' },
-  { label: 'Belgium', value: 'Belgium' },
-  { label: 'Bulgaria', value: 'Bulgaria' },
-  { label: 'Croatia', value: 'Croatia' },
-  { label: 'Cyprus', value: 'Cyprus' },
-  { label: 'Czech Republic', value: 'Czech Republic' },
-  { label: 'Denmark', value: 'Denmark' },
-  { label: 'Estonia', value: 'Estonia' },
-  { label: 'Finland', value: 'Finland' },
-  { label: 'France', value: 'France' },
-  { label: 'Germany', value: 'Germany' },
-  { label: 'Greece', value: 'Greece' },
-  { label: 'Hungary', value: 'Hungary' },
-  { label: 'Ireland', value: 'Ireland' },
-  { label: 'Italy', value: 'Italy' },
-  { label: 'Latvia', value: 'Latvia' },
-  { label: 'Lithuania', value: 'Lithuania' },
-  { label: 'Luxembourg', value: 'Luxembourg' },
-  { label: 'Malta', value: 'Malta' },
-  { label: 'Netherlands', value: 'Netherlands' },
-  { label: 'Poland', value: 'Poland' },
-  { label: 'Portugal', value: 'Portugal' },
-  { label: 'Romania', value: 'Romania' },
-  { label: 'Slovakia', value: 'Slovakia' },
-  { label: 'Slovenia', value: 'Slovenia' },
-  { label: 'Spain', value: 'Spain' },
-  { label: 'Sweden', value: 'Sweden' },
-  { label: 'United Kingdom', value: 'United Kingdom' },
-];

@@ -12,7 +12,7 @@
       <template v-if="websiteStore.active.domain || domain">
         <span> {{ websiteStore.active.domain || domain }} </span>
         <span
-          class="inline-block cursor-pointer ml-2"
+          class="ml-2 inline-block cursor-pointer"
           @click="copyToClipboard(`${websiteStore.active.domain || domain}`)"
         >
           <span class="icon-copy"></span>
@@ -23,7 +23,7 @@
     <p class="lg:whitespace-nowrap">
       <strong>Value: </strong>
       <span>{{ ip }}</span>
-      <span class="inline-block cursor-pointer ml-2" @click="copyToClipboard(ip)">
+      <span class="ml-2 inline-block cursor-pointer" @click="copyToClipboard(ip)">
         <span class="icon-copy"></span>
       </span>
     </p>
@@ -35,7 +35,7 @@
       <template v-if="websiteStore.active.domain || domain">
         <span> _dnslink.{{ websiteStore.active.domain || domain }} </span>
         <span
-          class="inline-block cursor-pointer ml-2"
+          class="ml-2 inline-block cursor-pointer"
           @click="copyToClipboard(`_dnslink.${websiteStore.active.domain || domain}`)"
         >
           <span class="icon-copy"></span>
@@ -46,7 +46,7 @@
     <p v-if="link.length > 10" class="lg:whitespace-nowrap">
       <strong>Value: </strong>
       <span>dnslink=/{{ link }}</span>
-      <span class="inline-block cursor-pointer ml-2" @click="copyToClipboard(`dnslink=/${link}`)">
+      <span class="ml-2 inline-block cursor-pointer" @click="copyToClipboard(`dnslink=/${link}`)">
         <span class="icon-copy"></span>
       </span>
     </p>
@@ -82,7 +82,7 @@ onMounted(() => {
 });
 
 const parseIpfsFromLink = (link: string) => {
-  const match = link.match(/\/ipfs\/[^\/?]+/);
+  const match = link.match(/\/ipfs\/[^/?]+/);
   return match && match.length ? match[0] : '';
 };
 </script>

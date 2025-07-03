@@ -1,6 +1,5 @@
-import { useAccount, useConnect, useConnectorClient } from '@wagmi/vue';
+import { useAccount, useConnect, useConnectorClient, type Config } from '@wagmi/vue';
 import { signMessage } from '@wagmi/vue/actions';
-import { wagmiConfig } from '~/plugins/use-wagmi';
 
 export default function useWallet() {
   const { t } = useI18n();
@@ -8,9 +7,10 @@ export default function useWallet() {
   const authStore = useAuthStore();
 
   /** Evm wallet - wagmi */
-  const { connectAsync } = useConnect();
+  const { $wagmiConfig } = useNuxtApp();
   const { data: walletClient, refetch } = useConnectorClient();
   const { address, connector } = useAccount();
+  const { connectAsync } = useConnect();
 
   async function connectAndSign() {
     await sleep(200);
@@ -29,7 +29,7 @@ export default function useWallet() {
 
     try {
       const { message, timestamp } = await authStore.getAuthMsg();
-      const signature = await signMessage(wagmiConfig, { message });
+      const signature = await signMessage($wagmiConfig as Config, { message });
 
       await sleep(200);
 

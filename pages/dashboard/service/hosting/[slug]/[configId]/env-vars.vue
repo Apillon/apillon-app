@@ -4,25 +4,21 @@
       <HeaderWebsite />
     </template>
     <slot>
-      <template v-if="websiteStore.isActiveWebsiteGithubSource">
-        <TableHostingDeploymentVariables :variables="deploymentStore.variables" />
-      </template>
+      <TableHostingDeploymentVariables v-if="params?.configId" :config-id="Number(params?.configId)" />
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
-const websiteStore = useWebsiteStore();
-const deploymentStore = useDeploymentStore();
-
+const { t } = useI18n();
+const { params } = useRoute();
 const { pageLoading, initWebsite } = useHosting();
 
 useHead({
-  title: $i18n.t('dashboard.nav.hosting'),
+  title: t('dashboard.nav.hosting'),
 });
 
 onMounted(async () => {
-  initWebsite(DeploymentEnvironment.STAGING, false, true, true);
+  initWebsite(DeploymentEnvironment.STAGING);
 });
 </script>

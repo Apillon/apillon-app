@@ -20,36 +20,26 @@
             <Sidebar :show-on-mobile="showMobileSidebar" @toggle-sidebar="toggleSidebar" />
           </n-layout-sider>
           <n-layout>
-            <Header @toggleSidebar="toggleSidebar" />
-            <n-scrollbar y-scrollable style="max-height: calc(100dvh - 88px)">
-              <div
-                ref="messageRef"
-                class="flex justify-center items-center relative pt-8 px-4"
-                style="height: calc(100dvh - 88px)"
-              >
-                <div>
-                  <!-- customise 404 message from template section -->
-                  <n-h4>{{ $t('error.404') }}</n-h4>
+            <Header @toggle-sidebar="toggleSidebar" />
+            <div ref="messageRef" class="relative flex items-center justify-center px-4 pt-8 lg:min-h-[80dvh]">
+              <div>
+                <!-- customise 404 message from template section -->
+                <n-h4>{{ $t('error.404') }}</n-h4>
 
-                  <!-- Redirect to home page -->
-                  <Btn type="secondary" @click="handleError">
-                    {{ $t('general.goHome') }}
-                  </Btn>
-                </div>
+                <!-- Redirect to home page -->
+                <Btn type="secondary" @click="handleError">
+                  {{ $t('general.goHome') }}
+                </Btn>
               </div>
-              <!-- <CookieConsent /> -->
-            </n-scrollbar>
+            </div>
           </n-layout>
         </n-layout>
       </n-message-provider>
     </n-config-provider>
   </div>
-  <div
-    v-else
-    class="relative flex flex-col justify-center align-middle min-h-screen h-full bg-bg-dark"
-  >
+  <div v-else class="relative flex h-full min-h-screen flex-col justify-center bg-bg-dark align-middle">
     <n-config-provider :theme-overrides="themeOverrides">
-      <div class="container relative max-w-lg py-16 sm:px-8 md:px-12 lg:px-16 card">
+      <div class="card container relative max-w-lg py-16 sm:px-8 md:px-12 lg:px-16">
         <AuthHeader />
         <div>
           <!-- customize 404 message from template section -->
@@ -67,6 +57,8 @@
 </template>
 
 <script lang="ts" setup>
+import { themeOverrides } from '~/lib/config/naive-ui';
+
 const authStore = useAuthStore();
 const { isLg } = useScreen();
 const messageRef = ref<HTMLDivElement>();
@@ -78,11 +70,7 @@ const showMobileSidebar = ref<boolean>(false);
  */
 const { lengthX, lengthY } = useSwipe(mainContentRef, {
   onSwipeEnd() {
-    if (
-      !isLg.value &&
-      Math.abs(lengthX.value) > 150 &&
-      Math.abs(lengthX.value) > Math.abs(lengthY.value)
-    ) {
+    if (!isLg.value && Math.abs(lengthX.value) > 150 && Math.abs(lengthX.value) > Math.abs(lengthY.value)) {
       /** Show sidebar if user swipe right otherwise close it   */
       toggleSidebar(lengthX.value < 0);
     }

@@ -1,47 +1,36 @@
 <template>
-  <Heading>
-    <slot>
-      <n-space align="center" size="large">
-        <NuxtLink :to="{ name: 'dashboard-service-nft' }">
-          <span class="icon-back align-sub text-2xl"></span>
-        </NuxtLink>
-        <h2 v-if="collectionStore.form.behavior.chain">
-          {{ t('nft.collection.title') }}:
-          <span class="capitalize">{{ chainIdToName(collectionStore.form.behavior.chain).replace('_', ' ') }}</span>
-        </h2>
-        <h2 v-else-if="collectionStore.active.chain && collectionStore.active.name">
-          {{ collectionStore.active.name }}
-          <small
-            >(<span class="capitalize">{{ chainIdToName(collectionStore.active.chain).replace('_', ' ') }}</span
-            >)</small
-          >
-        </h2>
-        <h2 v-else>{{ t('dashboard.solution.nftCollection.name') }}</h2>
-      </n-space>
-    </slot>
-    <template #info>
-      <n-space :size="32" align="center">
-        <!-- Modal Price list for Hosting -->
-        <ModalCreditCosts :service="ServiceTypeName.NFT" :chain="collectionStore.active.chain" filter-by-chain />
-        <IconInfo v-if="te('w3Warn.nft.info')" @click="modalW3WarnVisible = true" />
-      </n-space>
-    </template>
+  <Heading
+    :back="{ name: 'dashboard-service-nft' }"
+    :service="ServiceTypeName.NFT"
+    :chain="collectionStore.active.chain"
+    :hide-general="true"
+    filter-by-chain
+  >
+    <div class="flex items-end gap-1">
+      <NuxtLink :to="{ name: 'dashboard-service-nft' }">
+        <small class="inline-block pb-1 leading-normal">{{ $t('dashboard.nav.nft') }}</small>
+      </NuxtLink>
+      <h3 v-if="metadataStore.form.smartContract.chain">
+        <span>/</span>
+        {{ $t('nft.collection.title') }}:
+        <span class="capitalize">{{ chainIdToName(metadataStore.form.smartContract.chain) }}</span>
+      </h3>
+      <h3 v-else-if="collectionStore.active.chain && collectionStore.active.name">
+        <span>/</span>
+        {{ collectionStore.active.name }}
+        <small
+          >(<span class="capitalize">{{ chainIdToName(collectionStore.active.chain) }}</span
+          >)</small
+        >
+      </h3>
+    </div>
   </Heading>
-
-  <W3Warn v-model:show="modalW3WarnVisible">
-    {{ t('w3Warn.nft.new') }}
-  </W3Warn>
 </template>
 
 <script lang="ts" setup>
-import { chainIdToName } from '~/lib/utils/chain';
-import { ServiceTypeName } from '~/lib/types/service';
-
-const { t, te } = useI18n();
 const paymentStore = usePaymentStore();
+const metadataStore = useMetadataStore();
 const collectionStore = useCollectionStore();
-
-const modalW3WarnVisible = ref<boolean>(false);
 
 onMounted(() => {
   /** Get Price list */

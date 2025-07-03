@@ -51,16 +51,15 @@ export default function useSmartContracts() {
       router.push({ name: 'dashboard-service-smart-contracts' });
     }
 
-    await Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      const smartContract = await smartContractStore.getSmartContract(`${contractUuid}`);
+    await dataStore.waitOnPromises();
+    const smartContract = await smartContractStore.getSmartContract(`${contractUuid}`);
 
-      if (!smartContract) {
-        router.push({ name: 'dashboard-service-smart-contracts' });
-      } else {
-        smartContractStore.active = smartContract;
-        pageLoading.value = false;
-      }
-    });
+    if (!smartContract) {
+      router.push({ name: 'dashboard-service-smart-contracts' });
+    } else {
+      smartContractStore.active = smartContract;
+      pageLoading.value = false;
+    }
   }
 
   /** Contract polling */
@@ -84,10 +83,7 @@ export default function useSmartContracts() {
       const smartContract = smartContracts.find(
         contract => contract.contract_uuid === unfinishedContract.contract_uuid
       );
-      if (
-        smartContract &&
-        deployedContractStore.active.contract_uuid === smartContract.contract_uuid
-      ) {
+      if (smartContract && deployedContractStore.active.contract_uuid === smartContract.contract_uuid) {
         Object.assign(deployedContractStore.active, smartContract);
       }
       if (

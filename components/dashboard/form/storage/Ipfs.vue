@@ -10,7 +10,7 @@
       />
     </n-form-item>
     <!--  Ipfs name -->
-    <n-form-item path="name" :label="cidIpns" :label-props="{ for: 'cid' }">
+    <n-form-item path="cid" :label="cidIpns" :label-props="{ for: 'cid' }">
       <n-input
         v-model:value="formData.cid"
         :input-props="{ id: 'cid' }"
@@ -22,35 +22,41 @@
     <!--  Form submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('storage.ipfs.generateLink')" />
-      <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
+      <Btn
+        class="mt-2"
+        :class="size === 'large' ? '!w-auto' : 'w-full'"
+        :size="size"
+        type="primary"
+        :loading="loading"
+        @click="handleSubmit"
+      >
         {{ $t('storage.ipfs.generateLink') }}
       </Btn>
     </n-form-item>
 
-    <div class="min-h-[5rem]">
-      <HostingPreviewLink
-        v-if="ipfsLink"
-        :loading="loading"
-        :link="ipfsLink"
-        :title="$t('storage.ipfs.ipfsLink')"
-        :info="$t('storage.ipfs.ipfsLinkInfo')"
-      />
-    </div>
+    <HostingPreviewLink
+      v-if="ipfsLink"
+      :loading="loading"
+      :link="ipfsLink"
+      :title="$t('storage.ipfs.ipfsLink')"
+      :info="$t('storage.ipfs.ipfsLinkInfo')"
+    />
   </n-form>
 </template>
 
 <script lang="ts" setup>
+import type { Size } from 'naive-ui/es/button/src/interface';
+
 type FormIpfs = {
   cid: string;
   type: string | null;
 };
-enum IpfsType {
-  CID = 'CID',
-  IPNS = 'IPNS',
-}
 
-const message = useMessage();
-const $i18n = useI18n();
+defineProps({
+  size: { type: String as PropType<Size>, default: 'medium' },
+});
+
+const { t } = useI18n();
 const dataStore = useDataStore();
 const ipfsStore = useIpfsStore();
 
@@ -65,8 +71,8 @@ const formData = ref<FormIpfs>({
 });
 
 const rules: NFormRules = {
-  cid: ruleRequired($i18n.t('validation.ipfsCidRequired')),
-  type: ruleRequired($i18n.t('validation.ipfsTypeRequired')),
+  cid: ruleRequired(t('validation.ipfsCidRequired')),
+  type: ruleRequired(t('validation.ipfsTypeRequired')),
 };
 
 const cidIpns = computed(() => (formData.value.type ? formData.value.type : 'CID/IPNS'));
@@ -75,11 +81,7 @@ const cidIpns = computed(() => (formData.value.type ? formData.value.type : 'CID
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
-    } else {
+    if (!errors) {
       await generateIpfsLink();
     }
   });
@@ -92,7 +94,7 @@ async function generateIpfsLink() {
   const res = await ipfsStore.fetchIpfsLink(
     dataStore.projectUuid,
     formData.value.cid,
-    formData.value.type
+    formData.value.type || IpfsType.CID
   );
   if (res) {
     ipfsLink.value = res.link;

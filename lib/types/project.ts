@@ -48,7 +48,6 @@ declare global {
   interface ProjectResponse extends GeneralResponse<ProjectInterface> {}
   interface ProjectsResponse extends GeneralItemsResponse<ProjectInterface> {}
   interface CreateProjectResponse extends GeneralResponse<ProjectInterface> {}
-  interface ProjectsQuotaResponse extends GeneralResponse<boolean> {}
 
   interface ProjectOverviewInterface {
     availableBandwidth: number;

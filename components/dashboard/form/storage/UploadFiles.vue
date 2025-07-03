@@ -66,7 +66,7 @@
         <StorageFileListItem
           :id="file.id"
           :name="file.name"
-          :full-path="file.fullPath || ''"
+          :full-path="file.path || file.fullPath || ''"
           :percentage="file.percentage"
           :status="file.status"
           @remove-file="removeFileFromFileList"
@@ -140,7 +140,7 @@ const props = defineProps({
   bucketUuid: { type: String, required: true },
 });
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const bucketStore = useBucketStore();
 const { uploadFiles, fileAlreadyOnFileList, isEnoughSpaceInStorage, folderName } = useUpload();
@@ -175,6 +175,7 @@ const numOfUploadedFiles = computed<number>(() => {
 function uploadFilesRequest({ file, onError, onFinish }: UploadCustomRequestOptions) {
   const fileListItem: FileListItemType = {
     ...file,
+    path: file.fullPath,
     percentage: 0,
     size: file.file?.size || 0,
     timestamp: Date.now(),
@@ -182,7 +183,7 @@ function uploadFilesRequest({ file, onError, onFinish }: UploadCustomRequestOpti
     onError,
   };
   if (!isEnoughSpaceInStorage(bucketStore.uploadFileList, fileListItem)) {
-    message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
+    message.warning(t('validation.notEnoughSpaceInStorage', { name: file.name }));
     onError();
   } else if (fileAlreadyOnFileList(bucketStore.uploadFileList, fileListItem)) {
     onError();
@@ -222,7 +223,7 @@ async function upload() {
 function clearFileList(refreshDirectoryContent: boolean = false) {
   bucketStore.uploadFileList.forEach(item => {
     if (item.status !== FileUploadStatusValue.FINISHED) {
-      item.onError();
+      item?.onError();
     }
   });
   bucketStore.uploadFileList = [] as Array<FileListItemType>;
@@ -238,7 +239,7 @@ function clearFileList(refreshDirectoryContent: boolean = false) {
 function removeFileFromFileList(fileId: string) {
   bucketStore.uploadFileList.forEach(item => {
     if (item.id === fileId) {
-      item.onError();
+      item?.onError();
     }
   });
   bucketStore.uploadFileList = bucketStore.uploadFileList.filter(item => item.id !== fileId);

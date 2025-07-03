@@ -1,7 +1,7 @@
-import { useChainId, useChains, useClient, useConnectorClient, useSwitchChain } from '@wagmi/vue';
+import { useChainId, useChains, useClient, useConnectorClient } from '@wagmi/vue';
 import type { Address, Client, Transport, Chain, Account } from 'viem';
 import { createPublicClient, getContract, http } from 'viem';
-import { nftAbi, nftAbiNestable } from '~/lib/config/abi';
+import { nftAbi } from '~/lib/config/abi';
 
 const contracts = reactive<{ [key: string]: any }>({});
 const readContracts = reactive<{ [key: string]: any }>({});
@@ -53,11 +53,11 @@ export default function useNftContract() {
     return contracts[contractAddress];
   }
 
-  async function initReadContract(address: Address, chainId: number, isNestable = false) {
+  async function initReadContract(address: Address, chainId: number) {
     if (!(address in contracts)) {
       readContracts[address] = getContract({
         address,
-        abi: isNestable ? nftAbiNestable : nftAbi,
+        abi: nftAbi,
         client: getPublicClient(chainId),
       });
     }
@@ -66,7 +66,7 @@ export default function useNftContract() {
   }
 
   /** Actions */
-  async function getAllTokens(address: Address, chainId: number): Promise<Number[]> {
+  async function getAllTokens(address: Address, chainId: number): Promise<number[]> {
     try {
       const contract = await initReadContract(address, chainId);
       return (await contract.read.allTokens()).map(i => Number(i));

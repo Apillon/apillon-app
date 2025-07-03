@@ -1,15 +1,7 @@
 <template>
-  <n-tag
-    v-bind="$attrs"
-    :type="convertLogLevelToType(logLevel)"
-    :bordered="false"
-    size="tiny"
-    round
-  >
-    <n-space :class="'text-bg-dark'" :size="0" align="center" :wrap="false">
-      <span class="mx-1 uppercase">{{ logLevel }}</span>
-    </n-space>
-  </n-tag>
+  <Tag v-if="logLevel !== null" :type="convertLogLevelToType(logLevel)">
+    {{ logLevel }}
+  </Tag>
 </template>
 
 <script lang="ts" setup>

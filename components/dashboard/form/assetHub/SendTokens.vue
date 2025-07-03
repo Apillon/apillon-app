@@ -38,7 +38,7 @@
     </Btn>
   </n-form>
 
-  <ModalTransaction v-if="txHash" :transactionHash="txHash" @close="$emit('close')" />
+  <ModalTransaction v-if="txHash" :transaction-hash="txHash" @close="$emit('close')" />
   <AssetHubLoader v-if="loading && assetHubClient?.txApproved" class="z-3000" />
 </template>
 
@@ -77,9 +77,7 @@ const rules: NFormRules = {
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
-    } else {
+    if (!errors) {
       sendTokens();
     }
   });
@@ -87,7 +85,7 @@ function handleSubmit(e: Event | MouseEvent) {
 
 async function sendTokens() {
   if (!assetHubStore.account) {
-    message.warning(t('dashboard.service.assetHub.connect'));
+    message.warning(t('assetHub.connect'));
     return;
   }
   if (!formData.value.address || !formData.value.amount) {

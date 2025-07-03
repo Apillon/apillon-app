@@ -10,7 +10,6 @@ export enum Permission {
   NFTS = 3,
   AUTHENTICATION = 4,
   COMPUTING = 5,
-  SOCIAL = 6,
   EMBEDDED_WALLET = 7,
   CONTRACTS = 8,
   RPC = 9,
@@ -23,6 +22,16 @@ export enum OauthLinkType {
   DISCORD = 1,
   TWEETER = 2,
   GITHUB = 3,
+}
+export enum NotificationType {
+  UNKNOWN = 0,
+  WEBSITE_DEPLOYED = 1,
+  NFT_METADATA_DEPLOYED = 2,
+  NFT_COLLECTION_DEPLOYED = 3,
+  CLOUD_FUNCTION_DEPLOYED = 4,
+  INDEXER_DEPLOYED = 5,
+  SMART_CONTRACT_DEPLOYED = 6,
+  EMBEDDED_WALLET_GENERATED = 7,
 }
 
 declare global {
@@ -113,7 +122,7 @@ declare global {
   interface SignatureInterface {
     apiKey: string;
     dataHash: string;
-    hashedUsername: string | null;
+    contractAddress: string | null;
     publicAddress: string | null;
     status: number;
     createTime: string;
@@ -123,4 +132,16 @@ declare global {
   interface EmbeddedWalletsResponse extends GeneralItemsResponse<EmbeddedWalletInterface> {}
   interface EmbeddedWalletInfoResponse extends GeneralResponse<EmbeddedWalletInfoInterface> {}
   interface SignaturesResponse extends GeneralItemsResponse<SignatureInterface> {}
+
+  /**
+   * Notifications
+   */
+  interface NotificationInterface extends GeneralInterface {
+    createTime: string;
+    id: number;
+    message: string;
+    type: NotificationType;
+    userId: number;
+  }
+  interface NotificationsResponse extends GeneralItemsResponse<NotificationInterface> {}
 }

@@ -8,7 +8,6 @@ import type {
   SelectOption,
   TagProps,
   UploadFileInfo,
-  UploadSettledFileInfo,
 } from 'naive-ui';
 import type {
   InternalRowData,
@@ -25,6 +24,7 @@ declare global {
     title: string;
     key: string;
   };
+  type TableColumnSelect = { value: string; label: string };
   type MetadataAttributes = {
     value: string;
     label: string;
@@ -40,15 +40,15 @@ declare global {
     iconName?: string;
   }
 
-  interface FileListItemType extends UploadSettledFileInfo {
-    path?: string;
+  interface FileListItemType extends UploadFileInfo {
+    path: string | null;
     percentage: number;
     progress?: any;
     size: number;
     timestamp: number;
     uploadSpeed?: number;
-    onFinish: any;
-    onError: any;
+    onFinish?: any;
+    onError?: any;
     file_uuid?: string;
   }
 
@@ -72,6 +72,15 @@ declare global {
       items: Array<MainNavItemInterface>;
     };
   }
+
+  type Pagination = {
+    itemCount: number | undefined;
+    page: number | undefined;
+    pageSize: number;
+    showSizePicker: boolean;
+    pageSizes: number[];
+    prefix: ({ itemCount }: { itemCount: number | undefined }) => string;
+  };
 
   /** Naive UI */
   interface NFormInst extends FormInst {}
@@ -104,4 +113,11 @@ declare global {
   };
 
   type TagType = TagProps['type'];
+
+  type Func = () => void;
+
+  type VideoChapter = {
+    title: string;
+    time: number | string;
+  };
 }

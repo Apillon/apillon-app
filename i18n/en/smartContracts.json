@@ -1,0 +1,60 @@
+{
+  "smartContracts": {
+    "audited": "Audited",
+    "customizeAndDeploy": "Customize and deploy",
+    "create": "Create your smart contract",
+    "createNew": "Create a new smart contract",
+    "deployedContractsCount": "Number of deployed contracts",
+    "description": "Deploy audited and field-tested smart contracts with one click. Connect to the smart contract from your dapp and start using it immediately.",
+    "delete": "Delete Smart Contract",
+    "details": "Smart Contract Details",
+    "emptyArchive": "Smart Contracts Archive",
+    "emptyArchiveInfo": "There are currently no Smart Contracts in the Archive.",
+    "info": "Add it to your Web3 project",
+    "new": "New smart contract",
+    "transactionCount": "Number of transactions",
+    "table": {
+      "chain": "Chain",
+      "contractAddress": "Contract Address",
+      "contractStatus": "Status",
+      "contractType": "Contract type",
+      "name": "Name",
+      "version": "Version"
+    },
+    "status": {
+      "0": "CREATED",
+      "1": "INITIATED",
+      "2": "DEPLOYING",
+      "3": "DEPLOYED",
+      "4": "FAILED",
+      "5": "TRANSFERRING",
+      "6": "TRANSFERRED"
+    },
+    "type": {
+      "1": "OTHER",
+      "2": "ERC 20",
+      "3": "ERC 1155"
+    },
+    "infoSection": {
+      "title": "Execute read & write functions",
+      "p": "Your smart contract was deployed via Apillon. This means certain write functions are available only through the Apillon Backend, until you decide to take ownership of the contract. ",
+      "info": "Take ownership of the Smart Contract. Once you take ownership of the Smart Contract, you will be able to execute all the functions directly from your dapp. This is not a mandatory step, but it makes sense to take the ownership of the contract before going to production.",
+      "infoTransferred": "You are owner of this contract, now you execute all the functions directly from your dapp.",
+      "takeOwnershipBtn": "Take smart contract ownership",
+      "content": [
+        {
+          "title": "What do you get?",
+          "content": ["Free metadata storage", "No gas cost", "Free web template", "Free hosting"]
+        }
+      ]
+    },
+    "functions": {
+      "executed": "Function has been executed",
+      "write": "Write functions",
+      "read": "Read functions",
+      "writeFromDapp": "Write from your dapp",
+      "writeOverApillon": "Write over Apillon",
+      "readFromDapp": "Read from your dapp"
+    }
+  }
+}

@@ -1,22 +1,49 @@
 import { defineStore } from 'pinia';
+import NextJsPNG from '/assets/images/hosting/nextJs.png';
+
+export const apillonOwner = {
+  avatar_url: 'https://avatars.githubusercontent.com/u/68999895?s=48&v=4',
+  login: 'Apillon',
+};
+
+export const apillonRepos: GithubRepo[] = [
+  {
+    clone_url: 'https://github.com/Apillon/nft-template.git',
+    default_branch: 'master',
+    id: 629913711,
+    image: NextJsPNG,
+    name: 'nft-template',
+    owner: apillonOwner,
+    updated_at: '2024-02-15T08:56:38Z',
+    html_url: '',
+  },
+  {
+    clone_url: 'https://github.com/Apillon/nft-template-vue.git',
+    default_branch: 'master',
+    id: 657149828,
+    image: NextJsPNG,
+    name: 'nft-template-vue',
+    owner: apillonOwner,
+    updated_at: '2024-02-15T08:56:38Z',
+    html_url: '',
+  },
+  {
+    clone_url: 'https://github.com/Apillon/nft-template-react.git',
+    default_branch: 'master',
+    id: 657149144,
+    image: NextJsPNG,
+    name: 'nft-template-react',
+    owner: apillonOwner,
+    updated_at: '2024-02-15T08:56:38Z',
+    html_url: '',
+  },
+];
 
 export const useStorageStore = defineStore('storage', {
   state: () => ({
     info: {} as StorageInfoInterface,
     projectConfig: undefined as GithubProjectConfig | undefined,
     loading: false,
-    deployConfigForm: {
-      branchName: '',
-      buildCommand: 'npm run build',
-      buildDirectory: './dist',
-      installCommand: 'npm install',
-      apiKey: undefined as string | undefined,
-      apiSecret: '',
-      repoId: undefined as number | undefined,
-      repoName: '',
-      repoOwnerName: '',
-      repoUrl: '',
-    },
     repos: [] as GithubRepo[],
   }),
   getters: {
@@ -33,21 +60,6 @@ export const useStorageStore = defineStore('storage', {
   actions: {
     resetData() {
       this.info = {} as StorageInfoInterface;
-    },
-
-    resetDeployConfigForm() {
-      this.deployConfigForm = {
-        branchName: '',
-        buildCommand: 'npm run build',
-        buildDirectory: './dist',
-        installCommand: 'npm install',
-        apiKey: undefined as string | undefined,
-        apiSecret: '',
-        repoId: undefined as number | undefined,
-        repoName: '',
-        repoOwnerName: '',
-        repoUrl: '',
-      };
     },
 
     /**
@@ -76,15 +88,11 @@ export const useStorageStore = defineStore('storage', {
      * API calls
      */
     async fetchStorageInfo() {
-      this.loading = true;
-
       const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
+      await dataStore.waitOnPromises();
+      if (!dataStore.projectUuid) return;
 
-        if (!dataStore.projectUuid) return;
-      }
-
+      this.loading = true;
       try {
         const res = await $api.get<StorageInfoResponse>(endpoints.storageInfo, {
           project_uuid: dataStore.projectUuid,
@@ -103,16 +111,12 @@ export const useStorageStore = defineStore('storage', {
     },
 
     async fetchGithubProjectConfig() {
-      this.loading = true;
       const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
+      const projectUuid = await dataStore.getProjectUuid();
 
-        if (!dataStore.projectUuid) return;
-      }
-
+      this.loading = true;
       try {
-        const res = await $api.get<GithubProjectConfigResponse>(endpoints.githubProjectConfig(dataStore.projectUuid));
+        const res = await $api.get<GithubProjectConfigResponse>(endpoints.githubProjectConfig(projectUuid));
         this.projectConfig = res.data;
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.GITHUB_PROJECT_CONFIG, Date.now().toString());
@@ -120,19 +124,19 @@ export const useStorageStore = defineStore('storage', {
         this.projectConfig = undefined;
         window.$message.error(userFriendlyMsg(error));
       }
+      this.loading = false;
     },
 
     async fetchRepos() {
-      this.loading = true;
       const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
+      const projectUuid = await dataStore.getProjectUuid();
 
-        if (!dataStore.projectUuid) return;
-      }
+      if (this.projectConfig === undefined) await this.getGithubProjectConfig();
+      if (!this.hasProjectConfigLoaded) return;
 
+      this.loading = true;
       try {
-        const res = await $api.get<GithubReposResponse>(endpoints.githubRepos(dataStore.projectUuid));
+        const res = await $api.get<GithubReposResponse>(endpoints.githubRepos(projectUuid));
         this.repos = res.data;
 
         /** Save timestamp to SS */
@@ -141,6 +145,7 @@ export const useStorageStore = defineStore('storage', {
         this.repos = [];
         window.$message.error(userFriendlyMsg(error));
       }
+      this.loading = false;
     },
   },
 });
