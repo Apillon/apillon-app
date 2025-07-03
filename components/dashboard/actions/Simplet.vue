@@ -2,13 +2,7 @@
   <div>
     <n-space class="w-full lg:min-w-52" size="large" vertical>
       <!-- Refresh -->
-      <Btn
-        class="locked w-full"
-        size="medium"
-        type="secondary"
-        :loading="simpletStore.loading"
-        @click="simpletStore.fetchSimplet(simpletStore.active.simpletDeploy_uuid)"
-      >
+      <Btn class="locked w-full" size="medium" type="secondary" :loading="simpletStore.loading" @click="refresh()">
         {{ $t('general.refresh') }}
       </Btn>
 
@@ -137,6 +131,18 @@ function openModalMysql() {
   simpletStore.form.mysql.database = simpletStore.getBackendVariable('MYSQL_DATABASE') || '';
   simpletStore.form.mysql.user = simpletStore.getBackendVariable('MYSQL_USER') || '';
   simpletStore.form.mysql.password = simpletStore.getBackendVariable('MYSQL_PASSWORD') || '';
+}
+
+async function refresh() {
+  simpletStore.fetchSimplet(simpletStore.active.simpletDeploy_uuid);
+  const simpletLink = websiteStore.active.domain || websiteStore.active.w3ProductionLink;
+  if (
+    simpletStore.active.frontendStatus === ResourceStatus.ONLINE &&
+    simpletStore.active.frontend_uuid === websiteStore.active.website_uuid &&
+    !simpletLink
+  ) {
+    websiteStore.fetchWebsite(simpletStore.active.frontend_uuid);
+  }
 }
 
 async function submitFormSmtp() {
