@@ -6,6 +6,8 @@
     trans-key="hosting.website.createStep"
     :title="$t('hosting.website.create')"
     :minimize="websiteStore.stepWebsiteCreate > 1"
+    :finished="websiteStore.stepWebsiteCreate === WebsiteCreateStep.DEPLOYED"
+    @reset="onReset"
   >
     <slot>
       <FormHostingWebsiteTypeSelect
@@ -43,6 +45,7 @@
       <HostingWebsiteDeployed
         v-else-if="websiteStore.stepWebsiteCreate === WebsiteCreateStep.DEPLOYED"
         class="mx-auto max-w-5xl"
+        @reset="onReset"
       />
     </slot>
     <template v-if="websiteStore.stepWebsiteCreate < WebsiteCreateStep.REVIEW" #footer>
@@ -76,13 +79,12 @@ const storageStore = useStorageStore();
 const websiteStore = useWebsiteStore();
 
 const { createWebsite } = useHosting();
-const { pricing } = useMetadata();
 
 const websiteTypeRef = useTemplateRef('websiteTypeRef');
 const formWebsiteRef = useTemplateRef('formWebsiteRef');
 const formWebsiteGithubRef = useTemplateRef('formWebsiteGithubRef');
 
-const totalCredits = computed(() => sumCredits(pricing.value));
+const totalCredits = computed(() => sumCredits(paymentStore.filterServicePrice([PriceServiceName.HOSTING_WEBSITE])));
 const progress = computed(() => Math.min(100, 20 * websiteStore.stepWebsiteCreate));
 
 onMounted(async () => {
@@ -90,6 +92,12 @@ onMounted(async () => {
   storageStore.getStorageInfo();
   paymentStore.getPriceList();
 });
+
+const onReset = () => {
+  websiteStore.modalNewWebsiteVisible = false;
+  websiteStore.stepWebsiteCreate = WebsiteCreateStep.TYPE;
+  websiteStore.resetForm();
+};
 
 const submitFormRef = async formRef => (formRef ? await formRef.handleSubmit() : false);
 

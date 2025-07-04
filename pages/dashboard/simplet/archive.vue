@@ -8,12 +8,7 @@
         <ActionsSimplets archive />
         <TableSimplets :search="simpletStore.archive.search" archive />
       </n-space>
-      <Empty
-        v-else
-        :title="t('nft.collection.emptyArchive')"
-        :info="t('nft.collection.emptyArchiveInfo')"
-        icon="nft/illustration"
-      >
+      <Empty v-else :title="t('simplet.emptyArchive')" :info="t('simplet.emptyArchiveInfo')" icon="nft/illustration">
         <Btn type="primary" :to="{ name: 'dashboard-simplet-list' }">
           {{ $t('simplet.menu.list') }}
         </Btn>

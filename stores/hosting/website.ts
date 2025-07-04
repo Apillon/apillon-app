@@ -9,6 +9,7 @@ export const useWebsiteStore = defineStore('website', {
     items: [] as WebsiteBaseInterface[],
     loading: false,
     missingHtml: false,
+    modalNewWebsiteVisible: false as boolean | null,
     search: '',
     selected: '',
     stepWebsiteCreate: WebsiteCreateStep.TYPE,

@@ -207,6 +207,8 @@
     "deploy": "Deploy simplet",
     "deployed": "Deploy simplet",
     "edit": "Edit Simplet",
+    "emptyArchive": "Simplet Archive",
+    "emptyArchiveInfo": "No Simplets have been archived yet. Once you archive a Simplet, it will appear here.",
     "endpoint": "Backend URL",
     "frontendStatus": "Frontend status",
     "includedServices": "Web3 services, included in the Simplet:",

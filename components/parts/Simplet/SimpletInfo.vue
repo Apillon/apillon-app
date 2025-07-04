@@ -105,7 +105,7 @@ const data = computed(() => {
     },
     {
       label: t('simplet.url'),
-      value: '',
+      value: websiteStore.active.domain || websiteStore.active.w3ProductionLink,
       component: resolveComponent('TableLink'),
       loading:
         simpletStore.loading ||

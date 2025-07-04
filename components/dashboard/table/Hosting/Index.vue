@@ -88,6 +88,7 @@ const columns = computed<NDataTableColumns<WebsiteBaseInterface>>(() => {
         { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
         { hidden: !selectedColumns.value.includes('source') },
       ],
+      minWidth: 120,
       render(row) {
         return [
           h('span', { class: `mr-1 text-lg ${websiteSourceIcon(row)}` }),
@@ -95,17 +96,17 @@ const columns = computed<NDataTableColumns<WebsiteBaseInterface>>(() => {
         ];
       },
     },
-    {
-      key: 'status',
-      title: t('general.status'),
-      className: [
-        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
-        { hidden: !selectedColumns.value.includes('status') },
-      ],
-      render(row: WebsiteBaseInterface) {
-        return h(resolveComponent('HostingDeploymentStatus'), { status: row.lastDeploymentStatus });
-      },
-    },
+    // {
+    //   key: 'status',
+    //   title: t('general.status'),
+    //   className: [
+    //     { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
+    //     { hidden: !selectedColumns.value.includes('status') },
+    //   ],
+    //   render(row: WebsiteBaseInterface) {
+    //     return h(resolveComponent('HostingDeploymentStatus'), { status: row.lastDeploymentStatus });
+    //   },
+    // },
     {
       key: 'description',
       title: t('hosting.website.description'),

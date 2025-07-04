@@ -61,11 +61,11 @@ watch(
 
 const loadSimpletData = async () => {
   if (simpletStore.active.frontend_uuid) {
-    websiteStore.getWebsite(simpletStore.active.frontend_uuid);
+    websiteStore.fetchWebsite(simpletStore.active.frontend_uuid);
   }
 
   if (simpletStore.active.backend_uuid) {
-    simpletStore.getBackend(simpletStore.active.backend_uuid);
+    simpletStore.fetchBackend(simpletStore.active.backend_uuid);
   }
 };
 </script>

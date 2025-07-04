@@ -82,6 +82,7 @@
     "FILE_NOT_FOUND": "File not found",
     "GITHUB_WEBHOOK_CREATION_FAILED": "GitHub Webhook creation failed.",
     "WEBSITE_DOMAIN_CHANGE_NOT_ALLOWED": "Website domain can be changed every 15 minutes.",
+    "WEBSITE_WITH_THAT_DOMAIN_ALREADY_EXISTS": "Website with that domain already exists.",
     "DEPLOYMENT_CONFIG_ALREADY_EXISTS": "Repository is already connected to Apillon. Remove the connection or use a different repository.",
     "DEPLOYMENT_CONFIG_VARIABLES_DUPLICATE": "Deployment variables keys are not unique.",
     "NO_FILES_TO_DEPLOY": "Please upload some files first.",
