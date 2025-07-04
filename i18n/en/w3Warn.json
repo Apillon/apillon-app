@@ -18,7 +18,7 @@
       "delete": "All items stored in this folder will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."
     },
     "hosting": {
-      "upload": "With web3 hosting you can only hosting static, client site rendered pages. Server side rendering is not supported.",
+      "upload": "With Web3 hosting, you can only host static pages that are client-side rendered. Server-side rendering is not supported.",
       "delete": "Deleted sites are no longer accessible, but they are still available in Website Archive. Websites in the archive can be republished.",
       "deploy": "Please be advised that the deployment may take up to 5 minutes to complete."
     },

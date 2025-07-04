@@ -12,29 +12,17 @@
       <Pill :type="domainStatusType">
         {{ $t(`hosting.domain.status.${domainStatus || 0}`) }}
       </Pill>
+    </div>
+
+    <n-space class="w-full" :wrap="!isLg" align="center">
       <n-button :disabled="btnDomainDisabled" :loading="loadingDomain" @click="refreshDomainStatus">
         <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('hosting.domain.refreshStatus') }}
       </n-button>
-    </div>
-
-    <n-space class="w-full" :wrap="!isLg" align="center">
-      <Btn type="primary" @click="showModalConfiguration = true">
-        {{ $t('hosting.domain.configure') }}
-      </Btn>
-
       <Btn type="error" :loading="loadingDelete" @click="deleteDomain">
         {{ $t('hosting.domain.remove') }}
       </Btn>
     </n-space>
-    <!-- Modal - Website domain configuration -->
-    <modal
-      v-model:show="showModalConfiguration"
-      class="!w-auto max-w-[100vw]"
-      title="How to setup a domain for Apillon hosting?"
-    >
-      <HostingDomainConfiguration />
-    </modal>
   </div>
   <FormHostingDomain v-else :website-uuid="uuid" :domain="domain" />
 </template>
@@ -48,7 +36,6 @@ const websiteStore = useWebsiteStore();
 const { websiteUuid } = useHosting();
 const { deleteItem } = useDelete();
 
-const showModalConfiguration = ref<boolean>(false);
 const domainStatus = ref<number | null>(null);
 const loadingDomain = ref<boolean>(false);
 const loadingDelete = ref<boolean>(false);

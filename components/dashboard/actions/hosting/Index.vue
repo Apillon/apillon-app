@@ -9,7 +9,11 @@
         <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('general.refresh') }}
       </n-button>
-      <Btn inner-class="flex gap-2 items-center" :disabled="authStore.isAdmin()" @click="showModalNewWebsite = true">
+      <Btn
+        inner-class="flex gap-2 items-center"
+        :disabled="authStore.isAdmin()"
+        @click="websiteStore.modalNewWebsiteVisible = true"
+      >
         <span class="icon-add text-xl"></span>
         <span>{{ $t('hosting.website.add') }}</span>
       </Btn>
@@ -17,7 +21,7 @@
   </n-space>
 
   <!-- Modal - New website -->
-  <HostingModal v-model:show="showModalNewWebsite" :title="$t('hosting.website.new')" />
+  <HostingModal v-model:show="websiteStore.modalNewWebsiteVisible" :title="$t('hosting.website.new')" />
 </template>
 
 <script lang="ts" setup>
@@ -27,5 +31,4 @@ defineProps({
 
 const authStore = useAuthStore();
 const websiteStore = useWebsiteStore();
-const showModalNewWebsite = ref<boolean>(false);
 </script>

@@ -126,9 +126,12 @@ export const useFileStore = defineStore('file', {
         return blockId.toJSON() as number;
       } catch (e: ApiError | any) {
         console.error(e);
-        this.currentBlockId = 0;
+        if (this.currentBlockId === -1) {
+          return this.currentBlockId;
+        }
+        this.currentBlockId = -1;
+        return this.fetchCurrentBlockFromCrust();
       }
-      return 0;
     },
 
     async fetchFileSessions(fileStatus?: number | null, args: FetchParams = {}) {

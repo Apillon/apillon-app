@@ -146,6 +146,8 @@ export default function useHosting() {
 
       if (refreshedBuilds.find(deployment => deployment.buildStatus < DeploymentBuildStatus.SUCCESS) === undefined) {
         clearInterval(buildInterval);
+        websiteStore.fetchWebsite(websiteStore.active.website_uuid);
+        deploymentStore.fetchDeployments(websiteStore.active?.website_uuid);
       }
     }, 5000);
   }

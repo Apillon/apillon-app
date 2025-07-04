@@ -30,7 +30,7 @@
   </W3Warn>
 
   <!-- Modal - Create Website -->
-  <HostingModal v-model:show="showModalNewWebsite" :title="$t('hosting.website.new')" />
+  <HostingModal v-model:show="websiteStore.modalNewWebsiteVisible" :title="$t('hosting.website.new')" />
 </template>
 
 <script lang="ts" setup>
@@ -43,7 +43,6 @@ const websiteStore = useWebsiteStore();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.HOSTING_NEW);
 
 const pageLoading = ref<boolean>(true);
-const showModalNewWebsite = ref<boolean | null>(false);
 
 const serviceGuides = [
   {
@@ -78,17 +77,17 @@ onMounted(async () => {
  * */
 function createNewWebsite() {
   if (localStorage.getItem(LsW3WarnKeys.HOSTING_NEW) || !te('w3Warn.hosting.upload')) {
-    showModalNewWebsite.value = true;
+    websiteStore.modalNewWebsiteVisible = true;
   } else {
     modalW3WarnVisible.value = true;
-    showModalNewWebsite.value = null;
+    websiteStore.modalNewWebsiteVisible = null;
   }
 }
 
 /** When user close W3Warn, allow him to create new website */
 function onModalW3WarnHide() {
-  if (showModalNewWebsite.value !== false) {
-    showModalNewWebsite.value = true;
+  if (websiteStore.modalNewWebsiteVisible !== false) {
+    websiteStore.modalNewWebsiteVisible = true;
   }
 }
 </script>

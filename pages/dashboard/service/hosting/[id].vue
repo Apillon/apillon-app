@@ -49,7 +49,7 @@ const { t } = useI18n();
 const storageStore = useStorageStore();
 const websiteStore = useWebsiteStore();
 const deploymentStore = useDeploymentStore();
-const { activeTab, tabs, pageLoading, initWebsite } = useHosting();
+const { activeTab, tabs, pageLoading, initWebsite, checkUnfinishedBuilds } = useHosting();
 const tabsRef = ref();
 
 useHead({
@@ -60,6 +60,10 @@ onMounted(async () => {
   initWebsite();
   storageStore.getStorageInfo();
   storageStore.getGithubProjectConfig();
+
+  if (configId.value || !websiteStore.isActiveWebsiteStatic) {
+    checkUnfinishedBuilds();
+  }
 });
 
 const configId = computed(() => {

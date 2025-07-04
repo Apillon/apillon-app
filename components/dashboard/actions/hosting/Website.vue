@@ -41,6 +41,7 @@
 
       <template v-if="websiteStore.active.w3ProductionLink">
         <BtnDomain v-if="websiteStore.active.lastDeploymentStatus === DeploymentStatus.SUCCESSFUL" />
+        <BtnDns v-if="websiteStore.active.lastDeploymentStatus === DeploymentStatus.SUCCESSFUL" />
         <FormStorageShortUrl :target-url="websiteStore.active.w3ProductionLink" class="w-full" />
       </template>
 

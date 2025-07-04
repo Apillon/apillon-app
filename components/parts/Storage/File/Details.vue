@@ -65,12 +65,13 @@
       <div v-if="file?.CID" class="body-sm mb-4">
         <p class="body-sm text-body">{{ $t('storage.expiration') }}</p>
         <div class="relative min-h-[20px]">
-          <strong v-if="crustFileDetails?.expired_at">
+          <Tag v-if="crustFileDetails === null" type="error"> ERROR </Tag>
+          <strong v-else-if="crustFileDetails?.expired_at">
             {{
               fileExpiration(
                 parseInt(crustFileDetails.calculated_at),
                 parseInt(crustFileDetails.expired_at),
-                file.updateTime,
+                file.updateTime || file.createTime,
                 currentBlockId
               )
             }}
@@ -83,7 +84,8 @@
       <div v-if="file?.CID" class="body-sm mb-4">
         <p class="body-sm text-body">{{ $t('storage.replicas') }}</p>
         <div class="relative min-h-[20px]">
-          <strong v-if="crustFileDetails?.reported_replica_count">
+          <Tag v-if="crustFileDetails === null" type="error"> ERROR </Tag>
+          <strong v-else-if="crustFileDetails?.reported_replica_count">
             {{ crustFileDetails.reported_replica_count }}
           </strong>
           <Spinner v-else :size="16" />
@@ -94,14 +96,14 @@
       <div class="body-sm mb-6">
         <p class="body-sm mb-1 text-body">{{ $t('storage.status') }}</p>
         <div class="uppercase">
-          <StorageFileStatus :file-status="fileDetails.fileStatus" />
+          <StorageFileStatus :status="fileDetails.fileStatus" />
         </div>
       </div>
     </div>
 
     <!-- Actions -->
     <n-grid v-if="file?.CID" :cols="2" :x-gap="32">
-      <n-gi>
+      <n-gi v-if="file.link">
         <Btn type="primary" size="large" @click="download(file.link, file.name)">
           {{ $t('general.download') }}
         </Btn>
@@ -152,7 +154,7 @@ async function getFileDetails(uuidOrCID?: string) {
 
 /** Get File details from CRUST */
 async function getCrustFileDetails(cid: string) {
-  if (!(cid in fileStore.crust)) {
+  if (!(cid in fileStore.crust) || fileStore.crust[cid] === null) {
     try {
       fileStore.crust[cid] = await fileStore.fetchFileDetailsFromCrust(cid);
     } catch (e) {
