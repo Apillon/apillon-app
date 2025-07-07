@@ -41,7 +41,7 @@
     <n-input
       v-model:value="form.password"
       type="password"
-      :input-props="{ id: 'password', autocomplete: 'mysql-password' }"
+      :input-props="{ id: 'password', autocomplete: 'off' }"
       :placeholder="$t('form.placeholder.mysql.password')"
       show-password-on="click"
       clearable

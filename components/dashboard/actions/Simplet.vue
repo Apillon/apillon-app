@@ -118,21 +118,21 @@ const rules = reactive({
 function openModalSmtp() {
   modalSmtpVisible.value = true;
 
-  simpletStore.form.smtp.host = '';
-  simpletStore.form.smtp.port = 587;
-  simpletStore.form.smtp.username = '';
-  simpletStore.form.smtp.password = '';
-  simpletStore.form.smtp.senderName = '';
-  simpletStore.form.smtp.senderEmail = '';
+  simpletStore.form.smtp.host = simpletStore.getBackendVariable('SMTP_HOST') || '';
+  simpletStore.form.smtp.port = Number(simpletStore.getBackendVariable('SMTP_PORT') || '587');
+  simpletStore.form.smtp.username = simpletStore.getBackendVariable('SMTP_USERNAME') || '';
+  simpletStore.form.smtp.password = simpletStore.getBackendVariable('SMTP_PASSWORD') || '';
+  simpletStore.form.smtp.senderName = simpletStore.getBackendVariable('SMTP_NAME_FROM') || '';
+  simpletStore.form.smtp.senderEmail = simpletStore.getBackendVariable('SMTP_EMAIL_FROM') || '';
 }
 function openModalMysql() {
   modalMysqlVisible.value = true;
 
-  simpletStore.form.mysql.host = '';
-  simpletStore.form.mysql.port = 3306;
-  simpletStore.form.mysql.database = '';
-  simpletStore.form.mysql.user = '';
-  simpletStore.form.mysql.password = '';
+  simpletStore.form.mysql.host = simpletStore.getBackendVariable('MYSQL_HOST') || '';
+  simpletStore.form.mysql.port = Number(simpletStore.getBackendVariable('MYSQL_PORT') || '3306');
+  simpletStore.form.mysql.database = simpletStore.getBackendVariable('MYSQL_DATABASE') || '';
+  simpletStore.form.mysql.user = simpletStore.getBackendVariable('MYSQL_USER') || '';
+  simpletStore.form.mysql.password = simpletStore.getBackendVariable('MYSQL_PASSWORD') || '';
 }
 
 async function refresh() {
