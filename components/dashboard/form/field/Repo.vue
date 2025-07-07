@@ -17,16 +17,15 @@ import type { SelectOption } from 'naive-ui';
 const storageStore = useStorageStore();
 const websiteStore = useWebsiteStore();
 const deploymentStore = useDeploymentStore();
-const repoOptions = ref<SelectOption[]>([]);
+const repoOptions = computed<SelectOption[]>(() =>
+  storageStore.repos.map((item: GithubRepo) => ({
+    value: item.id,
+    label: item.name,
+  }))
+);
 
 onMounted(async () => {
   await storageStore.getGithubProjectConfig();
-  if (storageStore.projectConfig) {
-    repoOptions.value = storageStore.repos.map((item: GithubRepo) => ({
-      value: item.id,
-      label: item.name,
-    }));
-  }
   await storageStore.getRepos();
 
   if (deploymentStore.deploymentConfig?.repoId) {
