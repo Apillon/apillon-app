@@ -71,7 +71,7 @@ const docs = [
   {
     key: 'tutorials',
     label: t('dashboard.tutorials'),
-    link: 'https://blog.apillon.io/tagged/tutorial',
+    link: 'https://blog.apillon.io/tag/tutorial',
     iconName: 'icon/guide',
     icon: renderIcon('icon/guide'),
   },
