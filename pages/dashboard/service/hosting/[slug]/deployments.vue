@@ -69,9 +69,6 @@ onUnmounted(() => {
   }
 });
 
-const hasGithubConnected = computed(() => {
-  return !!websiteStore.isActiveWebsiteGithubSource || !!websiteStore.active.nftCollectionUuid;
-});
 const refreshBuilds = async () => {
   const websiteUuid = websiteStore.active?.website_uuid;
   if (websiteUuid) {

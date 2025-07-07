@@ -15,12 +15,15 @@
       <HostingCardTemplates class="md:w-1/2" @select-repo="repoSelected = true" />
     </div>
   </div>
-  <div v-else class="mx-auto max-w-lg">
-    <!-- Permissions Error Notification -->
-    <Notification v-if="isFormDisabled" type="error" class="mb-8 w-full">
-      {{ $t('dashboard.permissions.insufficient') }}
-    </Notification>
 
+  <FormNftWebsiteDeploy
+    v-else-if="isApillonRepo && websiteStore.form.repoId"
+    ref="formNftWebsiteRef"
+    class="mx-auto max-w-lg"
+    :template-type="websiteStore.form.repoId"
+    hide-submit
+  />
+  <Form v-else class="mx-auto max-w-lg">
     <n-form
       ref="formRef"
       :model="websiteStore.form"
@@ -119,7 +122,7 @@
         </Btn>
       </n-form-item>
     </n-form>
-  </div>
+  </Form>
 </template>
 
 <script lang="ts" setup>
@@ -129,11 +132,13 @@ const props = defineProps({
   title: { type: String, default: null },
   hideSubmit: { type: Boolean, default: false },
 });
+const formNftWebsiteRef = useTemplateRef('formNftWebsiteRef');
 const message = useMessage();
 const dataStore = useDataStore();
 const storageStore = useStorageStore();
 const websiteStore = useWebsiteStore();
 const warningStore = useWarningStore();
+const collectionStore = useCollectionStore();
 
 const { t } = useI18n();
 const { rulesWebsite } = useForm();
@@ -144,9 +149,8 @@ const repoSelected = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
 const website = ref<WebsiteInterface | null>(null);
 
-const isFormDisabled = computed<boolean>(() => {
-  return dataStore.isProjectUser;
-});
+const isApillonRepo = computed<boolean>(() => apillonRepos.some(r => r.id === websiteStore.form.repoId));
+const isFormDisabled = computed<boolean>(() => dataStore.isProjectUser);
 const selectedRepo = computed(() =>
   [...storageStore.repos, ...apillonRepos].find(r => r.id === websiteStore.form.repoId)
 );
@@ -169,6 +173,17 @@ async function handleSubmit(e?: Event | MouseEvent) {
     } else {
       repoSelected.value = true;
     }
+  } else if (isApillonRepo.value) {
+    const result = await formNftWebsiteRef.value?.handleSubmit();
+    const collection = collectionStore.items.find(c => c.collection_uuid === result?.nftCollection);
+
+    websiteStore.form.name = `${collection?.name} - Website`;
+    websiteStore.form.apiKey = result?.apiKey;
+    websiteStore.form.apiSecret = result?.apiSecret;
+    websiteStore.form.embeddedWallet = result?.embeddedWallet || '';
+    websiteStore.form.nftCollection = result?.nftCollection || '';
+    websiteStore.form.templateType = result?.type || 1;
+    return props.hideSubmit ? !!result : null;
   } else {
     const validation = await formRef.value?.validate();
     if (props.hideSubmit) {

@@ -10,7 +10,8 @@ export const apillonRepos: GithubRepo[] = [
   {
     clone_url: 'https://github.com/Apillon/nft-template.git',
     default_branch: 'master',
-    id: 629913711,
+    repoId: 629913711,
+    id: NftWebsiteType.PLAIN_JS,
     image: NextJsPNG,
     name: 'nft-template',
     owner: apillonOwner,
@@ -20,7 +21,8 @@ export const apillonRepos: GithubRepo[] = [
   {
     clone_url: 'https://github.com/Apillon/nft-template-vue.git',
     default_branch: 'master',
-    id: 657149828,
+    repoId: 657149828,
+    id: NftWebsiteType.VUE,
     image: NextJsPNG,
     name: 'nft-template-vue',
     owner: apillonOwner,
@@ -30,7 +32,8 @@ export const apillonRepos: GithubRepo[] = [
   {
     clone_url: 'https://github.com/Apillon/nft-template-react.git',
     default_branch: 'master',
-    id: 657149144,
+    repoId: 657149144,
+    id: NftWebsiteType.REACT,
     image: NextJsPNG,
     name: 'nft-template-react',
     owner: apillonOwner,

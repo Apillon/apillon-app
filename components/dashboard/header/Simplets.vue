@@ -11,7 +11,7 @@
     </slot>
 
     <template #submenu>
-      <MenuSimplets />
+      <MenuSimplets v-if="dataStore.project.selected && simpletStore.hasSimplets" />
     </template>
 
     <template #details>
@@ -35,5 +35,7 @@
 <script lang="ts" setup>
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.HOSTING_NEW);
 
+const dataStore = useDataStore();
 const storageStore = useStorageStore();
+const simpletStore = useSimpletStore();
 </script>

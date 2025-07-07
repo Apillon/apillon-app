@@ -26,6 +26,8 @@ defineEmits(['back', 'deploy']);
 const { t } = useI18n();
 const paymentStore = usePaymentStore();
 const websiteStore = useWebsiteStore();
+const collectionStore = useCollectionStore();
+const embeddedWalletStore = useEmbeddedWalletStore();
 
 const pricing = computed<ProductPriceInterface[]>(() => {
   const prices: ProductPriceInterface[] = [];
@@ -45,10 +47,35 @@ const data = ref<Record<string, string | boolean>[]>([
   },
 ]);
 
+const templateTypeName = (type: number) =>
+  type === NftWebsiteType.VUE
+    ? t('nft.collection.websiteDeploy.vue')
+    : type === NftWebsiteType.REACT
+      ? t('nft.collection.websiteDeploy.react')
+      : t('nft.collection.websiteDeploy.plain_js');
+
 onMounted(() => {
+  const isApillonNftRepo = apillonRepos.some(r => r.id === websiteStore.form.repoId);
   paymentStore.getPriceList();
 
-  if (websiteStore.form.type === WebsiteType.GITHUB) {
+  if (isApillonNftRepo) {
+    data.value.push({ label: 'Template type', value: templateTypeName(websiteStore.form.templateType) });
+    data.value.push({
+      label: t('nft.collection.preview'),
+      value: collectionStore.items.find(c => c.collection_uuid === websiteStore.form.nftCollection)?.name || '',
+      show: !!websiteStore.form.nftCollection,
+    });
+    data.value.push({
+      label: t('form.label.embeddedWallet.integration'),
+      value: embeddedWalletStore.items.find(c => c.integration_uuid === websiteStore.form.embeddedWallet)?.title || '',
+      show: !!websiteStore.form.embeddedWallet,
+    });
+    data.value.push({
+      label: t('form.label.apiKey'),
+      value: websiteStore.form.apiKey || '',
+      show: !!websiteStore.form.apiKey,
+    });
+  } else if (websiteStore.form.type === WebsiteType.GITHUB) {
     data.value.push({ label: t('form.label.website.repository'), value: websiteStore.form.repoName });
     data.value.push({ label: t('form.label.website.repoUrl'), value: websiteStore.form.repoUrl });
     data.value.push({ label: t('form.label.website.branchName'), value: websiteStore.form.branchName });

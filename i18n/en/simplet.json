@@ -154,7 +154,7 @@
       "0": "Requested",
       "1": "Deploying",
       "2": "Online",
-      "3": "Stopped",
+      "3": "Trial expired",
       "4": "Shut down",
       "5": "Failed"
     },

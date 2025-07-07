@@ -1,3 +1,4 @@
+import type EmbeddedWallet from '~/components/dashboard/actions/EmbeddedWallet.vue';
 import { WebsiteSource } from '~/lib/types/hosting';
 
 const activeTab = ref();
@@ -10,6 +11,7 @@ export default function useHosting() {
   const dataStore = useDataStore();
   const bucketStore = useBucketStore();
   const websiteStore = useWebsiteStore();
+  const collectionStore = useCollectionStore();
   const deploymentStore = useDeploymentStore();
 
   const loading = ref<boolean>(false);
@@ -173,12 +175,25 @@ export default function useHosting() {
 
     loading.value = true;
     try {
-      const bodyData: Record<string, string | number | object> = {
-        name: websiteStore.form.name,
-        description: websiteStore.form.description,
-        project_uuid: dataStore.projectUuid,
-      };
-      if (websiteStore.form.type === WebsiteType.GITHUB) {
+      const isApillonNftRepo = apillonRepos.some(r => r.id === websiteStore.form.repoId);
+      const url = isApillonNftRepo ? endpoints.deployNftWebsite : endpoints.website;
+
+      const bodyData: Record<string, string | number | object | undefined> = isApillonNftRepo
+        ? {
+            apiKey: websiteStore.form.apiKey,
+            apiSecret: websiteStore.form.apiSecret,
+            collectionUuid: websiteStore.form.nftCollection,
+            embeddedWallet: websiteStore.form.embeddedWallet,
+            projectUuid: dataStore.projectUuid,
+            type: websiteStore.form.templateType,
+          }
+        : {
+            name: websiteStore.form.name,
+            description: websiteStore.form.description,
+            project_uuid: dataStore.projectUuid,
+          };
+
+      if (!isApillonNftRepo && websiteStore.form.type === WebsiteType.GITHUB) {
         bodyData.deploymentConfig = {
           branchName: websiteStore.form.branchName,
           buildCommand: websiteStore.form.buildCommand,
@@ -194,13 +209,18 @@ export default function useHosting() {
         };
       }
 
-      const { data } = await $api.post<WebsiteResponse>(endpoints.website, bodyData);
+      const { data } = await $api.post<WebsiteResponse>(url, bodyData);
       websiteStore.active = data;
-
-      /** On new website created add new website to list */
       websiteStore.items.unshift(data as WebsiteBaseInterface);
 
-      message.success(t('form.success.created.website'));
+      if (isApillonNftRepo) {
+        message.success(t('nft.collection.websiteDeploy.success'));
+      } else if (websiteStore.form.type === WebsiteType.GITHUB) {
+        message.success(t('hosting.website.deploying'));
+      } else {
+        message.success(t('form.success.created.website'));
+      }
+
       loading.value = false;
       return data;
     } catch (error) {

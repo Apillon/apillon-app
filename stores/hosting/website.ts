@@ -22,12 +22,15 @@ export const useWebsiteStore = defineStore('website', {
       buildCommand: 'npm run build',
       buildDirectory: './dist',
       installCommand: 'npm install',
-      apiKey: undefined,
-      apiSecret: '',
+      apiKey: undefined as Optional<string> | undefined,
+      apiSecret: undefined as Optional<string> | undefined,
       repoId: undefined as number | undefined,
       repoName: '',
       repoOwnerName: '',
       repoUrl: '',
+      embeddedWallet: '',
+      nftCollection: '',
+      templateType: 0,
     },
   }),
   getters: {
@@ -69,6 +72,8 @@ export const useWebsiteStore = defineStore('website', {
       this.form.repoName = '';
       this.form.repoOwnerName = '';
       this.form.repoUrl = '';
+      this.form.embeddedWallet = '';
+      this.form.templateType = 0;
     },
 
     setWebsite(uuid: string) {
