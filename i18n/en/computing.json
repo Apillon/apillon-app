@@ -3,7 +3,7 @@
     "cloudFunctions": {
       "addNew": "Add new Cloud function",
       "checkVideo": "Check out the video",
-      "delete": "Delete Cloud function",
+      "delete": "Archive Cloud function",
       "deployments": "Deployments",
       "endpoint": "Cloud function API endpoint",
       "emptyArchive": "Cloud functions Archive",

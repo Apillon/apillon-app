@@ -124,7 +124,7 @@
       "branchDeployments": "Branch deployments",
       "create": "Create website",
       "description": "Website description",
-      "delete": "Delete website",
+      "delete": "Archive website",
       "deleteConfirm": "Are you sure that you want to delete selected website?",
       "deployed": "Yay, your website is live and waiting for content.",
       "deployedInfo": "Upload your files with the CLI or drag & drop them when you're ready.",

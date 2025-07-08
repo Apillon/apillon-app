@@ -35,7 +35,7 @@
     </Modal>
   </template>
   <n-drawer v-bind="$attrs" width="100%" height="92vh" placement="bottom">
-    <n-drawer-content :title="title" closable>
+    <n-drawer-content :title="title">
       <template #header>
         <div class="flex w-full items-center justify-between">
           <small class="inline-block md:w-1/6">{{ title }}</small>
@@ -51,7 +51,13 @@
               </div>
             </slot>
           </div>
-          <div class="md:w-1/6"></div>
+          <div class="flex justify-end md:w-1/6">
+            <NBaseClose
+              cls-prefix="n"
+              class="n-base-close n-base-close--absolute n-drawer-header__close"
+              @click="btnClose()"
+            />
+          </div>
         </div>
         <div
           v-if="progress !== null"
@@ -65,11 +71,25 @@
       <template v-if="$slots.footer" #footer>
         <slot name="footer" />
       </template>
+
+      <Modal v-model:show="modalResetVisible" class="hide-header z-[9000] text-center">
+        <Headline :title="$t('dashboard.reset.title')" :content="$t('dashboard.reset.info')" />
+        <div class="mt-8 flex gap-4">
+          <Btn type="secondary" class="flex-1" @click="close()">
+            {{ $t('general.close') }}
+          </Btn>
+          <Btn type="primary" class="flex-1" @click="closeReset()">
+            {{ $t('form.reset') }}
+          </Btn>
+        </div>
+      </Modal>
     </n-drawer-content>
   </n-drawer>
 </template>
 
 <script lang="ts" setup>
+import { NBaseClose } from 'naive-ui/es/_internal';
+
 const emit = defineEmits(['reset']);
 const props = defineProps({
   activeStep: { type: Number, default: 0 },
@@ -85,6 +105,22 @@ const attrs = useAttrs();
 const { vnode } = getCurrentInstance();
 const hasReset = computed(() => 'onReset' in vnode.props);
 const modalResetVisible = ref<boolean>(false);
+
+const btnClose = () => {
+  if (props.minimize) {
+    modalResetVisible.value = true;
+  } else {
+    close();
+  }
+};
+const close = () => {
+  modalResetVisible.value = false;
+  (attrs as Record<string, any>)['onUpdate:show']?.(false);
+};
+const closeReset = () => {
+  close();
+  emit('reset');
+};
 
 const checkIfFinished = () => {
   if (props.finished && !attrs.show && hasReset) {

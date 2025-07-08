@@ -52,7 +52,7 @@
           v-model:value="simpletStore.form.smtp.password"
           type="password"
           show-password-on="click"
-          :input-props="{ id: 'password', autocomplete: 'smtp-password' }"
+          :input-props="{ id: 'password', autocomplete: 'off' }"
           :placeholder="$t('form.placeholder.smtp.password')"
           clearable
         />

@@ -93,6 +93,7 @@
         "dropPrice": "Minting price in {currency}",
         "dropReserve": "Reserve NFTs",
         "initialOwner": "Initial owner",
+        "integration": "Select NFT collection",
         "logo": "Collection logo",
         "maxSupply": "How many?",
         "name": "Name",

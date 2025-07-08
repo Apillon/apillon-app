@@ -15,7 +15,13 @@
         :pricing="paymentStore.filterServicePrice([PriceServiceName.SIMPLET_NFT_STUDIO_DEPLOY])"
         :deploy-text="$t('simplet.wizard.create')"
         @deploy="$emit('deploy')"
-      />
+      >
+        <Notification v-if="!paymentStore.hasActiveSubscription" type="warning" class="mb-4">
+          {{ $t('service.quotaSimplet') }}
+          <NuxtLink class="underline" :to="{ name: 'dashboard-payments' }"> {{ $t('project.upgradingPlan') }} </NuxtLink
+          >.
+        </Notification>
+      </ReviewPricing>
     </template>
   </ReviewLayout>
 </template>

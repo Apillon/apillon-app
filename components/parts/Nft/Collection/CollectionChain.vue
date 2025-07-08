@@ -15,13 +15,5 @@ defineProps({
   chainId: { type: Number, default: null },
 });
 
-const { nftChains, chainsTestnet } = useCollection();
-const chains = [...nftChains, ...chainsTestnet];
-
-function getChainIconName(chainId?: number) {
-  return chains.find(chain => chain.value === chainId)?.name?.toLowerCase();
-}
-function getChainName(collectionChain?: number) {
-  return [...nftChains, ...chainsTestnet].find(chain => chain.value === collectionChain)?.label;
-}
+const { getChainName, getChainIconName } = useCollection();
 </script>

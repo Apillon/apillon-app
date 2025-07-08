@@ -39,8 +39,8 @@
     "Insufficient permissions to access this record": "You don't have permission for this action",
     "DEFAULT_VALIDATOR_ERROR_CODE": "Validation error, please fill the form",
     "FORBIDDEN_RESOURCE": "You don't have permissions for this action",
-    "ERR_CONNECTION_REFUSED": "Connection refused, please check your internet connection.",
-    "Failed to fetch": "Connection refused, please check your internet connection.",
+    "ERR_CONNECTION_REFUSED": "Connection refused, please try again later.",
+    "Failed to fetch": "Failed to fetch, please try again later.",
     "jwt expired": "Your session has expired, please log in again.",
     "API_KEY_NOT_PRESENT": "API key is missing",
     "API_KEY_SECRET_NOT_PRESENT": "API key secret is missing",
@@ -167,6 +167,6 @@
     "fileUploadMissing": "File by name \"{name}\" will not be uploaded. Please upload it again.",
     "request entity too large": "Request entity too large",
     "Unable to mint new NFTs, out of supply!": "Nfts out of stock!",
-    "walletSignature": "'Could not capture your signature, check your wallet connection"
+    "walletSignature": "Could not capture your signature, check your wallet connection"
   }
 }

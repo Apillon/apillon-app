@@ -69,7 +69,6 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const message = useMessage();
 const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
 const warningStore = useWarningStore();

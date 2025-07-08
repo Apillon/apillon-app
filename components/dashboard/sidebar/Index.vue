@@ -166,8 +166,6 @@ onMounted(async () => {
 
 async function initProject() {
   projectsLoaded.value = false;
-  await sleep(1);
-  await dataStore.waitOnPromises(false);
 
   if (authStore.isAdmin() && dataStore.project.selected) {
     const currentProject = await dataStore.getProject(dataStore.project.selected);
@@ -175,6 +173,8 @@ async function initProject() {
     dataStore.updateCurrentProject(currentProject);
     projectsLoaded.value = true;
   } else {
+    await sleep(1);
+    await dataStore.waitOnPromises(false);
     await dataStore.getProjects();
 
     if (dataStore.project.selected) {

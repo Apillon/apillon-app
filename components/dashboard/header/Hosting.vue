@@ -3,8 +3,7 @@
     :service="ServiceTypeName.HOSTING"
     :info="$t('w3Warn.hosting.upload')"
     :technologies="['logo/crust', 'library/typescript', 'library/javascript', 'library/nextjs']"
-    docs="sdocnkslk"
-    demo="qQJnuvUo-xo"
+    docs="https://wiki.apillon.io/web3-services/3-web3-hosting.html"
   >
     <slot>
       <n-space align="center">

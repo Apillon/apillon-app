@@ -9,6 +9,7 @@
     "owner": "Project owner",
     "quotaReached": "Quota has been reached. To create more projects",
     "upgradePlan": " upgrade your current plan",
+    "upgradingPlan": " upgrading your plan",
     "usersAndPermissions": "Project users & permissions",
     "uuid": "Project UUID"
   }

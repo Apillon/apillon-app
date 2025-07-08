@@ -171,16 +171,15 @@ export const useDeploymentStore = defineStore('deployment', {
       this.loading = false;
     },
     async fetchBuilds(websiteUuid: string, loading = true) {
+      if (!websiteUuid) return this.builds;
       this.buildsLoading = loading;
 
       try {
         const params = parseArguments(PARAMS_ALL_ITEMS);
         params.websiteUuid = websiteUuid;
 
-        const res = await $api.get<DeploymentBuildsResponse>(endpoints.deploymentBuilds, params);
-
-        this.builds = res.data.items;
-
+        const { data } = await $api.get<DeploymentBuildsResponse>(endpoints.deploymentBuilds, params);
+        this.builds = data.items;
         this.buildWebsiteUuid = websiteUuid;
 
         sessionStorage.setItem(LsCacheKeys.DEPLOYMENT_BUILD, Date.now().toString());

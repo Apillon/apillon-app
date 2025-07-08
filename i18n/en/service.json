@@ -185,6 +185,7 @@
     "info": "Launch a service, receive API keys and start building your next dapp.",
     "new": "New service",
     "quotaReached": "Quota has been reached. To create more services",
+    "quotaSimplet": "We noticed you are currently on the Freemium plan, so this Simplet will stay live for 3 days before it’s automatically removed. To keep it active, consider ",
     "used": "Web3 services used"
   }
 }

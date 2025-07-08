@@ -2,7 +2,7 @@
   <n-modal v-bind="$attrs" ref="modalRef" :mask-closable="false">
     <n-card
       class="!max-w-xl"
-      :title="title || $t(`general.delete`)"
+      :title="title || $t(`general.archive`)"
       :bordered="false"
       role="dialog"
       aria-modal="true"

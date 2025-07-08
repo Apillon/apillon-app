@@ -210,11 +210,11 @@ watch(
 
 async function loadBaseUri(url?: Optional<string>) {
   if (!url) return;
-  const parts = removeLastSlash(url).split('/');
-  if (parts.length) {
+  const cid = extractCIDFromUrl(url);
+  if (cid) {
     const type = url.includes('ipns') ? IpfsType.IPNS : IpfsType.CID;
     const projectUuid = await dataStore.getProjectUuid();
-    const ipfsLink = await ipfsStore.fetchIpfsLink(projectUuid, parts[parts.length - 1], type);
+    const ipfsLink = await ipfsStore.fetchIpfsLink(projectUuid, cid, type);
     collectionBaseUri.value = ipfsLink?.link;
   }
 }

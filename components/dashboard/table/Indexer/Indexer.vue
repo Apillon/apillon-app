@@ -122,7 +122,7 @@ const dropdownOptions = [
     },
   },
   {
-    key: 'hostingDelete',
+    key: 'delete',
     label: t('general.delete'),
     disabled: authStore.isAdmin(),
     props: {

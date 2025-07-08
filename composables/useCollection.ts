@@ -61,6 +61,13 @@ export default function useCollection() {
       };
     });
 
+  const getChainIconName = (chainId?: number) => {
+    return [...nftChains, ...chainsTestnet].find(chain => chain.value === chainId)?.name?.toLowerCase();
+  };
+  const getChainName = (collectionChain?: number) => {
+    return [...nftChains, ...chainsTestnet].find(chain => chain.value === collectionChain)?.label;
+  };
+
   const chainTypes = enumKeys(ChainType).map(k => {
     return {
       name: k.toLowerCase(),
@@ -298,6 +305,8 @@ export default function useCollection() {
     collectionEndpoint,
     disablePastDate,
     disablePastTime,
+    getChainName,
+    getChainIconName,
     isChainAvailable,
     openAddNft,
     prepareFormData,

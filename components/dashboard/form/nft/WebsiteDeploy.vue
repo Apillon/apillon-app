@@ -1,6 +1,11 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules" autocomplete="off" @submit.prevent="handleSubmit">
-    <n-form-item path="type" :label="$t('form.label.website.type')" :label-props="{ for: 'nftTemplate' }">
+    <n-form-item
+      v-if="!templateType"
+      path="type"
+      :label="$t('form.label.website.type')"
+      :label-props="{ for: 'nftTemplate' }"
+    >
       <n-radio-group v-model:value="formData.type" class="w-full gap-4 md:grid md:grid-cols-3" name="radiogroup">
         <CardSelect
           v-for="(type, key) in websiteTypes"
@@ -16,6 +21,18 @@
       </n-radio-group>
     </n-form-item>
 
+    <FormFieldNftCollection
+      v-if="templateType"
+      v-model:value="formData.nftCollection"
+      clearable
+      @update:value="c => (formData.nftCollection = c)"
+    />
+    <FormFieldEmbeddedWallet
+      v-model:value="formData.embeddedWallet"
+      clearable
+      @update:value="ew => (formData.embeddedWallet = ew)"
+    />
+
     <FormFieldApiKey
       :api-key="formData.apiKey"
       :api-secret="formData.apiSecret"
@@ -23,7 +40,7 @@
       @update:api-secret="apiSecret => (formData.apiSecret = apiSecret)"
     />
 
-    <n-form-item class="mt-8" :show-feedback="false" :show-label="false">
+    <n-form-item v-if="!hideSubmit" class="mt-8" :show-feedback="false" :show-label="false">
       <input type="submit" class="hidden" :value="'Save'" />
 
       <Btn type="primary" class="mt-2 w-full" :loading="loading" @click="handleSubmit">
@@ -35,12 +52,19 @@
 
 <script lang="ts" setup>
 type FormWebsiteDeploy = {
-  apiKey: string;
-  apiSecret: string;
+  apiKey: string | null;
+  apiSecret: string | null;
   type: NftWebsiteType | null;
+  nftCollection: string | null;
+  embeddedWallet: string | null;
 };
 
+defineExpose({ handleSubmit });
 const emit = defineEmits(['submitSuccess']);
+const props = defineProps({
+  templateType: { type: Number, default: null },
+  hideSubmit: { type: Boolean, default: false },
+});
 const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
@@ -58,24 +82,30 @@ const websiteTypes = ref([
 ]);
 
 const formData = reactive<FormWebsiteDeploy>({
-  apiKey: '',
-  apiSecret: '',
-  type: null,
+  apiKey: null,
+  apiSecret: null,
+  type: props.templateType,
+  nftCollection: null,
+  embeddedWallet: null,
 });
 
 const rules: NFormRules = {
-  type: [ruleRequired(t('validation.website.typeRequired'))],
+  type: ruleRequired(t('validation.website.typeRequired')),
+  nftCollection: { required: !!props.templateType, message: t('validation.nft.collection') },
   apiKey: ruleApiKey(formData),
   apiSecret: ruleApiSecret(formData),
 };
 
-async function handleSubmit(e: Event | MouseEvent) {
-  e.preventDefault();
-  formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
-    if (!errors) {
-      deployNftWebsite();
-    }
-  });
+async function handleSubmit(e?: Event | MouseEvent) {
+  e?.preventDefault();
+
+  const validation = await formRef.value?.validate();
+
+  if (props.hideSubmit) {
+    return !validation?.warnings ? formData : null;
+  } else if (!validation?.warnings) {
+    deployNftWebsite();
+  }
 }
 
 async function deployNftWebsite() {

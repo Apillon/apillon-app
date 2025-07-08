@@ -101,6 +101,7 @@ declare global {
 
   interface GithubRepo {
     id: number;
+    repoId: number;
     name: string;
     clone_url: string;
     default_branch: string;

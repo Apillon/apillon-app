@@ -72,6 +72,6 @@ const openModal = (type: string | number) => {
 const onWebsiteDeployed = (website: WebsiteInterface) => {
   modalDeployWebsiteVisible.value = false;
   websiteStore.active = website;
-  router.push(`/dashboard/service/hosting/${website.website_uuid}/production`);
+  router.push(`/dashboard/service/hosting/${website.website_uuid}`);
 };
 </script>

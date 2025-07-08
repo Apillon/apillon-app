@@ -224,7 +224,6 @@ async function createSimplet(simpletUuid: string) {
 
     const { data } = await $api.post<SimpletCreateResponse>(endpoints.simpletDeploy(simpletUuid), bodyData);
     simpletStore.active = data.data;
-    message.success(t('simplet.wizard.deployingInfo'));
 
     if (data.errors?.length) {
       data.errors.forEach(e => {
