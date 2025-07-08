@@ -218,6 +218,7 @@
     "redeploy": "Redeploy",
     "settings": "Simplet settings",
     "templates": "Pre-built templates",
+    "type": "Simplet type",
     "url": "Simplet URL",
     "uuid": "Simplet UUID",
     "viewCode": "View code"
