@@ -150,7 +150,6 @@ const dropdownOptions = [
   {
     key: 'delete',
     label: t('general.archive'),
-
     disabled: authStore.isAdmin(),
     props: {
       class: '!text-pink',

@@ -160,6 +160,7 @@ async function deploy(env: number) {
   deploying.value = true;
   await deploymentStore.deploy(websiteStore.active.website_uuid, env);
   deploying.value = false;
+  modalWebsiteReviewVisible.value = false;
 }
 
 /**

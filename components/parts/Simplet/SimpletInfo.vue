@@ -35,12 +35,12 @@ const data = computed(() => {
       value: simpletStore.active.name,
       loading: simpletStore.loading,
     },
-    {
-      label: t('simplet.uuid'),
-      value: simpletStore.active.simpletDeploy_uuid,
-      copy: true,
-      loading: simpletStore.loading,
-    },
+    // {
+    //   label: t('simplet.uuid'),
+    //   value: simpletStore.active.simpletDeploy_uuid,
+    //   copy: true,
+    //   loading: simpletStore.loading,
+    // },
     {
       label: t('general.type'),
       value: simpletType.value
@@ -93,7 +93,7 @@ const data = computed(() => {
       },
     },
     {
-      label: t('general.website'),
+      label: t('dashboard.nav.hosting'),
       value: '',
       component: resolveComponent('TableLink'),
       loading: simpletStore.loading || websiteStore.loading,

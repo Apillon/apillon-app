@@ -8,20 +8,21 @@
 
       <!-- Preview -->
       <Btn
-        v-if="websiteStore.active.w3ProductionLink"
         class="locked w-full"
         size="medium"
-        type="secondary"
-        :href="websiteStore.active.w3ProductionLink"
+        type="primary"
+        :disabled="!simpletLink"
+        :loading="!simpletLink"
+        :href="simpletLink"
       >
-        {{ $t('general.preview') }}
+        {{ $t('simplet.open') }}
       </Btn>
 
       <!-- Domain -->
       <template
         v-if="simpletStore.active.frontendStatus === ResourceStatus.ONLINE || websiteStore.active.w3ProductionLink"
       >
-        <BtnDomain :frontend-uuid="simpletStore.active.frontend_uuid" />
+        <BtnDomain type="secondary" :frontend-uuid="simpletStore.active.frontend_uuid" />
         <BtnDns />
       </template>
 
@@ -30,7 +31,7 @@
         v-if="simpletStore.active.backendStatus === ResourceStatus.ONLINE"
         class="locked w-full"
         size="medium"
-        type="primary"
+        type="secondary"
         @click="openModalSmtp()"
       >
         {{ $t('simplet.wizard.smtp.edit') }}
@@ -41,7 +42,7 @@
         v-if="simpletStore.active.backendStatus === ResourceStatus.ONLINE"
         class="locked w-full"
         size="medium"
-        type="primary"
+        type="secondary"
         @click="openModalMysql()"
       >
         {{ $t('simplet.mysql.edit') }}
@@ -59,10 +60,17 @@
         "
         class="locked w-full"
         size="medium"
-        type="error"
+        type="secondary"
+        :disabled="loadingRedeploy"
+        :loading="loadingRedeploy"
         @click="redeploy(simpletStore.active.simpletDeploy_uuid)"
       >
         {{ $t('simplet.redeploy') }}
+      </Btn>
+
+      <!-- Delete -->
+      <Btn class="locked w-full" size="medium" type="error" :loading="loading" @click="deleteSimplet()">
+        {{ $t('general.archive') }}
       </Btn>
     </n-space>
 
@@ -96,15 +104,18 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
+const router = useRouter();
 const message = useMessage();
 const dataStore = useDataStore();
 const simpletStore = useSimpletStore();
 const websiteStore = useWebsiteStore();
+const { deleteItem, loading } = useDelete();
 const simpletFormSmtpRef = useTemplateRef('simpletFormSmtpRef');
 
 const formRef = ref<NFormInst | null>(null);
 const loadingSmtp = ref<boolean>(false);
 const loadingMysql = ref<boolean>(false);
+const loadingRedeploy = ref<boolean>(false);
 const modalSmtpVisible = ref<boolean>(false);
 const modalMysqlVisible = ref<boolean>(false);
 
@@ -114,6 +125,8 @@ const rules = reactive({
   ['mysql.user']: ruleRequired(t('validation.mysqlRequired')),
   ['mysql.password']: ruleRequired(t('validation.mysqlRequired')),
 });
+
+const simpletLink = computed(() => websiteStore.active.domain || websiteStore.active.w3ProductionLink);
 
 function openModalSmtp() {
   modalSmtpVisible.value = true;
@@ -214,11 +227,21 @@ async function updateMysql() {
 
 async function redeploy(uuid: string) {
   try {
+    loadingRedeploy.value = true;
     const { data } = await $api.post<SimpletCreateResponse>(endpoints.simpletRedeploy(uuid));
     simpletStore.active = data.data;
     message.success(t('simplet.wizard.redeployingInfo'));
   } catch (e) {
     message.error(userFriendlyMsg(e));
+    loadingRedeploy.value = false;
   }
+  setTimeout(() => {
+    loadingRedeploy.value = false;
+  }, 60000);
+}
+
+async function deleteSimplet() {
+  await deleteItem(ItemDeleteKey.SIMPLET, simpletStore.active.simpletDeploy_uuid);
+  router.push({ name: 'dashboard-simplet-archive' });
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <Btn class="locked w-full" type="primary" @click="showModalConfiguration = true">
+  <Btn class="locked w-full" type="secondary" @click="showModalConfiguration = true">
     {{ $t('hosting.domain.configure') }}
   </Btn>
 

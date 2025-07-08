@@ -15,7 +15,9 @@
           <small>{{ $t('dashboard.credits.pricing') }}</small>
           <div class="flex flex-col gap-1 text-right text-xs">
             <strong>100 credits for setup</strong>
-            <NuxtLink :to="{ name: 'dashboard-price-list' }">{{ $t('dashboard.credits.checkPricing') }}</NuxtLink>
+            <div class="cursor-pointer" @click="modalDetailsVisible = true">
+              {{ $t('dashboard.credits.checkPricing') }}
+            </div>
           </div>
         </div>
       </div>
@@ -32,6 +34,8 @@
         </div>
       </div>
     </div>
+
+    <SidebarDetails v-model:show="modalDetailsVisible" :service="ServiceTypeName.SIMPLETS" :hide-general="true" />
 
     <!-- Modal - New Simplet -->
     <SimpletModal
@@ -52,6 +56,7 @@ const { simplets, generateContent } = useSimplet();
 
 const simpletTemplate = ref<SimpletTemplateInterface>();
 const content = generateContent(simplets[props.simpletId]);
+const modalDetailsVisible = ref<boolean>(false);
 
 onMounted(async () => {
   simpletTemplate.value = simpletStore.findTemplate(simplets[props.simpletId]);

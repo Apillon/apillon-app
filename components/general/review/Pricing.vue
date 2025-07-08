@@ -8,8 +8,6 @@
       </p>
     </div>
 
-    <slot />
-
     <n-table class="plain my-6 table-auto" :bordered="false" :single-line="true">
       <tbody>
         <tr v-for="(price, key) in pricing" :key="key">
@@ -19,6 +17,9 @@
         </tr>
       </tbody>
     </n-table>
+
+    <slot />
+
     <div class="card-light p-6">
       <div class="flex gap-2">
         <strong class="block w-1/2">{{ $t('nft.collection.review.totalSpend') }}</strong>

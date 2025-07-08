@@ -31,7 +31,7 @@
           v-if="deployedWebsite?.website_uuid"
           type="primary"
           size="large"
-          :to="`/dashboard/service/hosting/${deployedWebsite?.website_uuid}/production`"
+          :to="`/dashboard/service/hosting/${deployedWebsite?.website_uuid}`"
         >
           {{ $t('nft.upload.previewNfts') }}
         </Btn>

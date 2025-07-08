@@ -152,3 +152,34 @@ export const transformLinks = (str: string) => {
     }
   });
 };
+
+export function extractCIDFromUrl(link: string): string | null {
+  try {
+    // Normalize and parse URL
+    if (!link.startsWith('http')) {
+      // Handle protocols like ipfs:// or ipns://
+      const match = link.match(/^(ipfs|ipns):\/\/([^/]+)/);
+      if (match) {
+        return match[2];
+      }
+    } else {
+      const url = new URL(link);
+
+      // Case: Subdomain gateway (e.g., https://<cid>.ipfs.gateway.com)
+      const [possibleCID, protocol, ...rest] = url.hostname.split('.');
+      if ((protocol === 'ipfs' || protocol === 'ipns') && /^[a-z0-9]{46,}$/.test(possibleCID)) {
+        return possibleCID;
+      }
+
+      // Case: Path-based gateway (e.g., https://gateway.com/ipfs/<cid>)
+      const parts = url.pathname.split('/');
+      const index = parts.findIndex(part => part === 'ipfs' || part === 'ipns');
+      if (index !== -1 && parts[index + 1]) {
+        return parts[index + 1];
+      }
+    }
+  } catch (e: any) {
+    console.warn(e);
+  }
+  return null;
+}
