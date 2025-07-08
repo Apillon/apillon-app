@@ -59,6 +59,7 @@ const content = generateContent(simplets[props.simpletId]);
 const modalDetailsVisible = ref<boolean>(false);
 
 onMounted(async () => {
+  simpletStore.getSimpletQuota();
   simpletTemplate.value = simpletStore.findTemplate(simplets[props.simpletId]);
 });
 </script>

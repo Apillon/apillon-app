@@ -68,11 +68,11 @@ const props = defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
+const settingsStore = useSettingsStore();
 const collectionStore = useCollectionStore();
 const { ruleApiKey, ruleApiSecret } = useForm();
 
 const loading = ref<boolean>(false);
-
 const formRef = ref<NFormInst | null>(null);
 
 const websiteTypes = ref([
@@ -92,7 +92,7 @@ const formData = reactive<FormWebsiteDeploy>({
 const rules: NFormRules = {
   type: ruleRequired(t('validation.website.typeRequired')),
   nftCollection: { required: !!props.templateType, message: t('validation.nft.collection') },
-  apiKey: ruleApiKey(formData),
+  apiKey: [{ required: settingsStore.apiKeyQuotaReached, message: t('validation.apiRequired') }, ruleApiKey(formData)],
   apiSecret: ruleApiSecret(formData),
 };
 

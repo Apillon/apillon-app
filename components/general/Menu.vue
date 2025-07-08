@@ -45,16 +45,22 @@ function removeIdOrSlug(text: string) {
 function renderMenuLabel(option: NMenuOption) {
   const colorClass = option?.color === 'yellow' ? '!text-yellow' : option?.color === 'blue' ? '!text-blue' : '';
 
+  const label = (
+    Number(option?.counter || 0) > 0
+      ? [option.label, h(resolveComponent('Tag'), { class: 'ml-2' }, { default: () => option.counter })]
+      : [option.label]
+  ) as Array<string | VNode>;
+
   if ('disabled' in option && option.disabled) {
-    return h('span', { class: 'text-body' }, { default: () => option.label as string });
+    return h('span', { class: 'text-body' }, label);
   } else if ('href' in option) {
-    return h('a', { href: option.href, class: colorClass, target: '_blank' }, () => option.label as string);
+    return h('a', { href: option.href, class: colorClass, target: '_blank' }, label);
   } else if ('path' in option) {
-    return h(NuxtLink, { to: { path: option.path }, class: colorClass }, () => option.label as string);
+    return h(NuxtLink, { to: { path: option.path }, class: colorClass }, label);
   } else if ('to' in option) {
-    return h(NuxtLink, { to: { name: option.to }, class: colorClass }, () => option.label as string);
+    return h(NuxtLink, { to: { name: option.to }, class: colorClass }, label);
   }
-  return h('span', { class: 'text' }, { default: () => option.label as string });
+  return h('span', { class: 'text' }, label);
 }
 
 function renderMenuExtra(option: NMenuOption) {

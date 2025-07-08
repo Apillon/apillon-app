@@ -1,7 +1,7 @@
 <template>
   <strong
     v-bind="$attrs"
-    class="inline-flex-cc gap-1 whitespace-nowrap bg-bg-lighter/70 font-semibold transition-all duration-300"
+    class="inline-flex-cc min-w-5 gap-1 whitespace-nowrap bg-bg-lighter/70 font-semibold transition-all duration-300"
     :class="[tagClass, sizeClass]"
   >
     <AnimationStatus v-if="animation" />

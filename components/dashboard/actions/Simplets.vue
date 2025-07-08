@@ -38,6 +38,7 @@ const simpletStore = useSimpletStore();
 
 onMounted(() => {
   simpletStore.resetForm();
+  simpletStore.getSimpletQuota();
   simpletStore.stepSimpletCreate = SimpletCreateStep.TYPE;
 });
 </script>

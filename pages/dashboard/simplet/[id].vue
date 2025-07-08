@@ -6,8 +6,16 @@
 
     <n-space class="pb-8" :size="32" vertical>
       <div class="flex gap-8">
-        <div class="card-light flex-1 rounded-lg px-6 py-4">
-          <SimpletInfo />
+        <div>
+          <div class="card-light flex-1 rounded-lg px-6 py-4">
+            <SimpletInfo />
+          </div>
+          <Notification v-if="!paymentStore.hasActiveSubscription" type="warning" class="my-2">
+            {{ $t('service.quotaSimplet') }}
+            <NuxtLink class="underline" :to="{ name: 'dashboard-payments' }">
+              {{ $t('project.upgradingPlan') }} </NuxtLink
+            >.
+          </Notification>
         </div>
 
         <div class="card max-w-64 px-6 py-4">
@@ -21,6 +29,7 @@
 
 <script lang="ts" setup>
 const router = useRouter();
+const paymentStore = usePaymentStore();
 const simpletStore = useSimpletStore();
 const websiteStore = useWebsiteStore();
 

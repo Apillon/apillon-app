@@ -15,6 +15,11 @@
   />
 
   <ModalDelete v-model:show="modalDeleteVisible" :title="$t('simplet.delete')">
+    <template #content>
+      <p>
+        {{ $t('simplet.archiveInfo') }}
+      </p>
+    </template>
     <FormDelete :id="currentRow.simpletDeploy_uuid" :type="ItemDeleteKey.SIMPLET" @submit-success="onDeleted" />
   </ModalDelete>
 </template>

@@ -1,6 +1,7 @@
 {
   "validation": {
     "alreadyOnList": "{name} is already on list",
+    "apiRequired": "Please provide API Key and API Secret",
     "apiKeyRequired": "API Key is required if API Secret is provided",
     "apiSecretRequired": "API Secret is required if API Key is provided",
     "bucketNameRequired": "Please enter bucket name",

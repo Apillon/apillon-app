@@ -96,6 +96,7 @@ defineExpose({ handleSubmit });
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const simpletStore = useSimpletStore();
+const settingsStore = useSettingsStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
 
 const { t } = useI18n();
@@ -113,7 +114,10 @@ const rules = computed(() => ({
     ruleRequired(t('validation.simplet.walletAddressRequired')),
     ruleWalletAddress(t('validation.evmWalletAddress')),
   ],
-  apiKey: ruleApiKey(simpletStore.form),
+  apiKey: [
+    { required: settingsStore.apiKeyQuotaReached, message: t('validation.apiRequired') },
+    ruleApiKey(simpletStore.form),
+  ],
   apiSecret: ruleApiSecret(simpletStore.form),
   ['mysql.host']: { required: useDifferentDB.value, message: t('validation.mysqlRequired') },
   ['mysql.database']: { required: useDifferentDB.value, message: t('validation.mysqlRequired') },

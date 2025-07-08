@@ -1,6 +1,6 @@
 <template>
-  <n-collapse accordion>
-    <n-collapse-item>
+  <n-collapse :expanded-names="expandedNames" accordion @item-header-click="handleItemHeaderClick">
+    <n-collapse-item name="apiKey">
       <template #header>
         {{ $t('form.label.advancedSettings') }}
       </template>
@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { SelectOption } from 'naive-ui';
+import type { CollapseProps, SelectOption } from 'naive-ui';
 
 defineEmits(['update:apiKey', 'update:apiSecret']);
 defineProps({
@@ -53,13 +53,23 @@ defineProps({
 
 const settingsStore = useSettingsStore();
 const apiKeyOptions = ref<SelectOption[]>([]);
+const expandedNames = ref<string[]>([]);
 const showApiSecretInput = ref(false);
 
 const onChangeSecretPress = () => {
   showApiSecretInput.value = true;
 };
 
+const handleItemHeaderClick: CollapseProps['onItemHeaderClick'] = ({ name, expanded }) => {
+  if (expanded) {
+    expandedNames.value.push(name);
+  } else {
+    expandedNames.value = expandedNames.value.filter(i => i !== name);
+  }
+};
+
 onMounted(async () => {
+  checkQuota();
   await settingsStore.getApiKeys();
   apiKeyOptions.value = settingsStore.apiKeys.map((item: ApiKeyInterface) => {
     return {
@@ -68,4 +78,11 @@ onMounted(async () => {
     };
   });
 });
+
+async function checkQuota() {
+  await settingsStore.fetchApiKeyQuota();
+  if (settingsStore.apiKeyQuotaReached) {
+    expandedNames.value.push('apiKey');
+  }
+}
 </script>

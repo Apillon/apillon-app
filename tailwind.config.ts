@@ -29,7 +29,7 @@ export const colors = {
 
   bg: {
     lightest: '#F4F4EA',
-    lighter: '#313442',
+    lighter: '#313442', // rgb(49, 52, 66)
     light: '#1E212B', // rgb(30, 33, 43)
     lightTransparent: 'rgba(30, 33, 43, 0.64)', //#1E212B
     DEFAULT: '#141721',

@@ -80,7 +80,7 @@
 
       <template #footer>
         <Btn class="float-right" type="primary" :loading="loadingSmtp" @click="submitFormSmtp()">
-          {{ $t('simplet.wizard.smtp.edit') }}
+          {{ $t('form.save') }}
         </Btn>
       </template>
     </ModalFullScreen>
@@ -95,7 +95,7 @@
 
       <template #footer>
         <Btn class="float-right" type="primary" :loading="loadingMysql" @click="submitFormMysql()">
-          {{ $t('simplet.mysql.edit') }}
+          {{ $t('form.save') }}
         </Btn>
       </template>
     </ModalFullScreen>

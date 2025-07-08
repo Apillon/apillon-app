@@ -51,6 +51,7 @@ onBeforeMount(() => {
 
 onMounted(async () => {
   simpletStore.fetchSimplets();
+  simpletStore.fetchSimpletQuota();
   await simpletStore.fetchSimpletTemplates();
   pageLoading.value = false;
 });

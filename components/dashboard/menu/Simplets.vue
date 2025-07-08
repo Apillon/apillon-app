@@ -4,6 +4,7 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
+const simpletStore = useSimpletStore();
 
 const menuOptions: NMenuOption[] = [
   {
@@ -14,11 +15,13 @@ const menuOptions: NMenuOption[] = [
   {
     key: 'dashboard-simplet-list',
     label: t('simplet.menu.list'),
+    counter: simpletStore.items.length,
     path: '/dashboard/simplet/list',
   },
   {
     key: 'dashboard-simplet-archive',
     label: t('simplet.menu.archive'),
+    counter: simpletStore.archive.items.length,
     path: '/dashboard/simplet/archive',
   },
 ];
