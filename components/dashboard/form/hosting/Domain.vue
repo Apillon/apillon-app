@@ -1,10 +1,8 @@
 <template>
-  <div v-if="websiteUuid && !website" class="relative h-20 min-w-80">
-    <Spinner />
-  </div>
-  <HostingDomainConfiguration v-else-if="domainCreated" class="mb-8" :domain="formData.domain || domain" />
-  <div v-else class="sm:min-w-[22rem]">
+  <Form :loading="!!websiteUuid && !website" class="sm:min-w-[22rem]">
+    <HostingDomainConfiguration v-if="domainCreated" class="mb-8" :domain="formData.domain || domain" />
     <n-form
+      v-else
       ref="formRef"
       :model="formData"
       :rules="rules"
@@ -45,7 +43,7 @@
         </Btn>
       </n-form-item>
     </n-form>
-  </div>
+  </Form>
 </template>
 
 <script lang="ts" setup>
@@ -149,11 +147,10 @@ async function createWebsiteDomain() {
   try {
     const res = await $api.patch<WebsiteResponse>(endpoints.websites(props.websiteUuid), formData.value);
     updateWebsiteDomainValue(res.data.domain);
+    websiteStore.fetchWebsite(props.websiteUuid);
 
     domainCreated.value = true;
     message.success(t('form.success.created.domain'));
-
-    websiteStore.fetchWebsite(props.websiteUuid);
 
     /** Emit events */
     emit('submitSuccess');

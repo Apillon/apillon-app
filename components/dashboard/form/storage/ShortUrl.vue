@@ -1,6 +1,6 @@
 <template>
   <template v-if="autoSubmit"></template>
-  <Btn v-else-if="targetUrl" v-bind="$attrs" type="primary" :loading="loading" @click="generateShortUrl">
+  <Btn v-else-if="targetUrl" v-bind="$attrs" type="secondary" :loading="loading" @click="generateShortUrl">
     {{ $t('storage.shortUrl.generateShortLink') }}
   </Btn>
   <n-form v-else v-bind="$attrs" ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">

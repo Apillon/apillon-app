@@ -11,7 +11,7 @@
         v-if="simpletStore.active.frontendStatus === ResourceStatus.ONLINE || websiteStore.active.w3ProductionLink"
       >
         <BtnDomain type="secondary" :frontend-uuid="simpletStore.active.frontend_uuid" />
-        <BtnDns />
+        <BtnDns v-if="websiteStore.active.domain" />
       </template>
 
       <!-- SMTP -->

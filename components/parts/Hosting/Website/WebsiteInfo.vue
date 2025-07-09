@@ -5,7 +5,7 @@
         <Image :src="websiteStore.active?.image || ''" height="104" :alt="websiteStore.active.name" />
       </div>
       <div class="flex h-8 items-center px-2 py-1">
-        <span class="text-xs capitalize">{{ websiteStore.active.name.replaceAll('-', ' ') }}</span>
+        <span class="text-xs capitalize">{{ (websiteStore.active?.name || '').replaceAll('-', ' ') }}</span>
       </div>
     </div>
     <TableInfo :data="data" />
