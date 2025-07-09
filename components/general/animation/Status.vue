@@ -1,7 +1,8 @@
 <template>
   <NuxtIcon
     name="animation/status"
-    class="animation-spinning inline-flex-cc"
+    class="animation-spinning icon-inherit inline-flex-cc"
+    :class="`text-[${size}px]`"
     filled
     :style="{ width: `${size}px`, height: `${size}px` }"
   />

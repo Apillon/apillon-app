@@ -18,8 +18,7 @@
       >
         <Notification v-if="!paymentStore.hasActiveSubscription" type="warning" class="mb-4">
           {{ $t('service.quotaSimplet') }}
-          <NuxtLink class="underline" :to="{ name: 'dashboard-payments' }"> {{ $t('project.upgradingPlan') }} </NuxtLink
-          >.
+          <Btn type="link" href="/dashboard/payments"> {{ $t('project.upgradingPlan') }} </Btn>.
         </Notification>
       </ReviewPricing>
     </template>
@@ -37,6 +36,7 @@ const embeddedWalletStore = useEmbeddedWalletStore();
 const data = ref<Record<string, string | boolean>[]>([
   { label: t('form.label.simplet.name'), value: simpletStore.form.name },
   { label: t('form.label.description'), value: simpletStore.form.description },
+  { label: t('simplet.type'), value: t(`simplet.${simpletStore.form.type?.name || ''}.name`) },
   { label: t('nft.collection.preview'), value: simpletStore.form.collection?.name || '' },
   { label: t('form.label.simplet.walletAddress'), value: simpletStore.form.walletAddress || '' },
   {

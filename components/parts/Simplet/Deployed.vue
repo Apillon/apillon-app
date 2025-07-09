@@ -11,14 +11,14 @@
         </Btn>
       </div>
     </div>
-    <div class="mx-auto my-8 max-w-lg lg:my-16">
+    <!-- <div class="mx-auto my-8 max-w-lg lg:my-16">
       <h6 class="mb-1">{{ $t('simplet.wizard.deployed.domain') }}</h6>
       <i18n-t keypath="simplet.wizard.deployed.addDomain" tag="p">
         <Btn class="underline" type="link" @click="openSimplet()">
           {{ $t('simplet.settings') }}
         </Btn>
       </i18n-t>
-    </div>
+    </div> -->
   </div>
 </template>
 

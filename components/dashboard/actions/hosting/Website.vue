@@ -1,7 +1,6 @@
 <template>
   <div>
     <n-space class="w-full lg:min-w-52" size="large" vertical>
-      <!-- Refresh -->
       <n-button
         class="w-full"
         size="medium"
@@ -10,6 +9,12 @@
       >
         {{ $t('general.refresh') }}
       </n-button>
+
+      <template v-if="websiteStore.active.w3ProductionLink">
+        <BtnDomain />
+        <BtnDns v-if="websiteStore.active.domain" />
+        <FormStorageShortUrl :target-url="websiteStore.active.w3ProductionLink" class="w-full" />
+      </template>
 
       <template v-if="websiteStore.isActiveWebsiteGithubSource">
         <n-button v-if="!websiteStore.active.isSimplet" class="w-full" @click="showUpdateModal">
@@ -39,13 +44,6 @@
         {{ $t('hosting.deployProd') }}
       </Btn>
 
-      <template v-if="websiteStore.active.w3ProductionLink">
-        <BtnDomain v-if="websiteStore.active.lastDeploymentStatus === DeploymentStatus.SUCCESSFUL" />
-        <BtnDns v-if="websiteStore.active.lastDeploymentStatus === DeploymentStatus.SUCCESSFUL" />
-        <FormStorageShortUrl :target-url="websiteStore.active.w3ProductionLink" class="w-full" />
-      </template>
-
-      <!-- Clear all files -->
       <n-button
         class="w-full"
         type="error"

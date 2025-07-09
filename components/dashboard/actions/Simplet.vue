@@ -6,24 +6,12 @@
         {{ $t('general.refresh') }}
       </Btn>
 
-      <!-- Preview -->
-      <Btn
-        class="locked w-full"
-        size="medium"
-        type="primary"
-        :disabled="!simpletLink"
-        :loading="!simpletLink"
-        :href="simpletLink"
-      >
-        {{ $t('simplet.open') }}
-      </Btn>
-
       <!-- Domain -->
       <template
         v-if="simpletStore.active.frontendStatus === ResourceStatus.ONLINE || websiteStore.active.w3ProductionLink"
       >
         <BtnDomain type="secondary" :frontend-uuid="simpletStore.active.frontend_uuid" />
-        <BtnDns />
+        <BtnDns v-if="websiteStore.active.domain" />
       </template>
 
       <!-- SMTP -->
@@ -51,6 +39,7 @@
       <!-- Redeploy -->
       <Btn
         v-if="
+          true ||
           simpletStore.active.backendStatus === ResourceStatus.FAILED ||
           simpletStore.active.backendStatus === ResourceStatus.ERROR ||
           simpletStore.active.frontendStatus === ResourceStatus.FAILED ||
@@ -72,6 +61,19 @@
       <Btn class="locked w-full" size="medium" type="error" :loading="loading" @click="deleteSimplet()">
         {{ $t('general.archive') }}
       </Btn>
+
+      <!-- Preview -->
+      <Btn
+        v-if="simpletLink"
+        class="locked w-full"
+        size="medium"
+        type="primary"
+        :disabled="!simpletLink"
+        :loading="!simpletLink"
+        :href="simpletLink"
+      >
+        {{ $t('simplet.open') }}
+      </Btn>
     </n-space>
 
     <!-- Modal - SMTP -->
@@ -80,7 +82,7 @@
 
       <template #footer>
         <Btn class="float-right" type="primary" :loading="loadingSmtp" @click="submitFormSmtp()">
-          {{ $t('simplet.wizard.smtp.edit') }}
+          {{ $t('form.save') }}
         </Btn>
       </template>
     </ModalFullScreen>
@@ -95,7 +97,7 @@
 
       <template #footer>
         <Btn class="float-right" type="primary" :loading="loadingMysql" @click="submitFormMysql()">
-          {{ $t('simplet.mysql.edit') }}
+          {{ $t('form.save') }}
         </Btn>
       </template>
     </ModalFullScreen>

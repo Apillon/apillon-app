@@ -3,7 +3,7 @@
     <Btn
       v-if="editDomainEnabled"
       class="locked w-full"
-      :type="!websiteStore.active.domain ? 'primary' : 'secondary'"
+      type="secondary"
       :disabled="authStore.isAdmin()"
       @click="modalWebsiteDomainVisible = true"
     >
@@ -12,7 +12,7 @@
     </Btn>
     <n-tooltip v-else placement="top" :trigger="isMd ? 'hover' : 'click'">
       <template #trigger>
-        <Btn class="locked w-full cursor-default !bg-primary/50" type="primary">
+        <Btn class="locked w-full cursor-default opacity-50" type="secondary">
           <span v-if="websiteStore.active.domain"> {{ $t('hosting.domain.update') }}</span>
           <span v-else> {{ $t('hosting.domain.add') }}</span>
         </Btn>

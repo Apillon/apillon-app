@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 export const useSettingsStore = defineStore('settings', {
   state: () => ({
     apiKeys: [] as ApiKeyInterface[],
+    apiKeyQuotaReached: undefined as boolean | undefined,
     discordLink: '' as string,
     oauthLinks: [] as OauthLinkInterface[],
     users: [] as ProjectUserInterface[],
@@ -47,6 +48,7 @@ export const useSettingsStore = defineStore('settings', {
   actions: {
     resetData() {
       this.apiKeys = [] as ApiKeyInterface[];
+      this.apiKeyQuotaReached = undefined;
       this.users = [] as ProjectUserInterface[];
     },
 
@@ -72,6 +74,11 @@ export const useSettingsStore = defineStore('settings', {
     /**
      * Fetch wrappers
      */
+    async getApiKeyQuota() {
+      if (this.apiKeyQuotaReached === undefined) {
+        await this.fetchApiKeyQuota();
+      }
+    },
 
     /** API Keys */
     async getApiKeys() {
@@ -130,6 +137,21 @@ export const useSettingsStore = defineStore('settings', {
         this.apiKeys = [] as ApiKeyInterface[];
 
         /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+    },
+
+    async fetchApiKeyQuota() {
+      const dataStore = useDataStore();
+      await dataStore.waitOnPromises(false);
+      if (!dataStore.projectUuid) return;
+      try {
+        const { data } = await $api.get<BooleanResponse>(endpoints.apiKeyQuota, {
+          project_uuid: dataStore.projectUuid,
+        });
+        this.apiKeyQuotaReached = data;
+      } catch (error: ApiError | any) {
+        this.apiKeyQuotaReached = undefined;
         window.$message.error(userFriendlyMsg(error));
       }
     },

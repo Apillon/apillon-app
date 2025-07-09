@@ -15,7 +15,7 @@
       <tbody>
         <tr v-for="item in data" :key="item.key" :class="{ hidden: item.show === false }">
           <td class="!text-white">{{ item.label }}</td>
-          <td class="relative">
+          <td class="relative cursor-pointer" @click="$emit('back')">
             <NftCollectionChain v-if="item?.key === 'chain'" :chain-id="item.value" />
             <div v-else-if="item?.key === 'password'" class="inline-block max-w-[80%]">
               <n-input :value="item.value" show-password-on="mousedown" size="tiny" type="password" readonly />
@@ -27,11 +27,7 @@
             </template>
             <template v-else> {{ item.value }}</template>
 
-            <Btn
-              class="float-right text-white-primary no-underline hover:text-primary"
-              type="link"
-              @click="$emit('back')"
-            >
+            <Btn class="float-right text-white-primary no-underline hover:text-primary" type="link">
               <span class="icon-edit align-sub text-xl" />
             </Btn>
           </td>

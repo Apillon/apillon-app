@@ -21,19 +21,19 @@ export const colors = {
   placeholder: '#B6B6AF',
 
   white: {
-    DEFAULT: '#F5F5EE',
-    primary: '#F0F2DA',
-    secondary: '#D5D7C1',
-    terciary: '#B6B6AF',
+    DEFAULT: '#F5F5EE', // rgb(245, 245, 238)
+    primary: '#F0F2DA', // rgb(240, 242, 218)
+    secondary: '#D5D7C1', // rgb(213, 215, 193)
+    terciary: '#B6B6AF', // rgb(182, 182, 175)
   },
 
   bg: {
-    lightest: '#F4F4EA',
-    lighter: '#313442',
+    lightest: '#F4F4EA', // rgb(244, 244, 234)
+    lighter: '#313442', // rgb(49, 52, 66)
     light: '#1E212B', // rgb(30, 33, 43)
     lightTransparent: 'rgba(30, 33, 43, 0.64)', //#1E212B
-    DEFAULT: '#141721',
-    dark: '#06080F',
+    DEFAULT: '#141721', // rgb(20, 23, 33)
+    dark: '#06080F', // rgb(6, 8, 15)
   },
 };
 

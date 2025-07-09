@@ -863,6 +863,9 @@ body > .n-message-container {
     td {
       @apply text-body;
 
+      &:hover .icon-edit {
+        @apply text-yellow;
+      }
       &.relative:hover .hidden {
         @apply inline-block;
       }

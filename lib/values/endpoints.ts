@@ -210,6 +210,7 @@ const Endpoints = {
 
   /** Api Keys */
   apiKey: (key?: number | string) => (key ? `/api-keys/${key}` : '/api-keys'),
+  apiKeyQuota: `/api-keys/quota-reached`,
   apiKeyRole: (key: number) => `/api-keys/${key}/role`,
   apiKeyRoles: (key: number) => `/api-keys/${key}/roles`,
   apiKeyServiceRoles: (key: number) => `/api-keys/${key}/service-roles`,

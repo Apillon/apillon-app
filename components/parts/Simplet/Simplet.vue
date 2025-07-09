@@ -15,7 +15,7 @@
           <small>{{ $t('dashboard.credits.pricing') }}</small>
           <div class="flex flex-col gap-1 text-right text-xs">
             <strong>100 credits for setup</strong>
-            <div class="cursor-pointer" @click="modalDetailsVisible = true">
+            <div class="cursor-pointer hover:text-primary" @click="modalDetailsVisible = true">
               {{ $t('dashboard.credits.checkPricing') }}
             </div>
           </div>
@@ -59,6 +59,7 @@ const content = generateContent(simplets[props.simpletId]);
 const modalDetailsVisible = ref<boolean>(false);
 
 onMounted(async () => {
+  simpletStore.getSimpletQuota();
   simpletTemplate.value = simpletStore.findTemplate(simplets[props.simpletId]);
 });
 </script>

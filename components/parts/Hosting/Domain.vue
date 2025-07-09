@@ -1,5 +1,6 @@
 <template>
-  <div v-if="domain">
+  <HostingDomainConfiguration v-if="domainCreated" />
+  <div v-else-if="domain">
     <div class="body-sm mb-1">
       <strong>{{ $t('hosting.domain.preview') }}</strong>
     </div>
@@ -24,7 +25,7 @@
       </Btn>
     </n-space>
   </div>
-  <FormHostingDomain v-else :website-uuid="uuid" :domain="domain" />
+  <FormHostingDomain v-else :website-uuid="uuid" :domain="domain" @create-success="onDomainCreated" />
 </template>
 
 <script lang="ts" setup>
@@ -40,6 +41,7 @@ const domainStatus = ref<number | null>(null);
 const loadingDomain = ref<boolean>(false);
 const loadingDelete = ref<boolean>(false);
 const btnDomainDisabled = ref<boolean>(false);
+const domainCreated = ref<boolean>(false);
 
 onMounted(() => {
   domainStatus.value = websiteStore.active.domainStatus;
@@ -60,6 +62,10 @@ const domainStatusType = computed<TagType>(() => {
       return 'error';
   }
 });
+
+const onDomainCreated = () => {
+  domainCreated.value = true;
+};
 
 async function refreshDomainStatus() {
   if (domain.value) {

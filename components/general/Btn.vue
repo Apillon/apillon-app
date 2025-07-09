@@ -15,10 +15,11 @@
     :quaternary="quaternary || type === 'builders' ? true : false"
     @click="onClick"
   >
-    <span v-if="loading" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+    <AnimationStatus v-if="loading && disabled" class="-ml-6 mr-2" :size="size === 'large' ? 24 : 18" />
+    <span v-else-if="loading" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
       <Spinner :size="size === 'large' ? 36 : 24" />
     </span>
-    <span :class="[innerClass, { 'opacity-0': loading }]">
+    <span :class="[innerClass, loading && disabled ? 'opacity-60' : loading ? 'opacity-0' : '']">
       <slot />
     </span>
   </component>
@@ -45,10 +46,11 @@
       :quaternary="quaternary || type === 'builders'"
       @click="onClick"
     >
-      <span v-if="loading" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+      <AnimationStatus v-if="loading && disabled" :size="size === 'large' ? 24 : 18" />
+      <span v-else-if="loading" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
         <Spinner :size="size === 'large' ? 36 : 24" />
       </span>
-      <span :class="[innerClass, { 'opacity-0': loading }]">
+      <span :class="[innerClass, loading && disabled ? 'opacity-60' : loading ? 'opacity-0' : '']">
         <slot />
       </span>
     </n-button>

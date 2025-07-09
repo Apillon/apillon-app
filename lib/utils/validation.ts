@@ -47,7 +47,7 @@ export function validateRequiredDropdown(_: FormItemRule, value: string | null):
 
 /** Validate Ethereum address */
 export function validateEvmAddress(_: FormItemRule, value: string | null): boolean {
-  return !!value && isAddress(value);
+  return !value || isAddress(value);
 }
 export function substrateAddressValidate(
   _: FormItemRule,
