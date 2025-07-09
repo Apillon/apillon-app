@@ -6,18 +6,6 @@
         {{ $t('general.refresh') }}
       </Btn>
 
-      <!-- Preview -->
-      <Btn
-        class="locked w-full"
-        size="medium"
-        type="primary"
-        :disabled="!simpletLink"
-        :loading="!simpletLink"
-        :href="simpletLink"
-      >
-        {{ $t('simplet.open') }}
-      </Btn>
-
       <!-- Domain -->
       <template
         v-if="simpletStore.active.frontendStatus === ResourceStatus.ONLINE || websiteStore.active.w3ProductionLink"
@@ -51,6 +39,7 @@
       <!-- Redeploy -->
       <Btn
         v-if="
+          true ||
           simpletStore.active.backendStatus === ResourceStatus.FAILED ||
           simpletStore.active.backendStatus === ResourceStatus.ERROR ||
           simpletStore.active.frontendStatus === ResourceStatus.FAILED ||
@@ -71,6 +60,19 @@
       <!-- Delete -->
       <Btn class="locked w-full" size="medium" type="error" :loading="loading" @click="deleteSimplet()">
         {{ $t('general.archive') }}
+      </Btn>
+
+      <!-- Preview -->
+      <Btn
+        v-if="simpletLink"
+        class="locked w-full"
+        size="medium"
+        type="primary"
+        :disabled="!simpletLink"
+        :loading="!simpletLink"
+        :href="simpletLink"
+      >
+        {{ $t('simplet.open') }}
       </Btn>
     </n-space>
 

@@ -28,6 +28,7 @@ defineEmits(['toggleSidebar']);
 const { t } = useI18n();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
+const simpletStore = useSimpletStore();
 
 const menuKey = computed<string>(() => `menu-${dataStore.project.items.length}`);
 const defaultExpandedKeys = computed(() => ['coreWeb3Infrastructure', 'assetManagement', 'utility']);
@@ -51,7 +52,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
     {
       key: 'dashboard-simplet',
       label: t('dashboard.nav.simplets'),
-      to: 'dashboard-simplet',
+      to: simpletStore.hasSimplets ? 'dashboard-simplet-list' : 'dashboard-simplet',
       color: 'blue',
       svgIcon: 'dashboard/simplet',
     },

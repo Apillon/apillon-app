@@ -1,7 +1,7 @@
 <template>
   <n-table class="plain" :bordered="false" single-line>
     <tbody>
-      <tr v-for="(item, key) in data" :key="key">
+      <tr v-for="(item, key) in data.slice(0, showAll || !maxLines ? data.length : maxLines + 1)" :key="key">
         <td :class="[item?.classLabel, { '!border-b-0': key + 1 === data.length }]">
           <span class="flex items-center gap-1">
             <span class="text-white lg:whitespace-nowrap">{{ item.label }}</span>
@@ -24,9 +24,19 @@
       </tr>
     </tbody>
   </n-table>
+  <div v-if="maxLines && data.length > maxLines" class="text-right" :class="{ 'mt-4': !showAll }">
+    <Btn type="tertiary" inner-class="flex gap-2 items-center text-white" @click="showAll = !showAll">
+      <span v-if="showAll">{{ $t('general.lessDetails') }}</span>
+      <span v-else>{{ $t('general.moreDetails') }}</span>
+      <n-icon class="transition-transform" :class="showAll ? '-scale-100' : 'scale-100'" size="16">
+        <ChevronDownFilledIcon />
+      </n-icon>
+    </Btn>
+  </div>
 </template>
 
 <script lang="ts" setup>
+import { ChevronDownFilledIcon } from 'naive-ui/es/_internal/icons';
 import type { Address } from 'viem';
 
 export type TableInfo = {
@@ -44,5 +54,8 @@ export type TableInfo = {
 };
 defineProps({
   data: { type: Array<TableInfo>, required: true },
+  maxLines: { type: Number, default: null },
 });
+
+const showAll = ref(false);
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="flex h-full flex-col justify-between">
-    <TableInfo :data="data" />
+    <TableInfo :data="data" :max-lines="4" />
   </div>
 </template>
 

@@ -18,8 +18,7 @@
       >
         <Notification v-if="!paymentStore.hasActiveSubscription" type="warning" class="mb-4">
           {{ $t('service.quotaSimplet') }}
-          <NuxtLink class="underline" :to="{ name: 'dashboard-payments' }"> {{ $t('project.upgradingPlan') }} </NuxtLink
-          >.
+          <Btn type="link" href="/dashboard/payments"> {{ $t('project.upgradingPlan') }} </Btn>.
         </Notification>
       </ReviewPricing>
     </template>

@@ -10,11 +10,30 @@
           <div class="card-light flex-1 rounded-lg px-6 py-4">
             <SimpletInfo />
           </div>
-          <Notification v-if="!paymentStore.hasActiveSubscription" type="warning" class="my-2">
-            {{ $t('service.quotaSimplet') }}
-            <NuxtLink class="underline" :to="{ name: 'dashboard-payments' }">
-              {{ $t('project.upgradingPlan') }} </NuxtLink
-            >.
+          <Notification
+            v-if="
+              simpletStore.active.frontendStatus !== ResourceStatus.ONLINE &&
+              !(websiteStore.active.domain || websiteStore.active.name)
+            "
+            type="warning"
+            class="my-2"
+          >
+            {{ $t('simplet.wizard.deployingNotice') }}
+          </Notification>
+          <Notification
+            v-else-if="
+              !paymentStore.hasActiveSubscription &&
+              Date.now() < addDays(new Date(simpletStore.active.createTime), 3).getTime()
+            "
+            type="warning"
+            class="my-2"
+          >
+            <i18n-t keypath="simplet.trialInfo" tag="span">
+              <NuxtTime :datetime="addDays(new Date(simpletStore.active.createTime), 3)" relative />
+            </i18n-t>
+            <i18n-t keypath="project.considerUpgrade" tag="span">
+              <a href="/dashboard/payments" class="link" target="_blank">{{ $t('project.upgradingPlan') }}</a>
+            </i18n-t>
           </Notification>
         </div>
 
@@ -28,6 +47,7 @@
 </template>
 
 <script lang="ts" setup>
+import { addDays } from 'date-fns';
 const router = useRouter();
 const paymentStore = usePaymentStore();
 const simpletStore = useSimpletStore();

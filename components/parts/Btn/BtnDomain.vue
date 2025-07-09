@@ -3,7 +3,7 @@
     <Btn
       v-if="editDomainEnabled"
       class="locked w-full"
-      :type="!websiteStore.active.domain ? 'primary' : 'secondary'"
+      type="secondary"
       :disabled="authStore.isAdmin()"
       @click="modalWebsiteDomainVisible = true"
     >

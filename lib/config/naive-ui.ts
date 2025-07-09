@@ -302,7 +302,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     itemTextColorActiveInverted: colors.white.DEFAULT,
     itemTextColorHoverInverted: colors.white.DEFAULT,
     itemTextColorChildActiveHoverInverted: colors.white.DEFAULT,
-    itemTextColorHorizontal: colors.bodyDark,
+    itemTextColorHorizontal: colors.white.terciary,
     itemTextColorActiveHorizontal: colors.white.DEFAULT,
     itemTextColorActiveHoverHorizontal: colors.white.DEFAULT,
     itemTextColorHoverHorizontal: colors.body,

@@ -218,7 +218,7 @@
         "endTime": "End time",
         "name": "Simplet name",
         "startTime": "Start time",
-        "walletAddress": "Wallet address",
+        "walletAddress": "Admin wallet address",
         "labelInfo": {
           "walletAddress": "This wallet will have access to login as the administrator and manage the Simplet's users."
         }
@@ -351,7 +351,7 @@
       "simplet": {
         "name": "Just for your eyes—helps you keep things organized.",
         "description": "Optional. Add a note for future-you (or teammates) to remember what this setup is for.",
-        "walletAddress": "This wallet will have access to login as the administrator and manage the Simplet's users."
+        "walletAddress": "Admin wallet address"
       },
       "smtp": {
         "host": "Your mail server host (e.g. smtp.yourdomain.com)",
@@ -437,7 +437,7 @@
         "bucketContent": "Bucket items has been deleted",
         "collection": "NFT collection has been archived",
         "cloudFunction": "Cloud function has been archived",
-        "contract": "Contract has been deleted",
+        "contract": "Contract has been archived",
         "directory": "Folder has been deleted",
         "domain": "Domain has been deleted",
         "file": "File has been deleted",
@@ -445,10 +445,9 @@
         "ipns": "IPNS has been deleted",
         "item": "Item has been deleted",
         "items": "Items has been deleted",
-        "post": "Channel has been archived",
         "rpcEndpoint": "RPC endpoint has been removed from favorites",
-        "space": "Hub has been archived",
         "service": "Service has been deleted",
+        "simplet": "Simplet has been archived",
         "smartContract": "Smart Contract has been archived",
         "user": "User has been removed from project",
         "userUninvited": "User has been uninvited from project",

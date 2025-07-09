@@ -13,7 +13,9 @@
 
   <!-- Modal - Delete API key -->
   <ModalDelete v-model:show="showModalDeleteApiKey" :title="$t('dashboard.apiKey.delete')">
-    <FormDelete :id="currentRow?.id" type="apiKey" @submit-success="onApiKeyDeleted" />
+    <FormDelete :id="currentRow?.id" :type="ItemDeleteKey.API_KEY" @submit-success="onApiKeyDeleted">
+      {{ $t('dashboard.apiKey.delete') }}
+    </FormDelete>
   </ModalDelete>
 </template>
 
