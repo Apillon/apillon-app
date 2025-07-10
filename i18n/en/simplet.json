@@ -195,7 +195,7 @@
       "create": "Deploy simplet",
       "deploying": "Creating Simplet",
       "deployingNotice": "Your Simplet is still deploying. This usually takes just a few minutes. Once it’s ready, you’ll be able to access your Simplet Solution Dashboard.",
-      "redeployingInfo": "Re-deploying NFT Studio...",
+      "redeployingInfo": "Re-deploying Simplet...",
       "info": "You’re about to deploy a Simplet that sets up your NFT distribution dashboard. Here, you’ll manage everything—email drops, wallet airdrops, public minting, and more.",
       "selectCollection": "Select NFT collection",
       "selectType": "Select simplet type",
