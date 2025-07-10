@@ -160,6 +160,9 @@
 
 /** Data table */
 .n-data-table {
+  &.tr-capitalize th {
+    @apply capitalize;
+  }
   .n-data-table-tr.selected-row td {
     @apply bg-bg-dark;
   }

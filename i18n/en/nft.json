@@ -192,6 +192,8 @@
       },
       "websiteDeploy": {
         "deploy": "Deploy NFT website",
+        "disabled": "This NFT collection cannot be used for NFT website deployment.",
+        "notDeployed": "NFT collection is not deployed yet. Please wait until the collection is deployed.",
         "plain_js": "Vanilla Javascript",
         "react": "React",
         "vue": "Vue",

@@ -114,7 +114,8 @@
     "upload": {
       "directory": "Upload folder",
       "dragAndDrop": "Drag & drop (up to 100 files)",
-      "files": "Upload files and folders"
+      "files": "Upload files and folders",
+      "finished": "All files have been uploaded. Would you like to deploy them now?"
     },
     "website": {
       "add": "Add website",
@@ -153,9 +154,11 @@
       },
       "source": {
         "apillon": "Website",
+        "basic": "Website",
         "github": "GitHub CI/CD",
         "nft": "NFT template",
-        "title": "Type"
+        "simplet": "Simplet",
+        "title": "Website type"
       }
     },
     "clearAll": "Clear all",

@@ -57,6 +57,8 @@ export enum WebsiteCreateStep {
 export enum WebsiteType {
   BASIC = 'basic',
   GITHUB = 'github',
+  NFT_TEMPLATE = 'nft',
+  SIMPLET = 'simplet',
 }
 
 declare global {
@@ -88,7 +90,7 @@ declare global {
     ipnsProduction: string | null;
     lastDeploymentStatus: number | null;
     nftCollectionUuid: string | null;
-    source: WebsiteSource;
+    source: number;
     website_uuid: string;
   }
   interface WebsiteInterface extends WebsiteBaseInterface {

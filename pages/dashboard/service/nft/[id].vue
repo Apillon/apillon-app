@@ -147,6 +147,7 @@ const ipfsStore = useIpfsStore();
 const bucketStore = useBucketStore();
 const storageStore = useStorageStore();
 const paymentStore = usePaymentStore();
+const websiteStore = useWebsiteStore();
 const metadataStore = useMetadataStore();
 const collectionStore = useCollectionStore();
 const { checkUnfinishedCollection, checkUnfinishedTransactions } = useCollection();
@@ -189,6 +190,10 @@ onMounted(async () => {
     await collectionStore.getCollectionTransactions(currentCollection.collection_uuid);
     collectionStore.active = currentCollection;
     pageLoading.value = false;
+
+    if (currentCollection.websiteUuid) {
+      websiteStore.getWebsite(currentCollection.websiteUuid);
+    }
 
     storageStore.getStorageInfo();
     paymentStore.getPriceList();

@@ -102,6 +102,7 @@
     "information": {
       "hide": "Hide information",
       "show": "Show information"
-    }
+    },
+    "until": "until"
   }
 }

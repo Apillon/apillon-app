@@ -10,10 +10,13 @@ export const useWebsiteStore = defineStore('website', {
     loading: false,
     missingHtml: false,
     modalNewWebsiteVisible: false as boolean | null,
-    search: '',
     selected: '',
     stepWebsiteCreate: WebsiteCreateStep.TYPE,
     uploadActive: false,
+    filter: {
+      websiteType: null as Optional<WebsiteType>,
+      search: '',
+    },
     form: {
       type: null as Optional<WebsiteType>,
       name: '',
@@ -55,7 +58,7 @@ export const useWebsiteStore = defineStore('website', {
       this.active = {} as WebsiteInterface;
       this.archive = [] as Array<WebsiteBaseInterface>;
       this.items = [] as Array<WebsiteBaseInterface>;
-      this.search = '';
+      this.filter.search = '';
       this.selected = '';
     },
     resetForm() {
@@ -135,7 +138,8 @@ export const useWebsiteStore = defineStore('website', {
         const res = await req;
 
         this[key] = res.data.items;
-        this.search = '';
+        this.filter.search = '';
+        this.filter.websiteType = null;
 
         /** Save timestamp to SS */
         const cacheKey = archive ? LsCacheKeys.WEBSITE_ARCHIVE : LsCacheKeys.WEBSITES;

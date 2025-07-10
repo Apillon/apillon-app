@@ -213,6 +213,7 @@ declare global {
     maxSupply: number;
     dropPrice: number;
     dropReserve: number;
+    project_uuid: string;
     royaltiesAddress: Optional<string>;
     royaltiesFees: number;
     symbol: string;

@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-4">
     <!-- Upload files -->
-    <FormHostingUploadWebsite :bucket-uuid="bucketStore.bucketUuid" />
+    <FormHostingUploadWebsite :bucket-uuid="bucketStore.bucketUuid" @uploaded="modalDeployVisible = true" />
 
     <div class="flex items-center justify-between">
       <!-- Breadcrumbs -->
@@ -72,6 +72,15 @@
         <FormDelete :id="bucketStore.active.bucket_uuid" type="bucketContent" @submit-success="onAllFilesDeleted" />
       </slot>
     </ModalDelete>
+
+    <ModalDelete v-model:show="modalDeployVisible" :title="$t(`hosting.deployProd`)">
+      <template #content>
+        <p>{{ $t(`hosting.upload.finished`) }}</p>
+      </template>
+      <slot>
+        <ActionsHostingWebsite only-deploy @deployed="modalDeployVisible = false" />
+      </slot>
+    </ModalDelete>
   </div>
 </template>
 
@@ -80,10 +89,12 @@ const authStore = useAuthStore();
 const bucketStore = useBucketStore();
 const { changeEnv } = useHosting();
 
+const modalDeployVisible = ref<boolean>(false);
 const showModalNewFolder = ref<boolean>(false);
 const showModalClearAll = ref<boolean>(false);
 const showModalDelete = ref<boolean>(false);
 const showPopoverDelete = ref<boolean>(false);
+const deploying = ref<boolean>(false);
 
 onMounted(() => {
   changeEnv();

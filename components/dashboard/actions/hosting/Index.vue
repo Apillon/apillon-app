@@ -1,8 +1,19 @@
 <template>
   <n-space v-bind="$attrs" justify="space-between">
-    <div class="w-[20vw] min-w-[11rem] max-w-xs">
-      <FormFieldSearch v-model:value="websiteStore.search" />
-    </div>
+    <n-space size="large">
+      <div class="w-[20vw] min-w-[11rem] max-w-xs">
+        <FormFieldSearch v-model:value="websiteStore.filter.search" />
+      </div>
+      <select-options
+        v-model:value="websiteStore.filter.websiteType"
+        :options="websiteTypes"
+        class="w-[20vw] min-w-[11rem] max-w-xs"
+        size="medium"
+        :placeholder="$t('hosting.website.source.title')"
+        filterable
+        clearable
+      />
+    </n-space>
 
     <n-space size="large">
       <n-button :loading="websiteStore.loading" @click="websiteStore.fetchWebsites(archive)">
@@ -25,10 +36,20 @@
 </template>
 
 <script lang="ts" setup>
+import type { SelectOption } from 'naive-ui';
+
 defineProps({
   archive: { type: Boolean, default: false },
 });
 
+const { t } = useI18n();
 const authStore = useAuthStore();
 const websiteStore = useWebsiteStore();
+
+const websiteTypes = ref<SelectOption[]>(
+  enumValues(WebsiteType).map(i => ({
+    value: i,
+    label: t(`hosting.website.source.${i}`),
+  }))
+);
 </script>
