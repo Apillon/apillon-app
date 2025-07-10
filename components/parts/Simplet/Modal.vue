@@ -29,7 +29,7 @@
         v-else-if="isStep(SimpletCreateStep.DEPLOYING)"
         class="min-h-full"
         :title="$t('simplet.wizard.deploying')"
-        :content="$t('simplet.wizard.deployingInfo')"
+        :content="$t('general.deploying', { service: t(`simplet.${simpletStore.form.type?.name}.name`) }) + '...'"
       />
       <SimpletDeployed v-else-if="isStep(SimpletCreateStep.DEPLOYED)" class="mx-auto max-w-5xl" />
     </slot>

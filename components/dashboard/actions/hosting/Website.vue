@@ -23,14 +23,19 @@
         <!-- <n-button v-if="deploymentStore.deploymentConfig?.id" class="w-full" @click="modalVariablesVisible = true">
           {{ $t('hosting.menu.envVars') }}
         </n-button> -->
-        <n-button
+        <Btn
           v-if="websiteStore.active?.website_uuid"
-          class="w-full"
+          class="locked w-full"
+          type="secondary"
+          :disabled="
+            deploymentStore.deployLoading ||
+            Number(websiteStore.active?.lastDeploymentStatus || 0) < DeploymentStatus.SUCCESSFUL
+          "
           :loading="deploymentStore.deployLoading"
           @click="deploymentStore.redeploy(websiteStore.active.website_uuid)"
         >
           {{ $t('hosting.deploy.redeploy') }}
-        </n-button>
+        </Btn>
       </template>
       <Btn
         v-else

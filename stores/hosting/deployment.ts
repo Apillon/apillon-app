@@ -246,9 +246,11 @@ export const useDeploymentStore = defineStore('deployment', {
         await this.fetchBuilds(websiteUuid);
       } catch (error: any) {
         window.$message.error(userFriendlyMsg(error));
+        this.deployLoading = false;
       }
-
-      this.deployLoading = false;
+      setTimeout(() => {
+        this.deployLoading = false;
+      }, 60000);
     },
 
     async deploy(
