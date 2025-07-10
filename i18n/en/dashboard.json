@@ -159,7 +159,7 @@
     },
     "onboarding": {
       "banner": {
-        "content": "Take a few moments to explore Apillon with our CPO as your guide.",
+        "content": "Take a few moments to explore Apillon - we’ll show you around.",
         "title": "Getting around the platform",
         "token": "$NCTR Token",
         "tokenInfo": "Save on services and vote on future platform upgrades."
