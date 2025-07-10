@@ -20,9 +20,9 @@
 
       <n-grid :cols="2" :x-gap="32" class="items-end">
         <n-gi>
-          <n-button class="w-full" type="primary" @click="closeModal">
+          <Btn class="w-full" type="secondary" @click="closeModal">
             {{ $t('general.cancel') }}
-          </n-button>
+          </Btn>
         </n-gi>
 
         <n-gi>

@@ -28,6 +28,7 @@ const props = defineProps({
   loading: { type: Boolean, default: false },
 });
 const { t } = useI18n();
+const websiteStore = useWebsiteStore();
 const collectionStore = useCollectionStore();
 
 const data = computed(() => {
@@ -53,6 +54,17 @@ const data = computed(() => {
       data: {
         link: props.baseUriLink || collectionStore.active.baseUri,
         text: collectionStore.active.baseUri,
+      },
+    },
+    {
+      label: t('dashboard.nav.hosting'),
+      value: '',
+      component: resolveComponent('TableLink'),
+      loading: collectionStore.loading || websiteStore.loading,
+      show: !!collectionStore.active?.websiteUuid,
+      data: {
+        text: websiteStore.active.domain || websiteStore.active.name,
+        link: websiteStore.active.website_uuid ? `/dashboard/service/hosting/${websiteStore.active.website_uuid}` : '',
       },
     },
   ];

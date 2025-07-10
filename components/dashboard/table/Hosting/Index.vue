@@ -47,9 +47,30 @@ const showModalEditWebsite = ref<boolean>(false);
 const showModalDeleteWebsite = ref<boolean>(false);
 const pagination = reactive(createPagination(false));
 
+const isWebsiteType = (website: WebsiteBaseInterface, type?: string) => {
+  switch (type) {
+    case WebsiteType.NFT_TEMPLATE:
+      return !!website.nftCollectionUuid;
+    case WebsiteType.SIMPLET:
+      return !!website.isSimplet;
+    case WebsiteType.BASIC:
+      return website.source === WebsiteSource.APILLON;
+    case WebsiteType.GITHUB:
+      return website.source === WebsiteSource.GITHUB && !website.nftCollectionUuid && !website.isSimplet;
+    default:
+      return true;
+  }
+};
+
 /** Data: filtered websites */
 const data = computed<Array<WebsiteBaseInterface>>(() => {
-  return props.websites.filter(item => item.name.toLowerCase().includes(websiteStore.search.toLowerCase())) || [];
+  return (
+    props.websites.filter(
+      item =>
+        isWebsiteType(item, websiteStore.filter.websiteType) &&
+        item.name.toLowerCase().includes(websiteStore.filter.search.toLowerCase())
+    ) || []
+  );
 });
 
 const columns = computed<NDataTableColumns<WebsiteBaseInterface>>(() => {

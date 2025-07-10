@@ -1,5 +1,27 @@
 <template>
-  <n-form ref="formRef" :model="formData" :rules="rules" autocomplete="off" @submit.prevent="handleSubmit">
+  <Notification
+    v-if="collectionStore.active.collectionStatus < CollectionStatus.DEPLOYED"
+    type="warning"
+    class="mb-8 w-full"
+  >
+    <div>
+      {{ $t('nft.collection.websiteDeploy.notDeployed') }}
+    </div>
+    <div class="relative">
+      <Spinner :size="12" />
+    </div>
+  </Notification>
+  <Notification v-else-if="isFormDisabled" type="error" class="mb-4">
+    {{ $t('nft.collection.websiteDeploy.disabled') }}
+  </Notification>
+  <n-form
+    ref="formRef"
+    :model="formData"
+    :disabled="isFormDisabled"
+    :rules="rules"
+    autocomplete="off"
+    @submit.prevent="handleSubmit"
+  >
     <n-form-item
       v-if="!templateType"
       path="type"
@@ -43,7 +65,7 @@
     <n-form-item v-if="!hideSubmit" class="mt-8" :show-feedback="false" :show-label="false">
       <input type="submit" class="hidden" :value="'Save'" />
 
-      <Btn type="primary" class="mt-2 w-full" :loading="loading" @click="handleSubmit">
+      <Btn type="primary" class="mt-2 w-full" :disabled="isFormDisabled" :loading="loading" @click="handleSubmit">
         {{ $t('nft.collection.websiteDeploy.deploy') }}
       </Btn>
     </n-form-item>
@@ -71,6 +93,7 @@ const dataStore = useDataStore();
 const settingsStore = useSettingsStore();
 const collectionStore = useCollectionStore();
 const { ruleApiKey, ruleApiSecret } = useForm();
+const { checkUnfinishedCollection } = useCollection();
 
 const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
@@ -85,16 +108,29 @@ const formData = reactive<FormWebsiteDeploy>({
   apiKey: null,
   apiSecret: null,
   type: props.templateType,
-  nftCollection: null,
+  nftCollection: collectionStore.active.collection_uuid,
   embeddedWallet: null,
 });
 
 const rules: NFormRules = {
   type: ruleRequired(t('validation.website.typeRequired')),
-  nftCollection: { required: !!props.templateType, message: t('validation.nft.collection') },
+  nftCollection: ruleRequired(t('validation.nft.collection')),
   apiKey: [{ required: settingsStore.apiKeyQuotaReached, message: t('validation.apiRequired') }, ruleApiKey(formData)],
   apiSecret: ruleApiSecret(formData),
 };
+
+const isFormDisabled = computed(() => collectionStore.active.collectionStatus !== CollectionStatus.DEPLOYED);
+
+onMounted(() => {
+  if (!props.templateType && collectionStore.active.collection_uuid) {
+    checkUnfinishedCollection();
+  }
+});
+
+watch(
+  () => collectionStore.active.collection_uuid,
+  uuid => (formData.nftCollection = uuid ?? formData.nftCollection)
+);
 
 async function handleSubmit(e?: Event | MouseEvent) {
   e?.preventDefault();

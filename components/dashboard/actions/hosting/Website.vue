@@ -2,6 +2,7 @@
   <div>
     <n-space class="w-full lg:min-w-52" size="large" vertical>
       <n-button
+        v-if="!onlyDeploy"
         class="w-full"
         size="medium"
         :loading="bucketStore.folder.loading"
@@ -10,7 +11,7 @@
         {{ $t('general.refresh') }}
       </n-button>
 
-      <template v-if="websiteStore.active.w3ProductionLink">
+      <template v-if="!onlyDeploy && websiteStore.active.w3ProductionLink">
         <BtnDomain />
         <BtnDns v-if="websiteStore.active.domain" />
         <FormStorageShortUrl :target-url="websiteStore.active.w3ProductionLink" class="w-full" />
@@ -23,28 +24,34 @@
         <!-- <n-button v-if="deploymentStore.deploymentConfig?.id" class="w-full" @click="modalVariablesVisible = true">
           {{ $t('hosting.menu.envVars') }}
         </n-button> -->
-        <n-button
+        <Btn
           v-if="websiteStore.active?.website_uuid"
-          class="w-full"
+          class="locked w-full"
+          type="secondary"
+          :disabled="
+            deploymentStore.deployLoading ||
+            Number(websiteStore.active?.lastDeploymentStatus || 0) < DeploymentStatus.SUCCESSFUL
+          "
           :loading="deploymentStore.deployLoading"
           @click="deploymentStore.redeploy(websiteStore.active.website_uuid)"
         >
           {{ $t('hosting.deploy.redeploy') }}
-        </n-button>
+        </Btn>
       </template>
       <Btn
         v-else
         class="locked w-full"
         size="medium"
         type="primary"
-        :loading="deploying"
-        :disabled="authStore.isAdmin()"
+        :loading="isDeploying"
+        :disabled="isDeploying || authStore.isAdmin()"
         @click="deployWebsite(DeploymentEnvironment.DIRECT_TO_PRODUCTION)"
       >
         {{ $t('hosting.deployProd') }}
       </Btn>
 
       <n-button
+        v-if="!onlyDeploy"
         class="w-full"
         type="error"
         :disabled="authStore.isAdmin()"
@@ -103,6 +110,11 @@
 </template>
 
 <script lang="ts" setup>
+const emit = defineEmits(['deployed']);
+defineProps({
+  onlyDeploy: { type: Boolean, default: false },
+});
+
 const { activeTab, tabs, checkUnfinishedBuilds, onWebsiteDeleted, refreshWebpage } = useHosting();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.HOSTING_DEPLOY);
 const { subscriptionMessage } = usePayment();
@@ -127,6 +139,14 @@ const deployEnv = ref<number>(DeploymentEnvironment.STAGING);
 
 const hasActiveDeployments = computed<boolean>(() => {
   return deploymentStore.staging.some(deployment => deployment.deploymentStatus < DeploymentStatus.SUCCESSFUL);
+});
+const isDeploying = computed<boolean>(() => {
+  return (
+    deploying.value ||
+    websiteStore.active.lastDeploymentStatus === DeploymentStatus.IN_PROGRESS ||
+    deploymentStore.active?.deploymentStatus === DeploymentStatus.IN_PROGRESS ||
+    deploymentStore.production.some(deployment => deployment.deploymentStatus === DeploymentStatus.IN_PROGRESS)
+  );
 });
 
 /** Show payment messages if user create subscription */
@@ -157,8 +177,15 @@ const showUpdateModal = async () => {
 async function deploy(env: number) {
   deploying.value = true;
   await deploymentStore.deploy(websiteStore.active.website_uuid, env);
-  deploying.value = false;
+  setTimeout(() => {
+    deploying.value = false;
+  }, 30000);
   modalWebsiteReviewVisible.value = false;
+
+  if (env >= DeploymentEnvironment.PRODUCTION) {
+    activeTab.value = tabs.PRODUCTION;
+  }
+  emit('deployed');
 }
 
 /**

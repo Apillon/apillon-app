@@ -25,6 +25,7 @@
     "customizeDeploy": "Customize and deploy",
     "decline": "Decline",
     "delete": "Delete",
+    "deploying": "Deploying {service}",
     "description": "Description",
     "deselectAll": "Deselect All",
     "details": "Details",
@@ -101,6 +102,7 @@
     "information": {
       "hide": "Hide information",
       "show": "Show information"
-    }
+    },
+    "until": "until"
   }
 }

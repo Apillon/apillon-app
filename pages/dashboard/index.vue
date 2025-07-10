@@ -7,27 +7,17 @@
       <div class="mb-8">
         <div class="mb-10 flex gap-4">
           <div
-            class="flex cursor-pointer flex-col justify-between gap-8 rounded-lg bg-violet p-6 text-bg lg:w-5/12"
+            class="flex cursor-pointer flex-col justify-between gap-4 rounded-lg bg-violet p-6 text-bg lg:w-5/12"
             @click="showVideo = true"
           >
+            <NuxtIcon name="dashboard/butterfly" class="text-4xl" filled />
             <div>
               <h4>{{ $t('dashboard.onboarding.banner.title') }}</h4>
               <span class="text-sm">{{ $t('dashboard.onboarding.banner.content') }}</span>
             </div>
+
             <div class="flex justify-between text-sm">
-              <div class="flex items-center gap-2">
-                <img
-                  src="~/assets/images/dashboard/cpo.png"
-                  class="h-11 w-11 rounded-full"
-                  width="42"
-                  height="42"
-                  alt="CPO at Apillon"
-                />
-                <div class="flex flex-col">
-                  <strong>Nino Kutnjak</strong>
-                  <span>CPO at Apillon</span>
-                </div>
-              </div>
+              <div class="flex items-center gap-2"></div>
               <Btn
                 class="!text-bg-dark no-underline"
                 type="tertiary"
@@ -42,9 +32,10 @@
 
           <div class="flex flex-col gap-4 rounded-lg bg-bg-light p-6 lg:w-1/4">
             <NuxtIcon name="dashboard/token" class="text-4xl" filled />
-            <h4>{{ $t('dashboard.onboarding.banner.token') }}</h4>
-            <p>{{ $t('dashboard.onboarding.banner.tokenInfo') }}</p>
-
+            <div>
+              <h4>{{ $t('dashboard.onboarding.banner.token') }}</h4>
+              <p>{{ $t('dashboard.onboarding.banner.tokenInfo') }}</p>
+            </div>
             <Btn type="tertiary" href="https://www.apillon.io/token">{{ $t('general.learnMore') }}</Btn>
           </div>
 

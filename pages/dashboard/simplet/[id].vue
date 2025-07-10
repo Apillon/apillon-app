@@ -29,7 +29,10 @@
             class="my-2"
           >
             <i18n-t keypath="simplet.trialInfo" tag="span">
-              <NuxtTime :datetime="addDays(new Date(simpletStore.active.createTime), 3)" relative />
+              <span>
+                {{ $t('general.until') }}
+                <NuxtTime :datetime="addDays(new Date(simpletStore.active.createTime), 3)" date-style="long" />
+              </span>
             </i18n-t>
             <i18n-t keypath="project.considerUpgrade" tag="span">
               <a href="/dashboard/payments" class="link" target="_blank">{{ $t('project.upgradingPlan') }}</a>

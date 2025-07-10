@@ -28,6 +28,7 @@ useHead({
 onMounted(async () => {
   await dataStore.waitOnPromises();
   await simpletStore.fetchSimplets();
+  simpletStore.getSimpletsArchive();
   paymentStore.getPriceList();
   checkUnfinishedSimplets();
 

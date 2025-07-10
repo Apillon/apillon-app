@@ -67,7 +67,6 @@
 
 <script lang="ts" setup>
 import type { SelectOption } from 'naive-ui';
-import { ServiceTypeName } from '~/lib/types/service';
 
 const emit = defineEmits(['onBucketDelete']);
 

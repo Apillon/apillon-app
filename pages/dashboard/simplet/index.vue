@@ -53,6 +53,7 @@ onMounted(async () => {
   simpletStore.fetchSimplets();
   simpletStore.fetchSimpletQuota();
   await simpletStore.fetchSimpletTemplates();
+  simpletStore.getSimpletsArchive();
   pageLoading.value = false;
 });
 

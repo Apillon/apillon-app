@@ -1,4 +1,3 @@
-import type EmbeddedWallet from '~/components/dashboard/actions/EmbeddedWallet.vue';
 import { WebsiteSource } from '~/lib/types/hosting';
 
 const activeTab = ref();
@@ -11,7 +10,6 @@ export default function useHosting() {
   const dataStore = useDataStore();
   const bucketStore = useBucketStore();
   const websiteStore = useWebsiteStore();
-  const collectionStore = useCollectionStore();
   const deploymentStore = useDeploymentStore();
 
   const loading = ref<boolean>(false);
@@ -178,7 +176,7 @@ export default function useHosting() {
       const isApillonNftRepo = apillonRepos.some(r => r.id === websiteStore.form.repoId);
       const url = isApillonNftRepo ? endpoints.deployNftWebsite : endpoints.website;
 
-      const bodyData: Record<string, string | number | object | undefined> = isApillonNftRepo
+      const bodyData: Record<string, Optional<string> | number | object | undefined> = isApillonNftRepo
         ? {
             apiKey: websiteStore.form.apiKey,
             apiSecret: websiteStore.form.apiSecret,

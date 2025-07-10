@@ -1,6 +1,7 @@
 <template>
   <n-data-table
     v-if="baseUri"
+    class="tr-capitalize"
     :bordered="false"
     :columns="columns"
     :data="nfts"

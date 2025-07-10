@@ -59,8 +59,9 @@
 <script lang="ts" setup>
 import { themeOverrides } from '~/lib/config/naive-ui';
 
-const authStore = useAuthStore();
 const { isLg } = useScreen();
+const router = useRouter();
+const authStore = useAuthStore();
 const messageRef = ref<HTMLDivElement>();
 const mainContentRef = ref<HTMLDivElement>();
 const showMobileSidebar = ref<boolean>(false);
@@ -75,6 +76,12 @@ const { lengthX, lengthY } = useSwipe(mainContentRef, {
       toggleSidebar(lengthX.value < 0);
     }
   },
+});
+
+onMounted(() => {
+  if (!authStore.loggedIn) {
+    router.push({ name: 'login' });
+  }
 });
 
 /** Hide sidebar if user flip device in mobile view */

@@ -53,6 +53,8 @@
 <script lang="ts" setup>
 import type { UploadCustomRequestOptions } from 'naive-ui';
 
+// emit for all files uploaded
+const emit = defineEmits(['uploaded']);
 const props = defineProps({
   bucketUuid: { type: String, required: true },
 });
@@ -139,6 +141,7 @@ function addFileToListAndUpload(fileListItem: FileListItemType) {
         /** When all files are on file list, start uploading files */
         try {
           await uploadFiles(props.bucketUuid, uploadFileList.value, false, true);
+          emit('uploaded');
 
           setTimeout(() => {
             bucketStore.fetchDirectoryContent();
