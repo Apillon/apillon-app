@@ -525,6 +525,7 @@
     "continue": "Continue",
     "disabled": "Disabled",
     "deploy": "Deploy",
+    "exitDiscard": "Exit and discard setup",
     "generate": "Generate",
     "goBack": "Go back",
     "login": "Log in",

@@ -52,6 +52,9 @@
             </slot>
           </div>
           <div class="flex justify-end md:w-1/6">
+            <button v-if="minimize" class="n-base-close n-base-close--absolute n-drawer-header__close" @click="close()">
+              <NuxtIcon name="action/minimize" />
+            </button>
             <NBaseClose
               cls-prefix="n"
               class="n-base-close n-base-close--absolute n-drawer-header__close"
@@ -72,14 +75,15 @@
         <slot name="footer" />
       </template>
 
-      <Modal v-model:show="modalResetVisible" class="hide-header z-[9000] text-center">
-        <Headline :title="$t('dashboard.reset.title')" :content="$t('dashboard.reset.info')" />
+      <Modal v-model:show="modalResetVisible" class="hide-header z-[9000]">
+        <NuxtIcon name="icon/alert" class="text-xl" filled />
+        <Headline class="mt-4" :title="$t('dashboard.reset.title')" :content="$t('dashboard.reset.info')" />
         <div class="mt-8 flex gap-4">
-          <Btn type="secondary" class="flex-1" @click="close()">
-            {{ $t('general.close') }}
+          <Btn type="error" class="flex-1" @click="closeReset()">
+            {{ $t('form.exitDiscard') }}
           </Btn>
-          <Btn type="primary" class="flex-1" @click="closeReset()">
-            {{ $t('form.reset') }}
+          <Btn type="primary" class="flex-1" @click="close()">
+            {{ $t('general.exit') }}
           </Btn>
         </div>
       </Modal>
@@ -102,8 +106,8 @@ const props = defineProps({
 });
 
 const attrs = useAttrs();
-const { vnode } = getCurrentInstance();
-const hasReset = computed(() => 'onReset' in vnode.props);
+const instance = getCurrentInstance();
+const hasReset = computed(() => instance?.vnode?.props && 'onReset' in instance.vnode.props);
 const modalResetVisible = ref<boolean>(false);
 
 const btnClose = () => {

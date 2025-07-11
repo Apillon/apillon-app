@@ -415,6 +415,14 @@ body .nuxt-icon {
 .n-input-number {
   @apply w-full;
 
+  .n-input-wrapper {
+    @apply pr-3;
+
+    .n-input__suffix {
+      @apply gap-1;
+    }
+  }
+
   .n-button__icon {
     width: var(--n-icon-size);
   }

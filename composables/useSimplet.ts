@@ -22,7 +22,7 @@ type SimpletContentTrans = {
 };
 
 export default function useSimplet() {
-  const { te, tm, rt } = useI18n();
+  const { t, te, tm, rt } = useI18n();
   const simpletStore = useSimpletStore();
 
   let simpletInterval: any = null as any;

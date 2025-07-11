@@ -20,6 +20,8 @@
         class="locked w-full"
         size="medium"
         type="secondary"
+        :disabled="loadingSmtp"
+        :loading="loadingSmtp"
         @click="openModalSmtp()"
       >
         {{ $t('simplet.wizard.smtp.edit') }}
@@ -31,6 +33,8 @@
         class="locked w-full"
         size="medium"
         type="secondary"
+        :disabled="loadingMysql"
+        :loading="loadingMysql"
         @click="openModalMysql()"
       >
         {{ $t('simplet.mysql.edit') }}
@@ -186,8 +190,11 @@ async function submitFormSmtp() {
       message.success(t('simplet.wizard.redeployingInfo'));
     } catch (e) {
       message.error(userFriendlyMsg(e));
+      loadingSmtp.value = false;
     }
-    loadingSmtp.value = false;
+    setTimeout(() => {
+      loadingSmtp.value = false;
+    }, 30000);
   }
 }
 
@@ -223,8 +230,11 @@ async function updateMysql() {
     message.success(t('simplet.wizard.redeployingInfo'));
   } catch (e) {
     message.error(userFriendlyMsg(e));
+    loadingMysql.value = false;
   }
-  loadingMysql.value = false;
+  setTimeout(() => {
+    loadingMysql.value = false;
+  }, 30000);
 }
 
 async function redeploy(uuid: string) {

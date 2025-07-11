@@ -94,7 +94,6 @@ const showModalNewFolder = ref<boolean>(false);
 const showModalClearAll = ref<boolean>(false);
 const showModalDelete = ref<boolean>(false);
 const showPopoverDelete = ref<boolean>(false);
-const deploying = ref<boolean>(false);
 
 onMounted(() => {
   changeEnv();

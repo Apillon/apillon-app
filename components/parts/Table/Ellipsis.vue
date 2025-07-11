@@ -4,7 +4,7 @@
     <n-ellipsis class="break-all align-bottom" :class="color" :line-clamp="1">
       {{ text }}
     </n-ellipsis>
-    <button class="ml-2" @click="copyToClipboard(text)">
+    <button v-if="copy" class="ml-2" @click="copyToClipboard(text)">
       <span class="icon-copy text-white-primary" :class="color"></span>
     </button>
   </div>
@@ -16,5 +16,6 @@ defineProps({
   text: { type: String, default: '' },
   color: { type: String, default: 'text-body' },
   textWhite: { type: Boolean, default: false },
+  copy: { type: Boolean, default: true },
 });
 </script>

@@ -263,8 +263,8 @@
       "insufficient": "You don't have permissions to create or edit this item."
     },
     "reset": {
-      "info": "This will reset your current progress. Are you sure you want to continue?",
-      "title": "Reset progress"
+      "info": "Do you want to discard the setup or just close the window and keep your progress?",
+      "title": "Exit setup?"
     },
     "solution": {
       "customEvm": "Custom EVM",
