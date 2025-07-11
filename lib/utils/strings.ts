@@ -110,10 +110,10 @@ export function getCompactValue(value: number | string, decimals = 2) {
   return `${getFixed(value, decimals)}`;
 }
 
-export function truncateWallet(source: string, partLength: number = 4): string {
-  return source.length > 9
+export function truncateWallet(source?: Optional<string>, partLength: number = 4): string {
+  return source && source.length > 9
     ? source.slice(0, partLength) + '…' + source.slice(source.length - partLength, source.length)
-    : source;
+    : source || '';
 }
 
 export function truncateCid(source: string, partLength: number = 4): string {
@@ -166,7 +166,7 @@ export function extractCIDFromUrl(link: string): string | null {
       const url = new URL(link);
 
       // Case: Subdomain gateway (e.g., https://<cid>.ipfs.gateway.com)
-      const [possibleCID, protocol, ...rest] = url.hostname.split('.');
+      const [possibleCID, protocol, ..._] = url.hostname.split('.');
       if ((protocol === 'ipfs' || protocol === 'ipns') && /^[a-z0-9]{46,}$/.test(possibleCID)) {
         return possibleCID;
       }

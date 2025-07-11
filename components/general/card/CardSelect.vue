@@ -2,7 +2,8 @@
   <div
     class="relative my-3 flex w-full cursor-pointer gap-4 rounded-md border p-4 text-sm transition-colors duration-300 hover:border-white"
     :class="[
-      selected ? 'border-yellow' : disabled ? 'border-bodyDark' : 'border-bg-lighter',
+      dark ? 'card-dark' : 'card-light',
+      selected ? '!border-yellow' : disabled ? 'border-bodyDark' : 'border-bg-lighter',
       { '!cursor-default opacity-60': disabled },
     ]"
   >
@@ -24,6 +25,11 @@
           <p class="text-xs text-white-secondary" v-html="content"></p>
         </slot>
         <slot name="additional" />
+        <div v-if="tags" class="my-2 flex flex-wrap gap-2">
+          <Tag v-for="(item, key) in tags" :key="key" :type="item.includes('No code') ? 'success' : 'default'">
+            {{ item }}
+          </Tag>
+        </div>
       </div>
     </div>
   </div>
@@ -31,11 +37,13 @@
 
 <script lang="ts" setup>
 defineProps({
+  content: { type: String, default: '' },
+  dark: { type: Boolean, default: false },
   icon: { type: String, default: '' },
   iconClass: { type: String, default: '' },
   img: { type: String, default: '' },
   title: { type: String, default: '' },
-  content: { type: String, default: '' },
+  tags: { type: Array<string>, default: null },
   disabled: { type: Boolean, default: false },
   selected: { type: Boolean, default: false },
 });

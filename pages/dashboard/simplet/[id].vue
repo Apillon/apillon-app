@@ -5,8 +5,8 @@
     </template>
 
     <n-space class="pb-8" :size="32" vertical>
-      <div class="flex gap-8">
-        <div>
+      <div class="flex w-full gap-8">
+        <div class="flex-1">
           <div class="card-light flex-1 rounded-lg px-6 py-4">
             <SimpletInfo />
           </div>

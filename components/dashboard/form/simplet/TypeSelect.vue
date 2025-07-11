@@ -7,21 +7,11 @@
       :icon="`simplet/${simplet.name}`"
       :title="t(`simplet.${simplet.name}.name`)"
       :content="simplet.description || ''"
-      :usage="translateItems(`simplet.${simplet.name}.usage`)"
+      :tags="translateItems(`simplet.${simplet.name}.usage`)"
       :selected="selectedType?.name === simplet.name"
+      dark
       @click="selectedType = simplet"
     >
-      <template #additional>
-        <div class="mt-2 flex flex-wrap gap-2">
-          <Tag
-            v-for="(item, key) in translateItems(`simplet.${simplet.name}.usage`)"
-            :key="key"
-            :type="item.includes('No code') ? 'success' : 'default'"
-          >
-            {{ item }}
-          </Tag>
-        </div>
-      </template>
     </CardSelect>
   </div>
 </template>

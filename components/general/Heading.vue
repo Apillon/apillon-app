@@ -18,7 +18,7 @@
       <slot>
         <div class="flex items-center gap-1">
           <NuxtLink v-if="back && !isLg" :to="back">
-            <span class="icon-back align-sub text-xl"></span>
+            <span class="icon-back align-sub text-xl transition-colors hover:text-white-primary"></span>
           </NuxtLink>
           <h3 v-if="headline">
             {{ headline }}
@@ -26,7 +26,7 @@
           </h3>
           <template v-else>
             <NuxtLink v-if="back && serviceName" :to="back">
-              <small>{{ serviceName }}</small>
+              <small class="transition-colors hover:text-white-secondary">{{ serviceName }}</small>
             </NuxtLink>
             <small v-else-if="serviceName">{{ serviceName }}</small>
             <h5>
