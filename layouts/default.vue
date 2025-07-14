@@ -1,7 +1,7 @@
 <template>
   <div v-if="!authStore.loadingProfile" ref="mainContentRef" class="relative h-screen">
-    <div ref="serviceStatusRef" class="w-full z-20">
-      <ServiceStatus v-for="item in serviceStatus" :service-status="item" />
+    <div ref="serviceStatusRef" class="z-20 w-full">
+      <ServiceStatus v-for="item in serviceStatus" :key="item.id" :service-status="item" />
     </div>
     <n-layout class="h-full" :has-sider="isLg" sider-placement="left">
       <n-layout-sider
@@ -19,13 +19,10 @@
         <Sidebar :collapsed="sidebarCollapsed" />
       </n-layout-sider>
       <n-layout>
-        <Header @toggle-sidebar="toggleSidebar" />
-        <n-scrollbar class="bg-bg" y-scrollable style="max-height: calc(100dvh - 88px)">
-          <div class="relative pt-8 px-4 sm:px-8 bg-bg">
-            <slot />
-          </div>
-          <!-- <CookieConsent /> -->
-        </n-scrollbar>
+        <Header @toggle-sidebar="toggleSidebar"> </Header>
+        <div class="relative bg-bg px-4 sm:px-8">
+          <slot />
+        </div>
       </n-layout>
     </n-layout>
 
@@ -53,18 +50,13 @@ onMounted(() => {
 });
 
 const calcServiceStatusHeight = () => serviceStatusRef.value?.clientHeight || 0;
-const serviceStatusHeight = ref<number>(calcServiceStatusHeight());
 
 /**
  * Show/hide sidebar on mobile
  */
 const { lengthX, lengthY } = useSwipe(mainContentRef, {
   onSwipeEnd() {
-    if (
-      !isLg.value &&
-      Math.abs(lengthX.value) > 250 &&
-      Math.abs(lengthX.value) > Math.abs(lengthY.value)
-    ) {
+    if (!isLg.value && Math.abs(lengthX.value) > 250 && Math.abs(lengthX.value) > Math.abs(lengthY.value)) {
       const isLeftToRight = lengthX.value < 0;
       toggleSidebar(isLeftToRight);
     }

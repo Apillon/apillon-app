@@ -6,18 +6,18 @@
 
     <slot>
       <n-space v-if="cloudFunctionStore.hasVariables" class="pb-8" :size="32" vertical>
-        <ActionsComputingCloudFunctionsEnvironment />
-        <TableComputingCloudFunctionVariables v-if="cloudFunctionStore.hasVariables" />
+        <ActionsCloudFunctionsEnvironment />
+        <TableCloudFunctionsVariables v-if="cloudFunctionStore.hasVariables" />
       </n-space>
       <n-space v-else class="pb-8" :size="32" vertical>
-        <div class="flex justify-center items-center h-full">
-          <div class="flex flex-col gap-4 mb-8 my-20 max-w-xl text-center">
+        <div class="flex h-full items-center justify-center">
+          <div class="my-20 mb-8 flex max-w-xl flex-col gap-4 text-center">
             <h4 class="mb-2">{{ $t('computing.cloudFunctions.variable.title') }}</h4>
             <i18n-t keypath="computing.cloudFunctions.variable.content" tag="p">
-              <template v-slot:url>
+              <template #url>
                 <a
                   href="https://wiki.apillon.io/web3-services/7-web3-compute.html"
-                  class="underline text-blue"
+                  class="text-blue underline"
                   target="_blank"
                 >
                   {{ $t('general.documentation') }}
@@ -25,7 +25,7 @@
               </template>
             </i18n-t>
 
-            <div class="mt-4 max-w-xs mx-auto">
+            <div class="mx-auto mt-4 max-w-xs">
               <Btn class="mb-2" size="large" @click="modalCreateVariableVisible = true">
                 {{ $t('computing.cloudFunctions.variable.btnAdd') }}
               </Btn>
@@ -40,14 +40,10 @@
       </n-space>
 
       <!-- Modal - Create Cloud Function variables -->
-      <modal
-        v-model:show="modalCreateVariableVisible"
-        :title="$t('computing.cloudFunctions.variable.new')"
-      >
-        <FormComputingCloudFunctionsVariable
+      <modal v-model:show="modalCreateVariableVisible" :title="$t('computing.cloudFunctions.variable.new')">
+        <FormCloudFunctionsVariable
           :function-uuid="cloudFunctionStore.functionUuid"
           @submit-success="modalCreateVariableVisible = false"
-          @create-success=""
         />
       </modal>
     </slot>

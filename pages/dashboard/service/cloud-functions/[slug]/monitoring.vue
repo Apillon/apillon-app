@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import colors from '~/tailwind.colors';
+import { colors } from '~/tailwind.config';
 
 const { t } = useI18n();
 const cloudFunctionStore = useCloudFunctionStore();
@@ -63,7 +63,7 @@ const prepareData = () => {
       {
         label: 'Success',
         backgroundColor: colors.green,
-        borderColor: colors.white,
+        borderColor: colors.white.DEFAULT,
         data: dataSuccess,
         fill: true,
         borderWidth: 1,
@@ -71,7 +71,7 @@ const prepareData = () => {
       {
         label: 'Error',
         backgroundColor: colors.pink,
-        borderColor: colors.white,
+        borderColor: colors.white.DEFAULT,
         data: dataError,
         fill: true,
         borderWidth: 1,

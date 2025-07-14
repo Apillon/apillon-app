@@ -1,5 +1,5 @@
 <template v-if="items.length">
-  <Btn type="primary" class="w-full mt-2" :loading="loading" @click="downloadFiles">
+  <Btn type="primary" class="mt-2 w-full" :loading="loading" @click="downloadFiles">
     <template v-if="items.length === 1">
       {{ $t(`storage.download.item`) }}
     </template>

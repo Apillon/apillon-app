@@ -2,16 +2,13 @@
   <n-form
     v-if="!isWalletRegister"
     ref="formRef"
+    size="large"
     :model="formData"
     :rules="rules"
     @submit.prevent="handleSubmit"
   >
     <!--  Register password -->
-    <n-form-item
-      path="password"
-      :label="$t('form.label.password', { length: 12 })"
-      :label-props="{ for: 'password' }"
-    >
+    <n-form-item path="password" :label="$t('form.label.password', { length: 12 })" :label-props="{ for: 'password' }">
       <n-input
         v-model:value="formData.password"
         type="password"
@@ -129,9 +126,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      // errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else if (props.resetPassword) {
       await submitResetPassword();
     } else {
@@ -143,7 +138,7 @@ function handleSubmit(e: Event | MouseEvent) {
 /** Register (create new user) */
 async function register() {
   loading.value = true;
-  dataStore.resetCurrentProject();
+  dataStore.resetData();
 
   try {
     const res = await $api.post<RegisterResponse>(endpoints.register, {
@@ -172,7 +167,7 @@ async function submitResetPassword() {
   loading.value = true;
 
   try {
-    const res = await $api.post<PasswordResetResponse>(endpoints.passwordReset, {
+    const res = await $api.post<BooleanResponse>(endpoints.passwordReset, {
       password: formData.value.password,
       token: props.token || query.token || authStore.jwt,
     });
@@ -188,8 +183,6 @@ async function submitResetPassword() {
 }
 
 function getMetadata() {
-  return query && Object.keys(query).length
-    ? JSON.stringify(query)
-    : readCookie('apillon_mkt_params');
+  return query && Object.keys(query).length ? JSON.stringify(query) : readCookie('apillon_mkt_params');
 }
 </script>

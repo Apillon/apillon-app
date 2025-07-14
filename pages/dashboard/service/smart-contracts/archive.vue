@@ -13,8 +13,8 @@
         </n-space>
         <Empty
           v-show="!deployedContractStore.showDeployedContractsArchive"
-          :title="$t('dashboard.service.smartContracts.emptyArchive')"
-          :info="$t('dashboard.service.smartContracts.emptyArchiveInfo')"
+          :title="$t('smartContracts.emptyArchive')"
+          :info="$t('smartContracts.emptyArchiveInfo')"
           icon="storage/empty"
         >
         </Empty>
@@ -33,10 +33,9 @@ useHead({
 });
 const pageLoading = ref<boolean>(true);
 
-onMounted(() => {
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    await deployedContractStore.getDeployedContractsArchive();
-    pageLoading.value = false;
-  });
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  await deployedContractStore.getDeployedContractsArchive();
+  pageLoading.value = false;
 });
 </script>

@@ -39,7 +39,6 @@ declare global {
 
   interface RegisterResponse extends GeneralResponse<RegisterInterface> {}
   interface ValidateMailResponse extends GeneralResponse<ValidateMailInterface> {}
-  interface PasswordResetResponse extends GeneralResponse<boolean> {}
 
   /**
    * Login
@@ -50,7 +49,6 @@ declare global {
   }
 
   interface LoginResponse extends GeneralResponse<LoginInterface> {}
-  interface PasswordResetRequestResponse extends GeneralResponse<boolean> {}
   interface OAuthSessionInterface {
     sessionToken: string;
   }

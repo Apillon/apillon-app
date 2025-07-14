@@ -9,7 +9,6 @@ import type { Signer } from '@polkadot/types/types';
 export {};
 
 declare global {
-  /* eslint-disable no-use-before-define */
   type SubscriptionFn = (accounts: WalletAccount[] | undefined) => void | Promise<void>;
   type WalletDeviceType = 'desktop' | 'mobile';
 
@@ -58,7 +57,7 @@ declare global {
 
   interface OpenSelectWalletInterface {
     isOpen: boolean;
-    open: () => void;
-    close: () => void;
+    open: Func;
+    close: Func;
   }
 }

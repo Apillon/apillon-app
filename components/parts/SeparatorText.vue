@@ -1,13 +1,10 @@
 <template>
-  <div v-bind="$attrs" class="my-10 flex items-center text-sm">
-    <span v-if="borderLeft" class="bg-bg-lighter h-[1px] w-full"></span>
-    <span
-      class="inline-block text-body whitespace-nowrap"
-      :class="{ 'ml-4': borderLeft, 'mr-4': borderRight }"
-    >
+  <div v-bind="$attrs" class="my-8 flex items-center text-sm">
+    <span v-if="borderLeft" class="h-[1px] w-full bg-bg-lighter"></span>
+    <span class="inline-block whitespace-nowrap text-body" :class="{ 'ml-4': borderLeft, 'mr-4': borderRight }">
       <slot />
     </span>
-    <span v-if="borderRight" class="bg-bg-lighter h-[1px] w-full"></span>
+    <span v-if="borderRight" class="h-[1px] w-full bg-bg-lighter"></span>
   </div>
 </template>
 

@@ -1,100 +1,104 @@
 <template>
   <Dashboard :loading="authStore.loadingProfile" :learn-collapsible="false">
     <template #heading>
-      <Heading>
-        <h1>{{ $t('dashboard.homepage') }}</h1>
-      </Heading>
+      <h4>{{ $t('dashboard.onboarding.welcome') }}</h4>
     </template>
     <slot>
-      <div
-        v-if="isFeatureEnabled(Feature.PREBUILD_SOLUTIONS, authStore.getUserRoles())"
-        class="mb-8"
-      >
-        <!-- Resources-->
-        <SolutionOverview />
-
-        <hr class="border-bg-lighter my-8" />
-
-        <!-- Services-->
-        <h4 class="mb-8">{{ $t('general.explore') }}</h4>
-
-        <div class="grid md:grid-cols-3 gap-x-8 gap-y-4">
+      <div class="mb-8">
+        <div class="mb-10 flex gap-4">
           <div
-            v-for="(service, key) in services"
-            :key="key"
-            class="card-dark p-8 flex flex-col justify-between"
+            class="flex cursor-pointer flex-col justify-between gap-4 rounded-lg bg-violet p-6 text-bg lg:w-5/12"
+            @click="showVideo = true"
           >
-            <div class="flex justify-between items-center text-white">
-              <strong>{{ service.title }}</strong>
-              <NuxtLink
-                v-if="service.link"
-                :to="{ name: service.link }"
-                class="inline-flex-cc w-10 h-10 hover:bg-bg-lighter rounded-full transition-colors duration-300"
-              >
-                <span class="icon-wide-right text-xl"></span>
-              </NuxtLink>
+            <NuxtIcon name="dashboard/butterfly" class="text-4xl" filled />
+            <div>
+              <h4>{{ $t('dashboard.onboarding.banner.title') }}</h4>
+              <span class="text-sm">{{ $t('dashboard.onboarding.banner.content') }}</span>
             </div>
-            <div class="mt-4">
-              <p>{{ service.content }}</p>
+
+            <div class="flex justify-between text-sm">
+              <div class="flex items-center gap-2"></div>
+              <Btn
+                class="!text-bg-dark no-underline"
+                type="tertiary"
+                inner-class="flex gap-2 items-center"
+                @click="showVideo = true"
+              >
+                <span class="icon-video text-xl text-bg-dark"></span>
+                <strong>{{ $t('dashboard.youTube.play') }}</strong>
+              </Btn>
             </div>
           </div>
-        </div>
-      </div>
-      <div v-else class="p-8 mb-8 bg-bg-light text-body rounded-lg">
-        <h3 class="mb-4 text-white">Welcome to Apillon, your gateway to Web3!</h3>
-        <p>
-          Start your Web3 journey and integrate Decentralized Hosting and Storage services in your
-          project, or create a fully-fledged decentralized NFT collection.
-        </p>
-        <p>
-          Soon, more Web3 services will be added, including Decentralized Authentication and
-          Computing.
-        </p>
-        <p>
-          Find out how things work in the
-          <Btn
-            class="inline-block"
-            type="link"
-            href="https://wiki.apillon.io/web3-services/1-good-to-know.html"
-            target="_blank"
-          >
-            back end
-          </Btn>
-          <span>.</span>
-        </p>
-        <p>
-          If you know your way around code, check out
-          <Btn
-            class="inline-block"
-            type="link"
-            href="https://wiki.apillon.io/build/1-apillon-api.html"
-            target="_blank"
-          >
-            Apillon API
-          </Btn>
-          <span> details.</span>
-        </p>
-        <br />
 
-        <p>
-          Or, if you prefer the drag-and-drop way, navigate to the menu on the left and integrate
-          Web3 technologies with a few clicks.
-        </p>
-        <p>
-          Launch projects on Web3 like never before. Oh, and if you detect bugs or would like to
-          suggest UI improvements, please file a ticket in the
-          <Btn
-            class="inline-block"
-            type="link"
-            href="https://discord.com/channels/881835505120079912/881848835364778006"
-            target="_blank"
-          >
-            Apillon Discord channel
-          </Btn>
-          <span>.</span>
-        </p>
-        <p>Happy Web3 building!</p>
+          <div class="flex flex-col gap-4 rounded-lg bg-bg-light p-6 lg:w-1/4">
+            <NuxtIcon name="dashboard/token" class="text-4xl" filled />
+            <div>
+              <h4>{{ $t('dashboard.onboarding.banner.token') }}</h4>
+              <p>{{ $t('dashboard.onboarding.banner.tokenInfo') }}</p>
+            </div>
+            <Btn type="tertiary" href="https://www.apillon.io/token">{{ $t('general.learnMore') }}</Btn>
+          </div>
+
+          <div class="flex flex-col gap-6 text-sm lg:w-1/3">
+            <div class="flex items-center justify-between">
+              <strong>{{ $t('dashboard.usage.title') }}</strong>
+              <Btn
+                v-if="dataStore.currentProject"
+                class="font-bold no-underline"
+                type="tertiary"
+                :to="{ name: 'dashboard-payments' }"
+              >
+                <template v-if="paymentStore.hasActiveSubscription">
+                  {{ $t('dashboard.payment.managePlan') }}
+                </template>
+                <template v-else>
+                  {{ $t('dashboard.payment.upgradePlan') }}
+                </template>
+              </Btn>
+            </div>
+            <StorageProgress
+              :label="$t('dashboard.usage.bytesStored')"
+              :size="storageStore.info.usedStorage"
+              :max-size="storageStore.info.availableStorage"
+              :unit="$t('general.total')"
+              wrap
+            />
+            <StorageProgress
+              :label="$t('dashboard.subscription.bandwidth')"
+              :size="storageStore.info.usedBandwidth"
+              :max-size="storageStore.info.availableBandwidth"
+              :unit="$t('general.month')"
+              wrap
+            />
+          </div>
+        </div>
+        <Drawer v-model:show="showVideo">
+          <DemoVideo
+            video-id="qQJnuvUo-xo"
+            :chapters="[
+              { time: '00:00', title: 'Intro' },
+              { time: '00:35', title: 'Dashboard' },
+              { time: '02:53', title: 'NFT Collection' },
+              { time: '05:20', title: 'Minting' },
+              { time: '07:15', title: 'Website' },
+            ]"
+          />
+        </Drawer>
+
+        <!-- Services-->
+        <h4 class="mb-8">{{ $t('dashboard.onboarding.servicesTitle') }}</h4>
+
+        <div class="mb-8 grid grid-cols-cards gap-4">
+          <CardService v-for="(service, key) in onboardingServices" v-bind="service" :key="key" />
+        </div>
+
+        <!-- Resources
+        <SolutionOverview />-->
       </div>
+
+      <modal v-model:show="dataStore.project.showOnboarding" class="hide-header" size="small">
+        <OnboardingSteps />
+      </modal>
     </slot>
   </Dashboard>
 </template>
@@ -102,25 +106,19 @@
 <script lang="ts" setup>
 const { t } = useI18n();
 const authStore = useAuthStore();
+const dataStore = useDataStore();
+const paymentStore = usePaymentStore();
+const storageStore = useStorageStore();
+const { onboardingServices } = useService();
+
+const showVideo = ref<boolean>(false);
 
 useHead({
-  title: t('dashboard.dashboard'),
+  title: t('dashboard.homepage'),
 });
 
-const services = [
-  {
-    title: t('dashboard.nav.services'),
-    content: t('dashboard.service.info'),
-    link: 'dashboard-service',
-  },
-  // {
-  //   title: t('dashboard.nav.smartContracts'),
-  //   content: t('dashboard.smartContracts.info'),
-  // },
-  {
-    title: t('dashboard.nav.solutions'),
-    content: t('dashboard.solution.info'),
-    link: 'dashboard-solution',
-  },
-];
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  storageStore.getStorageInfo();
+});
 </script>

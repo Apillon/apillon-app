@@ -1,5 +1,6 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { defineStore } from 'pinia';
+import { AssetHubClient } from '~/lib/asset-hub/client';
 
 export type AssetInterface = {
   id: number;
@@ -76,8 +77,8 @@ export const useAssetHubStore = defineStore('assetHub', {
 
     async initClient(mainnet?: boolean, showMsg = true) {
       if (!this.account) {
-        if(showMsg){
-          window.$message.warning(window.$i18n.t('dashboard.service.assetHub.connect'));
+        if (showMsg) {
+          window.$message.warning(window.$i18n.t('assetHub.connect'));
         }
         return null;
       }
@@ -109,9 +110,7 @@ export const useAssetHubStore = defineStore('assetHub', {
     async getAsset(id: number): Promise<AssetInterface> {
       if (this.active?.id === id) return this.active;
 
-      const asset = this.mainnet
-        ? this.itemsMainnet.find(i => i.id === id)
-        : this.itemsTestnet.find(i => i.id === id);
+      const asset = this.mainnet ? this.itemsMainnet.find(i => i.id === id) : this.itemsTestnet.find(i => i.id === id);
       if (asset) {
         this.active = asset;
       } else {
@@ -137,9 +136,7 @@ export const useAssetHubStore = defineStore('assetHub', {
         const id = toNum(asset[0].toHuman()?.toLocaleString());
         const metadata = await assetHubClient.getAssetMetadata(id);
 
-        assets.push(
-          Object.assign({ id }, asset[1].toHuman(), metadata.toHuman()) as AssetInterface
-        );
+        assets.push(Object.assign({ id }, asset[1].toHuman(), metadata.toHuman()) as AssetInterface);
       };
 
       loadedAssets.forEach(asset => {
@@ -172,8 +169,7 @@ export const useAssetHubStore = defineStore('assetHub', {
 
   persist: {
     key: SessionKeys.ASSET_HUB,
-    storage: persistedState.sessionStorage,
-    paths: ['account', 'itemsMainnet', 'itemsTestnet'],
-    // debug: true,
-  } as any,
+    storage: piniaPluginPersistedstate.sessionStorage(),
+    pick: ['account', 'itemsMainnet', 'itemsTestnet'],
+  },
 });

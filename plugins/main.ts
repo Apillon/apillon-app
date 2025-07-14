@@ -1,6 +1,7 @@
 import type { RuntimeConfig } from '@nuxt/schema';
 import type { RouteLocationNormalized } from '#vue-router';
 import VuePapaParse from 'vue-papa-parse';
+import VueYtframe from 'vue3-ytframe';
 import VueCookieAcceptDecline from 'vue-cookie-accept-decline';
 import { createGtm } from '@gtm-support/vue-gtm';
 import { Buffer } from 'buffer';
@@ -17,6 +18,9 @@ export default defineNuxtPlugin(nuxtApp => {
 
     /** CSV parser */
     nuxtApp.vueApp.use(VuePapaParse);
+
+    /** YouTube */
+    nuxtApp.vueApp.use(VueYtframe);
 
     /** Cookie notice */
     nuxtApp.vueApp.component('vue-cookie-accept-decline', VueCookieAcceptDecline);
@@ -45,6 +49,9 @@ export default defineNuxtPlugin(nuxtApp => {
     /** Preserve query params */
     const router = useRouter();
     router.beforeEach((to, from, next) => {
+      const pageTitle = useState('pageTitle');
+      pageTitle.value = '';
+
       if (!hasQueryParams(to) && hasQueryParams(from) && !toStr(to.name).includes('dashboard-')) {
         next({ name: to.name?.toString(), query: from.query });
       } else {

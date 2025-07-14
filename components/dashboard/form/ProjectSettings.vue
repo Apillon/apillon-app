@@ -8,11 +8,7 @@
     @submit.prevent="handleSubmit"
   >
     <!--  Project name -->
-    <n-form-item
-      path="name"
-      :label="$t('form.label.projectName')"
-      :label-props="{ for: 'projectName' }"
-    >
+    <n-form-item path="name" :label="$t('form.label.projectName')" :label-props="{ for: 'projectName' }">
       <n-input
         v-model:value="formData.name"
         :input-props="{ id: 'projectName' }"
@@ -38,13 +34,7 @@
     <!--  Submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.save')" />
-      <Btn
-        type="primary"
-        class="mt-2"
-        :loading="loading"
-        :disabled="!dataStore.isUserOwner"
-        @click="handleSubmit"
-      >
+      <Btn type="primary" class="mt-2" :loading="loading" :disabled="!dataStore.isUserOwner" @click="handleSubmit">
         {{ $t('form.save') }}
       </Btn>
     </n-form-item>
@@ -56,7 +46,7 @@ type FormProjectSettings = {
   name?: string | null;
   description?: string | null;
 };
-const $i18n = useI18n();
+const { t } = useI18n();
 const dataStore = useDataStore();
 
 const loading = ref(false);
@@ -67,14 +57,13 @@ const formData = ref<FormProjectSettings>({
   description: dataStore.currentProject?.description || null,
 });
 
-onMounted(() => {
-  /** If page was reloaded, populate form data after projects has been loaded */
-  Promise.all(Object.values(dataStore.promises)).then(_ => {
-    if (!formData.value.name) {
-      formData.value.name = dataStore.currentProject?.name;
-      formData.value.description = dataStore.currentProject?.description;
-    }
-  });
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+
+  if (!formData.value.name) {
+    formData.value.name = dataStore.currentProject?.name;
+    formData.value.description = dataStore.currentProject?.description;
+  }
 });
 
 const rules: NFormRules = {
@@ -86,16 +75,13 @@ const rules: NFormRules = {
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => window.$message.error(error.message || 'Error'))
-      );
-    } else {
+    if (!errors) {
       await updateProjectData();
     }
   });
 }
 async function updateProjectData() {
+  if (!dataStore.project.selected) return;
   loading.value = true;
 
   try {
@@ -106,7 +92,7 @@ async function updateProjectData() {
 
     if (res.data) {
       dataStore.updateCurrentProject(res.data);
-      window.$message.success($i18n.t('form.success.updated.project'));
+      window.$message.success(t('form.success.updated.project'));
     }
   } catch (error) {
     window.$message.error(userFriendlyMsg(error));

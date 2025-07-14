@@ -32,8 +32,11 @@ function routeNameToKey(name: string) {
   return props.sliceName ? removeIdOrSlug(name) : name;
 }
 
-function removeIdOrSlug(text) {
-  return text.replace(/(-id|-slug|-archive|-deployed|-new).*/g, '');
+function removeIdOrSlug(text: string) {
+  return text.replace(
+    /(-id|-slug|-archive|-deployed|-new|-airdrop|-list|-nft-brand-booster|-nft-wild-west|-nft-event-experience).*/g,
+    ''
+  );
 }
 
 /**
@@ -42,16 +45,22 @@ function removeIdOrSlug(text) {
 function renderMenuLabel(option: NMenuOption) {
   const colorClass = option?.color === 'yellow' ? '!text-yellow' : option?.color === 'blue' ? '!text-blue' : '';
 
+  const label = (
+    Number(option?.counter || 0) > 0
+      ? [option.label, h(resolveComponent('Tag'), { class: 'ml-2' }, { default: () => option.counter })]
+      : [option.label]
+  ) as Array<string | VNode>;
+
   if ('disabled' in option && option.disabled) {
-    return h('span', { class: 'text-body' }, { default: () => option.label as string });
+    return h('span', { class: 'text-body' }, label);
   } else if ('href' in option) {
-    return h('a', { href: option.href, class: colorClass, target: '_blank' }, () => option.label as string);
+    return h('a', { href: option.href, class: colorClass, target: '_blank' }, label);
   } else if ('path' in option) {
-    return h(NuxtLink, { to: { path: option.path }, class: colorClass }, () => option.label as string);
+    return h(NuxtLink, { to: { path: option.path }, class: colorClass }, label);
   } else if ('to' in option) {
-    return h(NuxtLink, { to: { name: option.to }, class: colorClass }, () => option.label as string);
+    return h(NuxtLink, { to: { name: option.to }, class: colorClass }, label);
   }
-  return h('span', { class: 'text' }, { default: () => option.label as string });
+  return h('span', { class: 'text' }, label);
 }
 
 function renderMenuExtra(option: NMenuOption) {
@@ -73,14 +82,16 @@ function renderMenuExtra(option: NMenuOption) {
 }
 
 function renderMenuIcon(option: NMenuOption) {
+  const colorClass = option?.color === 'yellow' ? 'text-yellow' : option?.color === 'blue' ? 'text-blue' : '';
+
   if ('svgIcon' in option) {
     return h(
       resolveComponent('NuxtIcon'),
-      { name: option.svgIcon, class: `text-xl mx-2 ${iconClass(option.svgIcon)}` },
+      { name: option.svgIcon, class: `text-xl mx-2 ${colorClass} ${iconClass(option.svgIcon)}` },
       ''
     );
   } else if ('iconName' in option) {
-    return h('span', { class: iconClass(option.iconName) }, '');
+    return h('span', { class: `${colorClass} ${iconClass(option.iconName)}` }, '');
   }
   return null;
 }

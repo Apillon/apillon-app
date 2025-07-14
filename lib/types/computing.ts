@@ -28,19 +28,6 @@ export enum ComputingTransactionStatus {
   WORKER_FAILED = 6,
 }
 
-/** Encrypt steps */
-export enum EncryptTab {
-  BUCKET = 1,
-  ASSIGN = 2,
-  FINISHED = 3,
-}
-
-/** Encrypt configure steps */
-export enum EncryptConfigureTab {
-  BASE = 1,
-  NFT_COLLECTION = 2,
-}
-
 /** Encrypt deploy steps */
 export enum EncryptDeployTab {
   PREVIEW = 1,
@@ -57,48 +44,13 @@ export enum AcurastJobStatus {
 }
 
 declare global {
-  /**
-   * Contract
-   */
-  interface ContractInterface extends BaseObjectInterface {
-    contract_uuid: string;
-    project_uuid: string;
-    bucket_uuid: string;
-    contractType: number;
-    contractStatus: number;
-    sourceHash: string;
-    contractAddress: string;
-    deployerAddress: string;
-    transactionHash: string;
-    data: {
-      clusterId: string;
-      ipfsGatewayUrl: string;
-      nftChainRpcUrl: string;
-      restrictToOwner: boolean;
-      nftContractAddress: string;
-    };
-  }
-
-  interface ContractResponse extends GeneralResponse<ContractInterface> {}
-  interface ContractsResponse extends GeneralItemsResponse<ContractInterface> {}
-
-  /**
-   * Transaction
-   */
-  interface ComputingTransactionInterface {
-    id: number;
-    status: number;
-    chainId: number;
-    transactionType: number;
-    refTable: string;
-    refId: number;
-    transactionStatus: number;
-    transactionHash: string | null;
-  }
-
-  interface ComputingTransactionResponse
-    extends GeneralItemsResponse<ComputingTransactionInterface> {}
-
+  type FormCloudFunctionsJob = {
+    name: string | null;
+    slots: number | null;
+    scriptCid: string | null;
+    file: FileListItemType | undefined | null;
+    bucket_uuid: string | null;
+  };
   /**
    * Cloud Functions
    */

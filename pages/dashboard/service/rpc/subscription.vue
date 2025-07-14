@@ -1,13 +1,11 @@
 <template>
   <Dashboard>
     <template #heading>
-      <Heading>
-        <h1>{{ $t('dashboard.nav.rpc') }}</h1>
-      </Heading>
+      <Heading :headline="$t('dashboard.nav.rpc')" />
     </template>
 
     <slot>
-      <div class="pb-8 mb-6">
+      <div class="mb-6 pb-8">
         <h4>
           {{ $t('rpc.apiKey.headline') }}
         </h4>

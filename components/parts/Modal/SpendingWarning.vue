@@ -6,10 +6,11 @@
       :bordered="false"
       role="dialog"
       aria-modal="true"
+      size="large"
     >
       <div v-if="servicePrices">
-        <div v-if="isEnoughCredits" class="flex flex-col gap-1 text-body mb-4">
-          <span v-for="servicePrice in servicePrices">
+        <div v-if="isEnoughCredits" class="mb-4 flex flex-col gap-1 text-body">
+          <span v-for="(servicePrice, key) in servicePrices" :key="key">
             {{ servicePrice.description || servicePrice.name }}
           </span>
         </div>
@@ -31,13 +32,7 @@
             <Btn v-if="isEnoughCredits" type="primary" size="large" @click="submit">
               {{ $t('dashboard.payment.proceed') }}
             </Btn>
-            <Btn
-              v-else
-              type="secondary"
-              size="large"
-              :to="{ name: 'dashboard-payments' }"
-              @click="$emit('close')"
-            >
+            <Btn v-else type="secondary" size="large" :to="{ name: 'dashboard-payments' }" @click="$emit('close')">
               {{ $t('dashboard.payment.buyCredits') }}
             </Btn>
           </div>

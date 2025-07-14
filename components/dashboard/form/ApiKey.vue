@@ -1,107 +1,101 @@
 <template>
-  <n-form
-    v-if="!loading"
-    v-bind="$attrs"
-    ref="formRef"
-    :model="formData"
-    :rules="rules"
-    :disabled="dataStore.isProjectUser"
-    @submit.prevent="handleSubmit"
-  >
-    <!--  Service name -->
-    <n-form-item path="name" :label="$t('form.label.apiKeyName')" :label-props="{ for: 'name' }">
-      <n-input
-        v-model:value="formData.name"
-        :input-props="{ id: 'name' }"
-        :placeholder="$t('form.placeholder.apiKeyName')"
-        :disabled="props.id > 0"
-        clearable
-      />
-    </n-form-item>
+  <Form :disabled="disabled" :loading="loading">
+    <n-form
+      v-bind="$attrs"
+      ref="formRef"
+      :model="formData"
+      :rules="rules"
+      :disabled="disabled"
+      @submit.prevent="handleSubmit"
+    >
+      <!--  Service name -->
+      <n-form-item path="name" :label="$t('form.label.apiKeyName')" :label-props="{ for: 'name' }">
+        <n-input
+          v-model:value="formData.name"
+          :input-props="{ id: 'name' }"
+          :placeholder="$t('form.placeholder.apiKeyName')"
+          :disabled="props.id > 0"
+          clearable
+        />
+      </n-form-item>
 
-    <!-- Permissions per service -->
-    <n-form-item path="roles" :show-label="false" :show-feedback="false">
+      <!-- Permissions per service -->
+      <n-form-item path="roles" :show-label="false" :show-feedback="false">
+        <n-collapse
+          v-if="formData.roles && formData.roles.length"
+          class="collapse-permissions"
+          :expanded-names="expandedPermissions"
+          @item-header-click="handleItemHeaderClick"
+        >
+          <!-- Active services -->
+          <n-collapse-item
+            v-for="service in formData.roles"
+            :key="service.service_uuid"
+            :title="$t(`dashboard.apiKey.service.${service.serviceType.toLowerCase()}`)"
+            :name="service.service_uuid"
+          >
+            <template #arrow>
+              <span :class="`icon-${service.serviceType.toLowerCase()}`" class="min-w-[20px] text-center"> </span>
+            </template>
+            <template #header-extra>
+              <n-switch v-model:value="service.enabled" class="pointer-events-none" />
+            </template>
+
+            <n-grid :cols="2">
+              <n-form-item-gi
+                v-for="permission in service.permissions"
+                :key="permission.key"
+                :path="`${service.name}.${permission.name}`"
+                :show-label="false"
+                :show-feedback="false"
+              >
+                <n-checkbox
+                  v-model:checked="permission.value"
+                  size="medium"
+                  :label="permission.label"
+                  @update:checked="updatePermission(service.service_uuid, permission.key, permission.value)"
+                />
+              </n-form-item-gi>
+            </n-grid>
+          </n-collapse-item>
+        </n-collapse>
+      </n-form-item>
+
+      <!-- Unused services  -->
       <n-collapse
-        v-if="formData.roles && formData.roles.length"
-        class="collapse-permissions"
-        :expanded-names="expandedPermissions"
-        @item-header-click="handleItemHeaderClick"
+        v-if="unusedServices && unusedServices.length"
+        class="collapse-permissions unused"
+        :expanded-names="expandedUnused"
       >
-        <!-- Active services -->
         <n-collapse-item
-          v-for="service in formData.roles"
-          :key="service.service_uuid"
-          :title="$t(`dashboard.apiKey.service.${service.serviceType.toLowerCase()}`)"
-          :name="service.service_uuid"
+          v-for="serviceType in unusedServices"
+          :key="serviceType.id"
+          :title="serviceType.name"
+          :name="serviceType.name"
         >
           <template #arrow>
-            <span :class="`icon-${service.serviceType.toLowerCase()}`" class="min-w-[20px] text-center"> </span>
-          </template>
-          <template #header-extra>
-            <n-switch v-model:value="service.enabled" class="pointer-events-none" />
+            <span :class="`icon-${serviceType.name.toLowerCase()}`"></span>
           </template>
 
-          <n-grid :cols="2">
-            <n-form-item-gi
-              v-for="permission in service.permissions"
-              :key="permission.key"
-              :path="`${service.name}.${permission.name}`"
-              :show-label="false"
-              :show-feedback="false"
-            >
-              <n-checkbox
-                v-model:checked="permission.value"
-                size="medium"
-                :label="permission.label"
-                @update:checked="updatePermission(service.service_uuid, permission.key, permission.value)"
-              />
-            </n-form-item-gi>
-          </n-grid>
+          <FormService
+            class="mt-4 pr-4 sm:pr-8"
+            :service-type="serviceType.id"
+            :default-service-name="serviceType.name"
+            :btn-text="$t('general.attachService', { service: serviceType.name })"
+            @create-success="onServiceCreated"
+          />
         </n-collapse-item>
       </n-collapse>
-    </n-form-item>
 
-    <!-- Unused services  -->
-    <n-collapse
-      v-if="unusedServices && unusedServices.length"
-      class="collapse-permissions unused"
-      :expanded-names="expandedUnused"
-    >
-      <n-collapse-item
-        v-for="serviceType in unusedServices"
-        :key="serviceType.id"
-        :title="serviceType.name"
-        :name="serviceType.name"
-      >
-        <template #arrow>
-          <span :class="`icon-${serviceType.name.toLowerCase()}`"></span>
-        </template>
-
-        <FormService
-          class="mt-4 pr-4 sm:pr-8"
-          :service-type="serviceType.id"
-          :default-service-name="serviceType.name"
-          :btn-text="$t('general.attachService', { service: serviceType.name })"
-          @create-success="onServiceCreated"
-        />
-      </n-collapse-item>
-    </n-collapse>
-
-    <!--  Submit -->
-    <n-form-item v-if="props.id === 0" :show-label="false">
-      <input type="submit" class="hidden" :value="$t('form.generate')" />
-      <Btn
-        type="primary"
-        class="mt-8 w-full"
-        :loading="loading"
-        :disabled="dataStore.isProjectUser"
-        @click="handleSubmit"
-      >
-        {{ $t('form.generate') }}
-      </Btn>
-    </n-form-item>
-  </n-form>
-  <Spinner v-else />
+      <!--  Submit -->
+      <n-form-item v-if="props.id === 0" :show-label="false">
+        <input type="submit" class="hidden" :value="$t('form.generate')" />
+        <Btn type="primary" class="mt-8 w-full" :loading="loading" :disabled="disabled" @click="handleSubmit">
+          {{ $t('form.generate') }}
+        </Btn>
+      </n-form-item>
+    </n-form>
+  </Form>
 
   <!-- Modal - API key details -->
   <n-modal
@@ -185,6 +179,8 @@ const rules: NFormRules = {
     },
   ],
 };
+
+const disabled = computed(() => dataStore.isProjectUser || settingsStore.apiKeyQuotaReached);
 
 const unusedServices = computed<ServiceTypeField[]>(() => {
   return dataStore.serviceTypes.reduce((acc, serviceType) => {
@@ -282,6 +278,7 @@ function updateExpanded(name: string, expanded: boolean) {
 
 /** Load roles and show permissions */
 onMounted(async () => {
+  settingsStore.getApiKeyQuota();
   if (props.id > 0) {
     await getApiKeyRoles();
 
@@ -316,7 +313,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
+      // errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else if (props.id > 0) {
       await updateApiKey();
     } else {
@@ -368,9 +365,8 @@ async function updateApiKey() {
   loadingForm.value = true;
 
   try {
-    const projectUuid = dataStore.projectUuid;
     const bodyData = {
-      project_uuid: projectUuid,
+      project_uuid: dataStore.projectUuid,
       name: formData.value.name,
       testNetwork: false,
     };
@@ -401,9 +397,8 @@ function isPermissionEnabled(serviceUuid: string, roleId: number) {
     }
   }
 
-  const projectUuid = dataStore.projectUuid;
   return apiKeyRoles.value.some(
-    role => role.project_uuid === projectUuid && role.service_uuid === serviceUuid && role.role_id === roleId
+    role => role.project_uuid === dataStore.projectUuid && role.service_uuid === serviceUuid && role.role_id === roleId
   );
 }
 function isAnyPermissionEnabled(service: ServiceInterface) {
@@ -433,10 +428,9 @@ async function addAllPermissions(serviceUuid: string) {
 }
 
 async function addPermission(serviceUuid: string, roleId: number, showMsg = true) {
-  const projectUuid = dataStore.projectUuid;
   try {
     await $api.post<ApiKeyRoleUpdateResponse>(endpoints.apiKeyRole(props.id), {
-      project_uuid: projectUuid,
+      project_uuid: dataStore.projectUuid,
       service_uuid: serviceUuid,
       role_id: roleId,
     });
@@ -450,10 +444,9 @@ async function addPermission(serviceUuid: string, roleId: number, showMsg = true
 }
 
 async function removePermission(serviceUuid: string, roleId: number) {
-  const projectUuid = dataStore.projectUuid || '';
   try {
     await $api.delete<DeleteResponse>(endpoints.apiKeyRole(props.id), {
-      project_uuid: projectUuid,
+      project_uuid: dataStore.projectUuid,
       service_uuid: serviceUuid,
       role_id: roleId,
     });
@@ -465,13 +458,12 @@ async function removePermission(serviceUuid: string, roleId: number) {
 }
 
 async function removeServicePermissions(service: ApiKeyRoleForm) {
-  const projectUuid = dataStore.projectUuid || '';
   if (props.id === 0) return;
 
   // If toggle off, remove all active roles for this service type
   try {
     await $api.delete<DeleteResponse>(endpoints.apiKeyServiceRoles(props.id), {
-      project_uuid: projectUuid,
+      project_uuid: dataStore.projectUuid,
       service_uuid: service.service_uuid,
       role_id: 50, // Validation placeholder
     });

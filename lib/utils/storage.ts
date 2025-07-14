@@ -56,7 +56,7 @@ export function stripFolderName(value: string | [string, string]) {
   return textMarshal({
     input: value,
     template: 'x',
-    disallowCharacters: [/@/, /\\/, /\//, /\|/, /\!/, /\#/, /\$/, /\%/, /\^/, /\&/, /\*/],
+    disallowCharacters: [/@/, /\\/, /\//, /\|/, /!/, /#/, /$/, /%/, /^/, /&/, /\*/],
     isRepeat: {
       value: true,
       removeStart: true,
@@ -123,9 +123,4 @@ export const calculateCID = async (content: any, options: UserImporterOptions) =
   }
 
   return `${lastCid}`;
-};
-
-export const websiteLink = (website: WebsiteBaseInterface | WebsiteInterface) => {
-  const pathEnd = website.source === WebsiteSource.GITHUB ? '/deployments' : '';
-  return `/dashboard/service/hosting/${website.website_uuid}${pathEnd}`;
 };

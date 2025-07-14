@@ -2,7 +2,7 @@
   <!-- Sidebar mask (page overlay for tablets that is used to close sidebar if user click on it) -->
   <div
     v-if="showOnMobile && !isLg"
-    class="fixed left-0 top-0 w-full h-full z-1"
+    class="fixed left-0 top-0 z-1 h-full w-full"
     @click="emit('toggleSidebar', false)"
   ></div>
 
@@ -13,7 +13,7 @@
         <!-- Close - only on mobile -->
         <button
           v-if="!isLg"
-          class="flex items-center justify-center absolute top-4 right-4 w-8 h-8 z-50"
+          class="absolute right-4 top-4 z-50 flex h-8 w-8 items-center justify-center"
           @click="emit('toggleSidebar', false)"
         >
           <span class="icon-close text-body"></span>
@@ -21,27 +21,25 @@
 
         <n-space class="py-8" :size="32" vertical>
           <!-- LOGO -->
-          <div class="flex" :class="collapsed ? 'px-4 justify-center' : 'px-8 pt-1 justify-left'">
+          <div class="flex" :class="collapsed ? 'justify-center px-4' : 'justify-left px-8 pt-1'">
             <NuxtIcon v-if="collapsed" name="logo/apillon-icon" class="text-3xl" />
             <Logo v-else />
           </div>
 
           <!-- PROJECTS & NEW PROJECT -->
-          <div
-            v-if="isFeatureEnabled(Feature.PROJECT, authStore.getUserRoles())"
-            :class="collapsed ? 'px-4' : 'px-8'"
-          >
+          <div :class="collapsed ? 'px-4' : 'px-8'">
             <!-- Projects dropdown -->
-            <div class="min-h-[48px]">
+            <div class="min-h-12">
               <SidebarSelectProject :collapsed="collapsed" />
               <Btn
                 v-if="!dataStore.hasProjects && projectsLoaded && !authStore.isAdmin()"
-                type="info"
+                class="!min-w-0"
+                type="primary"
                 :size="collapsed ? 'small' : 'large'"
                 @click="modalNewProjectVisible = true"
               >
                 <template v-if="collapsed">
-                  <span class="inline-block w-5 icon-add text-xl"></span>
+                  <span class="icon-add inline-block w-5 text-xl"></span>
                 </template>
                 <template v-else>
                   {{ $t('project.new') }}
@@ -49,7 +47,6 @@
               </Btn>
             </div>
           </div>
-          <div v-else class="h-8"></div>
 
           <!-- SIDEBAR NAVIGATION -->
           <MenuNav :collapsed="collapsed" @toggle-sidebar="hideNavOnMobile" />
@@ -68,7 +65,7 @@
       <div
         v-if="!collapsed && dataStore.hasProjects && !authStore.isAdmin()"
         ref="footerRef"
-        class="relative flex border-t border-bg-lighter flex-col p-8 z-2"
+        class="relative z-2 flex flex-col border-t border-bg-lighter p-8"
       >
         <div class="flex items-end" :class="{ 'opacity-0': paymentStore.loading }">
           <div class="w-1/2">
@@ -80,9 +77,7 @@
           <div v-if="!dataStore.isProjectUser" class="w-1/2">
             <span class="text-xs text-bodyDark">
               {{ $t('dashboard.payment.costs') }}:
-              {{ formatPrice(paymentStore.getActiveSubscriptionPackage?.price || 0) }}/{{
-                $t('general.month')
-              }}
+              {{ formatPrice(paymentStore.getActiveSubscriptionPackage?.price || 0) }}/{{ $t('general.month') }}
             </span>
             <PaymentCardPlan
               v-if="route.name === 'dashboard-payments'"
@@ -90,12 +85,7 @@
               btn-class="font-bold no-underline"
               btn-type="link"
             />
-            <Btn
-              v-else
-              class="font-bold no-underline"
-              type="link"
-              @click="router.push({ name: 'dashboard-payments' })"
-            >
+            <Btn v-else class="font-bold no-underline" type="link" @click="router.push({ name: 'dashboard-payments' })">
               <template v-if="paymentStore.hasActiveSubscription">
                 {{ $t('dashboard.payment.managePlan') }}
               </template>
@@ -112,16 +102,12 @@
 
   <!-- Modal - Create new project -->
   <modal v-model:show="modalNewProjectVisible" :title="$t('project.new')">
-    <FormProject
-      @submit-success="modalNewProjectVisible = false"
-      @close="modalNewProjectVisible = false"
-    />
+    <OnboardingFinish v-if="firstProjectCreated" @close="modalNewProjectVisible = false" />
+    <FormProject v-else @submit-success="onProjectCreated" @close="modalNewProjectVisible = false" />
   </modal>
 </template>
 
 <script lang="ts" setup>
-const authStore = useAuthStore();
-
 const props = defineProps({
   collapsed: { type: Boolean, default: false },
   showOnMobile: { type: Boolean, default: false },
@@ -129,12 +115,14 @@ const props = defineProps({
 
 const route = useRoute();
 const router = useRouter();
+const authStore = useAuthStore();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const { isSm, isLg } = useScreen();
 const { width } = useWindowSize();
 
 const projectsLoaded = ref<boolean>(false);
+const firstProjectCreated = ref<boolean>(false);
 const modalNewProjectVisible = ref<boolean>(false);
 const emit = defineEmits(['toggleSidebar']);
 
@@ -164,33 +152,43 @@ onMounted(async () => {
 
   setFooterHeight();
   projectsLoaded.value = true;
-  if (
-    !dataStore.hasProjects &&
-    isFeatureEnabled(Feature.PROJECT_ON_STARTUP, authStore.getUserRoles()) &&
-    !authStore.isAdmin()
-  ) {
-    modalNewProjectVisible.value = true;
-  } else if (!authStore.isAdmin()) {
+
+  if (dataStore.hasProjects && !authStore.isAdmin()) {
     paymentStore.getSubscriptionPackages();
     await paymentStore.fetchActiveSubscription();
 
     setTimeout(() => setFooterHeight(), 1000);
+  } else if (!sessionStorage.getItem(DataLsKeys.ONBOARDING)) {
+    dataStore.project.showOnboarding = true;
+    sessionStorage.setItem(DataLsKeys.ONBOARDING, Date.now().toString());
   }
 });
 
 async function initProject() {
   projectsLoaded.value = false;
-  await sleep(1);
-  await Promise.all(Object.values(dataStore.promises));
-  if (authStore.isAdmin()) {
+
+  if (authStore.isAdmin() && dataStore.project.selected) {
     const currentProject = await dataStore.getProject(dataStore.project.selected);
     dataStore.project.items = [currentProject];
     dataStore.updateCurrentProject(currentProject);
     projectsLoaded.value = true;
   } else {
+    await sleep(1);
+    await dataStore.waitOnPromises(false);
     await dataStore.getProjects();
-    await dataStore.getProject(dataStore.project.selected);
+
+    if (dataStore.project.selected) {
+      await dataStore.getProject(dataStore.project.selected);
+    }
     projectsLoaded.value = true;
+  }
+}
+
+async function onProjectCreated() {
+  if (dataStore.project.items.length <= 1) {
+    firstProjectCreated.value = true;
+  } else {
+    modalNewProjectVisible.value = false;
   }
 }
 
@@ -208,8 +206,7 @@ watch(
   }
 );
 function setFooterHeight() {
-  footerHeight.value =
-    footerRef.value && footerRef.value?.offsetHeight > 100 ? footerRef.value.offsetHeight : 0;
+  footerHeight.value = footerRef.value && footerRef.value?.offsetHeight > 100 ? footerRef.value.offsetHeight : 0;
   updateSidebarStyle();
 }
 
@@ -229,6 +226,6 @@ function updateSidebarStyle() {
 
 <style lang="postcss">
 .scrollbar--menu .n-scrollbar-content {
-  @apply min-h-full flex flex-col justify-between;
+  @apply flex min-h-full flex-col justify-between;
 }
 </style>

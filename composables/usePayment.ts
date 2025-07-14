@@ -28,7 +28,7 @@ export default function usePayment() {
     loading.value = false;
 
     if (customerPortalUrl) {
-      window.open(customerPortalUrl, '_blank');
+      window.open(customerPortalUrl, '_blank', 'Apillon - Github connect');
     }
   }
 
@@ -43,14 +43,8 @@ export default function usePayment() {
   }
 
   async function creditsMessage() {
-    if (
-      query.credits &&
-      isCacheExpired(SessionKeys.CREDITS_MSG) &&
-      (await wereCreditsPurchased())
-    ) {
-      const creditPackage = paymentStore.creditPackages.find(
-        item => item.id === parseInt(toStr(query.credits))
-      );
+    if (query.credits && isCacheExpired(SessionKeys.CREDITS_MSG) && (await wereCreditsPurchased())) {
+      const creditPackage = paymentStore.creditPackages.find(item => item.id === parseInt(toStr(query.credits)));
 
       if (creditPackage) {
         /** Save timestamp to SS */
@@ -72,8 +66,7 @@ export default function usePayment() {
   async function showMsgActiveSubscription(packageId: string): Promise<boolean> {
     await paymentStore.getActiveSubscription();
     return (
-      paymentStore.activeSubscription.package_id === intVal(packageId) &&
-      !paymentStore.activeSubscription.cancelDate
+      paymentStore.activeSubscription.package_id === intVal(packageId) && !paymentStore.activeSubscription.cancelDate
     );
   }
 

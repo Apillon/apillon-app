@@ -1,14 +1,8 @@
 <template>
-  <div v-if="websiteUuid && !website" class="h-20 relative min-w-80">
-    <Spinner />
-  </div>
-  <HostingDomainConfiguration
-    v-else-if="domainCreated"
-    class="mb-8"
-    :domain="formData.domain || domain"
-  />
-  <div v-else class="sm:min-w-[22rem]">
+  <Form :loading="!!websiteUuid && !website" class="sm:min-w-[22rem]">
+    <HostingDomainConfiguration v-if="domainCreated" class="mb-8" :domain="formData.domain || domain" />
     <n-form
+      v-else
       ref="formRef"
       :model="formData"
       :rules="rules"
@@ -27,10 +21,7 @@
 
       <!--  IPNS -->
       <n-form-item v-if="!website?.ipnsProduction" path="ipns" :show-label="false">
-        <n-checkbox
-          v-model:checked="formData.ipns"
-          :label="labelInfo('useIpns', 'hosting.domain') as string"
-        />
+        <n-checkbox v-model:checked="formData.ipns" :label="labelInfo('useIpns')" />
       </n-form-item>
 
       <!--  Form submit -->
@@ -38,7 +29,7 @@
         <input type="submit" class="hidden" :value="$t('hosting.domain.add')" />
         <Btn
           type="primary"
-          class="w-full mt-2"
+          class="mt-2 w-full"
           :loading="loading"
           :disabled="(!domain && formData.domain?.length === 0) || authStore.isAdmin()"
           @click="handleSubmit"
@@ -52,7 +43,7 @@
         </Btn>
       </n-form-item>
     </n-form>
-  </div>
+  </Form>
 </template>
 
 <script lang="ts" setup>
@@ -69,13 +60,13 @@ const props = defineProps({
 });
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
 const websiteStore = useWebsiteStore();
 const warningStore = useWarningStore();
 const deploymentStore = useDeploymentStore();
-const { labelInfo } = useComputing();
+const { labelInfo } = useForm('hosting.domain');
 const { checkUnfinishedWebsite } = useHosting();
 
 const loading = ref<boolean>(false);
@@ -93,7 +84,7 @@ const rules: NFormRules = {
     {
       type: 'url',
       validator: validateDomain,
-      message: $i18n.t('validation.websiteDomainUrl'),
+      message: t('validation.website.domainUrl'),
     },
   ],
 };
@@ -106,14 +97,17 @@ onMounted(async () => {
     if (props.domain) {
       formData.value.ipns = !!website.value?.ipnsProduction;
     }
+    deploymentStore.getDeployments(props.websiteUuid);
   }
 });
 
-const lastDeployment = computed(() => {
-  return deploymentStore.production.reduce((latest, current) => {
-    return new Date(current.createTime) > new Date(latest.createTime) ? current : latest;
-  });
-});
+const lastDeployment = computed(() =>
+  deploymentStore.hasProductionDeployments
+    ? deploymentStore.production.reduce((latest, current) => {
+        return new Date(current.createTime) > new Date(latest.createTime) ? current : latest;
+      })
+    : null
+);
 
 // Custom validations
 function validateDomain(_: FormItemRule, value: string): boolean {
@@ -132,7 +126,7 @@ function handleSubmit(e: Event | MouseEvent) {
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
+      // errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else if (props.domain || website.value?.ipnsProduction) {
       warningStore.showSpendingWarning(serviceName, () => updateWebsiteDomain());
     } else {
@@ -151,14 +145,12 @@ async function createWebsiteDomain() {
   }
 
   try {
-    const res = await $api.patch<WebsiteResponse>(
-      endpoints.websites(props.websiteUuid),
-      formData.value
-    );
+    const res = await $api.patch<WebsiteResponse>(endpoints.websites(props.websiteUuid), formData.value);
     updateWebsiteDomainValue(res.data.domain);
+    websiteStore.fetchWebsite(props.websiteUuid);
 
     domainCreated.value = true;
-    message.success($i18n.t('form.success.created.domain'));
+    message.success(t('form.success.created.domain'));
 
     /** Emit events */
     emit('submitSuccess');
@@ -176,16 +168,13 @@ async function createIpns(): Promise<boolean> {
   }
 
   try {
-    const res = await $api.post<IpnsCreateResponse>(
-      endpoints.ipns(websiteStore.active.productionBucket.bucket_uuid),
-      {
-        name: `Website: ${websiteStore.active.name}`,
-        cid: lastDeployment.value.cidv1 || lastDeployment.value.cid,
-      }
-    );
+    const res = await $api.post<IpnsCreateResponse>(endpoints.ipns(websiteStore.active.productionBucket.bucket_uuid), {
+      name: `Website: ${websiteStore.active.name}`,
+      cid: lastDeployment.value.cidv1 || lastDeployment.value.cid,
+    });
     websiteStore.active.ipnsProduction = res.data.ipnsName;
 
-    message.success($i18n.t('form.success.created.ipns'));
+    message.success(t('form.success.created.ipns'));
     return true;
   } catch (error) {
     message.error(userFriendlyMsg(error));
@@ -198,14 +187,11 @@ async function updateWebsiteDomain() {
   loading.value = true;
 
   try {
-    const res = await $api.patch<WebsiteResponse>(
-      endpoints.websites(props.websiteUuid),
-      formData.value
-    );
+    const res = await $api.patch<WebsiteResponse>(endpoints.websites(props.websiteUuid), formData.value);
 
     updateWebsiteDomainValue(res.data.domain);
 
-    message.success($i18n.t('form.success.updated.domain'));
+    message.success(t('form.success.updated.domain'));
 
     /** Emit events */
     emit('submitSuccess');

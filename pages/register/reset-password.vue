@@ -5,11 +5,7 @@
     <p class="mb-7 text-body">{{ $t('auth.login.enterNewPassword') }}</p>
 
     <!-- Form -->
-    <FormPassword
-      :reset-password="true"
-      :token="query?.token?.toString()"
-      @submit-success="passwordChanged"
-    />
+    <FormPassword :reset-password="true" :token="query?.token?.toString()" @submit-success="passwordChanged" />
   </div>
 </template>
 

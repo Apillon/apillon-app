@@ -82,13 +82,13 @@
 </template>
 
 <script setup lang="ts">
-import { useAccount, useConnect, useDisconnect, useConnectorClient, useAccountEffect } from '@wagmi/vue';
+import { useAccount, useChainId, useConnect, useConnectorClient, useAccountEffect } from '@wagmi/vue';
 
+const chainId = useChainId();
 const { connect, connectors } = useConnect();
 const { refetch: refetchWalletClient } = useConnectorClient();
 const { isConnected } = useAccount();
 const referralStore = useReferralStore();
-const { disconnect } = useDisconnect();
 useAccountEffect({ onConnect: onWalletConnected });
 
 const {
@@ -101,7 +101,6 @@ const {
   loading,
   transactionHash,
   usedChain,
-  chain,
   address,
 } = useContract();
 
@@ -134,7 +133,7 @@ const isDisabled = computed(
 );
 
 const wrongNetwork = computed(() => {
-  return !chain || !chain.value || chain.value.id !== usedChain.id;
+  return chainId.value !== usedChain.id;
 });
 
 async function connectWallet() {
@@ -160,7 +159,7 @@ async function claimNctr(e: MouseEvent | null) {
     }
 
     // Final claim on contract
-    hasClaimed.value = await claimTokens(amount, timestamp, signature);
+    hasClaimed.value = !!(await claimTokens(amount, timestamp, signature));
   } catch (error) {
     console.error(error);
     loading.value = false;
@@ -177,7 +176,7 @@ async function getNctrClaimParams(): Promise<NctrClaimParams> {
     return res.data;
   } catch (error) {
     console.error('Error fetching request params:', error);
-    return error;
+    return {} as NctrClaimParams;
   }
 }
 

@@ -18,16 +18,17 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown } from 'naive-ui';
+import { NDropdown } from 'naive-ui';
 
 const { t } = useI18n();
 const router = useRouter();
-const indexerStore = useIndexerStore();
+const message = useMessage();
 const dataStore = useDataStore();
 const authStore = useAuthStore();
-const showModalEditIndexer = ref<boolean | null>(false);
-const message = useMessage();
+const indexerStore = useIndexerStore();
+const { tableRowCreateTime } = useTable();
 
+const showModalEditIndexer = ref<boolean | null>(false);
 const rowKey = (row: IndexerBaseInterface) => row.indexer_uuid;
 const currentRow = ref<IndexerBaseInterface>(indexerStore.items[0]);
 const pagination = reactive(createPagination(false));
@@ -60,18 +61,12 @@ const columns = computed(() => [
       return h('strong', {}, { default: () => row.description });
     },
   },
-  {
-    key: 'createTime',
-    title: t('dashboard.createTime'),
-    render(row: IndexerBaseInterface) {
-      return h('span', {}, { default: () => dateTimeToDateAndTime(row.createTime || '') });
-    },
-  },
+  tableRowCreateTime,
   {
     key: 'status',
     title: t('indexer.table.status'),
     render(row: IndexerBaseInterface) {
-      return h(resolveComponent('IndexerStatusLabel'), { indexerStatus: row.status }, '');
+      return h(resolveComponent('IndexerStatusLabel'), { status: row.status }, '');
     },
   },
   {
@@ -87,12 +82,7 @@ const columns = computed(() => [
           trigger: 'click',
         },
         {
-          default: () =>
-            h(
-              NButton,
-              { type: 'tertiary', size: 'small', quaternary: true, round: true },
-              { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-            ),
+          default: () => h(resolveComponent('BtnActions')),
         }
       );
     },
@@ -132,7 +122,7 @@ const dropdownOptions = [
     },
   },
   {
-    key: 'hostingDelete',
+    key: 'delete',
     label: t('general.delete'),
     disabled: authStore.isAdmin(),
     props: {

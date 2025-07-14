@@ -113,7 +113,6 @@ export class DotSamaWallet implements Wallet {
     }
 
     if (!this._extension) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       callback(undefined);
 
       return null;
@@ -122,7 +121,6 @@ export class DotSamaWallet implements Wallet {
     return this._extension.accounts.subscribe((accounts: InjectedAccount[]) => {
       const accountsWithWallet = accounts.map(this.generateWalletAccount);
 
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       callback(accountsWithWallet);
     });
   };

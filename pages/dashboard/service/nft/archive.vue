@@ -6,7 +6,11 @@
     <slot>
       <n-space v-if="collectionStore.hasCollectionArchive" class="pb-8" :size="32" vertical>
         <ActionsNft archive />
-        <TableNftCollection :collections="collectionStore.archive" archive />
+        <TableNftCollection
+          :collections="collectionStore.archive.items"
+          :search="collectionStore.archive.search"
+          archive
+        />
       </n-space>
       <Empty
         v-else
@@ -15,7 +19,7 @@
         icon="nft/illustration"
       >
         <Btn type="primary" :to="{ name: 'dashboard-service-nft' }">
-          {{ t('dashboard.nav.nft') }}
+          {{ $t('dashboard.nav.nft') }}
         </Btn>
       </Empty>
     </slot>
@@ -24,7 +28,6 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
-const router = useRouter();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const collectionStore = useCollectionStore();
@@ -35,16 +38,13 @@ useHead({
   title: t('dashboard.nav.nft'),
 });
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await collectionStore.getCollectionArchive();
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  await collectionStore.getCollectionArchive();
 
-      /** Get Price list */
-      paymentStore.getPriceList();
+  /** Get Price list */
+  paymentStore.getPriceList();
 
-      pageLoading.value = false;
-    });
-  }, 100);
+  pageLoading.value = false;
 });
 </script>

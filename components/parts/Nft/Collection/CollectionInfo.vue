@@ -1,61 +1,35 @@
 <template>
   <div class="flex h-full flex-col justify-between">
     <div class="relative mb-9 min-h-32 w-full flex-auto rounded-lg bg-bg-lighter">
-      <Spinner v-if="loadingImages" />
+      <Spinner v-if="loading" />
       <template v-else>
         <Image
           v-if="coverImage"
-          :src="coverImage.link"
+          :src="coverImage"
           class="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 rounded-lg object-cover object-center"
         />
         <Image
-          v-if="logo"
-          :src="logo.link"
+          v-if="logoImage"
+          :src="logoImage"
           class="absolute left-6 top-10 h-28 w-28 rounded-full object-cover object-center"
         />
         <div v-else class="absolute left-6 top-10 h-28 w-28 rounded-full bg-bg-dark" />
       </template>
     </div>
-    <n-table class="plain" :bordered="false" single-line>
-      <tbody>
-        <tr v-for="(item, key) in data" :key="key">
-          <td :class="{ '!border-b-0': key + 1 === data.length }">
-            <span class="text-white lg:whitespace-nowrap">{{ item.label }}</span>
-          </td>
-          <td :class="{ '!border-b-0': key + 1 === data.length }">
-            <TableLink v-if="item.link && item.value" class="w-full" :link="item.link" :text="item.value" />
-            <TableEllipsis v-else-if="item.copy" class="w-full justify-between" :text="item.value" />
-            <p v-else class="w-full">{{ item.value }}</p>
-          </td>
-        </tr>
-      </tbody>
-    </n-table>
+    <TableInfo :data="data" />
   </div>
 </template>
 
 <script lang="ts" setup>
-const { t } = useI18n();
-const bucketStore = useBucketStore();
-const collectionStore = useCollectionStore();
-
-const loadingImages = ref<boolean>(true);
-const logo = ref<BucketItemInterface | undefined>();
-const coverImage = ref<BucketItemInterface | undefined>();
-
-onMounted(async () => {
-  await bucketStore.fetchDirectoryContent({
-    bucketUuid: collectionStore.active.bucket_uuid,
-    ...PARAMS_ALL_ITEMS,
-  });
-
-  logo.value = bucketStore.folder.items.find(item => item.type === BucketItemType.FILE && item.name.includes('logo'));
-  coverImage.value = bucketStore.folder.items.find(
-    item => item.type === BucketItemType.FILE && item.name.includes('cover')
-  );
-
-  await sleep(10);
-  loadingImages.value = false;
+const props = defineProps({
+  baseUriLink: { type: String, default: null },
+  coverImage: { type: String, default: null },
+  logoImage: { type: String, default: null },
+  loading: { type: Boolean, default: false },
 });
+const { t } = useI18n();
+const websiteStore = useWebsiteStore();
+const collectionStore = useCollectionStore();
 
 const data = computed(() => {
   return [
@@ -76,7 +50,22 @@ const data = computed(() => {
     {
       label: t('nft.collection.baseUri'),
       value: collectionStore.active.baseUri,
-      copy: true,
+      component: resolveComponent('TableLink'),
+      data: {
+        link: props.baseUriLink || collectionStore.active.baseUri,
+        text: collectionStore.active.baseUri,
+      },
+    },
+    {
+      label: t('dashboard.nav.hosting'),
+      value: '',
+      component: resolveComponent('TableLink'),
+      loading: collectionStore.loading || websiteStore.loading,
+      show: !!collectionStore.active?.websiteUuid,
+      data: {
+        text: websiteStore.active.domain || websiteStore.active.name,
+        link: websiteStore.active.website_uuid ? `/dashboard/service/hosting/${websiteStore.active.website_uuid}` : '',
+      },
     },
   ];
 });

@@ -1,21 +1,10 @@
 <template>
   <n-space v-bind="$attrs" class="items-center">
-    <div class="min-w-[11rem] w-[20vw] max-w-xs">
-      <n-input
-        v-model:value="rpcEndpointStore.search"
-        type="text"
-        name="search"
-        size="small"
-        :placeholder="$t('general.search')"
-        clearable
-      >
-        <template #prefix>
-          <span class="icon-search text-2xl"></span>
-        </template>
-      </n-input>
+    <div class="w-[20vw] min-w-[11rem] max-w-xs">
+      <FormFieldSearch v-model:value="rpcEndpointStore.search" />
     </div>
     <a
-      class="text-yellow text-sm"
+      class="text-sm text-yellow"
       href="https://app.formbricks.com/s/cm38pirih0001131eiwz4nj8v"
       target="_blank"
       rel="noopener noreferrer"

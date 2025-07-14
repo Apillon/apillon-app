@@ -46,6 +46,21 @@ export enum WebsiteDomainStatus {
   INVALID = 10,
 }
 
+/** Hosintg Create Website step */
+export enum WebsiteCreateStep {
+  TYPE = 1,
+  FORM = 2,
+  REVIEW = 3,
+  DEPLOYING = 4,
+  DEPLOYED = 5,
+}
+export enum WebsiteType {
+  BASIC = 'basic',
+  GITHUB = 'github',
+  NFT_TEMPLATE = 'nft',
+  SIMPLET = 'simplet',
+}
+
 declare global {
   /**
    * Webhook
@@ -71,9 +86,11 @@ declare global {
     domain: string | null;
     domainChangeDate: string | null;
     domainStatus: number;
+    isSimplet: boolean;
     ipnsProduction: string | null;
+    lastDeploymentStatus: number | null;
     nftCollectionUuid: string | null;
-    source: WebsiteSource;
+    source: number;
     website_uuid: string;
   }
   interface WebsiteInterface extends WebsiteBaseInterface {

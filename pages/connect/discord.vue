@@ -6,7 +6,7 @@
 const { query } = useRoute();
 const router = useRouter();
 const message = useMessage();
-const $i18n = useI18n();
+const { t } = useI18n();
 
 onBeforeMount(() => {
   if (query.error) {
@@ -21,7 +21,7 @@ async function discordConnect(code: string) {
   try {
     await $api.post(endpoints.discordConnect, { code });
 
-    message.success($i18n.t('profile.discord.connected'));
+    message.success(t('profile.discord.connected'));
   } catch (error) {
     /** Show error message */
     message.error(userFriendlyMsg(error));

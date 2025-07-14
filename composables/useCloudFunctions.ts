@@ -1,16 +1,16 @@
 import type { UploadCustomRequestOptions, UploadFileInfo } from 'naive-ui';
-import type { FormCloudFunctions } from '~/components/dashboard/form/computing/CloudFunctions/Job.vue';
 
 let jobInterval: any = null as any;
 
 export default function useCloudFunctions() {
-  const { t } = useI18n();
-  const { params } = useRoute();
   const router = useRouter();
   const message = useMessage();
   const dataStore = useDataStore();
   const cloudFunctionStore = useCloudFunctionStore();
-  const { uploadFileToIPFS } = useComputing();
+
+  const { t } = useI18n();
+  const { params } = useRoute();
+  const { uploadFileToIPFS } = useFile();
   const { refreshInterval, clearIntervalJob, setJobStatus, updateJobStatus } = useRefreshStatus();
 
   const pageLoading = ref<boolean>(true);
@@ -28,7 +28,7 @@ export default function useCloudFunctions() {
       cloudFunctionStore.resetVariables();
     }
 
-    await Promise.all(Object.values(dataStore.promises));
+    await dataStore.waitOnPromises();
 
     const currentCloudFunction = await cloudFunctionStore.getCloudFunction(functionUuid);
     if (!currentCloudFunction?.function_uuid) {
@@ -118,11 +118,8 @@ export default function useCloudFunctions() {
     }
   }
 
-  async function createNewJob(data: FormCloudFunctions, functionUuid: string): Promise<JobInterface | null> {
-    if (!dataStore.hasProjects) {
-      await dataStore.fetchProjects();
-      if (!dataStore.projectUuid) return null;
-    }
+  async function createNewJob(data: FormCloudFunctionsJob, functionUuid: string): Promise<JobInterface | null> {
+    const projectUuid = await dataStore.getProjectUuid();
     try {
       setJobStatus(data?.file?.name);
 
@@ -133,7 +130,7 @@ export default function useCloudFunctions() {
       }
 
       const bodyData = {
-        project_uuid: dataStore.projectUuid,
+        project_uuid: projectUuid,
         function_uuid: functionUuid,
         name: data.name,
         slots: data.slots,

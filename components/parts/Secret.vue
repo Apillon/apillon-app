@@ -5,16 +5,10 @@
       <span v-if="info" class="text-[11px]"> ({{ info }})</span>
     </div>
     <div class="relative">
-      <n-input
-        type="password"
-        class="!bg-bg-dark h-[42px] pl-2 pr-7 py-[1px]"
-        show-password-on="click"
-        size="small"
-        :value="secret"
-      />
+      <n-input type="password" class="!bg-bg-dark" show-password-on="click" :value="secret" />
       <button
         v-if="copy"
-        class="absolute right-4 top-1/2 -translate-y-1/2 text-body ml-2"
+        class="absolute right-4 top-1/2 ml-2 -translate-y-1/2 text-body"
         @click="copyToClipboard(secret)"
       >
         <span class="icon-copy"></span>

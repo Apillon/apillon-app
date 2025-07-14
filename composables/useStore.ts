@@ -1,9 +1,7 @@
 export default function useStore() {
   const bucketStore = useBucketStore();
-  const chatStore = useChatStore();
   const cloudFunctionStore = useCloudFunctionStore();
   const collectionStore = useCollectionStore();
-  const contractStore = useContractStore();
   const dataStore = useDataStore();
   const deployedContractStore = useDeployedContractStore();
   const deploymentStore = useDeploymentStore();
@@ -14,35 +12,32 @@ export default function useStore() {
   const indexerDeploymentsStore = useIndexerDeploymentsStore();
   const ipfsStore = useIpfsStore();
   const ipnsStore = useIpnsStore();
+  const metadataStore = useMetadataStore();
   const paymentStore = usePaymentStore();
-  const postStore = usePostStore();
   const rpcApiKeyStore = useRpcApiKeyStore();
   const rpcEndpointStore = useRpcEndpointStore();
   const settingsStore = useSettingsStore();
+  const simpletStore = useSimpletStore();
   const storageStore = useStorageStore();
   const websiteStore = useWebsiteStore();
 
   function clearAll() {
+    cloudFunctionStore.resetData();
     dataStore.resetData();
+    deployedContractStore.resetData();
     embeddedWalletStore.resetData();
-    clearCollection();
-    clearComputing();
+    paymentStore.resetData();
+    settingsStore.resetData();
+    simpletStore.resetData();
     clearIndexer();
-    clearPayments();
+    clearNft();
     clearRpc();
-    clearSettings();
-    clearSmartContracts();
-    clearSocial();
     clearStorage();
   }
 
-  function clearCollection() {
+  function clearNft() {
     collectionStore.resetData();
-  }
-
-  function clearComputing() {
-    contractStore.resetData();
-    cloudFunctionStore.resetData();
+    metadataStore.resetData();
   }
 
   function clearHosting() {
@@ -56,26 +51,9 @@ export default function useStore() {
     indexerDeploymentsStore.resetData();
   }
 
-  function clearPayments() {
-    paymentStore.resetData();
-  }
-
   function clearRpc() {
     rpcApiKeyStore.reset();
     rpcEndpointStore.reset();
-  }
-
-  function clearSettings() {
-    settingsStore.resetData();
-  }
-
-  function clearSmartContracts() {
-    deployedContractStore.resetData();
-  }
-
-  function clearSocial() {
-    chatStore.resetData();
-    postStore.resetData();
   }
 
   function clearStorage() {
@@ -92,7 +70,5 @@ export default function useStore() {
     clearAll,
     clearStorage,
     clearHosting,
-    clearCollection,
-    clearSettings,
   };
 }

@@ -1,7 +1,7 @@
 <template>
-  <n-form ref="formRef" :model="formData" :rules="rules">
+  <n-form ref="formRef" size="large" :model="formData" :rules="rules">
     <!--  Signup email -->
-    <n-form-item v-show="!sendAgain" path="email" :show-label="false" :show-feedback="formErrors">
+    <n-form-item v-show="!sendAgain" path="email" :show-label="false">
       <n-input
         v-model:value="formData.email"
         :input-props="{ type: 'email' }"
@@ -10,23 +10,19 @@
       />
     </n-form-item>
 
-    <div v-show="!sendAgain" class="relative" :class="formErrors ? '-top-2' : 'mt-2'">
+    <div v-show="!sendAgain" class="relative" :class="formErrors ? '-top-2' : 'mt-0'">
       <n-form-item path="terms" :show-label="false" :show-feedback="formErrors && !formData.terms">
         <n-checkbox v-model:checked="formData.terms" size="medium" :label="termsLabel" />
       </n-form-item>
     </div>
 
     <div v-show="!sendAgain" class="relative" :class="formErrors ? 'mb-4' : 'mb-6'">
-      <n-checkbox
-        v-model:checked="newsletterChecked"
-        size="medium"
-        :label="$t('auth.signup.newsletter')"
-      />
+      <n-checkbox v-model:checked="newsletterChecked" size="medium" :label="$t('auth.signup.newsletter')" />
     </div>
 
-    <n-form-item path="captcha" :show-label="false">
-      <div class="block h-20 w-full">
-        <Captcha />
+    <n-form-item v-if="showCaptcha" path="captcha" :show-label="false">
+      <div class="block h-20 w-full" :class="{ 'mx-auto max-w-[302px]': sendAgain }">
+        <Captcha @captcha-verified="onCaptchaVerified" />
       </div>
       <n-input v-model:value="formData.captcha" class="absolute hidden" />
     </n-form-item>
@@ -34,7 +30,7 @@
     <!--  Signup submit -->
     <n-form-item :show-label="false" :show-feedback="false">
       <input type="submit" class="hidden" :value="$t('form.login')" />
-      <Btn v-if="sendAgain" type="primary" size="medium" @click="handleSubmit">
+      <Btn v-if="sendAgain" type="primary" size="large" @click="handleSubmit">
         {{ $t('auth.signup.sendAgain') }}
       </Btn>
       <Btn v-else type="primary" size="large" class="mt-2" :loading="loading" @click="handleSubmit">
@@ -68,16 +64,16 @@ const { query } = useRoute();
 const { t } = useI18n();
 const router = useRouter();
 const message = useMessage();
-const config = useRuntimeConfig();
 const authStore = useAuthStore();
 const { address, isConnected } = useAccount();
+const { showCaptcha, formCaptcha, captchaReset, captchaReload, onCaptchaVerified } = useCaptcha();
 
 const formRef = ref<NFormInst | null>(null);
 const formErrors = ref<boolean>(false);
 const newsletterChecked = ref<boolean>(false);
 const loading = ref<boolean>(false);
 
-const formData = ref<SignupForm>({
+const formData = reactive<SignupForm>({
   email: authStore.email,
   captcha: null as any,
   refCode: `${query?.REF || ''}`,
@@ -109,42 +105,28 @@ const rules: NFormRules = {
 const termsLabel = computed<any>(() => {
   return h('span', {}, [
     t('auth.terms.accept'),
-    h(
-      'a',
-      { href: 'https://apillon.io/legal-disclaimer', target: '_blank' },
-      { default: () => t('auth.terms.tc') }
-    ),
+    h('a', { href: 'https://apillon.io/legal-disclaimer', target: '_blank' }, { default: () => t('auth.terms.tc') }),
     t('auth.terms.and'),
-    h(
-      'a',
-      { href: 'https://apillon.io/privacy-policy', target: '_blank' },
-      { default: () => t('auth.terms.pp') }
-    ),
+    h('a', { href: 'https://apillon.io/privacy-policy', target: '_blank' }, { default: () => t('auth.terms.pp') }),
     '.',
   ]);
+});
+
+onMounted(() => {
+  showCaptcha.value = true;
 });
 
 function handleSubmit(e: MouseEvent | null) {
   e?.preventDefault();
   formErrors.value = false;
-
-  const prosopoToken = sessionStorage.getItem(AuthLsKeys.PROSOPO);
-  if (prosopoToken) {
-    formData.value.captcha = { token: prosopoToken, eKey: config.public.captchaKey };
-  }
+  formData.captcha = formCaptcha.value;
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       formErrors.value = true;
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
-    } else if (!formData.value.captcha) {
-      loading.value = true;
-      // TODO: captchaInput.value.execute();
+      // errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
-      // Email validation
-      authStore.saveEmail(formData.value.email);
+      authStore.saveEmail(formData.email);
       await signupWithEmail();
     }
   });
@@ -154,22 +136,21 @@ async function signupWithEmail() {
 
   // Wallet register params
   if (authStore.wallet.signature && authStore.wallet.timestamp) {
-    formData.value.isEvmWallet = authStore.wallet.isEvmWallet;
-    formData.value.signature = authStore.wallet.signature;
-    formData.value.timestamp = authStore.wallet.timestamp;
-    formData.value.wallet = isConnected.value ? address.value : authStore.wallet.address;
+    formData.isEvmWallet = authStore.wallet.isEvmWallet;
+    formData.signature = authStore.wallet.signature;
+    formData.timestamp = authStore.wallet.timestamp;
+    formData.wallet = isConnected.value ? address.value : authStore.wallet.address;
   }
 
   try {
-    await $api.post<ValidateMailResponse>(endpoints.validateMail, formData.value);
-    captchaReset();
+    await $api.post<ValidateMailResponse>(endpoints.validateMail, formData);
 
     if (!props.sendAgain) {
       if (newsletterChecked.value) {
-        await subscribeToNewsletter(formData.value.email);
+        await subscribeToNewsletter(formData.email);
       }
-      formData.value.signature = '';
-      formData.value.timestamp = 0;
+      formData.signature = '';
+      formData.timestamp = 0;
 
       /** Track new registration */
       trackEvent('registration_email_input');
@@ -179,21 +160,15 @@ async function signupWithEmail() {
       message.success(t('form.success.sendAgainEmail'));
     }
   } catch (error) {
-    formData.value.captcha = null;
+    formData.captcha = null;
     message.error(userFriendlyMsg(error));
-    captchaReset();
+    captchaReload();
   }
+  captchaReset();
   loading.value = false;
 }
 
-function captchaReset() {
-  formData.value.captcha = undefined;
-  sessionStorage.removeItem(AuthLsKeys.PROSOPO);
-}
-
 function getMetadata() {
-  return query && Object.keys(query).length
-    ? JSON.stringify(query)
-    : readCookie('apillon_mkt_params');
+  return query && Object.keys(query).length ? JSON.stringify(query) : readCookie('apillon_mkt_params');
 }
 </script>

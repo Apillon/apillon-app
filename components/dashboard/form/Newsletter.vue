@@ -1,10 +1,5 @@
 <template>
-  <Btn
-    v-if="subscribed && subscribed === authStore.email"
-    class="locked cursor-default"
-    type="primary"
-    :size="size"
-  >
+  <Btn v-if="subscribed && subscribed === authStore.email" class="locked cursor-default" type="primary" :size="size">
     {{ $t('profile.marketing.subscribed') }}
   </Btn>
   <Btn v-else type="secondary" :size="size" :loading="loading" @click="subscribe">
@@ -18,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import { type Size } from 'naive-ui/es/button/src/interface';
+import type { Size } from 'naive-ui/es/button/src/interface';
 
 defineProps({
   size: { type: String as PropType<Size>, default: 'large' },

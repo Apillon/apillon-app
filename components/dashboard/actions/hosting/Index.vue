@@ -1,63 +1,55 @@
 <template>
   <n-space v-bind="$attrs" justify="space-between">
-    <div class="w-[20vw] min-w-[11rem] max-w-xs">
-      <n-input
-        v-model:value="websiteStore.search"
-        type="text"
-        name="search"
-        size="small"
-        :placeholder="$t('general.search')"
+    <n-space size="large">
+      <div class="w-[20vw] min-w-[11rem] max-w-xs">
+        <FormFieldSearch v-model:value="websiteStore.filter.search" />
+      </div>
+      <select-options
+        v-model:value="websiteStore.filter.websiteType"
+        :options="websiteTypes"
+        class="w-[20vw] min-w-[11rem] max-w-xs"
+        size="medium"
+        :placeholder="$t('hosting.website.source.title')"
+        filterable
         clearable
-      >
-        <template #prefix>
-          <span class="icon-search text-2xl"></span>
-        </template>
-      </n-input>
-    </div>
+      />
+    </n-space>
 
     <n-space size="large">
-      <!-- Modal Price list for Hosting -->
-      <ModalCreditCosts :service="ServiceTypeName.HOSTING" />
-
-      <!-- Refresh websites -->
-      <n-button size="small" :loading="websiteStore.loading" @click="websiteStore.fetchWebsites(archive)">
+      <n-button :loading="websiteStore.loading" @click="websiteStore.fetchWebsites(archive)">
         <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('general.refresh') }}
       </n-button>
-
-      <StorageGithubProjectConfig class="locked" size="small" />
-
-      <!-- Create new website -->
-      <n-button
-        v-if="websiteStore.hasWebsites"
-        size="small"
+      <Btn
+        inner-class="flex gap-2 items-center"
         :disabled="authStore.isAdmin()"
-        @click="showModalEditWebsite = true"
+        @click="websiteStore.modalNewWebsiteVisible = true"
       >
-        <span class="icon-create-folder mr-2 text-xl text-primary"></span>
-        <span class="text-primary">{{ $t('hosting.website.new') }}</span>
-      </n-button>
+        <span class="icon-add text-xl"></span>
+        <span>{{ $t('hosting.website.add') }}</span>
+      </Btn>
     </n-space>
   </n-space>
 
   <!-- Modal - New website -->
-  <modal
-    v-model:show="showModalEditWebsite"
-    :title="$t('hosting.website.new')"
-    :service-name="PriceServiceName.HOSTING_WEBSITE"
-  >
-    <FormHostingWebsite />
-  </modal>
+  <HostingModal v-model:show="websiteStore.modalNewWebsiteVisible" :title="$t('hosting.website.new')" />
 </template>
 
 <script lang="ts" setup>
-import { ServiceTypeName, PriceServiceName } from '~/lib/types/service';
+import type { SelectOption } from 'naive-ui';
 
 defineProps({
   archive: { type: Boolean, default: false },
 });
 
+const { t } = useI18n();
 const authStore = useAuthStore();
 const websiteStore = useWebsiteStore();
-const showModalEditWebsite = ref<boolean>(false);
+
+const websiteTypes = ref<SelectOption[]>(
+  enumValues(WebsiteType).map(i => ({
+    value: i,
+    label: t(`hosting.website.source.${i}`),
+  }))
+);
 </script>

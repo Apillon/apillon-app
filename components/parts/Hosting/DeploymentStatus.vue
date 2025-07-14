@@ -1,48 +1,27 @@
 <template>
-  <n-tag
-    v-bind="$attrs"
-    :type="getDeploymentStatus(deploymentStatus)"
-    :bordered="deploymentStatus === DeploymentStatus.INITIATED"
-    size="tiny"
-    round
-  >
-    <n-space
-      :class="deploymentStatus === DeploymentStatus.INITIATED ? 'text-body' : 'text-bg-dark'"
-      :size="0"
-      align="center"
-      :wrap="false"
-    >
-      <span class="mx-1">{{ $t(`hosting.deployment.status.${deploymentStatus}`) }}</span>
-      <AnimationTyping v-if="deploymentStatus < DeploymentStatus.IN_REVIEW" />
-    </n-space>
-  </n-tag>
+  <Tag v-if="status !== null" :animation="status < DeploymentStatus.IN_REVIEW" :type="getStatus(status)">
+    {{ $t(`hosting.deployment.status.${status}`) }}
+  </Tag>
 </template>
 
 <script lang="ts" setup>
 defineProps({
-  deploymentStatus: {
-    type: Number as PropType<DeploymentStatus>,
-    default: DeploymentStatus.INITIATED,
-  },
+  status: { type: Number as PropType<DeploymentStatus>, default: null },
 });
 
 /** Deployment status */
-function getDeploymentStatus(status: number): TagType {
+function getStatus(status: number): TagType {
   switch (status) {
+    case DeploymentStatus.INITIATED:
     case DeploymentStatus.IN_PROGRESS:
-      return 'info';
+      return 'default';
     case DeploymentStatus.IN_REVIEW:
       return 'warning';
     case DeploymentStatus.APPROVED:
-      return 'success';
     case DeploymentStatus.SUCCESSFUL:
       return 'success';
-    case DeploymentStatus.FAILED:
-      return 'error';
-    case DeploymentStatus.REJECTED:
-      return 'error';
     default:
-      return 'default';
+      return 'error';
   }
 }
 </script>

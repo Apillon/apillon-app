@@ -1,16 +1,40 @@
 import { defineStore } from 'pinia';
-import { WebsiteSource } from '~/lib/types/hosting';
+import type { WebsiteType } from '~/lib/types/hosting';
+import { WebsiteCreateStep, WebsiteSource } from '~/lib/types/hosting';
 
 export const useWebsiteStore = defineStore('website', {
   state: () => ({
     active: {} as WebsiteInterface,
-    archive: [] as Array<WebsiteBaseInterface>,
-    items: [] as Array<WebsiteBaseInterface>,
+    archive: [] as WebsiteBaseInterface[],
+    items: [] as WebsiteBaseInterface[],
     loading: false,
     missingHtml: false,
-    search: '',
+    modalNewWebsiteVisible: false as boolean | null,
     selected: '',
+    stepWebsiteCreate: WebsiteCreateStep.TYPE,
     uploadActive: false,
+    filter: {
+      websiteType: null as Optional<WebsiteType>,
+      search: '',
+    },
+    form: {
+      type: null as Optional<WebsiteType>,
+      name: '',
+      description: '',
+      branchName: 'main',
+      buildCommand: 'npm run build',
+      buildDirectory: './dist',
+      installCommand: 'npm install',
+      apiKey: undefined as Optional<string> | undefined,
+      apiSecret: undefined as Optional<string> | undefined,
+      repoId: undefined as number | undefined,
+      repoName: '',
+      repoOwnerName: '',
+      repoUrl: '',
+      embeddedWallet: '',
+      nftCollection: '',
+      templateType: 0,
+    },
   }),
   getters: {
     hasWebsites(state): boolean {
@@ -25,15 +49,36 @@ export const useWebsiteStore = defineStore('website', {
     isActiveWebsiteGithubSource(state): boolean {
       return state.active.source === WebsiteSource.GITHUB;
     },
+    isActiveWebsiteStatic(state): boolean {
+      return state.active.source === WebsiteSource.APILLON && !state.active.nftCollectionUuid;
+    },
   },
   actions: {
     resetData() {
       this.active = {} as WebsiteInterface;
       this.archive = [] as Array<WebsiteBaseInterface>;
       this.items = [] as Array<WebsiteBaseInterface>;
-      this.search = '';
+      this.filter.search = '';
       this.selected = '';
     },
+    resetForm() {
+      this.form.type = null as Optional<WebsiteType>;
+      this.form.name = '';
+      this.form.description = '';
+      this.form.branchName = 'main';
+      this.form.buildCommand = 'npm run build';
+      this.form.buildDirectory = './out';
+      this.form.installCommand = 'npm install';
+      this.form.apiKey = undefined;
+      this.form.apiSecret = '';
+      this.form.repoId = undefined;
+      this.form.repoName = '';
+      this.form.repoOwnerName = '';
+      this.form.repoUrl = '';
+      this.form.embeddedWallet = '';
+      this.form.templateType = 0;
+    },
+
     setWebsite(uuid: string) {
       if (this.selected !== uuid) {
         this.selected = uuid;
@@ -76,13 +121,11 @@ export const useWebsiteStore = defineStore('website', {
      * API calls
      */
     async fetchWebsites(archive = false) {
-      this.loading = true;
-
       const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
+      if (!dataStore.projectUuid) return [];
 
+      this.loading = true;
+      const key = archive ? 'archive' : 'items';
       try {
         const params = parseArguments(PARAMS_ALL_ITEMS);
         params.project_uuid = dataStore.projectUuid;
@@ -94,12 +137,9 @@ export const useWebsiteStore = defineStore('website', {
         dataStore.promises.websites = req;
         const res = await req;
 
-        if (archive) {
-          this.archive = res.data.items;
-        } else {
-          this.items = res.data.items;
-        }
-        this.search = '';
+        this[key] = res.data.items;
+        this.filter.search = '';
+        this.filter.websiteType = null;
 
         /** Save timestamp to SS */
         const cacheKey = archive ? LsCacheKeys.WEBSITE_ARCHIVE : LsCacheKeys.WEBSITES;
@@ -107,12 +147,7 @@ export const useWebsiteStore = defineStore('website', {
       } catch (error: any) {
         /** Clear promise */
         dataStore.promises.websites = null;
-
-        if (archive) {
-          this.archive = [] as Array<WebsiteBaseInterface>;
-        } else {
-          this.items = [] as Array<WebsiteBaseInterface>;
-        }
+        this[key] = [] as Array<WebsiteBaseInterface>;
 
         /** Show error message  */
         window.$message.error(userFriendlyMsg(error));
@@ -121,19 +156,14 @@ export const useWebsiteStore = defineStore('website', {
     },
 
     async fetchWebsite(uuid: string): Promise<WebsiteInterface> {
-      const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
       try {
-        const res = await $api.get<WebsiteResponse>(endpoints.websites(uuid));
-
-        this.active = res.data;
+        const { data } = await $api.get<WebsiteResponse>(endpoints.websites(uuid));
+        this.active = data;
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.WEBSITE, Date.now().toString());
 
-        return res.data;
+        return data;
       } catch (error: any) {
         this.active = {} as WebsiteInterface;
 

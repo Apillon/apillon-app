@@ -28,7 +28,7 @@ declare global {
   type PricingService = {
     identity?: string;
     storage: string;
-    bandwith: string;
+    bandwidth: string;
     wallets: string;
     hosting?: string;
     smartContracts?: string;

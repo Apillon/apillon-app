@@ -1,68 +1,86 @@
 <template>
-  <Dashboard :loading="pageLoading">
+  <Dashboard :empty="!dataStore.project.selected || !embeddedWalletStore.hasEmbeddedWallets" :loading="pageLoading">
+    <template #empty>
+      <ServiceEmpty
+        :name="toCamelCase(Feature.EMBEDDED_WALLET)"
+        :service="ServiceTypeName.EMBEDDED_WALLET"
+        :guides="serviceGuides"
+        :image="BannerWEBP"
+        docs="https://wiki.apillon.io/web3-services/9-embedded-wallets.html"
+      >
+        <template #actions>
+          <Btn
+            inner-class="flex items-center justify-center "
+            size="large"
+            @click="modalNewEmbeddedWalletVisible = true"
+          >
+            <span>{{ $t('embeddedWallet.createNew') }}</span>
+          </Btn>
+        </template>
+        <!-- Modal - Create new EW -->
+        <modal v-model:show="modalNewEmbeddedWalletVisible" :title="$t('embeddedWallet.createNew')">
+          <FormEmbeddedWallet @submit-success="modalNewEmbeddedWalletVisible = false" />
+        </modal>
+      </ServiceEmpty>
+    </template>
     <template #heading>
-      <Heading>
-        <slot>
-          <h1 class="inline-block">
-            {{ $t('dashboard.nav.embeddedWallet') }}
-            <img src="/icons/beta.svg" alt="Beta" class="ml-2 inline-block h-5 w-14" />
-          </h1>
-        </slot>
-        <template #info>
-          <ModalCreditCosts :service="ServiceTypeName.EMBEDDED_WALLET" />
+      <Heading
+        :headline="$t('dashboard.nav.embeddedWallet')"
+        :service="ServiceTypeName.EMBEDDED_WALLET"
+        demo="9y-9nz0tpVs"
+        beta
+      >
+        <template #details>
+          <EmbeddedWalletInstructions :show-video="false" />
         </template>
       </Heading>
     </template>
 
-    <slot>
-      <div class="pb-8">
-        <n-space v-if="embeddedWalletStore.hasEmbeddedWallets" :size="32" vertical>
-          <n-collapse
-            class="-mt-4 border-b-1 border-bg-lighter pb-4"
-            accordion
-            @update:expanded-names="onUpdateAccordion"
-          >
-            <n-collapse-item>
-              <template #header>
-                <span class="icon-info mr-2 text-xl"></span>
-                {{ instructionsVisible ? $t('general.instructions.hide') : $t('general.instructions.show') }}
-              </template>
-              <EmbeddedWalletInstructions />
-            </n-collapse-item>
-          </n-collapse>
-          <ActionsEmbeddedWallet />
-          <TableEmbeddedWallet />
-        </n-space>
-        <EmbeddedWalletInstructions v-else />
-      </div>
-    </slot>
+    <n-space class="pb-8" :size="32" vertical>
+      <ActionsEmbeddedWallet />
+      <TableEmbeddedWallet />
+    </n-space>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-import { ServiceTypeName } from '~/lib/types/service';
+import BannerWEBP from '/assets/images/storage/file.webp';
 
 const { t } = useI18n();
 const dataStore = useDataStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
 
 const pageLoading = ref<boolean>(true);
-const instructionsVisible = ref<boolean>(false);
+const modalNewEmbeddedWalletVisible = ref<boolean>(false);
+
+const serviceGuides = [
+  {
+    title: 'Embedded Wallets: Web2 experience, Web3 security',
+    content:
+      'The road to Web3 is still paved with many roadblocks, starting with complex digital wallets. For some, they are confusing and frustrating.',
+    link: 'https://blog.apillon.io/embedded-wallets-web2-experience-web3-security-4074a69f64d5',
+  },
+  {
+    title: 'Embedded Wallets FAQs: All you need to know about secure and seamless Web3',
+    content: 'Learn how they make dapps easy, and stress-free, and why you don’t need any blockchain know-how.',
+    link: 'https://blog.apillon.io/embedded-wallets-faqs-all-you-need-to-know-about-secure-and-seamless-web3-c39d56b6e5f1',
+  },
+  {
+    title: 'Embedded Wallets 2.0: All the power, none of the pain',
+    content:
+      'Making Web3 simple wasn’t easy enough — we made it even easier to access and benefit from our version of account abstraction.',
+    link: 'https://blog.apillon.io/embedded-wallets-2-0-all-the-power-none-of-the-pain-88679cdd2d68',
+  },
+];
 
 useHead({
   title: t('embeddedWallet.title'),
 });
 
 onMounted(async () => {
-  await sleep(10);
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    await embeddedWalletStore.getEmbeddedWallets();
+  await dataStore.waitOnPromises();
+  await embeddedWalletStore.getEmbeddedWallets();
 
-    pageLoading.value = false;
-  });
+  pageLoading.value = false;
 });
-
-function onUpdateAccordion(expandedNames: Array<string | number>) {
-  instructionsVisible.value = expandedNames.length > 0;
-}
 </script>

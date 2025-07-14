@@ -1,10 +1,5 @@
 <template>
-  <n-data-table
-    :bordered="false"
-    :columns="columns"
-    :data="settingsStore.apiKeys"
-    :row-props="rowProps"
-  />
+  <n-data-table :bordered="false" :columns="columns" :data="settingsStore.apiKeys" :row-props="rowProps" />
 
   <!-- Drawer - Update API Key -->
   <n-drawer v-model:show="drawerUpdateApiKeyVisible" :width="495">
@@ -18,12 +13,14 @@
 
   <!-- Modal - Delete API key -->
   <ModalDelete v-model:show="showModalDeleteApiKey" :title="$t('dashboard.apiKey.delete')">
-    <FormDelete :id="currentRow?.id" type="apiKey" @submit-success="onApiKeyDeleted" />
+    <FormDelete :id="currentRow?.id" :type="ItemDeleteKey.API_KEY" @submit-success="onApiKeyDeleted">
+      {{ $t('dashboard.apiKey.delete') }}
+    </FormDelete>
   </ModalDelete>
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown } from 'naive-ui';
+import { NDropdown } from 'naive-ui';
 
 const { t } = useI18n();
 const dataStore = useDataStore();
@@ -45,11 +42,7 @@ const createColumns = (): NDataTableColumns<ApiKeyInterface> => {
       title: t('dashboard.env'),
       key: 'env',
       render(row) {
-        return h(
-          'span',
-          {},
-          { default: () => (row.testNetwork === 1 ? t('general.test') : t('general.live')) }
-        );
+        return h('span', {}, { default: () => (row.testNetwork === 1 ? t('general.test') : t('general.live')) });
       },
     },
     {
@@ -72,12 +65,7 @@ const createColumns = (): NDataTableColumns<ApiKeyInterface> => {
             trigger: 'click',
           },
           {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
+            default: () => h(resolveComponent('BtnActions')),
           }
         );
       },

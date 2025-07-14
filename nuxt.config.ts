@@ -27,13 +27,14 @@ export default defineNuxtConfig({
   components: ['~/components', '~/components/general/', '~/components/parts/', '~/components/dashboard/'],
 
   modules: [
+    '@nuxt/eslint',
     '@vueuse/nuxt',
-    '@pinia/nuxt',
-    '@pinia-plugin-persistedstate/nuxt',
-    'nuxt-icons',
-    '@nuxtjs/i18n',
     '@nuxtjs/google-fonts',
+    '@nuxtjs/i18n',
+    '@pinia/nuxt',
     '@wagmi/vue/nuxt',
+    'nuxt-icons',
+    'pinia-plugin-persistedstate/nuxt',
     ['@nuxtjs/tailwindcss', { cssPath: '~/assets/css/tailwind.css' }],
   ],
 
@@ -62,11 +63,24 @@ export default defineNuxtConfig({
 
     optimizeDeps: {
       include: process.env.NODE_ENV === 'development' ? ['naive-ui'] : [],
+      exclude:
+        process.env.NODE_ENV === 'development'
+          ? [
+              'uuid',
+              'viem/chains',
+              'swiper/vue',
+              'swiper/modules',
+              '@wdns/vue-code-block',
+              'vue3-youtube',
+              'swiper/types',
+              'seemly',
+            ]
+          : [],
     },
   },
 
   imports: {
-    dirs: ['composables/', 'stores/**', 'lib/**'],
+    dirs: ['composables/', 'stores/**', 'lib/types', 'lib/utils', 'lib/values'],
   },
 
   nitro: {
@@ -97,15 +111,15 @@ export default defineNuxtConfig({
       meta: [
         { name: 'format-detection', content: 'telephone=no' },
         { name: 'theme-color', content: '#070707' },
-        { name: 'description', content: meta.description, hid: 'description' },
-        { name: 'og:title', content: meta.title, hid: 'og:title' },
-        { name: 'og:description', content: meta.description, hid: 'og:description' },
-        { name: 'og:url', content: meta.url, hid: 'og:url' },
+        { name: 'description', content: meta.description },
+        { name: 'og:title', content: meta.title },
+        { name: 'og:description', content: meta.description },
+        { name: 'og:url', content: meta.url },
         { name: 'og:image', content: meta.image },
         { name: 'og:type', content: 'website' },
-        { name: 'twitter:title', content: meta.title, hid: 'twitter:title' },
-        { name: 'twitter:description', content: meta.description, hid: 'twitter:description' },
-        { name: 'twitter:url', content: meta.url, hid: 'twitter:url' },
+        { name: 'twitter:title', content: meta.title },
+        { name: 'twitter:description', content: meta.description },
+        { name: 'twitter:url', content: meta.url },
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:image', content: meta.image },
         { name: 'twitter:creator', content: meta.twitter },
@@ -115,6 +129,13 @@ export default defineNuxtConfig({
       link: [
         { rel: 'icon', type: 'image/png', href: '/favicon.png' },
         { rel: 'manifest', href: '/manifest.json' },
+        {
+          rel: 'preload',
+          type: 'font/woff2',
+          href: '/fonts/new-spirit/new_spirit_medium-webfont.woff2',
+          as: 'font',
+          crossorigin: '',
+        },
       ],
 
       script: [],
@@ -123,9 +144,10 @@ export default defineNuxtConfig({
 
   i18n: {
     lazy: true,
-    langDir: 'locales',
+    langDir: '',
     defaultLocale: 'en',
     strategy: 'no_prefix',
+    bundle: { optimizeTranslationDirective: false },
     compilation: { strictMessage: false, escapeHtml: false },
     locales: [
       {
@@ -147,10 +169,10 @@ export default defineNuxtConfig({
     download: true,
     families: {
       Inter: {
-        wght: [400, 700],
+        wght: [400, 600, 700],
       },
     },
   },
 
-  compatibilityDate: '2024-08-29',
+  compatibilityDate: '2025-04-07',
 });

@@ -59,6 +59,23 @@
 }
 
 /**
+ * Spinning
+*/
+.animation-spinning {
+  display: inline-block;
+  animation: spinning 1s infinite linear;
+}
+
+@keyframes spinning {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/**
  * Page transitions
 */
 .page-enter-active,
@@ -132,7 +149,7 @@
   transition: opacity 1s;
 }
 .fade-leave-active {
-  position: absolute;
+  @apply absolute left-0 top-0 w-full;
 }
 .fade-enter,
 .fade-enter-from,
@@ -155,7 +172,7 @@
     filter 0.5s;
 }
 .fadeBlur-leave-active {
-  position: absolute;
+  @apply absolute left-0 top-0 w-full;
 }
 .fadeBlur-enter,
 .fadeBlur-enter-from,

@@ -2,9 +2,9 @@
   <Btn
     type="secondary"
     inner-class="text-white flex items-center justify-center"
-    :class="{ 'locked hover:bg-bg-lighter rounded-lg transition-colors': hoverLighter }"
+    :class="{ 'locked rounded-lg transition-colors hover:bg-bg-lighter': hoverLighter }"
   >
-    <span class="icon-file text-xl mr-2"></span>
+    <span class="icon-file mr-2 text-xl text-yellow"></span>
     <slot>
       <span>{{ $t('dashboard.viewDocumentation') }}</span>
     </slot>

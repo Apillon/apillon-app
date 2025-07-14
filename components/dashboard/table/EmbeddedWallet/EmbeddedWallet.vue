@@ -1,5 +1,5 @@
 <template>
-  <n-data-table
+  <DataTable
     :bordered="false"
     :columns="columns"
     :data="items"
@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown } from 'naive-ui';
+import { NDropdown } from 'naive-ui';
 
 defineProps({
   archive: { type: Boolean, default: false },
@@ -29,6 +29,8 @@ const { t } = useI18n();
 const router = useRouter();
 const dataStore = useDataStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
+const { tableRowCreateTime } = useTable();
+
 const modalEditEmbeddedWalletVisible = ref<boolean>(false);
 
 const pagination = reactive(createPagination(false));
@@ -96,13 +98,7 @@ const createColumns = (): NDataTableColumns<EmbeddedWalletInterface> => {
       title: t('embeddedWallet.table.numberOfSignatures'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
-    {
-      title: t('embeddedWallet.table.created'),
-      key: 'created',
-      render(row: EmbeddedWalletInterface) {
-        return h('span', {}, { default: () => dateTimeToDate(row.createTime) });
-      },
-    },
+    tableRowCreateTime,
     {
       title: '',
       key: 'actions',
@@ -116,12 +112,7 @@ const createColumns = (): NDataTableColumns<EmbeddedWalletInterface> => {
             trigger: 'click',
           },
           {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
+            default: () => h(resolveComponent('BtnActions')),
           }
         );
       },

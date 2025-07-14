@@ -28,7 +28,7 @@
       <template v-if="input.type === 'tuple'">
         <div v-for="i in input.components" :key="i">
           <!-- string -->
-          <n-form-item :label="labelInfo(input.name, 'form.label.collection')" :path="i.name">
+          <n-form-item :label="labelInfo(input.name)" :path="i.name">
             <n-input
               v-if="i.type === 'string' || i.type === 'address'"
               v-model:value="form[i.name]"
@@ -40,7 +40,7 @@
           </n-form-item>
         </div>
       </template>
-      <n-form-item v-else :label="labelInfo(input.name, 'form.label.collection')" :path="input.name">
+      <n-form-item v-else :label="labelInfo(input.name)" :path="input.name">
         <template v-if="!isSpecialField(input)">
           <!-- string -->
           <n-input
@@ -108,7 +108,7 @@ const warningStore = useWarningStore();
 const smartContractStore = useSmartContractStore();
 const deployedContractStore = useDeployedContractStore();
 
-const { labelInfo } = useComputing();
+const { labelInfo } = useForm();
 const { isSpecialField } = useSmartContracts();
 const { chains, disablePastDate } = useCollection();
 
@@ -222,9 +222,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
-    } else {
+    if (!errors) {
       warningStore.showSpendingWarning(getServiceName(form.value.chain), () => deployContract());
     }
   });
@@ -238,19 +236,17 @@ async function deployContract() {
   const accumulatedKeys = ['royaltyRecipient', 'royaltyPercentageBps', 'maxSupply', 'pricePerMint'];
   const accumulatedArray: Array<any> = [];
 
-  for (const key in form.value) {
-    if (form.value.hasOwnProperty(key)) {
-      if (key !== 'Name' && key !== 'Description' && key !== 'chain') {
-        if (key === '_settings') {
-          constructorArguments.push(settings.value);
-        } else if (accumulatedKeys.includes(key)) {
-          accumulatedArray.push(form.value[key]);
-        } else {
-          constructorArguments.push(form.value[key]);
-        }
+  Object.keys(form.value).forEach(key => {
+    if (key !== 'Name' && key !== 'Description' && key !== 'chain') {
+      if (key === '_settings') {
+        constructorArguments.push(settings.value);
+      } else if (accumulatedKeys.includes(key)) {
+        accumulatedArray.push(form.value[key]);
+      } else {
+        constructorArguments.push(form.value[key]);
       }
     }
-  }
+  });
 
   // After the loop, push the accumulated array if it has values
   if (accumulatedArray.length > 0) {

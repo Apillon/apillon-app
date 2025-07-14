@@ -1,6 +1,6 @@
 <template>
   <template v-if="autoSubmit"></template>
-  <Btn v-else-if="targetUrl" v-bind="$attrs" type="primary" :loading="loading" @click="generateShortUrl">
+  <Btn v-else-if="targetUrl" v-bind="$attrs" type="secondary" :loading="loading" @click="generateShortUrl">
     {{ $t('storage.shortUrl.generateShortLink') }}
   </Btn>
   <n-form v-else v-bind="$attrs" ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
@@ -17,7 +17,14 @@
     <!--  Form submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('storage.shortUrl.generateLink')" />
-      <Btn type="primary" class="mt-2 w-full" :loading="loading" @click="handleSubmit">
+      <Btn
+        class="mt-2"
+        :class="size === 'large' ? '!w-auto' : 'w-full'"
+        :size="size"
+        type="primary"
+        :loading="loading"
+        @click="handleSubmit"
+      >
         {{ $t('storage.shortUrl.generateLink') }}
       </Btn>
     </n-form-item>
@@ -48,18 +55,21 @@
 </template>
 
 <script lang="ts" setup>
+import type { Size } from 'naive-ui/es/button/src/interface';
+
 type FormIpfs = {
   targetUrl: string | null;
 };
 
 const emit = defineEmits(['close', 'submitSuccess']);
 const props = defineProps({
-  targetUrl: { type: String, default: null },
   autoSubmit: { type: Boolean, default: false },
+  size: { type: String as PropType<Size>, default: 'medium' },
+  targetUrl: { type: String, default: null },
 });
 
 const message = useMessage();
-const $i18n = useI18n();
+const { t } = useI18n();
 
 const loading = ref<boolean>(false);
 const showModal = ref<boolean>(false);
@@ -71,7 +81,7 @@ const formData = ref<FormIpfs>({
 });
 
 const rules: NFormRules = {
-  targetUrl: ruleRequired($i18n.t('validation.ipfsCidRequired')),
+  targetUrl: ruleRequired(t('validation.ipfsCidRequired')),
 };
 
 onMounted(() => {
@@ -85,9 +95,7 @@ onMounted(() => {
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
-    } else {
+    if (!errors) {
       await generateShortUrl();
     }
   });

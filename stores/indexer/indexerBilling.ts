@@ -38,10 +38,7 @@ export const useIndexerBillingStore = defineStore('indexerBilling', {
           limit: PARAMS_ALL_ITEMS.limit,
         });
 
-        const res = await $api.get<IndexerBillingResponse>(
-          endpoints.indexerBilling(indexerUUID),
-          params
-        );
+        const res = await $api.get<IndexerBillingResponse>(endpoints.indexerBilling(indexerUUID), params);
         this.items = res.data.items;
 
         /** Save timestamp to SS */

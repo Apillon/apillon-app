@@ -1,0 +1,72 @@
+{
+  "computing": {
+    "cloudFunctions": {
+      "addNew": "Add new Cloud function",
+      "checkVideo": "Check out the video",
+      "delete": "Archive Cloud function",
+      "deployments": "Deployments",
+      "endpoint": "Cloud function API endpoint",
+      "emptyArchive": "Cloud functions Archive",
+      "emptyArchiveInfo": "There are currently no Cloud functions in the Archive.",
+      "monitoring": "Monitoring",
+      "new": "New Cloud function",
+      "startNew": "Start by creating a new cloud function",
+      "uuid": "Cloud Function UUID",
+      "variables": "Environment variables",
+      "content": [
+        {
+          "headline": "Features:",
+          "subtitle": "Use cloud functions to build your own unstoppable Web3 backend. \nJust like AWS lambda but without compromise. ",
+          "benefits": [
+            "Write code in NodeJS, bundle and deploy",
+            "Compute is executed on high performance CPUs with random providers and redundancy.",
+            "Bypass centralized backends and build a truly decentralized dapp",
+            "Set and forget mentality"
+          ]
+        }
+      ],
+      "job": {
+        "btnUpload": "Create new deployment",
+        "cid": "CID",
+        "content": "Start by creating and uploading your Node.js project",
+        "dateStarted": "Date started",
+        "delete": "Delete job",
+        "edit": "Edit job",
+        "filename": "Filename",
+        "name": "Job name",
+        "new": "Deploy new script",
+        "redeploy": "Deploy again",
+        "size": "Size",
+        "title": "You currently have no deployments for this Cloud function",
+        "status": {
+          "1": "DEPLOYING",
+          "2": "ASSIGNING PROCESSORS",
+          "3": "RUNNING",
+          "4": "NOT ACTIVE",
+          "9": "DELETED"
+        },
+        "viewTemplate": "View code template"
+      },
+      "usage": {
+        "title": "Cloud functions monitor"
+      },
+      "variable": {
+        "addRow": "Add row",
+        "btnAdd": "Add environment variable manually",
+        "btnAddVariable": "Add variable",
+        "btnCreate": "Create variables",
+        "btnUpdate": "Update variables",
+        "btnUpload": "Upload .ENV file for automatic detection",
+        "btnUploadEnv": "Upload .ENV",
+        "content": "Create a new environment variable which you want to pass into the cloud function. \nTo learn more about how environment variables are handled, refer to the {url}.",
+        "new": "New Environment variable",
+        "title": "You currently have no environment variables for this cloud functions"
+      }
+    },
+    "upload": {
+      "dragAndDrop": "Drag & drop file",
+      "upload": "Upload file",
+      "uploaded": "Uploaded file:"
+    }
+  }
+}

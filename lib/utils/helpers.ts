@@ -2,7 +2,7 @@ export function sleep(timeMs = 1000) {
   return new Promise(resolve => setTimeout(resolve, timeMs));
 }
 
-export function delay(fn: Function, delay = 500) {
+export function delay(fn: Func, delay = 500) {
   setTimeout(fn, delay);
 }
 
@@ -172,7 +172,7 @@ export function prepareOG(
   };
 }
 
-export function createPagination(remote = true) {
+export function createPagination(remote = true): Pagination {
   const { t } = useI18n();
   return {
     itemCount: remote ? 0 : undefined,

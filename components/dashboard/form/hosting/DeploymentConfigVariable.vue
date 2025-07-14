@@ -34,23 +34,21 @@
 const deploymentStore = useDeploymentStore();
 const emit = defineEmits(['submitSuccess']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 
 const props = defineProps({
   configId: { type: Number, default: 0 },
 });
 const rules: NFormRules = {
-  key: [ruleRequired($i18n.t('validation.deploy-env.key-required'))],
-  value: [ruleRequired($i18n.t('validation.deploy-env.value-required'))],
+  key: [ruleRequired(t('validation.deploy-env.key-required'))],
+  value: [ruleRequired(t('validation.deploy-env.value-required'))],
 };
 const formRef = ref<NFormInst | null>(null);
 
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => window.$message.error(error.message || 'Error')));
-    } else {
+    if (!errors) {
       await createVariable();
     }
   });

@@ -1,13 +1,6 @@
 <template>
   <Spinner v-if="serviceUuid && !service" />
-  <n-form
-    v-else
-    v-bind="$attrs"
-    ref="formRef"
-    :model="formData"
-    :rules="rules"
-    @submit.prevent="handleSubmit"
-  >
+  <n-form v-else v-bind="$attrs" ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
     <!--  Service name -->
     <n-form-item
       v-if="!defaultServiceName"
@@ -27,12 +20,7 @@
     <n-form-item class="hidden" path="networkTypes" :label="$t('form.label.networkType')">
       <n-radio-group v-model:value="formData.networkType" name="radiogroup">
         <n-space>
-          <n-radio
-            v-for="(type, key) in networkTypes"
-            :key="key"
-            :value="type.value"
-            :label="type.label"
-          />
+          <n-radio v-for="(type, key) in networkTypes" :key="key" :value="type.value" :label="type.label" />
         </n-space>
       </n-radio-group>
     </n-form-item>
@@ -40,13 +28,7 @@
     <!--  Service submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.login')" />
-      <Btn
-        :disabled="disabled"
-        type="primary"
-        size="large"
-        :loading="loading"
-        @click="handleSubmit"
-      >
+      <Btn :disabled="disabled" type="primary" :loading="loading" @click="handleSubmit">
         <template v-if="service">
           {{ $t('form.update') }}
         </template>
@@ -80,7 +62,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
-const $i18n = useI18n();
+const { t, te } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const loading = ref(false);
@@ -118,11 +100,11 @@ const rules: NFormRules = {
 const networkTypes = [
   {
     value: false,
-    label: $i18n.t('form.networkTypes.test'),
+    label: t('form.networkTypes.test'),
   },
   {
     value: true,
-    label: $i18n.t('form.networkTypes.live'),
+    label: t('form.networkTypes.live'),
   },
 ];
 
@@ -131,9 +113,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => window.$message.error(error.message || 'Error'))
-      );
+      // errors.map(fieldErrors => fieldErrors.map(error => window.$message.error(error.message || 'Error')));
     } else if (props.serviceUuid) {
       await updateService();
     } else {
@@ -155,16 +135,14 @@ async function createService() {
   try {
     const res = await $api.post<ServiceResponse>(endpoints.services(), bodyData);
 
-    const msg = $i18n.te(`form.success.created.${ServiceTypeNames[props.serviceType]}`)
-      ? $i18n.t(`form.success.created.${ServiceTypeNames[props.serviceType]}`)
-      : $i18n.t('form.success.created.service');
+    const msg = te(`form.success.created.${ServiceTypeNames[props.serviceType]}`)
+      ? t(`form.success.created.${ServiceTypeNames[props.serviceType]}`)
+      : t('form.success.created.service');
     message.success(msg);
 
     /** On new service created add new item to list */
     dataStore.services = await dataStore.fetchServices();
-    const createdService = dataStore.services.find(
-      item => item.service_uuid === res.data.service_uuid
-    );
+    const createdService = dataStore.services.find(item => item.service_uuid === res.data.service_uuid);
 
     /** Emit events */
     emit('submitSuccess');
@@ -179,7 +157,7 @@ async function createService() {
       )?.code === DevConsoleBadRequestErrorCode.DWELLIR_EMAIL_AREADY_EXISTS
     ) {
       // At the moment dwellir returns 500 if email is taken for RPC service
-      message.error($i18n.t('form.error.rpcEmailTaken'));
+      message.error(t('form.error.rpcEmailTaken'));
     } else {
       message.error(userFriendlyMsg(error));
     }
@@ -201,9 +179,9 @@ async function updateService() {
   try {
     const res = await $api.patch<ServiceResponse>(endpoints.services(props.serviceUuid), bodyData);
 
-    const msg = $i18n.te(`form.success.updated.${ServiceTypeNames[props.serviceType]}`)
-      ? $i18n.t(`form.success.updated.${ServiceTypeNames[props.serviceType]}`)
-      : $i18n.t('form.success.updated.service');
+    const msg = te(`form.success.updated.${ServiceTypeNames[props.serviceType]}`)
+      ? t(`form.success.updated.${ServiceTypeNames[props.serviceType]}`)
+      : t('form.success.updated.service');
     message.success(msg);
 
     /** On service updated refresh data */

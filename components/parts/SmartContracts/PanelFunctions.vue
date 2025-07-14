@@ -1,12 +1,12 @@
 <template>
   <div class="w-full">
-    <div class="px-3 py-2 rounded-lg" :class="bgClass">
+    <div class="rounded-lg px-3 py-2" :class="bgClass">
       <h4 class="my-3">
         {{ title }}
       </h4>
-      <n-card v-for="fn in functions" :key="fn" size="small" class="my-1 max-w-lg mb-3">
+      <n-card v-for="fn in functions" :key="fn.name" class="my-1 mb-3 max-w-lg" :bordered="false" size="small">
         <n-collapse accordion arrow-placement="right">
-          <n-collapse-item :title="labelInfoText(fn.name, fn?.description)">
+          <n-collapse-item :title="labelInfoText(fn.name, fn?.description) as string">
             <!-- Assign a form ref according to function ref - we have multiple form on same site -->
             <FormSmartContractAction :fn="fn" :read="read" :owner="owner" />
           </n-collapse-item>
@@ -24,5 +24,5 @@ defineProps({
   read: { type: Boolean, default: false },
   title: { type: String, default: '' },
 });
-const { labelInfoText } = useComputing();
+const { labelInfoText } = useForm();
 </script>

@@ -28,7 +28,7 @@
           }}
         </span>
       </div>
-      <div class="grid-cols-fit200 grid gap-4">
+      <div class="grid grid-cols-fit200 gap-4">
         <Btn
           :class="btnClass"
           :type="btnType"
@@ -89,9 +89,10 @@
 </template>
 
 <script lang="ts" setup>
-import type { Type as NButtonType } from 'naive-ui/es/button/src/interface';
 import type { ButtonType } from '~/components/general/Btn.vue';
-import colors from '~/tailwind.colors';
+import { formatPrice } from '~/lib/utils/helpers';
+import { dateTimeToDate } from '~/lib/utils/dates';
+import { colors } from '~/tailwind.config';
 
 defineProps({
   showCard: { type: Boolean, default: true },
@@ -114,7 +115,7 @@ const pricingPlans: Record<string, PricingPlan> = {
     description: 'Tap into the world of Web3 and start light with your first project.',
     services: {
       storage: '3 GB Lifetime',
-      bandwith: '20 GB Monthly',
+      bandwidth: '20 GB Monthly',
       wallets: '100 Wallets Monthly',
       credits: '1200 Credits Lifetime',
     },
@@ -125,7 +126,7 @@ const pricingPlans: Record<string, PricingPlan> = {
     description: 'Expand your Web3 reach with advanced features and shared access.',
     services: {
       storage: '60 GB Lifetime',
-      bandwith: '150 GB Monthly',
+      bandwidth: '150 GB Monthly',
       wallets: '500 Wallets Monthly',
       credits: '5000 Credits Lifetime',
     },
@@ -136,7 +137,7 @@ const pricingPlans: Record<string, PricingPlan> = {
     description: 'Bring your enterprise to the Web3 level and go big on decentralized tech.',
     services: {
       storage: '300 GB Lifetime',
-      bandwith: '750 GB Monthly',
+      bandwidth: '750 GB Monthly',
       wallets: '1000 Wallets Monthly',
       credits: '20000 Credits Lifetime',
     },

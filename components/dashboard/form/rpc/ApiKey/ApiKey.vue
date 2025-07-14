@@ -1,25 +1,21 @@
 <template>
   <div>
-    <Notification v-if="isFormDisabled" type="error" class="w-full mb-8">
+    <Notification v-if="isFormDisabled" type="error" class="mb-8 w-full">
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
 
     <template v-else>
-      <Notification v-if="!id && rpcApiKeyStore.quotaReached" type="warning" class="w-full mb-8">
+      <Notification v-if="!id && rpcApiKeyStore.quotaReached" type="warning" class="mb-8 w-full">
         {{ $t('rpc.apiKey.quotaReached') }},
-        <NuxtLink
-          class="text-yellow"
-          :to="{ name: 'dashboard-service-rpc-subscription' }"
-          @click="$emit('close')"
-        >
+        <NuxtLink class="text-yellow" :to="{ name: 'dashboard-service-rpc-subscription' }" @click="$emit('close')">
           {{ $t('project.upgradePlan') }}
         </NuxtLink>
       </Notification>
       <!-- Info text -->
-      <p v-if="$i18n.te('computing.contract.infoNew')" class="text-body mb-8">
+      <p v-if="$te('computing.contract.infoNew')" class="mb-8 text-body">
         {{ $t('computing.contract.infoNew') }}
       </p>
-      <p v-else-if="$i18n.te('computing.contract.infoEdit')" class="text-body mb-8">
+      <p v-else-if="$te('computing.contract.infoEdit')" class="mb-8 text-body">
         {{ $t('computing.contract.infoEdit') }}
       </p>
     </template>
@@ -32,11 +28,7 @@
       autocomplete="off"
       @submit.prevent="handleSubmit"
     >
-      <n-form-item
-        path="name"
-        :label="$t('form.label.rpcApiKey.name')"
-        :label-props="{ for: 'name' }"
-      >
+      <n-form-item path="name" :label="$t('form.label.rpcApiKey.name')" :label-props="{ for: 'name' }">
         <n-input
           v-model:value="rpcApiKeyStore.form.name"
           :input-props="{ id: 'name' }"
@@ -65,7 +57,7 @@
 
         <Btn
           type="primary"
-          class="w-full mt-2"
+          class="mt-2 w-full"
           :loading="loading"
           :disabled="isFormDisabled || !!(!id && rpcApiKeyStore.quotaReached)"
           @click="handleSubmit"
@@ -82,7 +74,7 @@ const props = defineProps({
   id: { type: Number, default: 0 },
 });
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess', 'close']);
@@ -98,17 +90,15 @@ const isFormDisabled = computed<boolean>(() => {
 });
 
 const rules: NFormRules = {
-  name: [ruleRequired($i18n.t('validation.rpc.nameRequired'))],
-  description: [ruleDescription($i18n.t('validation.descriptionTooLong'))],
+  name: [ruleRequired(t('validation.rpc.nameRequired'))],
+  description: [ruleDescription(t('validation.descriptionTooLong'))],
 };
 
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      // errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else if (props.id) {
       updateApiKey();
     } else {
@@ -118,13 +108,9 @@ function handleSubmit(e: Event | MouseEvent) {
 }
 
 async function createApiKey() {
+  if (!dataStore.projectUuid) return;
+
   loading.value = true;
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-
-    if (!dataStore.projectUuid) return;
-  }
-
   try {
     const bodyData = {
       ...rpcApiKeyStore.form,
@@ -132,7 +118,7 @@ async function createApiKey() {
     };
     const res = await $api.post<RpcApiKeyResponse>(endpoints.rpcApiKeys(), bodyData);
 
-    message.success($i18n.t('form.success.created.rpcApiKey'));
+    message.success(t('form.success.created.rpcApiKey'));
 
     rpcApiKeyStore.items.unshift(res.data as RpcApiKeyInterface);
 
@@ -157,7 +143,7 @@ async function updateApiKey() {
   try {
     const res = await $api.put<RpcApiKeyResponse>(endpoints.rpcApiKeys(props.id), bodyData);
 
-    const msg = $i18n.t('form.success.updated.rpcApiKey');
+    const msg = t('form.success.updated.rpcApiKey');
 
     message.success(msg);
 

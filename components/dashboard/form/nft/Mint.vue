@@ -88,7 +88,7 @@ const { addressLabel } = useCollection();
 const { getAllTokens } = useNftContract();
 
 const loading = ref<boolean>(false);
-const mintedTokens = ref<Number[]>([]);
+const mintedTokens = ref<number[]>([]);
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormNftMint>({
   receivingAddress: '',
@@ -109,10 +109,6 @@ const rules: NFormRules = {
     { validator: validateIdsLength, message: t('validation.nft.idsToMintMax') },
   ],
 };
-
-const isSubstrate = computed(
-  () => props.collection.chainType === ChainType.SUBSTRATE || props.collection.chain === SubstrateChain.UNIQUE
-);
 
 function validateQuantity(_: FormItemRule, value: number): boolean {
   return (
@@ -190,9 +186,7 @@ const renderOption = ({ node, option }) =>
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
-    } else {
+    if (!errors) {
       const priceServiceName = generatePriceServiceName(
         ServiceTypeName.NFT,
         props.collection.chain,

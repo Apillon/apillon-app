@@ -1,9 +1,8 @@
 <template>
-  <div class="flex items-center gap-x-2 mb-8">
+  <div class="mb-8 flex items-center gap-x-2">
     <h5>{{ $t('embeddedWallet.codeSnippets') }}</h5>
-    <div class="bg-bg-lighter rounded-full p-0.4">
+    <div class="p-0.4 rounded-full bg-bg-lighter">
       <n-button
-        size="small"
         round
         :class="selectedLanguage === CodeFramework.REACT ? '!bg-bg-dark' : ''"
         @click="select(CodeFramework.REACT)"
@@ -11,7 +10,6 @@
         <span class="px-2">React</span>
       </n-button>
       <n-button
-        size="small"
         round
         :class="selectedLanguage === CodeFramework.VUE ? '!bg-bg-dark' : ''"
         @click="select(CodeFramework.VUE)"
@@ -19,7 +17,6 @@
         <span class="px-2">Vue</span>
       </n-button>
       <n-button
-        size="small"
         round
         :class="selectedLanguage === CodeFramework.TYPESCRIPT ? '!bg-bg-dark' : ''"
         @click="select(CodeFramework.TYPESCRIPT)"
@@ -27,18 +24,14 @@
         <span class="px-2">TypeScript</span>
       </n-button>
     </div>
-    <BtnDocumentation
-      size="small"
-      href="https://wiki.apillon.io/build/12-embedded-wallets-integration.html"
-      hover-lighter
-    />
+    <BtnDocumentation href="https://wiki.apillon.io/build/12-embedded-wallets-integration.html" hover-lighter />
   </div>
 
-  <CodeBlock :code="currentCode" lang="js" theme="github-dark" highlightjs :style="codeSize" />
+  <CodeBlock :code="currentCode" language="ts" theme="prismFunky" :style="codeSize" />
 </template>
 
 <script lang="ts" setup>
-import CodeBlock from 'vue3-code-block';
+import { CodeBlock } from 'vuejs-code-block';
 
 enum CodeFramework {
   REACT = 'react',
@@ -79,7 +72,7 @@ const currentCode = computed(() => {
 `;
   } else if (selectedLanguage.value === CodeFramework.TYPESCRIPT) {
     return `import { EmbeddedWalletUI } from '@apillon/wallet-ui';
-
+ 
 EmbeddedWalletUI("#wallet", {
   clientId: "${embeddedWalletStore.active.integration_uuid}",
   defaultNetworkId: 1287,
@@ -88,7 +81,7 @@ EmbeddedWalletUI("#wallet", {
 `;
   } else {
     return `import { WalletWidget } from '@apillon/wallet-vue';
-
+ 
 <WalletWidget
   clientId="${embeddedWalletStore.active.integration_uuid}"
   :defaultNetworkId="1287"

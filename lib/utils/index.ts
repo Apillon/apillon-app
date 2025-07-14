@@ -4,7 +4,7 @@ import stg from '../config/staging';
 import dev from '../config/development';
 import prod from '../config/production';
 import local from '../config/local';
-import { Feature } from '../types/config';
+import type { Feature } from '../types/config';
 
 export function getAppConfig(env?: string) {
   const configFile = env === 'staging' ? stg : env === 'development' ? dev : env === 'local' ? local : prod;
@@ -38,7 +38,7 @@ export function trackEvent(eventName: string, data?: Record<string, any>) {
 export function enumKeys(E: any): string[] {
   return Object.keys(E).filter(k => isNaN(Number(k)));
 }
-export function enumValues(E: any): string[] | number[] {
+export function enumValues(E: any): Array<string | number> {
   return enumKeys(E).map(k => E[k as any]);
 }
 export function enumKeyValues(E: any): KeyValue[] {
@@ -50,7 +50,7 @@ export function mergeObjects(obj1: object, obj2: object) {
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
   const maxLength = Math.max(keys1.length, keys2.length);
-  return Array.from({ length: maxLength }).reduce((acc: Object, _, i) => {
+  return Array.from({ length: maxLength }).reduce((acc: object, _, i) => {
     if (keys1[i]) acc[keys1[i]] = obj1[keys1[i]];
     if (keys2[i]) acc[keys2[i]] = obj2[keys2[i]];
     return acc;
@@ -150,14 +150,14 @@ export async function subscribeToNewsletter(email: string, username?: string): P
   return true;
 }
 
-export function translateItems(key: string): String[] {
+export function translateItems(key: string): string[] {
   const { t, te } = useI18n();
-  return Array.from(Array(10).keys()).reduce((accumulator: String[], i) => {
+  return Array.from(Array(10).keys()).reduce((accumulator: string[], i) => {
     if (te(`${key}.${i}`) && t(`${key}.${i}`)) {
       accumulator.push(t(`${key}.${i}`));
     }
     return accumulator;
-  }, [] as String[]);
+  }, [] as string[]);
 }
 
 /**
@@ -249,6 +249,6 @@ export function getDeviceName() {
  */
 export function readCookie(name: string) {
   const value = `; ${document.cookie}`;
-  const parts: String[] = value.split(`; ${name}=`);
+  const parts: string[] = value.split(`; ${name}=`);
   return parts.length === 2 ? parts.pop()?.split(';')?.shift() || '' : '';
 }

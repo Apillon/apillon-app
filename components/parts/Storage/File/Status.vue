@@ -1,29 +1,17 @@
 <template>
-  <n-tag v-bind="$attrs" :type="getFileStatus(fileStatus)" :bordered="isPending" size="tiny" round>
-    <n-space
-      :class="isPending ? 'text-body' : 'text-bg-dark'"
-      :size="0"
-      align="center"
-      :wrap="false"
-    >
-      <span v-if="isPending" class="mx-1 uppercase">{{ $t('general.pending') }}</span>
-      <span v-else class="mx-1 uppercase">{{ $t(`storage.file.status.${fileStatus}`) }}</span>
-      <AnimationTyping v-if="isPending" />
-    </n-space>
-  </n-tag>
+  <Tag v-if="status !== null" :animation="status < FileStatus.UPLOADED_TO_IPFS" :type="getStatus(status)">
+    <span v-if="status < FileStatus.UPLOADED_TO_IPFS" class="mx-1 uppercase">{{ $t('general.pending') }}</span>
+    <span v-else class="mx-1 uppercase">{{ $t(`storage.file.status.${status}`) }}</span>
+  </Tag>
 </template>
 
 <script lang="ts" setup>
-const props = defineProps({
-  fileStatus: { type: Number, default: 1 },
-});
-
-const isPending = computed<boolean>(() => {
-  return props.fileStatus < FileStatus.UPLOADED_TO_IPFS;
+defineProps({
+  status: { type: Number, default: null },
 });
 
 /** Deployment status */
-function getFileStatus(status: number): TagType {
+function getStatus(status: number): TagType {
   switch (status) {
     case FileStatus.REQUEST_FOR_UPLOAD_GENERATED:
       return 'default';

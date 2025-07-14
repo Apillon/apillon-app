@@ -50,15 +50,9 @@ declare global {
   }
 
   interface RpcFavoriteEndpointsResponse extends GeneralItemsResponse<RpcFavoriteEndpointInterface> {}
-
   interface RpcFavoriteEndpointResponse extends GeneralResponse<RpcFavoriteEndpointInterface> {}
-
   interface RpcEndpointsResponse extends GeneralResponse<RpcEndpointInterface[]> {}
-
-  interface RpcApiKeysQuotaResponse extends GeneralResponse<boolean> {}
-
   interface RpcApiKeyUsageResponse extends GeneralResponse<RpcApiKeyUsageInterface> {}
-
   interface RpcApiKeyUsagePerChainResponse extends GeneralResponse<RpcApiKeyUsagePerChainInterface> {}
 }
 

@@ -11,7 +11,7 @@
           v-if="!assetId && formData.network === assetHubNetworks.westend.rpc"
           class="absolute bottom-full right-0 mb-2"
         >
-          <Btn size="small" type="link" href="https://faucet.polkadot.io/westend?parachain=1000">
+          <Btn type="link" href="https://faucet.polkadot.io/westend?parachain=1000">
             <span class="text-xs">Faucet</span>
           </Btn>
         </div>
@@ -28,7 +28,7 @@
     </div>
 
     <p class="mb-4 font-bold text-white" :class="{ hidden: !!assetId }">
-      {{ $t('dashboard.service.assetHub.characteristics') }}
+      {{ $t('assetHub.characteristics') }}
     </p>
     <div class="rounded-lg bg-bg-lighter p-8 pb-2">
       <n-form-item :label="$t('form.label.assetHub.name')" path="name">
@@ -128,16 +128,16 @@
     </div>
 
     <n-form-item :show-feedback="false">
-      <input type="submit" class="hidden" :value="$t('dashboard.service.assetHub.create')" />
+      <input type="submit" class="hidden" :value="$t('assetHub.create')" />
 
       <Btn type="primary" size="large" :loading="loading" @click="handleSubmit">
-        <span v-if="assetId">{{ $t('dashboard.service.assetHub.edit') }}</span>
-        <span v-else>{{ $t('dashboard.service.assetHub.create') }}</span>
+        <span v-if="assetId">{{ $t('assetHub.edit') }}</span>
+        <span v-else>{{ $t('assetHub.create') }}</span>
       </Btn>
     </n-form-item>
   </n-form>
 
-  <ModalTransaction v-if="txHash" :transactionHash="txHash" @close="$emit('close')" />
+  <ModalTransaction v-if="txHash" :transaction-hash="txHash" @close="$emit('close')" />
   <AssetHubLoader v-if="loading && assetHubClient?.txApproved" class="z-3000" />
 </template>
 
@@ -231,7 +231,7 @@ onMounted(async () => {
 
 watch(
   () => formData.value.network,
-  async rpc => {
+  async _ => {
     if (assetHubClient.value) {
       await assetHubClient.value.destroyInstance();
       await sleep(200);
@@ -240,9 +240,6 @@ watch(
 );
 
 // Custom validations
-function validateAssetId(_: FormItemRule, value: string): boolean {
-  return !!props.assetId || !assets.value.some(i => i.id === Number(value));
-}
 function validateName(_: FormItemRule, value: string): boolean {
   return !!props.assetId || !assets.value.some(i => equalsIgnoreCase(i.name, value));
 }
@@ -265,7 +262,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
+      // errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else if (props.assetId && asset.value) {
       if (
         formData.value.name === asset.value.name &&
@@ -284,7 +281,7 @@ function handleSubmit(e: Event | MouseEvent) {
 
 async function createAsset() {
   if (!assetHubStore.account) {
-    message.warning(t('dashboard.service.assetHub.connect'));
+    message.warning(t('assetHub.connect'));
     return;
   }
   if (!formData.value.network || !formData.value.decimals || !formData.value.minBalance) {
@@ -342,7 +339,7 @@ async function createAsset() {
 
 async function updateAsset() {
   if (!assetHubStore.account) {
-    message.warning(t('dashboard.service.assetHub.connect'));
+    message.warning(t('assetHub.connect'));
     return;
   }
   if (!asset.value || !formData.value.network || !formData.value.assetId || !formData.value.decimals) {

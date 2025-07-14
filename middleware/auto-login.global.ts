@@ -11,7 +11,7 @@ const authRoutes: Array<RouteInterface> = [
   { name: 'register', redirect: '/dashboard' },
 ];
 
-const ignoreRoutes: String[] = ['login-admin'];
+const ignoreRoutes: string[] = ['login-admin'];
 
 /**
  * Load user data from localStorage into pinia.
@@ -30,6 +30,9 @@ export default defineNuxtRouteMiddleware(to => {
     $api.setToken(authStore.jwt);
     return;
   }
+
+  const config = useRuntimeConfig();
+  $api.setBaseUrl(config.public.apiUrl);
 
   authStore.initUser();
   if (authStore.jwt) {

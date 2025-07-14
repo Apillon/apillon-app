@@ -1,21 +1,41 @@
-declare global {
-  type ServiceTypeItem = {
-    id: number | string;
-    key: string;
-    name: string;
-    description: string;
-    icon: string;
-    iconSvg?: string;
-    link?: string;
-    disabled?: boolean | null;
-    usage?: String[];
-  };
-}
+export type ServiceTypeItem = {
+  id: ServiceType | SimpletType | number | string;
+  key: string;
+  name: string;
+  description: string;
+  icon: string;
+  iconSvg?: string;
+  link?: string;
+  disabled?: boolean | null;
+  usage?: string[];
+};
+export type OnboardingService = {
+  key: string;
+  name: string;
+  description: string;
+  link?: string;
+  tags?: string[];
+  codingRequired?: boolean;
+};
+type OnboardingServiceTrans = {
+  title?: VueMsg;
+  content?: VueMsg;
+  tags?: VueMsg;
+};
+type IntroductionTrans = {
+  title?: VueMsg;
+  content?: VueMsg;
+};
+export type IntroductionContent = {
+  title?: string;
+  content?: string | string[];
+};
 
 export default function useService() {
-  const { t } = useI18n();
+  const { t, te, rt, tm } = useI18n();
   const authStore = useAuthStore();
   const config = useRuntimeConfig();
+  const { translate } = useSimplet();
 
   const services = {
     storage: ServiceType.STORAGE,
@@ -27,9 +47,7 @@ export default function useService() {
     nft: ServiceType.NFT,
     smartContracts: ServiceType.SMART_CONTRACTS,
     assetHub: ServiceType.ASSET_HUB,
-    computing: ServiceType.COMPUTING,
     authentication: ServiceType.AUTHENTICATION,
-    social: ServiceType.SOCIAL,
   };
 
   const generateLink = (service: string) => {
@@ -72,22 +90,55 @@ export default function useService() {
     return {
       id,
       key: service,
-      name: t(`dashboard.service.${service}.name`),
-      description: t(`dashboard.service.${service}.description`),
+      name: t(`service.${service}.name`),
+      description: t(`service.${service}.description`),
       icon: generateIcon(service),
       iconSvg: generateSvgIcon(service),
       link: generateLink(service),
       disabled: !isFeatureEnabled(Feature[ServiceType[id]], authStore.getUserRoles()),
-      usage: translateItems(`dashboard.service.${service}.usage`),
+      usage: translateItems(`service.${service}.usage`),
     };
   });
+
+  const onboardingServices =
+    Object.entries(tm('dashboard.onboarding.services') as Record<string, OnboardingServiceTrans>).map(
+      ([key, trans]) => {
+        return {
+          key,
+          link: generateLink(key),
+          name: trans?.title ? rt(trans.title) : '',
+          description: trans?.content ? rt(trans.content) : '',
+          codingRequired: ['embedded-wallet', 'cloud-functions', 'smart-contracts'].includes(key),
+        } as OnboardingService;
+      }
+    ) || [];
+
+  function generateIntroduction(service: string, BASE = 'service') {
+    if (te(`${BASE}.${service}.introduction`) || tm(`${BASE}.${service}.introduction`)) {
+      const translations = (tm(`${BASE}.${service}.introduction`) as IntroductionTrans[]) || [];
+
+      return (
+        (Array.isArray(translations) &&
+          translations?.map(trans => {
+            return {
+              title: trans.title ? translate(trans.title) : undefined,
+              content: trans.content ? translate(trans.content) : undefined,
+            } as IntroductionContent;
+          })) ||
+        []
+      );
+    }
+    return [];
+  }
 
   const isDev = () => {
     return config.public.ENV === AppEnv.DEV || config.public.ENV === AppEnv.LOCAL;
   };
 
   return {
+    onboardingServices,
     web3Services,
+    generateIntroduction,
     isDev,
   };
 }

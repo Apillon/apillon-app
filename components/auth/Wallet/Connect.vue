@@ -8,7 +8,7 @@
 
     <p class="mb-6 text-body">{{ $t('auth.wallet.connected.info') }}</p>
 
-    <div v-if="!!authStore.user?.wallet" class="w-full flex gap-4">
+    <div v-if="!!authStore.user?.wallet" class="flex w-full gap-4">
       <Btn class="flex-1" type="secondary" @click="modalWalletSelectVisible = true">
         {{ $t('auth.wallet.connect.different') }}
       </Btn>

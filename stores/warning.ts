@@ -2,13 +2,13 @@ import { defineStore } from 'pinia';
 
 export const useWarningStore = defineStore('warning', {
   state: () => ({
-    action: (() => {}) as Function,
+    action: (() => {}) as Func,
     isSpendingWarningOpen: false,
     services: [] as string[],
   }),
 
   actions: {
-    async showSpendingWarning(serviceNames: string | string[], action: Function) {
+    async showSpendingWarning(serviceNames: string | string[], action: Func) {
       this.services = Array.isArray(serviceNames) ? serviceNames : [serviceNames];
       this.action = action;
 

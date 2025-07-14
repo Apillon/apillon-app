@@ -9,13 +9,13 @@
           <div class="flex w-full flex-row-reverse justify-between gap-8">
             <!-- Actions : refresh, deploy -->
             <n-space>
-              <Btn size="small" type="primary" @click="triggerRedeploy" :loading="deploymentStore.deployLoading">
-                {{ $t('hosting.deploy.redeploy') }}
-              </Btn>
-              <n-button v-if="websiteStore.isActiveWebsiteGithubSource" size="small" @click="showUpdateModal">
-                {{ $t('hosting.deploy.update-config') }}
+              <n-button v-if="websiteStore.isActiveWebsiteGithubSource" @click="showUpdateModal">
+                {{ $t('hosting.deploy.updateConfig') }}
               </n-button>
-              <n-button size="small" :loading="deploymentStore.buildsLoading" @click="refreshBuilds">
+              <n-button
+                :loading="deploymentStore.buildsLoading"
+                @click="deploymentStore.fetchBuilds(websiteStore.active.website_uuid)"
+              >
                 <span class="icon-refresh mr-2 text-xl"></span>
                 {{ $t('general.refresh') }}
               </n-button>
@@ -26,17 +26,17 @@
           <TableHostingDeploymentBuilds :deployments="deploymentStore.builds" />
         </n-space>
       </template>
-      <Empty v-else :title="$t('general.nothingHere')" :info="$t('hosting.deploy.empty-info')" icon="storage/empty">
-        <Btn type="primary" @click="modalCreateKeyVisible = true">{{ $t('hosting.deploy.connect-repo') }}</Btn>
+      <Empty v-else :title="$t('general.nothingHere')" :info="$t('hosting.deploy.infoEmpty')" icon="storage/empty">
+        <Btn type="primary" @click="modalGithubVisible = true">{{ $t('hosting.deploy.connectRepo') }}</Btn>
       </Empty>
 
       <modal
-        v-model:show="modalCreateKeyVisible"
+        v-model:show="modalGithubVisible"
         :title="$t(websiteStore.isActiveWebsiteGithubSource ? 'hosting.deploy.update' : 'hosting.deploy.new')"
       >
         <FormStorageDeployConfig
+          :config-id="deploymentStore.deploymentConfig?.id"
           @submit-success="handleSubmitSuccess"
-          :config_id="deploymentStore.deploymentConfig?.id"
         />
       </modal>
     </slot>
@@ -44,20 +44,20 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t } = useI18n();
 const websiteStore = useWebsiteStore();
 const deploymentStore = useDeploymentStore();
 const storageStore = useStorageStore();
 const { pageLoading, initWebsite, checkUnfinishedBuilds } = useHosting();
-const modalCreateKeyVisible = ref<boolean>(false);
+const modalGithubVisible = ref<boolean>(false);
 let refreshInterval: NodeJS.Timeout | undefined;
 
 useHead({
-  title: $i18n.t('dashboard.nav.hosting'),
+  title: t('dashboard.nav.hosting'),
 });
 
 onMounted(async () => {
-  initWebsite(DeploymentEnvironment.STAGING, true, false, true);
+  initWebsite(DeploymentEnvironment.STAGING);
   storageStore.getGithubProjectConfig();
   checkAndStartAutoRefresh();
 });
@@ -77,8 +77,8 @@ const refreshBuilds = async () => {
 };
 
 const handleSubmitSuccess = async () => {
-  storageStore.resetDeployConfigForm();
-  modalCreateKeyVisible.value = false;
+  websiteStore.resetForm();
+  modalGithubVisible.value = false;
   const existingDeploymentConfigId = deploymentStore.deploymentConfig?.id;
   await deploymentStore.fetchDeploymentConfig(websiteStore.active?.website_uuid);
 
@@ -95,19 +95,14 @@ const triggerRedeploy = async () => {
 };
 
 const showUpdateModal = async () => {
-  storageStore.deployConfigForm = {
-    branchName: deploymentStore.deploymentConfig?.branchName || '',
-    buildCommand: deploymentStore.deploymentConfig?.buildCommand || '',
-    buildDirectory: deploymentStore.deploymentConfig?.buildDirectory || '',
-    installCommand: deploymentStore.deploymentConfig?.installCommand || '',
-    apiKey: deploymentStore.deploymentConfig?.apiKey || '',
-    apiSecret: '',
-    repoId: deploymentStore.deploymentConfig?.repoId || 0,
-    repoName: deploymentStore.deploymentConfig?.repoName || '',
-    repoOwnerName: deploymentStore.deploymentConfig?.repoOwnerName || '',
-    repoUrl: deploymentStore.deploymentConfig?.repoUrl || '',
-  };
-  modalCreateKeyVisible.value = true;
+  if (deploymentStore.deploymentConfig) {
+    Object.entries(deploymentStore.deploymentConfig).forEach(([key, value]) => {
+      if (value && key in websiteStore.form) {
+        websiteStore.form[key] = value;
+      }
+    });
+  }
+  modalGithubVisible.value = true;
 };
 
 const checkAndStartAutoRefresh = () => {

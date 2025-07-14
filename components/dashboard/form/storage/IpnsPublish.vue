@@ -3,11 +3,7 @@
   <div v-else class="mb-8">
     <div v-if="ipnsStore.hasIpns">
       <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
-        <n-form-item
-          path="file"
-          :label="$t('storage.ipns.selectIpns')"
-          :label-props="{ for: 'file' }"
-        >
+        <n-form-item path="file" :label="$t('storage.ipns.selectIpns')" :label-props="{ for: 'file' }">
           <select-options
             v-model:value="formData.ipns"
             :options="ipnsItems"
@@ -27,12 +23,12 @@
       </n-form>
 
       <!-- Separator -->
-      <SeparatorText class="mt-0 mb-8" :border-left="true">
+      <SeparatorText class="mb-8 mt-0" :border-left="true">
         {{ $t('storage.ipns.orCreateNew') }}
       </SeparatorText>
     </div>
     <div v-else>
-      <h4 class="text-center mt-8 mb-4">{{ $t('storage.ipns.createFirst') }}</h4>
+      <h4 class="mb-4 mt-8 text-center">{{ $t('storage.ipns.createFirst') }}</h4>
     </div>
     <Btn type="secondary" size="large" @click="modalCreateIpnsVisible = true">
       {{ $t('storage.ipns.create') }}
@@ -58,13 +54,13 @@ const props = defineProps({
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const message = useMessage();
-const $i18n = useI18n();
+const { t } = useI18n();
 const bucketStore = useBucketStore();
 const ipnsStore = useIpnsStore();
 
 const loading = ref(false);
 const modalCreateIpnsVisible = ref<boolean>(false);
-let ipnsPublishInterval: any = null as any;
+const ipnsPublishInterval: any = null as any;
 
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormIpnsPublish>({
@@ -74,7 +70,7 @@ const rules: NFormRules = {
   ipns: [
     {
       required: true,
-      message: $i18n.t('validation.ipnsRequired'),
+      message: t('validation.ipnsRequired'),
     },
   ],
 };
@@ -99,13 +95,11 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      // errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else if (formData.value.ipns) {
       publishToIpns(formData.value.ipns);
     } else {
-      message.warning($i18n.t('validation.ipnsRequired'));
+      message.warning(t('validation.ipnsRequired'));
     }
   });
 }
@@ -114,17 +108,14 @@ async function publishToIpns(ipnsUuid: string) {
   loading.value = true;
 
   try {
-    const res = await $api.post<IpnsPublishResponse>(
-      endpoints.ipnsPublish(bucketStore.selected, ipnsUuid),
-      {
-        cid: props.cid,
-      }
-    );
+    const res = await $api.post<IpnsPublishResponse>(endpoints.ipnsPublish(bucketStore.selected, ipnsUuid), {
+      cid: props.cid,
+    });
 
     /** On  ipns publish, update data */
     updateIpnsInList(res.data);
 
-    message.success($i18n.t('form.success.ipnsPublished'));
+    message.success(t('form.success.ipnsPublished'));
 
     /** Emit events */
     emit('submitSuccess');
@@ -149,6 +140,6 @@ function onIpnsCreated() {
   modalCreateIpnsVisible.value = false;
   /** Emit events */
   emit('submitSuccess');
-  message.success($i18n.t('form.success.ipnsPublished'));
+  message.success(t('form.success.ipnsPublished'));
 }
 </script>

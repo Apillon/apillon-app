@@ -1,16 +1,17 @@
 <template>
   <n-card
-    class="deploy-actions card-dark fixed right-0 bottom-0 max-w-[500px] z-10 !border-yellow !rounded-none -mr-[1px] -mb-[1px]"
+    class="deploy-actions card-dark fixed bottom-0 right-0 z-10 -mb-[1px] -mr-[1px] max-w-[500px] !rounded-none !border-yellow"
+    size="large"
   >
     <n-collapse class="collapse-up" display-directive="show" :default-expanded-names="['1']">
       <n-collapse-item v-model:expanded="expanded" name="1">
         <template #header>
-          <div class="flex items-center justify-between w-full">
-            <span class="ml-4 my-1" @click="expanded = !expanded">
+          <div class="flex w-full items-center justify-between">
+            <span class="my-1 ml-4" @click="expanded = !expanded">
               {{ $t('dashboard.refreshModal.title') }}
             </span>
             <!-- <n-button-group @click.stop>
-              <n-button size="small" @click="refresh">
+              <n-button @click="refresh">
                 <span class="icon-refresh text-xl mr-2"></span>
                 {{ $t('dashboard.refreshModal.refresh') }}
               </n-button>
@@ -20,7 +21,7 @@
                 :options="refreshStatusOptions"
                 @select="updateRefreshInterval"
               >
-                <n-button size="small">
+                <n-button>
                   <span>{{ refreshInterval.label }}</span> <span class="icon-down text-3xl"></span>
                 </n-button>
               </n-dropdown>
@@ -32,12 +33,9 @@
           <p class="mb-4">
             {{ $t('dashboard.refreshModal.subtitle') }}
           </p>
-          <n-scrollbar v-if="expanded" class="max-h-72 mt-4" y-scrollable>
+          <n-scrollbar v-if="expanded" class="mt-4 max-h-72" y-scrollable>
             <div v-for="(deployment, key) in activeDeployments" :key="key" class="px-2">
-              <div
-                v-if="deployment?.service || deployment?.title"
-                class="flex flex-row justify-between"
-              >
+              <div v-if="deployment?.service || deployment?.title" class="flex flex-row justify-between">
                 <h5>{{ deployment.service?.name || deployment.title }}</h5>
                 <n-progress
                   type="line"
@@ -49,7 +47,7 @@
                   :fill-border-radius="0"
                 />
               </div>
-              <hr v-if="key < activeDeployments.length - 1" class="border-bg-lighter my-3" />
+              <hr v-if="key < activeDeployments.length - 1" class="my-3 border-bg-lighter" />
             </div>
           </n-scrollbar>
         </div>
@@ -59,12 +57,11 @@
 </template>
 
 <script setup lang="ts">
-import colors from '~/tailwind.colors';
+import { colors } from '~/tailwind.config';
 
 const expanded = ref(true);
 
-const { activeDeployments, refreshInterval, refreshStatusOptions, updateRefreshInterval, refresh } =
-  useRefreshStatus();
+const { activeDeployments } = useRefreshStatus();
 </script>
 
 <style lang="postcss">

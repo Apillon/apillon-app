@@ -7,10 +7,10 @@
       :pagination="pagination"
       :modules="[EffectCards, Pagination]"
       @swiper="onSwiper"
-      @slideChange="onSlideChange"
+      @slide-change="onSlideChange"
     >
       <swiper-slide v-for="(slide, key) in slides" :key="key" class="mx-auto flex justify-center">
-        <NftCard :id="key + 1" :data="slide" class="min-h-[16rem] md:min-h-[18rem] lg:min-h-[20rem]" />
+        <NftCard :id="key + 1" v-bind="slide" class="min-h-[16rem] md:min-h-[18rem] lg:min-h-[20rem]" />
       </swiper-slide>
     </swiper>
   </div>
@@ -23,7 +23,7 @@
 <script lang="ts" setup>
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { EffectCards, Pagination } from 'swiper/modules';
-import { type Swiper as SwiperClass } from 'swiper/types';
+import type { Swiper as SwiperClass } from 'swiper/types';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -31,7 +31,7 @@ import 'swiper/css/effect-cards';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-const collectionStore = useCollectionStore();
+const metadataStore = useMetadataStore();
 
 const SLIDES_TO_SHOW = 10;
 const swiperRef = ref<SwiperClass>();
@@ -40,12 +40,12 @@ const slides = ref<Array<any>>([]);
 const pagination = reactive({
   type: 'fraction',
   formatFractionTotal: () => {
-    return collectionStore.metadata.length;
+    return metadataStore.metadata.length;
   },
 });
 
 onMounted(() => {
-  slides.value = collectionStore.metadata.slice(0, SLIDES_TO_SHOW);
+  slides.value = metadataStore.metadata.slice(0, SLIDES_TO_SHOW);
 });
 onUnmounted(() => {
   if (swiperRef.value) {
@@ -76,9 +76,9 @@ function onSlideChange(swiper: SwiperClass) {
   if (
     swiper.previousIndex < swiper.realIndex &&
     swiper.realIndex + SLIDES_TO_SHOW > slides.value.length &&
-    slides.value.length < collectionStore.metadata.length
+    slides.value.length < metadataStore.metadata.length
   ) {
-    slides.value.push(collectionStore.metadata[swiper.previousIndex + SLIDES_TO_SHOW]);
+    slides.value.push(metadataStore.metadata[swiper.previousIndex + SLIDES_TO_SHOW]);
   }
 }
 </script>

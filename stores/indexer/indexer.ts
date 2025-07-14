@@ -46,9 +46,7 @@ export const useIndexerStore = defineStore('indexer', {
      */
     async fetchIndexers(showLoader: boolean = true) {
       const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
+      if (!dataStore.projectUuid) return this.items;
 
       this.loading = showLoader;
       try {

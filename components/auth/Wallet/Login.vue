@@ -1,19 +1,15 @@
 <template>
-  <Btn v-bind="$attrs" type="info" :color="colors.blue" @click="modalWalletSelectVisible = true">
-    <span class="icon-wallet mr-2 align-sub text-xl"></span>
-    <span v-if="register">{{ $t('auth.signup.wallet') }}</span>
-    <span v-else>{{ $t('auth.login.wallet') }}</span>
+  <Btn v-bind="$attrs" size="large" type="secondary" @click="modalWalletSelectVisible = true">
+    <span class="icon-wallet mr-2 align-sub text-xl text-yellow"></span>
+    <span v-if="register" class="text-white">{{ $t('auth.signup.wallet') }}</span>
+    <span v-else class="text-white">{{ $t('auth.login.wallet') }}</span>
   </Btn>
   <!-- Modal - Wallet select -->
   <modal v-model:show="modalWalletSelectVisible" :title="$t('auth.wallet.connect.title')">
     <h6 class="flex-cc mb-6">
       {{ $t('auth.wallet.connect.polkadot') }}
     </h6>
-    <AuthWalletDot
-      :action-text="$t('auth.wallet.login.title')"
-      :loading="loadingWallet"
-      @sign="walletLogin"
-    />
+    <AuthWalletDot :action-text="$t('auth.wallet.login.title')" :loading="loadingWallet" @sign="walletLogin" />
 
     <h6 class="flex-cc mb-6">
       {{ $t('auth.wallet.evm.connect') }}
@@ -23,8 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useAccount, useDisconnect } from '@wagmi/vue';
-import colors from '~/tailwind.colors';
+import { useAccount, useDisconnect, useAccountEffect } from '@wagmi/vue';
 
 const props = defineProps({
   register: { type: Boolean, default: false },
@@ -43,6 +38,7 @@ const { clearAll } = useStore();
 /** Evm wallet - wagmi */
 const { disconnect } = useDisconnect();
 const { address } = useAccount();
+useAccountEffect({ onConnect: evmWalletLogin });
 
 const loadingWallet = ref<boolean>(false);
 const modalWalletSelectVisible = ref<boolean>(false);
@@ -57,7 +53,7 @@ async function walletLogin(account: WalletAccount) {
 
   // Logout first - delete LS and store if there is any data
   authStore.logout();
-  dataStore.resetCurrentProject();
+  dataStore.resetData();
 
   /** Clear all stored data */
   clearAll();

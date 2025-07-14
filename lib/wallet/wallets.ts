@@ -1,3 +1,5 @@
+import { DotSamaWallet } from './DotSamaWallet';
+
 const PREDEFINED_WALLETS: WalletInfo[] = [
   {
     type: 'desktop',
@@ -5,8 +7,7 @@ const PREDEFINED_WALLETS: WalletInfo[] = [
     title: 'Polkadot{.js}',
     installUrl: {
       firefox: 'https://addons.mozilla.org/en-US/firefox/addon/polkadot-js-extension/',
-      default:
-        'https://chrome.google.com/webstore/detail/polkadot%7Bjs%7D-extension/mopnmbcafieddcagagdcbnhejhlodfdd',
+      default: 'https://chrome.google.com/webstore/detail/polkadot%7Bjs%7D-extension/mopnmbcafieddcagagdcbnhejhlodfdd',
     },
     icon: 'wallet/polkadot',
   },
@@ -16,8 +17,7 @@ const PREDEFINED_WALLETS: WalletInfo[] = [
     title: 'SubWallet',
     installUrl: {
       firefox: 'https://addons.mozilla.org/en-US/firefox/addon/subwallet/',
-      default:
-        'https://chrome.google.com/webstore/detail/subwallet/onhogfjeacnfoofkfgppdlbmlmnplgbn',
+      default: 'https://chrome.google.com/webstore/detail/subwallet/onhogfjeacnfoofkfgppdlbmlmnplgbn',
     },
     icon: 'wallet/subwallet',
   },
@@ -27,8 +27,7 @@ const PREDEFINED_WALLETS: WalletInfo[] = [
     title: 'Talisman',
     installUrl: {
       firefox: 'https://addons.mozilla.org/en-US/firefox/addon/talisman-wallet-extension/',
-      default:
-        'https://chrome.google.com/webstore/detail/talisman-wallet/fijngjgcjhjmmpcmkeiomlglpeiijkld',
+      default: 'https://chrome.google.com/webstore/detail/talisman-wallet/fijngjgcjhjmmpcmkeiomlglpeiijkld',
     },
     icon: 'wallet/talisman',
   },

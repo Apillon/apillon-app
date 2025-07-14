@@ -1,13 +1,7 @@
 <template>
-  <n-form
-    ref="formRef"
-    class="inline"
-    :model="formData"
-    :rules="rules"
-    @submit.prevent="handleSubmit"
-  >
+  <n-form ref="formRef" class="inline" size="large" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
     <!--  Email - hidden if email provided by props -->
-    <div class="mb-8" :class="{ 'absolute invisible': email }">
+    <div class="mb-8" :class="{ 'invisible absolute': email }">
       <n-form-item path="email" :show-label="false" :show-feedback="false">
         <n-input
           v-model:value="formData.email"
@@ -18,9 +12,9 @@
       </n-form-item>
     </div>
 
-    <n-form-item path="captcha" :show-label="false">
-      <div class="block w-full h-20">
-        <Captcha />
+    <n-form-item v-if="showCaptcha" path="captcha" :show-label="false">
+      <div class="block h-20 w-full">
+        <Captcha @captcha-verified="onCaptchaVerified" />
       </div>
       <n-input v-model:value="formData.captcha" class="absolute hidden" />
     </n-form-item>
@@ -59,11 +53,11 @@ const props = defineProps({
 
 const { t } = useI18n();
 const message = useMessage();
-const config = useRuntimeConfig();
+const { showCaptcha, formCaptcha, captchaReset, captchaReload, onCaptchaVerified } = useCaptcha();
 
 const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
-const formData = ref<PasswordResetForm>({
+const formData = reactive<PasswordResetForm>({
   email: props.email,
   captcha: null,
   refCode: undefined,
@@ -83,15 +77,16 @@ const rules: NFormRules = {
   captcha: ruleRequired(t('validation.captchaRequired')),
 };
 
+onMounted(() => {
+  showCaptcha.value = true;
+});
+
 function handleSubmit(e: Event | MouseEvent | null) {
   e?.preventDefault();
-  formData.value.captcha = sessionStorage.getItem(AuthLsKeys.PROSOPO);
+  formData.captcha = formCaptcha.value;
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || '')));
-    } else {
-      /** Request password change */
+    if (!errors) {
       await passwordChangeRequest();
     }
   });
@@ -100,29 +95,18 @@ function handleSubmit(e: Event | MouseEvent | null) {
 async function passwordChangeRequest() {
   loading.value = true;
 
-  const prosopoToken = sessionStorage.getItem(AuthLsKeys.PROSOPO);
-  if (prosopoToken) {
-    formData.value.captcha = { token: prosopoToken, eKey: config.public.captchaKey };
-  }
   try {
-    const res = await $api.post<PasswordResetRequestResponse>(
-      endpoints.passwordResetRequest,
-      formData.value
-    );
+    const res = await $api.post<BooleanResponse>(endpoints.passwordResetRequest, formData);
 
     if (res.data) {
       message.success(t('form.success.requestPasswordChange'));
     }
   } catch (error) {
     message.error(userFriendlyMsg(error));
-  } finally {
     captchaReset();
+    captchaReload();
+  } finally {
     loading.value = false;
   }
-}
-
-function captchaReset() {
-  formData.value.captcha = undefined;
-  sessionStorage.removeItem(AuthLsKeys.PROSOPO);
 }
 </script>

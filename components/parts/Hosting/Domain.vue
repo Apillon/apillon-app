@@ -1,90 +1,54 @@
 <template>
-  <div v-bind="$attrs">
-    <div v-if="domain" class="body-sm mb-1">
+  <HostingDomainConfiguration v-if="domainCreated" />
+  <div v-else-if="domain">
+    <div class="body-sm mb-1">
       <strong>{{ $t('hosting.domain.preview') }}</strong>
     </div>
 
-    <div v-if="domain" class="flex flex-wrap mb-4 gap-4 gap-y-6 items-center">
-      <HostingPreviewLink :link="`https://${domain}`" />
-      <div class="flex gap-3 items-center flex-wrap sm:flex-nowrap mb-2">
-        <div class="body-sm">
-          <strong class="whitespace-nowrap">{{ $t('hosting.domain.domainStatus') }}:</strong>
-        </div>
-        <Pill :type="domainStatusType">
-          {{ $t(`hosting.domain.status.${domainStatus || 0}`) }}
-        </Pill>
-        <n-button
-          size="small"
-          :disabled="btnDomainDisabled"
-          :loading="loadingDomain"
-          @click="refreshDomainStatus"
-        >
-          <span class="icon-refresh text-xl mr-2"></span>
-          {{ $t('hosting.domain.refreshStatus') }}
-        </n-button>
+    <HostingPreviewLink :link="`https://${domain}`" />
+    <div class="my-4 flex flex-wrap items-center gap-3">
+      <div class="body-sm">
+        <strong class="whitespace-nowrap">{{ $t('hosting.domain.domainStatus') }}:</strong>
       </div>
+      <Pill :type="domainStatusType">
+        {{ $t(`hosting.domain.status.${domainStatus || 0}`) }}
+      </Pill>
     </div>
 
-    <n-space v-if="domain" class="w-full" :wrap="!isLg" align="center">
-      <Btn type="primary" size="small" @click="showModalConfiguration = true">
-        {{ $t('hosting.domain.configure') }}
-      </Btn>
-
-      <Btn type="error" size="small" :loading="loadingDelete" @click="deleteDomain">
+    <n-space class="w-full" :wrap="!isLg" align="center">
+      <n-button :disabled="btnDomainDisabled" :loading="loadingDomain" @click="refreshDomainStatus">
+        <span class="icon-refresh mr-2 text-xl"></span>
+        {{ $t('hosting.domain.refreshStatus') }}
+      </n-button>
+      <Btn type="error" :loading="loadingDelete" @click="deleteDomain">
         {{ $t('hosting.domain.remove') }}
       </Btn>
     </n-space>
-    <Btn v-else-if="editEnabled" type="primary" size="small" @click="showModalDomain = true">
-      {{ $t('hosting.domain.add') }}
-    </Btn>
-    <n-tooltip v-else placement="top" trigger="hover">
-      <template #trigger>
-        <Btn type="primary" size="small" class="cursor-default !bg-primary/50 locked">
-          {{ $t('hosting.domain.add') }}
-        </Btn>
-      </template>
-      <span>{{ $t('hosting.domain.editDisabled') }}</span>
-    </n-tooltip>
   </div>
-  <!-- Modal - Website domain -->
-  <modal
-    v-model:show="showModalDomain"
-    class="!w-auto md:min-w-[38rem] max-w-[100vw]"
-    :title="domain ? $t('hosting.domain.update') : $t('hosting.domain.add')"
-  >
-    <FormHostingDomain :website-uuid="websiteUuid" :domain="domain" />
-  </modal>
-
-  <!-- Modal - Website domain configuration -->
-  <modal
-    v-model:show="showModalConfiguration"
-    class="!w-auto max-w-[100vw]"
-    title="How to setup a domain for Apillon hosting?"
-  >
-    <HostingDomainConfiguration />
-  </modal>
+  <FormHostingDomain v-else :website-uuid="uuid" :domain="domain" @create-success="onDomainCreated" />
 </template>
 
 <script lang="ts" setup>
+const props = defineProps({
+  frontendUuid: { type: String, default: null },
+});
 const { isLg } = useScreen();
 const websiteStore = useWebsiteStore();
 const { websiteUuid } = useHosting();
 const { deleteItem } = useDelete();
 
-const showModalDomain = ref<boolean>(false);
-const showModalConfiguration = ref<boolean>(false);
 const domainStatus = ref<number | null>(null);
 const loadingDomain = ref<boolean>(false);
 const loadingDelete = ref<boolean>(false);
 const btnDomainDisabled = ref<boolean>(false);
+const domainCreated = ref<boolean>(false);
 
 onMounted(() => {
   domainStatus.value = websiteStore.active.domainStatus;
 });
 
-const domain = computed<string>(() => {
-  return websiteStore.active.domain || '';
-});
+const uuid = computed<string>(() => props.frontendUuid || websiteUuid.value);
+const domain = computed<string>(() => websiteStore.active.domain || '');
 
 const domainStatusType = computed<TagType>(() => {
   switch (domainStatus.value) {
@@ -99,17 +63,16 @@ const domainStatusType = computed<TagType>(() => {
   }
 });
 
-const editEnabled = computed<boolean>(() => {
-  const time = websiteStore.active.domainChangeDate;
-  return !time || new Date(time).getTime() + 15 * 60 * 1000 < Date.now();
-});
+const onDomainCreated = () => {
+  domainCreated.value = true;
+};
 
 async function refreshDomainStatus() {
   if (domain.value) {
     loadingDomain.value = true;
     btnDomainDisabled.value = true;
 
-    const websiteDomain = await websiteStore.fetchDomainStatus(websiteUuid.value);
+    const websiteDomain = await websiteStore.fetchDomainStatus(uuid.value);
     if (websiteDomain) {
       domainStatus.value = websiteDomain.domainStatus;
     }
@@ -120,7 +83,7 @@ async function refreshDomainStatus() {
 
 async function deleteDomain() {
   loadingDelete.value = true;
-  if (await deleteItem(ItemDeleteKey.DOMAIN, websiteUuid.value)) {
+  if (await deleteItem(ItemDeleteKey.DOMAIN, uuid.value)) {
     websiteStore.active.domain = null;
   }
   loadingDelete.value = false;

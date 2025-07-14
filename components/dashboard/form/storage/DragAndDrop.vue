@@ -8,8 +8,8 @@
   >
     <n-upload-dragger :style="uploadHeight">
       <div class="py-2 text-center">
-        <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
-          <span class="icon-upload text-violet text-2xl"></span>
+        <div class="mb-2 inline-block h-10 w-10 rounded-full bg-bg-lighter p-2">
+          <span class="icon-upload text-2xl text-violet"></span>
         </div>
 
         <h4 class="mb-1">{{ $t('storage.file.upload') }}</h4>
@@ -22,7 +22,7 @@
 <script lang="ts" setup>
 import { useMessage, type UploadCustomRequestOptions } from 'naive-ui';
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
 const bucketStore = useBucketStore();
@@ -44,6 +44,7 @@ onMounted(() => {
 function uploadFilesRequest({ file, onError, onFinish }: UploadCustomRequestOptions) {
   const fileListItem: FileListItemType = {
     ...file,
+    path: file.fullPath,
     percentage: 0,
     size: file.file?.size || 0,
     timestamp: Date.now(),
@@ -52,12 +53,12 @@ function uploadFilesRequest({ file, onError, onFinish }: UploadCustomRequestOpti
   };
 
   if (!isEnoughSpaceInStorage(bucketStore.uploadFileList, fileListItem)) {
-    message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
+    message.warning(t('validation.notEnoughSpaceInStorage', { name: file.name }));
     onError();
   } else if (fileAlreadyOnFileList(bucketStore.uploadFileList, fileListItem)) {
     onError();
   } else if (!paymentStore.hasActiveSubscription && !fileTypeValid(fileListItem)) {
-    message.warning($i18n.t('validation.fileTypeNotAllow', { name: file.name }));
+    message.warning(t('validation.fileTypeNotAllow', { name: file.name }));
     onError();
   } else {
     bucketStore.uploadFileList.push(fileListItem);

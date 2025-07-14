@@ -9,20 +9,20 @@
     >
       <n-upload-dragger>
         <div class="pb-12 text-center">
-          <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
-            <span class="icon-upload text-violet text-2xl"></span>
+          <div class="mb-2 inline-block h-10 w-10 rounded-full bg-bg-lighter p-2">
+            <span class="icon-upload text-2xl text-violet"></span>
           </div>
 
           <h4 class="mb-1">{{ $t('hosting.upload.files') }}</h4>
           <span class="text-body">{{ $t('hosting.upload.dragAndDrop') }}</span>
-          <SeparatorText class="mt-1 mb-1" :border-left="true">
+          <SeparatorText class="mb-1 mt-1" :border-left="true">
             {{ $t('general.or') }}
           </SeparatorText>
         </div>
       </n-upload-dragger>
     </n-upload>
     <n-upload
-      class="absolute inline-block w-auto left-1/2 bottom-4 -translate-x-1/2"
+      class="absolute bottom-4 left-1/2 inline-block w-auto -translate-x-1/2"
       :show-file-list="false"
       directory
       :disabled="authStore.isAdmin()"
@@ -32,7 +32,7 @@
     </n-upload>
   </div>
 
-  <n-space v-if="uploadFileList.length" class="min-h-[32px] my-4" justify="center" align="center">
+  <n-space v-if="uploadFileList.length" class="my-4 min-h-[32px]" justify="center" align="center">
     <n-space justify="space-between" align="center">
       <IconUploading />
       <div>
@@ -53,6 +53,8 @@
 <script lang="ts" setup>
 import type { UploadCustomRequestOptions } from 'naive-ui';
 
+// emit for all files uploaded
+const emit = defineEmits(['uploaded']);
 const props = defineProps({
   bucketUuid: { type: String, required: true },
 });
@@ -71,9 +73,7 @@ const uploadInterval = ref<any>(null);
 const numOfFinishedFiles = computed<number>(() => {
   return (
     uploadFileList.value.filter(
-      file =>
-        file.status === FileUploadStatusValue.FINISHED ||
-        file.status === FileUploadStatusValue.ERROR
+      file => file.status === FileUploadStatusValue.FINISHED || file.status === FileUploadStatusValue.ERROR
     ).length || 0
   );
 });
@@ -82,6 +82,7 @@ const numOfFinishedFiles = computed<number>(() => {
 function uploadFileRequest({ file, onError, onFinish }: UploadCustomRequestOptions) {
   const fileListItem: FileListItemType = {
     ...file,
+    path: file.fullPath,
     percentage: 0,
     size: file.file?.size || 0,
     timestamp: Date.now(),
@@ -95,7 +96,7 @@ function uploadFileRequest({ file, onError, onFinish }: UploadCustomRequestOptio
 function uploadDirectoryRequest({ file, onError, onFinish }: UploadCustomRequestOptions) {
   const fileListItem: FileListItemType = {
     ...file,
-    fullPath: removeBaseDirectoryFromFullPath(file.fullPath),
+    path: removeBaseDirectoryFromFullPath(file.fullPath),
     percentage: 0,
     size: file.file?.size || 0,
     timestamp: Date.now(),
@@ -140,6 +141,7 @@ function addFileToListAndUpload(fileListItem: FileListItemType) {
         /** When all files are on file list, start uploading files */
         try {
           await uploadFiles(props.bucketUuid, uploadFileList.value, false, true);
+          emit('uploaded');
 
           setTimeout(() => {
             bucketStore.fetchDirectoryContent();

@@ -8,15 +8,19 @@
       <n-space class="pb-8" :size="32" vertical>
         <div class="flex gap-8">
           <div class="card-light flex-1 rounded-lg px-6 py-4">
-            <NftCollectionInfo />
+            <NftCollectionInfo
+              :base-uri-link="collectionBaseUri"
+              :cover-image="coverImage || ''"
+              :logo-image="logoImage || ''"
+              :loading="loadingBucket"
+            />
           </div>
 
           <div class="card max-w-64 px-6 py-4">
-            <h6 class="mb-2">{{ t('general.actions') }}</h6>
+            <h6 class="mb-2">{{ $t('general.actions') }}</h6>
             <ActionsNftCollection
-              @add-nfts="openModalAddNfts"
+              @add-nfts="$router.push(`/dashboard/service/nft/${collectionStore.active.collection_uuid}/add`)"
               @mint="modalMintCollectionVisible = true"
-              @nest-mint="modalNestMintCollectionVisible = true"
               @revoke="modalBurnTokensVisible = true"
               @transfer="modalTransferOwnershipVisible = true"
               @set-base-uri="modalSetBaseUriVisible = true"
@@ -30,7 +34,7 @@
           >
             <template #tab>
               <span class="ml-2 text-sm text-white">
-                {{ t('nft.transaction.title') }}
+                {{ $t('nft.transaction.title') }}
               </span>
             </template>
             <slot>
@@ -43,7 +47,7 @@
           >
             <template #tab>
               <span class="ml-2 text-sm text-white">
-                {{ t('nft.metadata.deployTitle') }}
+                {{ $t('nft.metadata.deployTitle') }}
               </span>
             </template>
             <slot>
@@ -56,33 +60,34 @@
           <n-tab-pane :name="Tabs.NFTs">
             <template #tab>
               <span class="ml-2 text-sm text-white">
-                {{ t('dashboard.nav.nft') }}
+                {{ $t('dashboard.nav.nft') }}
               </span>
             </template>
             <slot>
               <div v-if="collectionStore.active.collectionStatus === CollectionStatus.CREATED">
-                <p class="my-4">{{ t('nft.transaction.empty') }}</p>
-                <!-- Add NFT -->
-                <n-button @click="openModalAddNfts">
+                <p class="my-4">{{ $t('nft.transaction.empty') }}</p>
+                <n-button @click="$router.push(`/dashboard/service/nft/${collectionStore.active.collection_uuid}/add`)">
                   <span class="icon-add mr-2 text-xl text-primary"></span>
-                  <span class="text-primary">{{ t('nft.add') }}</span>
+                  <span class="text-primary">{{ $t('nft.add') }}</span>
                 </n-button>
               </div>
-              <!-- Links to NFT templates -->
+              <TableNftNfts
+                v-else-if="collectionBaseUri && collectionMaxSupply"
+                :base-uri="collectionBaseUri"
+                :total="collectionMaxSupply"
+              />
               <NftPreviewFinish
                 v-else-if="collectionStore.active.chainType === ChainType.EVM && !collectionStore.active.websiteUuid"
                 :chain="collectionStore.active.chain"
               />
               <div v-else-if="collectionStore.active.websiteUuid">
                 <p class="my-4">
-                  {{ t('nft.collection.website-connected') }}
+                  {{ $t('nft.collection.websiteConnected') }}
                 </p>
 
-                <NuxtLink :to="`/dashboard/service/hosting/${collectionStore.active.websiteUuid}/deployments`">
-                  <Btn type="primary">
-                    {{ t('nft.collection.show-website') }}
-                  </Btn>
-                </NuxtLink>
+                <Btn type="primary" :to="`/dashboard/service/hosting/${collectionStore.active.websiteUuid}`">
+                  {{ $t('nft.collection.showWebsite') }}
+                </Btn>
               </div>
             </slot>
           </n-tab-pane>
@@ -92,15 +97,6 @@
       <!-- Modal - Collection Mint -->
       <modal v-model:show="modalMintCollectionVisible" class="dropdown-grid" :title="t('nft.collection.mint')">
         <FormNftMint :collection="collectionStore.active" @submit-success="onNftMinted" />
-      </modal>
-
-      <!-- Modal - Collection Nest Mint -->
-      <modal v-model:show="modalNestMintCollectionVisible" class="dropdown-grid" :title="t('nft.collection.nestMint')">
-        <FormNftNestMint
-          :collection-uuid="collectionStore.active.collection_uuid"
-          :chain-id="collectionStore.active.chain"
-          @submit-success="onNftNestMinted"
-        />
       </modal>
 
       <!-- Modal - Burn Tokens -->
@@ -126,15 +122,9 @@
         />
       </modal>
 
-      <!-- Modal - Add NFT -->
-      <modal v-model:show="modalAddNftVisible" class="hide-header">
-        <FormNftAmountOption v-if="collectionStore.nftStep === NftCreateStep.AMOUNT" @submit="onAmountSelected" />
-        <FormNftUpload v-else-if="collectionStore.nftStep === NftCreateStep.MULTIPLE" modal />
-      </modal>
-
       <ModalTransaction
         v-if="transactionHash"
-        :transactionHash="transactionHash"
+        :transaction-hash="transactionHash"
         :chain-id="collectionStore.active.chain"
         @close="transactionHash = ''"
       />
@@ -143,8 +133,6 @@
 </template>
 
 <script lang="ts" setup>
-import { CollectionStatus, ChainType, NftCreateStep } from '~/lib/types/nft';
-
 enum Tabs {
   TRANSACTIONS = 'transactions',
   DEPLOYS = 'deploys',
@@ -154,27 +142,30 @@ enum Tabs {
 const { t } = useI18n();
 const router = useRouter();
 const { params } = useRoute();
+const dataStore = useDataStore();
+const ipfsStore = useIpfsStore();
+const bucketStore = useBucketStore();
 const storageStore = useStorageStore();
 const paymentStore = usePaymentStore();
+const websiteStore = useWebsiteStore();
+const metadataStore = useMetadataStore();
 const collectionStore = useCollectionStore();
-const { openAddNft } = useCollection();
+const { checkUnfinishedCollection, checkUnfinishedTransactions } = useCollection();
 
 const pageLoading = ref<boolean>(true);
+const loadingBucket = ref<boolean>(true);
 const modalMintCollectionVisible = ref<boolean | null>(false);
-const modalNestMintCollectionVisible = ref<boolean | null>(false);
 const modalBurnTokensVisible = ref<boolean | null>(false);
 const modalTransferOwnershipVisible = ref<boolean | null>(false);
 const modalSetBaseUriVisible = ref<boolean | null>(false);
-const modalAddNftVisible = ref<boolean | null>(false);
-const transactionHash = ref<string | null>('');
-const tab = ref(collectionStore.active.collectionStatus === CollectionStatus.CREATED ? Tabs.NFTs : Tabs.DEPLOYS);
 
-/** Polling */
-let collectionInterval: any = null as any;
-let transactionInterval: any = null as any;
-
-/** Collection UUID from route */
 const collectionUuid = ref<string>(`${params?.id}`);
+const collectionBaseUri = ref<string>();
+const collectionMaxSupply = ref<number>(0);
+const transactionHash = ref<string | null>('');
+const logoImage = ref<Optional<string> | undefined>();
+const coverImage = ref<Optional<string> | undefined>();
+const tab = ref(collectionStore.active.collectionStatus === CollectionStatus.CREATED ? Tabs.NFTs : Tabs.DEPLOYS);
 
 useHead({
   title: t('dashboard.nav.nft'),
@@ -187,27 +178,29 @@ onMounted(async () => {
 
   /** Reset state if user opens different collection */
   if (collectionUuid.value !== collectionStore.active?.collection_uuid) {
-    collectionStore.resetMetadata();
+    metadataStore.resetMetadata();
   }
 
   if (!currentCollection?.collection_uuid) {
     router.push({ name: 'dashboard-service-nft' });
   } else {
+    loadBaseUri(currentCollection.baseUri);
+    loadBucket(currentCollection);
     await collectionStore.getMetadataDeploys(currentCollection.collection_uuid);
     await collectionStore.getCollectionTransactions(currentCollection.collection_uuid);
     collectionStore.active = currentCollection;
     pageLoading.value = false;
 
+    if (currentCollection.websiteUuid) {
+      websiteStore.getWebsite(currentCollection.websiteUuid);
+    }
+
     storageStore.getStorageInfo();
     paymentStore.getPriceList();
 
-    checkIfCollectionUnfinished();
+    checkUnfinishedCollection();
     checkUnfinishedTransactions();
   }
-});
-onUnmounted(() => {
-  clearInterval(transactionInterval);
-  clearInterval(collectionInterval);
 });
 
 /** Watch collectionStatus, if status changed from Created to Initiated, start polling */
@@ -215,26 +208,58 @@ watch(
   () => collectionStore.active?.collectionStatus,
   (status, oldStatus) => {
     if (status === CollectionStatus.DEPLOY_INITIATED && oldStatus === CollectionStatus.CREATED) {
-      checkIfCollectionUnfinished();
+      checkUnfinishedCollection();
     }
   }
 );
 
-function onNftMinted(hash: string) {
-  modalMintCollectionVisible.value = false;
-  transactionHash.value = hash;
-
-  setTimeout(() => {
-    collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid, false);
-
-    setTimeout(() => {
-      checkUnfinishedTransactions();
-    }, 3000);
-  }, 3000);
+async function loadBaseUri(url?: Optional<string>) {
+  if (!url) return;
+  const cid = extractCIDFromUrl(url);
+  if (cid) {
+    const type = url.includes('ipns') ? IpfsType.IPNS : IpfsType.CID;
+    const projectUuid = await dataStore.getProjectUuid();
+    const ipfsLink = await ipfsStore.fetchIpfsLink(projectUuid, cid, type);
+    collectionBaseUri.value = ipfsLink?.link;
+  }
 }
 
-function onNftNestMinted(hash: string) {
-  modalNestMintCollectionVisible.value = false;
+async function loadBucket(collection: CollectionInterface) {
+  collectionMaxSupply.value = collection.maxSupply;
+  if (!collection.bucket_uuid) return;
+
+  if (collection.maxSupply > 0 && collection.logoUrl && collection.bannerUrl) {
+    coverImage.value = collection.bannerUrl;
+    logoImage.value = collection.logoUrl;
+  } else {
+    const bucketFiles = await bucketStore.fetchDirectoryContent({
+      bucketUuid: collection.bucket_uuid,
+    });
+    loadingBucket.value = false;
+
+    logoImage.value =
+      collection.logoUrl ||
+      bucketFiles.find(item => item.type === BucketItemType.FILE && item.name.includes('logo'))?.link;
+    coverImage.value =
+      collection.bannerUrl ||
+      bucketFiles.find(item => item.type === BucketItemType.FILE && item.name.includes('cover'))?.link;
+
+    const metadataFolder = bucketFiles.find(
+      item => item.type === BucketItemType.DIRECTORY && item.name.includes('Metadata')
+    );
+    if (metadataFolder && collection.maxSupply === 0) {
+      await bucketStore.fetchDirectoryContent({
+        bucketUuid: collection.bucket_uuid,
+        folderUuid: metadataFolder.uuid,
+        limit: 1,
+      });
+      collectionMaxSupply.value = Number(bucketStore.folder.pagination.itemCount || 0);
+    }
+  }
+}
+
+function onNftMinted(hash: string) {
+  modalMintCollectionVisible.value = false;
   transactionHash.value = hash;
 
   setTimeout(() => {
@@ -270,69 +295,5 @@ function onNftTransferred() {
 function onBaseUriChanged(collection: CollectionInterface) {
   modalSetBaseUriVisible.value = false;
   collectionStore.active = collection;
-}
-
-/** Collection polling */
-function checkIfCollectionUnfinished() {
-  if (collectionStore.active.collectionStatus === CollectionStatus.CREATED) {
-    return;
-  }
-  if (collectionStore.active.collectionStatus >= CollectionStatus.DEPLOYED) {
-    clearInterval(collectionInterval);
-    return;
-  }
-
-  clearInterval(collectionInterval);
-  collectionInterval = setInterval(async () => {
-    const collection = await collectionStore.fetchCollection(collectionUuid.value);
-    if (!collection || collection.collectionStatus >= CollectionStatus.DEPLOYED) {
-      if (collection) {
-        collectionStore.active = collection;
-        await collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid, false);
-      }
-      clearInterval(collectionInterval);
-
-      /** On collection deploy, start transaction polling */
-      checkUnfinishedTransactions();
-    }
-  }, 10000);
-}
-
-/** Transactions polling */
-function checkUnfinishedTransactions() {
-  const unfinishedTransaction = collectionStore.transaction.find(
-    transaction => transaction.transactionStatus < TransactionStatus.CONFIRMED
-  );
-  if (unfinishedTransaction === undefined) {
-    clearInterval(transactionInterval);
-    return;
-  }
-
-  clearInterval(transactionInterval);
-  transactionInterval = setInterval(async () => {
-    const transactions = await collectionStore.fetchCollectionTransactions(
-      collectionStore.active.collection_uuid,
-      false
-    );
-    const transaction = transactions.find(transaction => transaction.id === unfinishedTransaction.id);
-    if (!transaction || transaction.transactionStatus >= TransactionStatus.CONFIRMED) {
-      clearInterval(transactionInterval);
-
-      const newCollection = await collectionStore.fetchCollection(collectionUuid.value);
-      if (newCollection) {
-        collectionStore.active = newCollection;
-      }
-    }
-  }, 10000);
-}
-
-function openModalAddNfts() {
-  collectionStore.nftStep = NftCreateStep.AMOUNT;
-  modalAddNftVisible.value = true;
-}
-function onAmountSelected(amount: number) {
-  if (amount === NftAmount.SINGLE) {
-    openAddNft(collectionStore.active.collection_uuid);
-  }
 }
 </script>
